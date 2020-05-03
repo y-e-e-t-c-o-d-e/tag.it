@@ -1,0 +1,29 @@
+{
+  "name": "tag.it",
+  "version": "1.0.0",
+  "description": "Our awesome CSE110 Project!",
+  "dependencies": {
+    "chai-http": "^4.3.0",
+    "nodemon": "^2.0.3"
+  },
+  "devDependencies": {
+    "concurrently": "^4.0.1"
+  },
+  "scripts": {
+    "client": "cd client && yarn start",
+    "server": "cd backend && nodemon app.js",
+    "clientTest": "cd client && yarn test",
+    "serverTest": "cd backend && yarn test",
+    "start": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "test": "yarn clientTest && yarn serverTest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/y-e-e-t-c-o-d-e/tag.it.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/y-e-e-t-c-o-d-e/tag.it/issues"
+  },
+  "homepage": "https://github.com/y-e-e-t-c-o-d-e/tag.it#readme"
+}
