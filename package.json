@@ -14,7 +14,8 @@
     "clientTest": "cd client && yarn test",
     "serverTest": "cd backend && yarn test",
     "start": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
-    "test": "yarn clientTest && yarn serverTest"
+    "test": "yarn clientTest && yarn serverTest",
+    "install": "cd client/ && yarn && cd ../ && cd backend/ && yarn && cd ../"
   },
   "repository": {
     "type": "git",

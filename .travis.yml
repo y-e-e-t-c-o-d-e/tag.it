@@ -6,6 +6,5 @@ cache:
   directories:
     - "node_modules"
 script:
-  - cd client && yarn && cd ../
-  - cd backend && yarn && cd ../
+  - yarn install
   - yarn test
