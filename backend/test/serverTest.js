@@ -10,7 +10,7 @@ describe('routes', () => {
 
   let server;
 
-  // Set up functino before every test
+  // Set up function before every test
   beforeEach(() => {
     server = require('../app');
   });
