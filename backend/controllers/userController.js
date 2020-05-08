@@ -18,7 +18,7 @@ exports.getUser = async (req, res) => {
     const mockData = {
         name: "Rick Ord",
         email: "rickord@retired.edu",
-        icon: "https://toppng.com/uploads/preview/stick-figure-png-stick-figure-png-transparent-11562935250atbb6dh8w3.png", 
+        icon: "https://picsum.photos/200", 
         studentCourseList: ["some course id", "some other course id"],
         postList: ["some post id", "other post id"],
         followingList: ["some post id", "other post id"],
