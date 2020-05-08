@@ -12,11 +12,15 @@
 yarn install
 ```
 
+### Front-End / Back-End Localhosts
+Frontend runs on localhost:3000.  
+Backend runs on localhost:4000 (to access API routes, use localhost:4000/api/).
+
 ### Running the Whole Webapp
 ```
 yarn start
 ```
-This commands runs the frontend AND the backend.
+This commands runs the frontend AND the backend. 
 
 ### Running the Whole Test Suite
 ```
