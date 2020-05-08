@@ -17,5 +17,5 @@ module.exports.getUser = (userUUID) => {
  * @param updateParams - Object consisting of keys & values that will be updated for the user
  */
 module.exports.updateUser = (updateParams) => {
-
+    
 };
