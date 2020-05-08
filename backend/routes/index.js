@@ -1,14 +1,7 @@
-const express = require('express');
-const { authenticated } = require('./auth');
-const router = express.Router();
-const exampleController = require("../controllers/exampleController");
+const router = require("express").Router();
+const apiRoutes = require("./api");
 
-/* GET home page. */
-router.get('/', exampleController.handleLogic);
-router.get('/protected', authenticated, (req, res, next) => {
-    // we now have req.user!
-    res.status(200);
-    res.send("Authenticated access to protected!")
-})
+// API Routes
+router.use("/api", apiRoutes);
 
 module.exports = router;
