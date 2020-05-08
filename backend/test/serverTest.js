@@ -22,7 +22,7 @@ describe('routes', () => {
 
   it('it should GET a hello world string', (done) => {
     chai.request(server)
-      .get('/')
+      .get('/api')
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.be.a('object');
@@ -34,7 +34,7 @@ describe('routes', () => {
     
     it('should protect authenticated routes', (done) => {
       chai.request(server)
-      .get('/protected')
+      .get('/api/protected')
       .end((err, res) => {
         res.should.have.status(401);
         done();
@@ -43,7 +43,7 @@ describe('routes', () => {
     
     it('should accept authenticated users', (done) => {
       chai.request(server)
-      .get('/protected')
+      .get('/api/protected')
       .set("Authorization", "Bearer someuseruuid")
       .end((err, res) => {
         res.should.have.status(200);
