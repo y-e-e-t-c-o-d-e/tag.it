@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require("../../controllers/userController");
 
-// TODO: Will update routes to match as few endpoints as possible.
+// TODO: Will update routes to match as few endpoints as possible. 
 
 // Matches with "/api/user"
 router.route("/")
