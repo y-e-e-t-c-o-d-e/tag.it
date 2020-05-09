@@ -3,18 +3,25 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import './App.css';
 
 // Importing Pages
-import Home from './pages/Home';
-import Login from './pages/Login';
+import Home from './pages/Home/index';
+import Login from './pages/Login/index';
+import Signup from './pages/Signup/index';
+
+// Importing Authentication
+import PrivateRoute from "./auth/PrivateRoute";
+import { AuthProvider } from "./auth/Auth";
 
 const App = () => {
   return (
-    <Router>
-      <div>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/login" component={Login} />
-      </div>
-    </Router>
-    
+    <AuthProvider>
+      <Router>
+        <div>
+          <PrivateRoute exact path="/" component={Home} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={Signup} />
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
