@@ -1,6 +1,4 @@
-import * as firebase from "firebase";
-
-const db = firebase.initializeApp({
+module.exports = {
     
     apiKey: "AIzaSyD9jl-q7A4p30mdJwfayjlHiXPakxZ4hZc",
     authDomain: "tagit110.firebaseapp.com",
@@ -11,8 +9,4 @@ const db = firebase.initializeApp({
     appId: "1:44092496508:web:6cfdf6a296511c82a707f9",
     measurementId: "G-ZZ28HF6EW6"
       
-});
-
-export default db;
-//export const provider2 = new firebase.auth.GoogleAuthProvider();
-//export const provider = new firebase.auth.FacebookAuthProvider();
+};
