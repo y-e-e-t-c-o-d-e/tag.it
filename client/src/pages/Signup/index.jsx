@@ -28,13 +28,15 @@ const SignUp = ({ history }) => {
             <h1>Sign Up</h1>
             <form onSubmit={handleSignUp}>
                 <label>
-                    Email
+                    <p>Email</p>
                     <input name="email" type="email" placeholder="Email" />
                 </label>
+                <br/>
                 <label>
-                    Password
+                    <p>Password</p>
                     <input name="password" type="password" placeholder="Password" />
                 </label>
+                <br/>
                 <button type="submit">Sign Up</button>
             </form>
             <button onClick={redirectLogIn}>Log In</button>
