@@ -3,6 +3,7 @@ const { authenticated } = require('./auth');
 const router = express.Router();
 const exampleController = require("../../controllers/exampleController");
 const userRoutes = require("./user");
+const courseRoutes = require("./course");
 
 /* GET home page. */
 router.get('/', exampleController.handleLogic); // TODO: Get rid of this controller.
@@ -14,5 +15,6 @@ router.get('/protected', authenticated, (req, res, next) => {
 
 // Object routes
 router.use("/user", userRoutes);
+router.use("/course", courseRoutes);
 
 module.exports = router;
