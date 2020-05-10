@@ -1,0 +1,47 @@
+button {
+    background: linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%);
+    background-color:#f9f9f9;
+    border: 1px solid #dcdcdc;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+}
+
+button:hover {
+    background: linear-gradient(to bottom, #e9e9e9 5%, #f9f9f9 100%);
+    background-color: #e9e9e9;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+input {
+    background-color: #def1ff;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: solid #214cdb;
+}
+
+.container {
+    text-align: center;
+}
+
+.header {
+    background-color: aqua;
+    background: linear-gradient(#214cdb, #10309c)
+}
+
+.inputField {
+    margin: 20px 40%;
+    text-align: center;
+}
+
+#pwdRecover {
+    display: block;
+    font-size: 0.8em;
+    text-decoration: none;
+}
