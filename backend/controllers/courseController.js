@@ -13,6 +13,7 @@ exports.getCourse = async (req, res) => {
             status: 422,
             error: "Missing parameter: courseUUID"
         });
+        return;
     };
 
     // TODO: Delete mockData and replace with dynamic course model data.
