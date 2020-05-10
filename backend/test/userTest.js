@@ -41,13 +41,18 @@ describe('user', () => {
 
     it('should add course to user courseList', async () => {
         const uuid = 'user1';
-        await user.getUserById(uuid, async (value) => {
-            const testUser = value
-            console.log(testUser.props.name);
-            const testCourseID = 'cse110';
-            await testUser.addCourse(testCourseID);
-            expect(true).to.equal(true);
-        });
+        // await user.getUserById(uuid, async (value) => {
+        //     const testUser = value
+        //     console.log(testUser.props.name);
+        //     const testCourseID = 'cse110';
+        //     await testUser.addCourse(testCourseID);
+        //     expect(true).to.equal(true);
+        // });
+
+        const testUser = await user.getUserById(uuid)
+        const testCourseID = 'cse110';
+        await testUser.addCourse(testCourseID);
+        expect(testUser.props.name).to.equal('gary');
         
     })
 });

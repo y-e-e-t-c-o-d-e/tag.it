@@ -67,16 +67,32 @@ module.exports.pushUserToFirebase = (updateParams) => {
 
 
 
-fromUUID = async (uuid, callback) => {
+fromUUID = async (uuid) => {
     const ref = db.ref('Users/' + uuid);
-    // Attach an asynchronous callback to read the data at our posts reference
-    await ref.once("value", function(snapshot) {
-        const r = new User(snapshot.val());
-        console.log(r.props.name);
-        callback(r);
-    }, function (errorObject) {
-        console.log("The read failed: " + errorObject.code);
-    })
+
+    return new Promise((resolve, reject) => {
+        ref.once("value", function(snapshot) {
+            const r = new User(snapshot.val());
+            //console.log(r.props.name);
+            resolve(r);
+        }, function (errorObject) {
+            reject(errorObject);
+        })
+    }) 
+
+
+    /**
+     * This is for reference to the callback but, we're using promises now.
+     */
+
+    // // Attach an asynchronous callback to read the data at our posts reference
+    // await ref.once("value", function(snapshot) {
+    //     const r = new User(snapshot.val());
+    //     console.log(r.props.name);
+    //     callback(r);
+    // }, function (errorObject) {
+    //     console.log("The read failed: " + errorObject.code);
+    // })
 }
 
    
