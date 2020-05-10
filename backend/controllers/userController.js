@@ -12,6 +12,7 @@ exports.getUser = async (req, res) => {
             status: 422,
             error: "Missing paramater: userUUID"
         });
+        return;
     };
 
     // TODO: Delete mockData and replace with dynamic user model data.

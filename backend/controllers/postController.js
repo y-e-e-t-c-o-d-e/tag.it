@@ -13,6 +13,7 @@ exports.getPost = async (req, res) => {
             status: 422,
             error: "Missing parameter: postUUID"
         });
+        return;
     };
 
     // TODO: Delete mockData and replace with dynamic user model data.
