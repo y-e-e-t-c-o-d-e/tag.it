@@ -2,37 +2,42 @@ const firebase = require("firebase");
 const config = require("./firebaseConfig");
 const app = firebase.initializeApp(config);
 const db = firebase.database();
-/**
- * Retrieves a user object from Firebase. 
- * 
- * @param userUUID - Document ID of the user object in Firebase 
- * @return Promise object with the user information
- */
-module.exports.getUser = (userUUID) => {
-    return new Promise((resolve, reject) => {
-        // TODO: Firebase logic goes in here. 
-        resolve({ "name": "tag.it" }); // Example of how to return success in a Promise
-    });
-};
 
-/**
- * Uupdate a given user's data fields.
- * 
- * @param updateParams - Object consisting of keys & values that will be updated for the user
- */
-module.exports.updateUser = (updateParams) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            await db.ref("Users").child("user2").set({name: "gary"});
-            resolve("Everything worked");
-    
-        } catch (e) {
-            console.log(e);
-            reject("Something went wrong");
-        }
-    });
-    
-};
+class User {
+    constructor(props) {
+        //super(props);
+        this.props = props;
+    }
+
+    /**
+     * Uupdate a given user's data fields.
+     * 
+     * @param updateParams - Object consisting of keys & values that will be updated for the user
+     */
+    addCourse = async (courseId) => {
+        this.props.studentCourseList.push(courseId);
+        await this.push();
+    }
+
+    /**
+     * Uupdate a given user's data fields.
+     * 
+     * @param updateParams - Object consisting of keys & values that will be updated for the user
+     */
+    push = async () => {
+        await db.ref("Users").child(this.props.uuid).set({
+            name: this.props.name, 
+            email: this.props.email, 
+            uuid: this.props.uuid, 
+            studentCourseList: this.props.studentCourseList,
+            instructorCourseList: this.props.instructorCourseList,
+            postList: this.props.postList,
+            commentList: this.props.commentList,
+            followingList: this.props.followingList,
+            icon: this.props.icon
+        });
+    } 
+}
 
 module.exports.pushUserToFirebase = (updateParams) => {
     var name = updateParams['name'];
@@ -60,22 +65,20 @@ module.exports.pushUserToFirebase = (updateParams) => {
     })
 };
 
-// getStudentCourseList(callback) {
-//     var userId = "user1";
-//     var userRef = db.database().ref("Users/"+userId+"/studentCourseList");
-//     userRef.on('value', function(snapshot) {
-//         callback(snapshot.val());
-//     });
-// }
 
-// async addStudentCourse(event) {
-//     var courseId = "course2";
-//     var userId = "user1";
-//     var userRef = db.database().ref("Users/"+userId+"/studentCourseList");
-//     getStudentCourseList(
-//         (courseList) => {
-//             courseList.push(courseId)
-//             db.database().ref("Users").child(userId).child("studentCourseList").set(courseList);
-//         },
-//     );
-// }
+
+fromUUID = async (uuid, callback) => {
+    const ref = db.ref('Users/' + uuid);
+    // Attach an asynchronous callback to read the data at our posts reference
+    await ref.once("value", function(snapshot) {
+        const r = new User(snapshot.val());
+        console.log(r.props.name);
+        callback(r);
+    }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+    })
+}
+
+   
+module.exports.User = User
+module.exports.getUserById = fromUUID
