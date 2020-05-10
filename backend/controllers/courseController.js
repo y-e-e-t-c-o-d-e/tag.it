@@ -1,5 +1,5 @@
 //Uncomment this wheen the models are good
-//const user = require("../models/Course");
+//const course = require("../models/Course");
 
 exports.addCourse = async (req, res) => {
     // TODO: Handle later with models
