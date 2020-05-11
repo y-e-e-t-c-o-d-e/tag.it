@@ -1,6 +1,6 @@
 const firebase = require("firebase");
 const config = require("./firebaseConfig");
-const app = firebase.initializeApp(config);
+//const app = firebase.initializeApp(config);
 const db = firebase.database();
 
 class User {
@@ -40,39 +40,39 @@ class User {
     }
 
     getName() {
-        return name;
+        return this.props.name;
     }
 
     getEmail() {
-        return email;
+        return this.props.email;
     }
 
     getUUID() {
-        return uuid;
+        return this.props.uuid;
     }
 
     getStudentCourseList() {
-        return studentCourseList;
+        return this.props.studentCourseList;
     }
 
     getInstructorCourseList() {
-        return instructorCourseList;
+        return this.props.instructorCourseList;
     }
 
     getPostList() {
-        return postList;
+        return this.props.postList;
     }
 
     getCommentList() {
-        return commentList;
+        return this.props.commentList;
     }
 
     getFollowingList() {
-        return followingList;
+        return this.props.followingList;
     }
 
     getIcon() {
-        return icon;
+        return this.props.icon;
     }
  
     //getters for everything, add post, add comment, add followedPost

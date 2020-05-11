@@ -14,6 +14,118 @@ class Post {
      * 
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
+    getAuthor() {
+        return this.props.author;
+    }
+
+    getTitle() {
+        return this.props.title;
+    }
+
+    getUUID() {
+        return this.props.uuid;
+    }
+
+    getUsersFollowing() {
+        return this.props.followingList;
+    }
+
+    getComments() {
+        return this.props.commentList;
+    }
+
+    getTagList() {
+        return this.props.tagList;
+    }
+
+    getCommentList() {
+        return commentList;
+    }
+
+    getCourse() {
+        return this.props.course;
+    }
+
+    getScore() {
+        return this.props.score;
+    }
+
+    getContent() {
+        return this.props.content;
+    }
+
+    setTitle = async (newTitle) => {
+        this.props.title = newTitle;
+        await this.push();
+    }
+
+    addFollower = async (userId) => {
+        this.props.followingList.push(userId);
+        await this.push();
+    }
+
+    addComment = async (commentId) => {
+        this.props.commentList.push(commentId);
+        await this.push();
+    }
+
+    addTag = async (tagId) => {
+        this.props.tagList.push(tagId);
+        await this.push();
+    }
+
+    incrementScore = async () => {
+        this.props.score++;
+        await this.push();
+    }
+
+    setAnnouncement = async (newValue) => {
+        this.props.isAnnouncement = newValue;
+        await this.push();
+    }
+
+    setResolved = async (newValue) => {
+        this.props.isResolved = newValue;
+        await this.push();
+    }
+
+    setPinned = async (newValue) => {
+        this.props.isPinned = newValue;
+        await this.push();
+    }
+
+    setPrivate = async (newValue) => {
+        this.props.isPrivate = newValue;
+        await this.push();
+    }
+
+    setAnonymous = async (newValue) => {
+        this.props.isAnonymous = newValue;
+        await this.push();
+    }
+
+    setContent = async (newContent) => {
+        this.props.content = newContent;
+        await this.push();
+    }
+
+    sendUpdate = async () => {
+        var userList = [];
+        for (var i = 0; i < this.props.followingList.length; i ++) {
+            const testUser = await user.getUserById(uuid);
+            var email = testUser.getEmail();
+
+        }
+    }
+
+    removeTag = async (tagId) => {
+        for (var i = 0; i < this.props.tagList.length; i ++) {
+            if (this.props.tagList[i] === tagId) {
+                this.props.tagList.splice(i, 1);
+            }
+        }
+        await this.push();
+    }
 
 
 
@@ -80,7 +192,7 @@ getPostById = async (uuid) => {
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
             const r = new Post(snapshot.val());
-            //console.log(r.props.name);
+            //console.log(r.props.author);
             resolve(r);
         }, function (errorObject) {
             reject(errorObject);
