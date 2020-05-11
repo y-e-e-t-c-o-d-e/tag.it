@@ -39,7 +39,7 @@ describe('user', () => {
     })
     */
 
-    it('should add course to user courseList', async () => {
+    it('should add course to user studentCourseList', async () => {
         const uuid = 'user1';
         // await user.getUserById(uuid, async (value) => {
         //     const testUser = value
@@ -51,8 +51,41 @@ describe('user', () => {
 
         const testUser = await user.getUserById(uuid)
         const testCourseID = 'cse110';
-        await testUser.addCourse(testCourseID);
+        await testUser.addStudentCourse(testCourseID);
         expect(testUser.props.name).to.equal('gary');
         
+    })
+
+    it('should add course to user instructorCourseList', async () => {
+        const uuid = 'user1';
+        const testUser = await user.getUserById(uuid)
+        const testCourseID = 'cse101';
+        await testUser.addInstructorCourse(testCourseID);
+        expect(testUser.props.name).to.equal('gary');
+        
+    })
+
+    it('should add a post to user postList', async () => {
+        const uuid = 'user1';
+        const testUser = await user.getUserById(uuid)
+        const testPostID = 'post1';
+        await testUser.addPost(testPostID);
+        expect(testUser.props.name).to.equal('gary');
+    })
+
+    it('should add a comment to user commentList', async () => {
+        const uuid = 'user1';
+        const testUser = await user.getUserById(uuid)
+        const testCommentID = 'comment1';
+        await testUser.addComment(testCommentID);
+        expect(testUser.props.name).to.equal('gary');
+    })
+
+    it('should add a followed post to user followingList', async () => {
+        const uuid = 'user1';
+        const testUser = await user.getUserById(uuid)
+        const testFollowedPostID = 'followedPost1';
+        await testUser.addFollowedPost(testFollowedPostID);
+        expect(testUser.props.name).to.equal('gary');
     })
 });

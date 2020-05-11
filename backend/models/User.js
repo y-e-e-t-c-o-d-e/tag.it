@@ -14,10 +14,68 @@ class User {
      * 
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
-    addCourse = async (courseId) => {
+    addStudentCourse = async (courseId) => {
         this.props.studentCourseList.push(courseId);
         await this.push();
     }
+
+    addInstructorCourse = async (courseId) => {
+        this.props.instructorCourseList.push(courseId);
+        await this.push();
+    }
+
+    addPost = async (postId) => {
+        this.props.postList.push(postId);
+        await this.push();
+    }
+
+    addComment = async (commentId) => {
+        this.props.commentList.push(commentId);
+        await this.push();
+    }
+
+    addFollowedPost = async (postId) => {
+        this.props.followingList.push(postId);
+        await this.push();
+    }
+
+    getName() {
+        return name;
+    }
+
+    getEmail() {
+        return email;
+    }
+
+    getUUID() {
+        return uuid;
+    }
+
+    getStudentCourseList() {
+        return studentCourseList;
+    }
+
+    getInstructorCourseList() {
+        return instructorCourseList;
+    }
+
+    getPostList() {
+        return postList;
+    }
+
+    getCommentList() {
+        return commentList;
+    }
+
+    getFollowingList() {
+        return followingList;
+    }
+
+    getIcon() {
+        return icon;
+    }
+ 
+    //getters for everything, add post, add comment, add followedPost
 
     /**
      * Uupdate a given user's data fields.
@@ -67,7 +125,7 @@ module.exports.pushUserToFirebase = (updateParams) => {
 
 
 
-fromUUID = async (uuid) => {
+getUserById = async (uuid) => {
     const ref = db.ref('Users/' + uuid);
 
     return new Promise((resolve, reject) => {
@@ -97,4 +155,4 @@ fromUUID = async (uuid) => {
 
    
 module.exports.User = User
-module.exports.getUserById = fromUUID
+module.exports.getUserById = getUserById
