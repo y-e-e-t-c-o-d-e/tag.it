@@ -67,4 +67,19 @@ describe('post', () => {
         expect(testPost.props.author).to.equal("user1");
     })
 
+    // This test will not send the email, since Node returns before finishing the call. How to fix, idk.
+    it('should send an email to the user from us', async () => {
+        const testPost = await post.getPostById('post1');
+        await testPost.sendUpdate();
+        const sleep = (milliseconds) => {
+            return new Promise(resolve => setTimeout(resolve, milliseconds))
+          }
+          const doSomething = async () => {
+            await sleep(2000)
+            expect(testPost.props.author).to.equal("post1");
+          }
+          
+          doSomething()
+    })
+
 });

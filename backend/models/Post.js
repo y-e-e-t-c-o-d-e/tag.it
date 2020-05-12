@@ -1,7 +1,13 @@
+
+// Install these dependencies before you run
 const firebase = require("firebase");
 const config = require("./firebaseConfig");
-const app = firebase.initializeApp(config);
+const nodemailer = require('nodemailer');
+const user = require("./User");
+
+//const app = firebase.initializeApp(config);
 const db = firebase.database();
+
 
 class Post {
     constructor(props) {
@@ -110,12 +116,36 @@ class Post {
     }
 
     sendUpdate = async () => {
-        var userList = [];
+        //var userList = [];
         for (var i = 0; i < this.props.followingList.length; i ++) {
-            const testUser = await user.getUserById(uuid);
-            var email = testUser.getEmail();
+            const currUser = await user.getUserById(this.props.followingList[i]);
+            const email = await currUser.getEmail();
+            console.log(email)
+            var transporter = nodemailer.createTransport({
+                host: "smtp.mailtrap.io",
+                port: 2525,
+                auth: {
+                  user: "60438c70e2cd80",
+                  pass: "4320d95a84005b"
+                }
+              });
 
-        }
+            var mailOptions = {
+                from: 'tagitcse110',
+                to: email,
+                subject: this.props.title + ' has been updated!',
+                // TODO: Need field for post url to add to updated email.
+                text: 'Check it out here'
+            };
+
+            transporter.sendMail(mailOptions, async function(error, info) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+        } 
     }
 
     removeTag = async (tagId) => {

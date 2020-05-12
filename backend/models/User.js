@@ -1,6 +1,6 @@
 const firebase = require("firebase");
 const config = require("./firebaseConfig");
-//const app = firebase.initializeApp(config);
+const app = firebase.initializeApp(config);
 const db = firebase.database();
 
 class User {
