@@ -37,7 +37,7 @@ describe('user', () => {
 
         }    
     })
-    */
+    
 
     it('should add course to user studentCourseList', async () => {
         const uuid = 'user1';
@@ -87,5 +87,5 @@ describe('user', () => {
         const testFollowedPostID = 'followedPost1';
         await testUser.addFollowedPost(testFollowedPostID);
         expect(testUser.props.name).to.equal('gary');
-    })
+    })*/
 });
