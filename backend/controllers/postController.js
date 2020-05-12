@@ -29,7 +29,7 @@ exports.getPost = async (req, res) => {
         isResolved: false,
         isPrivate: false,
         isAnonymous: false,
-        Score: 12,
+        score: 12,
         isInstructor: false,
     };
     res.status(200).json(mockData);
