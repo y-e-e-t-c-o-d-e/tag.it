@@ -1,0 +1,18 @@
+.postEditor {
+    width: 100%;
+    height: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.editor {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.liveView {
+    width: 60%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
