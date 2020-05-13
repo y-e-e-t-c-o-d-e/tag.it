@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "mocha"
+    "test": "mocha --exit",
+    "test-single" : "mocha -R nyan --exit"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +15,7 @@
     "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "firebase": "^7.14.3",
     "mocha": "^7.1.2"
   }
 }

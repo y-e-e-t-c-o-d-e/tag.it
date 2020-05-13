@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Our awesome CSE110 Project!",
   "dependencies": {
+    "firebase": "^7.14.3",
+    "firebase-tools": "^8.2.0",
+    "mocha": "^7.1.2",
+    "nodemailer": "^6.4.6",
     "nodemon": "^2.0.3"
   },
   "devDependencies": {
