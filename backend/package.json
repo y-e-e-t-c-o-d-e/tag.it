@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "mocha --exit"
+    "test": "mocha --exit",
+    "test-single" : "mocha -R nyan --exit"
   },
   "author": "",
   "license": "ISC",

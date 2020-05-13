@@ -15,10 +15,10 @@ describe('user', () => {
     afterEach(() => {
 
     });
-/*
+
     it('should succeed and get user info given uuid', async () => {
         //const {name} = await user.getUser('some UUID');
-        expect(name).to.equal("tag.it");
+        //expect(name).to.equal("tag.it");
     });
 
     it('should succeed and push user to firebase given info', async() => {
@@ -30,7 +30,7 @@ describe('user', () => {
         try {
             //const result = await user.pushUserToFirebase(userParams);
             //var result = "Something went wrong";
-            //const result = await user.pushUserToFirebase(userParams);
+            const result = await user.pushUserToFirebase(userParams);
             console.log(result);
             expect(result).to.equal("Everything worked");
         } catch(e) {
@@ -87,5 +87,5 @@ describe('user', () => {
         const testFollowedPostID = 'followedPost1';
         await testUser.addFollowedPost(testFollowedPostID);
         expect(testUser.props.name).to.equal('gary');
-    })*/
+    })
 });
