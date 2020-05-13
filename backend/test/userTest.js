@@ -16,11 +16,6 @@ describe('user', () => {
 
     });
 
-    it('should succeed and get user info given uuid', async () => {
-        //const {name} = await user.getUser('some UUID');
-        //expect(name).to.equal("tag.it");
-    });
-
     it('should succeed and push user to firebase given info', async() => {
         const userParams = {
             name: "gary",

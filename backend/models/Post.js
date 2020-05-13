@@ -11,7 +11,6 @@ const db = firebase.database();
 
 class Post {
     constructor(props) {
-        //super(props);
         this.props = props;
     }
 
@@ -116,7 +115,6 @@ class Post {
     }
 
     sendUpdate = async () => {
-        //var userList = [];
         for (var i = 0; i < this.props.followingList.length; i ++) {
             const currUser = await user.getUserById(this.props.followingList[i]);
             const email = await currUser.getEmail();
@@ -216,7 +214,6 @@ getPostById = async (uuid) => {
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
             const r = new Post(snapshot.val());
-            //console.log(r.props.author);
             resolve(r);
         }, function (errorObject) {
             reject(errorObject);

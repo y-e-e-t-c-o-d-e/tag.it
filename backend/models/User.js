@@ -5,7 +5,6 @@ const db = firebase.database();
 
 class User {
     constructor(props) {
-        //super(props);
         this.props = props;
     }
 
