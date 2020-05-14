@@ -30,11 +30,6 @@ input {
     text-align: center;
 }
 
-.header {
-    background-color: aqua;
-    background: linear-gradient(#214cdb, #10309c)
-}
-
 .input {
     width: 25%;
 }
