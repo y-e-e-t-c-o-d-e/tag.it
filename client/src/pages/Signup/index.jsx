@@ -35,13 +35,12 @@ const SignUp = ({ history }) => {
                     </div>
                     <div className="input-row">
                         <div className="input">
-                            <h1>Sign Up</h1>
+                            <h2>Sign Up</h2>
                             <form onSubmit={handleSignUp}>
                                 <label>
                                     <p>Please enter your email: </p>
                                     <input name="email" type="email" placeholder="Email" />
                                 </label>
-                                <br />
                                 <label>
                                     <p>Please enter your password: </p>
                                     <input name="password" type="password" placeholder="Password" />
@@ -50,8 +49,8 @@ const SignUp = ({ history }) => {
                                     <p>Please enter your password again: </p>
                                     <input name="password" type="password" placeholder="Password" />
                                 </label>
-                                <br /> <br />
-                                <button type="submit">Sign Up</button>
+                                <br />
+                                <button type="submit" id="signup-button">Sign Up</button>
                             </form>
                         </div>
 
