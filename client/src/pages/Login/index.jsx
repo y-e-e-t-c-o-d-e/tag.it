@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Redirect } from "react-router-dom";
 import { AuthContext } from "../../auth/Auth";
 import db from "../../base";
+import LoginNav from "../../components/LoginNav";
 import logo from "../../assets/logo.png";
 import './style.css';
 
@@ -72,6 +73,7 @@ const Login = ({ history }) => {
 
     return (
         <div>
+            <LoginNav/>
             <div className="container">
                 <div id="center-logo">
                     <img src={logo} alt="Tag.it" height="125" />
