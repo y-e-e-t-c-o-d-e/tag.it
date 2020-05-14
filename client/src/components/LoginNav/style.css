@@ -1,3 +1,43 @@
+#navbar-body {
+    background-color: #b3ecff;
+    overflow: hidden;
+    padding-left: 20px;
+    padding-right: 50px;
+    position: sticky;
+    top: 0px
+}
+
+#nav-right {
+    min-height: 60px;
+    align-items: center;
+    top: 0;
+    float: right;
+    display: flex;
+}
+
+#nav-right a {
+    color: #ffc61a;
+    text-align: center;
+    padding: 20px 26px;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: 450;
+}
+
+#nav-right a:hover{
+    background-color: #ffc61a;
+    color: #ccf3ff;
+}
+
+#nav-right a.active{
+    background-color: #ccf3ff;
+}
+
+#nav-right a.active:hover{
+    background-color: #ffc61a;
+    color: #ccf3ff;
+}
+
 #logo {
     width: 150px;
     height: 60px;

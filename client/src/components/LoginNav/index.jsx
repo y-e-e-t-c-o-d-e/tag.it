@@ -1,18 +1,20 @@
 import React from "react";
-import Navbar from 'react-bootstrap/Navbar'
 import './style.css';
 import logo from '../../assets/logo.png';
 
-function LoginNav () {
+function LoginNav() {
     return(
-        <Navbar>
-            <Navbar.Brand>
-                <img id="logo" 
-                className="d-inline-block align-top" 
-                src={logo} alt="tag.it"
-                />
-            </Navbar.Brand>
-        </Navbar>
+        <div id="navbar-body">
+            <img id="logo" src={logo} alt="tag.it" />
+
+            <div id="nav-right">
+                <nav>
+                    <a class="active" href="/login">Log In</a>
+                    <a href="/signup">Sign Up</a>
+                </nav>
+            </div>
+        </div>
+
     );
 };
 
