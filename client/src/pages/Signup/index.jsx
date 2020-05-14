@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import db from "../../base";
 import './style.css';
 import logo from '../../assets/logo.png';
+import API from "../../utils/API";
 
 var bgColors = {
     "default": "white",
@@ -20,16 +21,20 @@ const SignUp = ({ history }) => {
     const [passwordValid, setPasswordValid] = useState(false);
 
     /* Pushes signup data to database and redirect to Login */
-    const handleSignUp = (event) => {
+    const handleSignUp = async (event) => {
         if (emailValid && passwordValid) {
             event.preventDefault();
-            const { email, password } = event.target.elements;
+            const { name, email, password } = event.target.elements;
 
             try {
-                db
+                const {user} = await db
                     .auth()
                     .createUserWithEmailAndPassword(email.value,
-                        password.value);
+                        password[0].value);
+                user.updateProfile({
+                    displayName: name.value
+                });
+                API.createUser(name.value, email.value, user.uid);
                 history.push("/");
             } catch (error) {
                 alert(error);
@@ -68,7 +73,7 @@ const SignUp = ({ history }) => {
             setEmailBgColor(bgColors.default);
             setEmailValid(true);
         }
-    }
+    };
 
     /* Makes possible password input background color change  */
     const [passwordBgColor, setPasswordBgColor] = useState(
@@ -139,6 +144,12 @@ const SignUp = ({ history }) => {
                         <div className="input">
                             <h2>Sign Up</h2>
                             <form onSubmit={handleSignUp}>
+                                <label>
+                                    <p>Please enter your name: </p>
+                                    <input name="name" type="name" placeholder="First & Last Name"
+                                        style={{ backgroundColor: bgColors.default }}
+                                    />
+                                </label>
                                 <label>
                                     <p>Please enter your email: </p>
                                     <input name="email" type="email" placeholder="Email"
