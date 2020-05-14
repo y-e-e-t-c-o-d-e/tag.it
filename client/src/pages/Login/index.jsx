@@ -18,13 +18,13 @@ const Login = ({ history }) => {
     /* Checks whether the input form is valid */
     const [emailValid, setEmailValid] = useState(false);
 
-    const handleLogin = (event) => {
+    const handleLogin = async (event) => {
         if (emailValid) {
             event.preventDefault();
             const { email, password } = event.target.elements;
 
             try {
-                db
+                await db
                     .auth()
                     .signInWithEmailAndPassword(email.value,
                         password.value);
