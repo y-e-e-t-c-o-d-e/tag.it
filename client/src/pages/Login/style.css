@@ -35,13 +35,28 @@ input {
     background: linear-gradient(#214cdb, #10309c)
 }
 
+.input {
+    width: 25%;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .inputField {
-    margin: 20px 40%;
     text-align: center;
+    width: 100%;
+}
+
+#center-logo {
+    margin-top: 50px;
 }
 
 #pwdRecover {
     display: block;
     font-size: 0.8em;
+    margin-bottom: 18px;
     text-decoration: none;
 }
