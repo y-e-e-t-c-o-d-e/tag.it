@@ -147,20 +147,20 @@ const SignUp = ({ history }) => {
                             <h2>Sign Up</h2>
                             <form onSubmit={handleSignUp}>
                                 <label>
-                                    <p>Please enter your name: </p>
+                                    <p>Please enter your name:</p>
                                     <input name="name" type="name" placeholder="First & Last Name"
                                         style={{ backgroundColor: bgColors.default }}
                                     />
                                 </label>
                                 <label>
-                                    <p>Please enter your email: </p>
+                                    <p>Please enter your email:</p>
                                     <input name="email" type="email" placeholder="Email"
                                         onBlur={handleEmailChange}
                                         style={{ backgroundColor: emailBgColor }}
                                     />
                                 </label>
                                 <label>
-                                    <p>Please enter your password: </p>
+                                    <p>Please enter your password:</p>
                                     <input name="password" type="password" placeholder="Password" 
                                         onChange={handleFirstPasswordChange}
                                         onBlur={handleFirstPasswordChange}
@@ -168,8 +168,8 @@ const SignUp = ({ history }) => {
                                     />
                                 </label>
                                 <label>
-                                    <p>Please enter your password again: </p>
-                                    <input name="password" type="password" placeholder="Password" 
+                                    <p>Please enter your password again:</p>
+                                    <input name="password" type="password" placeholder="Confirm Password" 
                                         onChange={handleSecondPasswordChange}
                                         onBlur={handleSecondPasswordBlur}
                                         style={{backgroundColor: passwordBgColor}}

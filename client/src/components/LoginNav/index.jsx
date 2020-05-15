@@ -1,4 +1,5 @@
 import React from "react";
+import {NavLink} from "react-router-dom";
 import './style.css';
 import logo from '../../assets/logo.png';
 
@@ -9,8 +10,8 @@ function LoginNav() {
 
             <div id="nav-right">
                 <nav>
-                    <a class="active" href="/login">Log In</a>
-                    <a href="/signup">Sign Up</a>
+                    <NavLink to="/login">Log In</NavLink>
+                    <NavLink to="/signup">Sign Up</NavLink>
                 </nav>
             </div>
         </div>

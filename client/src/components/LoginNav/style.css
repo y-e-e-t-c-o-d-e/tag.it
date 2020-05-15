@@ -25,17 +25,18 @@
 }
 
 #nav-right a:hover{
-    background-color: #ffc61a;
-    color: #ccf3ff;
+    background-color: #ffd24d; /*#ccf3ff*/
+    color: white;
 }
 
 #nav-right a.active{
-    background-color: #ccf3ff;
+    background-color: #ffc61a;
+    color: white;
 }
 
 #nav-right a.active:hover{
     background-color: #ffc61a;
-    color: #ccf3ff;
+    color: white;
 }
 
 #logo {
