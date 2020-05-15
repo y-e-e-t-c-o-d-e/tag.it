@@ -24,7 +24,7 @@ const SignUp = ({ history }) => {
 
     /* Pushes signup data to database and redirect to Login */
     const handleSignUp = async (event) => {
-        if (emailValid && passwordValid) {
+        if (nameValid && emailValid && passwordValid) {
             event.preventDefault();
             const { name, email, password } = event.target.elements;
 
