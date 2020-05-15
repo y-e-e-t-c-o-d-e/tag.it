@@ -20,6 +20,7 @@ const SignUp = ({ history }) => {
     /* Checks whether the input form is valid */
     const [emailValid, setEmailValid] = useState(false);
     const [passwordValid, setPasswordValid] = useState(false);
+    const [nameValid, setnameValid] = useState(false);
 
     /* Pushes signup data to database and redirect to Login */
     const handleSignUp = async (event) => {
@@ -42,9 +43,38 @@ const SignUp = ({ history }) => {
             }
         }
         else{
-            if(!emailValid){alert("Invalid email address");}
+            if(!nameValid){alert("Please enter your first and last name");}
+            else if(!emailValid){alert("Invalid email address");}
             else if(!passwordValid){alert("Passwords do not match");}
         }
+    }
+
+    /* Makes possible email input background color change  */
+    const [nameBgColor, setNameBgColor] = useState(
+        bgColors.default
+    );
+
+    /* Makes sure name has the correct format */
+    const handleNameChange = (event) => {
+
+        // Checking for format of the name
+        const nameInput = event.target.value;
+        let lastSpacePos = nameInput.lastIndexOf(' ');
+        let firstNameValid = lastSpacePos > 0;
+        let lastNameValid = nameInput.length - lastSpacePos > 1;
+
+        // If invalid, indicate an error
+        if(nameInput==="" || !firstNameValid || !lastNameValid){
+            setNameBgColor(bgColors.error);
+            setnameValid(false);
+        }
+
+        // If valid, indicate valid
+        else{
+            setNameBgColor(bgColors.default);
+            setnameValid(true);
+        }
+    
     }
 
     /* Makes possible email input background color change  */
@@ -149,7 +179,8 @@ const SignUp = ({ history }) => {
                                 <label>
                                     <p>Please enter your name:</p>
                                     <input name="name" type="name" placeholder="First & Last Name"
-                                        style={{ backgroundColor: bgColors.default }}
+                                        onBlur={handleNameChange}
+                                        style={{ backgroundColor: nameBgColor }}
                                     />
                                 </label>
                                 <label>
