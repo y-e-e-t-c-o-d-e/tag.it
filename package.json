@@ -7,7 +7,8 @@
     "firebase-tools": "^8.2.0",
     "mocha": "^7.1.2",
     "nodemailer": "^6.4.6",
-    "nodemon": "^2.0.3"
+    "nodemon": "^2.0.3",
+    "react-bootstrap": "^1.0.1"
   },
   "devDependencies": {
     "concurrently": "^4.0.1"
