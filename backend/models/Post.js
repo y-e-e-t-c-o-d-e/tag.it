@@ -8,7 +8,6 @@ const user = require("./User");
 //const app = firebase.initializeApp(config);
 const db = firebase.database();
 
-
 class Post {
     constructor(props) {
         this.props = props;

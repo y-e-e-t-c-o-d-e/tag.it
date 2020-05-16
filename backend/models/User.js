@@ -51,23 +51,23 @@ class User {
     }
 
     getStudentCourseList() {
-        return this.props.studentCourseList;
+        return this.props.studentCourseList.slice(1, this.props.studentCourseList.length);
     }
 
     getInstructorCourseList() {
-        return this.props.instructorCourseList;
+        return this.props.instructorCourseList.slice(1, this.props.instructorCourseList.length);
     }
 
     getPostList() {
-        return this.props.postList;
+        return this.props.postList.slice(1, this.props.postList.length);
     }
 
     getCommentList() {
-        return this.props.commentList;
+        return this.props.commentList.slice(1, this.props.commentList.length);
     }
 
     getFollowingList() {
-        return this.props.followingList;
+        return this.props.followingList.slice(1, this.props.followingList.length);
     }
 
     getIcon() {
