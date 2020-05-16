@@ -6,11 +6,12 @@
   "scripts": {
     "start": "node app.js",
     "test": "mocha --exit",
-    "test-single" : "mocha -R nyan --exit"
+    "test-single": "mocha -R nyan --exit"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "cors": "^2.8.5",

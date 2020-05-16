@@ -1,8 +1,25 @@
 const user = require("../models/User");
 
 exports.addUser = async (req, res) => {
-    // TODO: Handle later with models
-    res.status(200).send("Added user");
+    // Check that required data is given
+    const bodyParams = req.body;
+    if (!("name" in bodyParams || "email" in bodyParams || "uuid" in bodyParams)) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing one of the following parameters: name, email, or uuid"
+        });
+        return;
+    };
+
+    try {
+        await user.pushUserToFirebase(bodyParams);
+        res.status(200).send(`Added user ${bodyParams.uuid}`)
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: "Server could not push to firebase"
+        })
+    }
 };
 
 exports.getUser = async (req, res) => {
@@ -15,18 +32,16 @@ exports.getUser = async (req, res) => {
         return;
     };
 
-    // TODO: Delete mockData and replace with dynamic user model data.
-    const mockData = {
-        name: "Rick Ord",
-        email: "rickord@retired.edu",
-        icon: "https://picsum.photos/200", 
-        studentCourseList: ["some course id", "some other course id"],
-        postList: ["some post id", "other post id"],
-        followingList: ["some post id", "other post id"],
-        commentList: [],
-        instructorCourseList: ["some course id"]
+    // Grabs the user based on the userUUID. If fails, responds with an error.
+    try {
+        const userObj = await user.getUserById(userUUID);
+        res.status(200).json(userObj.props);
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
     };
-    res.status(200).json(mockData);
 };
 
 exports.updateUser = async (req, res) => {
