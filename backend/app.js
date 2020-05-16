@@ -1,7 +1,11 @@
+const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 
 const indexRouter = require('./routes/index');
+
+// Middleware to parse JSON data
+app.use(bodyParser.json());
 
 app.use('/', indexRouter);
 

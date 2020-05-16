@@ -1,6 +1,6 @@
 const firebase = require("firebase");
 const config = require("./firebaseConfig");
-const app = firebase.initializeApp(config);
+//const app = firebase.initializeApp(config);
 const db = firebase.database();
 
 class User {
@@ -9,7 +9,7 @@ class User {
     }
 
     /**
-     * Uupdate a given user's data fields.
+     * Update a given user's data fields.
      * 
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
@@ -102,6 +102,7 @@ module.exports.pushUserToFirebase = (updateParams) => {
     var uuid = updateParams['uuid'];
     return new Promise(async (resolve, reject) => {
         try {
+            // TODO: Implement logic for these lists later.
             await db.ref("Users").child(uuid).set({
                 name: name, 
                 email: email, 
