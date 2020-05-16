@@ -1,0 +1,39 @@
+/*overall post */
+.post {
+    position: absolute;
+    top: 200px;
+    right: 30px;
+    width: 857px;
+    height: 370px;
+    border: 3px solid black;
+    padding: 5px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.question {
+    position: relative;
+} 
+
+.content {
+    position: relative;
+}
+
+.postbar {
+    position: relative;
+}
+
+.followup {
+    position: relative;
+}
+
+.back {
+    position: relative;
+    background: #91d6e9;
+    text-align: center;
+    margin: 0px;
+    height: 40px;
+    width:40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
