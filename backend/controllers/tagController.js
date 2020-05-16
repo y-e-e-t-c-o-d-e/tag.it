@@ -7,8 +7,8 @@ exports.addTag = async (req, res) => {
 };
 
 exports.getTag = async (req, res) => {
-    const postUUID = req.query.postUUID;
-    if (!postUUID) {
+    const tagUUID = req.query.tagUUID;
+    if (!tagUUID) {
         res.status(422).json({
             status: 422,
             error: "Missing parameter: tagUUID"
