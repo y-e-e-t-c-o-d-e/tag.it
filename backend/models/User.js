@@ -1,5 +1,4 @@
-const firebase = require("firebase");
-const db = firebase.database();
+const { db } = require("../shared/firebase")
 
 class User {
     constructor(props) {

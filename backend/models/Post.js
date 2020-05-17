@@ -1,12 +1,9 @@
 
 // Install these dependencies before you run
-const firebase = require("firebase");
-const config = require("./firebaseConfig");
 const nodemailer = require('nodemailer');
 const user = require("./User");
+const { db } = require("../shared/firebase")
 
-//const app = firebase.initializeApp(config);
-const db = firebase.database();
 
 class Post {
     constructor(props) {
