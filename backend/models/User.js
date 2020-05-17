@@ -90,6 +90,15 @@ class User {
         await this.push();
     }
 
+    addLikedPost = async (postId) => {
+        this.props.likedPostList.push(postId);
+        
+    }
+
+    addLikedComment = async (commentId) => {
+        this.props.likedCommentList.push(commentId);
+    }
+
     getName() {
         return this.props.name;
     }
@@ -122,6 +131,14 @@ class User {
         return this.props.followingList.slice(1, this.props.followingList.length);
     }
 
+    getLikedPostList() {
+        return this.props.likedPostList;
+    }
+
+    getLikedCommentList() {
+        return this.props.likedCommentList;
+    }
+
     getIcon() {
         return this.props.icon;
     }
@@ -143,6 +160,8 @@ class User {
             postList: this.props.postList,
             commentList: this.props.commentList,
             followingList: this.props.followingList,
+            likedPostList: this.props.likedPostList,
+            likedCommentList: this.props.likedCommentList,
             icon: this.props.icon
         });
     } 
@@ -163,6 +182,8 @@ module.exports.pushUserToFirebase = (updateParams) => {
                 postList: ["dummy_post_id"],
                 commentList: ["dummy_comment_id"],
                 followingList: ["dummy_post_id"],
+                likedPostList: ["dummy_post_id"],
+                likedCommentList: ["dummy_comment_id"],
                 icon: "anonymous.jpg"
             });
             resolve(updateParams['uuid']);
