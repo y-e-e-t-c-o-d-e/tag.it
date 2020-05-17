@@ -8,6 +8,10 @@ const utilMap = {
     "class": ClassUtil
 };
 
+const defaultTextMap = {
+    "class": "Ex. CSE110"
+};
+
 // Each prop is required to use this component
 const SuggestionTextField = ({name, options, onBlur, type}) => {
     const [textValue, setTextValue] = useState('');
@@ -21,7 +25,7 @@ const SuggestionTextField = ({name, options, onBlur, type}) => {
     // Input for suggestion text boxes
     const inputProps = {
         value: textValue,
-        placeholder: 'Ex. CSE110',
+        placeholder: defaultTextMap[type],
         onChange: onChange,
         onBlur: onBlur
     };
