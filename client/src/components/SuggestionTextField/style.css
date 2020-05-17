@@ -19,6 +19,7 @@
     border-radius: 4px;
     margin-top: auto;
     margin-bottom: auto;
+    text-align: left;
   }
   
 .react-autosuggest__input--focused {
@@ -66,8 +67,9 @@
 .classSuggestion {
   display: flex;
   flex-direction: column;
+  text-align: left;
 }
 
 .courseId {
-  font-size: 14px;
+  font-size: 12px;
 }
