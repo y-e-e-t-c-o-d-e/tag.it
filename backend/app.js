@@ -1,21 +1,15 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
+const cors = require("cors");
+
 const errorHandler = require('./shared/error').errorHandler;
 const indexRouter = require('./routes/index');
 
 // Middleware to parse JSON data
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (origin && origin.indexOf("tagdotit.netlify.app") < 0) {
-    res.header("Access-Control-Allow-Origin", "https://tagdotit.netlify.app/");
-  };
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
+app.use(cors());
 app.use('/', indexRouter);
 
 // Error Handling
