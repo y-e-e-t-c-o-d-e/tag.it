@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 console.log(process.env.NODE_ENV);
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://tagdotit.netlify.app/");
+  res.header("Access-Control-Allow-Origin", "https://[\s\S]*tagdotit.netlify.app/");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
