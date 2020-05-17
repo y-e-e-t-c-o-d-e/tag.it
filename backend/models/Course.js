@@ -1,10 +1,6 @@
 // Install these dependencies before you run
-const firebase = require("firebase");
-const config = require("./firebaseConfig");
-//const app = firebase.initializeApp(config);
 const post = require("../models/Post");
-const db = firebase.database();
-
+const db = require("./firebase").db;
 
 class Course {
     constructor(props) {
