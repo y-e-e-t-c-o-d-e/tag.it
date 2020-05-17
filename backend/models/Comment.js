@@ -1,6 +1,5 @@
-
-// Install these dependencies before you run
 const db = require("./firebase").db;
+
 
 class Comment {
     constructor(props) {
