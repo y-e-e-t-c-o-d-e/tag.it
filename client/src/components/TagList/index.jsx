@@ -34,7 +34,7 @@ export class TagList extends React.Component {
 
     render() {
         return (
-            <div className="tagSection">
+            <div className="tag-section">
                 <input className="search" type="text" placeholder="Search..." />
                 <button className="btn-style search-btn"><b>search.it</b></button>
                 <div className="filter-dropdown">
