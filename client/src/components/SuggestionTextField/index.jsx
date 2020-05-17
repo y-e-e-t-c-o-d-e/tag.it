@@ -30,7 +30,7 @@ const SuggestionTextField = ({name, options, onBlur, type}) => {
     let util = utilMap[type];
 
     return (
-        <div className="classTextField">
+        <div className="suggestionTextField">
             <p>{name}</p>
             <AutoSuggest
                 suggestions={suggestions}

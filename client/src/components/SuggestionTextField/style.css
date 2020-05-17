@@ -1,10 +1,10 @@
-.classTextField {
+.suggestionTextField {
     display: flex;
     flex-direction: row;
     justify-content: center;
 }
 
-.classTextField > p {
+.suggestionTextField > p {
     padding-right: 15px;
 }
 
