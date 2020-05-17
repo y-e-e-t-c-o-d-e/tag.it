@@ -6,6 +6,7 @@ const authHeaders = () => {
 }
 
 const baseURL = process.env.NODE_ENV === "development" ? "" : "https://tag-it-server.herokuapp.com";
+console.log(process.env.NODE_ENV);
 
 export default {
     /** USERS */
