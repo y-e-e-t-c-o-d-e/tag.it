@@ -1,13 +1,6 @@
-
-// Install these dependencies before you run
-const firebase = require("firebase");
-const config = require("./firebaseConfig");
 const user = require("./User");
 const post = require("./Post");
-
-//const app = firebase.initializeApp(config);
-const db = firebase.database();
-
+const { db } = require("../shared/firebase")
 
 class Tag {
     constructor(props) {

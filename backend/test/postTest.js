@@ -5,7 +5,7 @@ const post = require("../models/Post");
 const user = require("../models/User");
 
 // User test suite 
-describe('post', () => {
+describe('post', async () => {
 
     // Setup function before every test is run 
     beforeEach(() => {
@@ -67,10 +67,31 @@ describe('post', () => {
         expect(testPost.props.author).to.equal("user1");
     })
 
+    
+    const postParams = {
+        title: "i need help", 
+        content: "my code is broken",
+        author: "user1", 
+        uuid: "post2",
+        tagList: ["tag1"],
+        commentList: ["comment1"],
+        followingList: ["user1"],
+        isAnnouncement: false,
+        isPinned: false,
+        isAnonymous: true,
+        isPrivate: true,
+        isResolved: false,
+        isInstructor: false,
+        score: 283,
+        course: "course1",
+    }
+
+    await post.pushPostToFirebase(postParams);
+
     // This test will not send the email, since Node returns before finishing the call. How to fix, idk.
-    it('should send an email to the user from us', async () => {
+    /*it('should send an email to the user from us', async () => {
         const testPost = await post.getPostById('post1');
         await testPost.sendUpdate();
         expect(testPost.props.uuid).to.equal("post1");
-    })
+    })*/
 });

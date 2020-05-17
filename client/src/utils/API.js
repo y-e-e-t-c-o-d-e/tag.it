@@ -1,4 +1,11 @@
 import axios from "axios";
+// import { AuthContext } from "./Auth";
+import { AuthContext } from "../auth/Auth"
+import db from "../base"
+
+const authHeaders = () => {
+    return { Authorization: `Bearer ${db.auth().currentUser.uid}` }
+}
 
 export default {
     /** USERS */
@@ -6,7 +13,8 @@ export default {
         const config = {
             params: {
                 userUUID: uuid
-            }
+            },
+            headers: authHeaders()
         };
         return axios.get("/api/user", config);
     },
@@ -18,7 +26,8 @@ export default {
                 name: name,
                 email: email,
                 uuid: uuid
-            }
+            },
+            headers: authHeaders()
         };
         return axios(config);
     },
@@ -29,8 +38,9 @@ export default {
         const config = {
             params: {
                 postUUID: uuid
-            }
+            },
+            headers: authHeaders()
         };
         return axios.get("/api/post", config);
-    },
+    }
 }

@@ -17,10 +17,10 @@ router.get('/protected', authenticated, (req, res, next) => {
 })
 
 // Object routes
-router.use("/user", userRoutes);
-router.use("/post", postRoutes);
-router.use("/course", courseRoutes);
-router.use("/comment", commentRoutes);
-router.use("/tag", tagRoutes);
+router.use("/user", authenticated, userRoutes);
+router.use("/post", authenticated, postRoutes);
+router.use("/course", authenticated, courseRoutes);
+router.use("/comment", authenticated, commentRoutes);
+router.use("/tag", authenticated, tagRoutes);
 
 module.exports = router;
