@@ -1,9 +1,6 @@
-
-// Install these dependencies before you run
 const user = require("./User");
 const post = require("./Post");
-const db = require("./firebase").db;
-
+const { db } = require("../shared/firebase")
 
 class Tag {
     constructor(props) {
