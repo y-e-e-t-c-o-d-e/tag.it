@@ -3,8 +3,8 @@ const nodemailer = require('nodemailer');
 const user = require("./User");
 const tag = require("./Tag");
 const comment = require("./Comment")
-//const db = require("./firebase").db;
 const { db } = require("../shared/firebase")
+
 
 class Post {
     constructor(props) {
