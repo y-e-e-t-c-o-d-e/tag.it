@@ -6,6 +6,7 @@ import './App.css';
 import Home from './pages/Home/index';
 import Login from './pages/Login/index';
 import Signup from './pages/Signup/index';
+import ClassCreation from './pages/ClassCreation/index';
 
 // Importing Authentication
 import PrivateRoute from "./auth/PrivateRoute";
@@ -19,6 +20,7 @@ const App = () => {
           <PrivateRoute exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
+          <Route exact path="/createclass" component={ClassCreation} />
         </div>
       </Router>
     </AuthProvider>
