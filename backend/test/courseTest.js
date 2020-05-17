@@ -68,12 +68,17 @@ describe('course', () => {
         expect(testCourse.getPostList().length).to.equal(2);
     })
 
-    it('should add post to course', async () => {
+    it('should add post to course and get posts associated with a tag', async () => {
         const uuid = 'course1';
         const testCourse = await course.getCourseById(uuid);
         const posts = await testCourse.getPostsWithTag("tag1");
         expect(posts.length).to.equal(2);
     })
 
+    it('should get posts associated with a tag', async () => {
+        const testCourse = await course.getCourseById('course1');
+        const posts = await testCourse.getPostsWithMultipleTags(['tag1', 'tag2'])
+        expect(posts.length).to.equal(2);
+    })
 
 });

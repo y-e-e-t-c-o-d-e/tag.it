@@ -61,15 +61,14 @@ class Course {
 
     getPostsWithTag = async (tagId) => {
         let list = this.getPostList();
-        console.log(list);
         const posts = [];
         for (let i = 0; i < list.length; i ++) {
             // get each post object from firebase
             //console.log(list[i]);
-            const currentPost = await post.getPostById("post1");
-            const currList = await currentPost.getTagList();
-            for (let j = 0; j < currList.length; j ++) {
-                if (currList[j] === tagId) {
+            const currentPost = await post.getPostById(list[i]);
+            const tagList = await currentPost.getTagList();
+            for (let j = 0; j < tagList.length; j ++) {
+                if (tagList[j] === tagId) {
                     posts.push(currentPost);
                     break;
                 }
@@ -78,8 +77,16 @@ class Course {
         return posts;
     }
 
-
-
+    getPostsWithMultipleTags = async (tagList) => {
+        let posts = {};
+        for(let i = 0; i < tagList.length; i++) {
+            let newPosts = await this.getPostsWithTag(tagList[i]);
+            newPosts.forEach(post => {
+                posts[post.getUUID()] = post;
+            })
+        };
+        return Object.values(posts);
+    }
 
     /**
      * Update a given post's data fields.
