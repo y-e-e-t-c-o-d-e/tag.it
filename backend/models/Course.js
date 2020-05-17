@@ -1,6 +1,6 @@
 // Install these dependencies before you run
 const post = require("../models/Post");
-const db = require("./firebase").db;
+const { db } = require("../shared/firebase")
 
 class Course {
     constructor(props) {
