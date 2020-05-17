@@ -1,13 +1,17 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
-
+const errorHandler = require('./shared/error').errorHandler;
 const indexRouter = require('./routes/index');
 
 // Middleware to parse JSON data
 app.use(bodyParser.json());
 
 app.use('/', indexRouter);
+
+
+// Error Handling
+app.use(errorHandler);
 
 const port = process.env.PORT || 4000;
 const server = app.listen(port, function() {
