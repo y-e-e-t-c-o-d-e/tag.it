@@ -1,7 +1,9 @@
 import React from 'react';
-import Button from '../../components/Button';
+import Button from "../../components/Button/index.jsx";
 import './style.css';
 import db from "../../base";
+
+import TagList from "../../components/TagList/index.jsx";
 
 const Home = () => {
     return (
@@ -9,6 +11,7 @@ const Home = () => {
             <h1>Tag.it</h1>
             <Button text="Click Me"></Button>
             <button onClick={() => db.auth().signOut()}>Sign Out</button>
+            <TagList />
         </div>
     )
 };
