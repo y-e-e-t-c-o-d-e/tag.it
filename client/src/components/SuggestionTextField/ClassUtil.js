@@ -8,7 +8,11 @@ export default {
     
     renderSuggestion: (suggestion) => {
         return (
-            <span>{suggestion.courseName}</span>
+            <div className="classSuggestion">
+                <span>{suggestion.courseName}</span>
+                <span className="courseId">Course Id: {suggestion.courseId}</span>
+            </div>
+            
         );
     },
     
