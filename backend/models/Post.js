@@ -176,6 +176,8 @@ class Post {
     } 
 }
 
+//TODO: CREATE INITIAL POST
+
 module.exports.pushPostToFirebase = (updateParams) => {
     return new Promise(async (resolve, reject) => {
         try {
