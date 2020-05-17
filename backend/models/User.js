@@ -1,8 +1,11 @@
 const db = require("./firebase").db;
+<<<<<<< HEAD
 const post = require("./Post");
 const tag = require("./Tag");
 const comment = require("./Comment")
 const course = require("./Course")
+=======
+>>>>>>> Rohith/firebase models (#44)
 
 class User {
     constructor(props) {
