@@ -23,13 +23,8 @@ describe('course', () => {
             name: "cse110", 
             term: "sp20",
             uuid: "course1",
-<<<<<<< HEAD
             instructorList: ["user2"], 
             studentList: ["user1"],
-=======
-            instructorList: "user2", 
-            studentList: "user1",
->>>>>>> Rohith/firebase models (#44)
             tagList: ["dummy_tag"],
             postList: ["dummy_post"],
         }
@@ -86,7 +81,6 @@ describe('course', () => {
         expect(posts.length).to.equal(2);
     })
 
-<<<<<<< HEAD
     it('should classify the user according to their status', async () => {
         const testCourse = await course.getCourseById('course1');
         expect(testCourse.classifyUser('user2')).to.equal('instructor');
@@ -123,6 +117,4 @@ describe('course', () => {
 
 
 
-=======
->>>>>>> Rohith/firebase models (#44)
 });

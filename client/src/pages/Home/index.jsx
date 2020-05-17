@@ -1,9 +1,11 @@
 import React from 'react';
-import Button from '../../components/Button';
+import Button from "../../components/Button/index.jsx";
 import './style.css';
 import db from "../../base";
 
-const Home = ({currentUser, ...rest}) => {    
+import TagList from "../../components/TagList/index.jsx";
+
+const Home = () => {
     return (
         <div className="home">
             { // TODO: Will rearrange frontend to handle the user data.
@@ -12,6 +14,7 @@ const Home = ({currentUser, ...rest}) => {
             <h1>Tag.it</h1>
             <Button text="Click Me"></Button>
             <button onClick={() => db.auth().signOut()}>Sign Out</button>
+            <TagList />
         </div>
     )
 };
