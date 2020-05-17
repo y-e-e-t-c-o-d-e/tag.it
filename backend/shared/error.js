@@ -1,5 +1,6 @@
 class HTTPError extends Error {
-    super(status, message, data) {
+    constructor(status, message, data) {
+        super(message || status);
         this.status = status;
         this.message = message || status;
         this.data = data || {};
@@ -18,7 +19,17 @@ class NotFound extends HTTPError {
     }
 }
 
+class InternalServerError extends HTTPError {
+    constructor(message) {
+        super(500, message)
+    }
+}
+
 const errorHandler = (err, req, res, next) => {
+    if (!err.status) {
+        return next(new InternalServerError("No Error Status Given"))
+    }
+
     res.status(err.status).json({
         error: {
             status: err.status,
@@ -32,5 +43,6 @@ module.exports = {
     HTTPError,
     Unauthorized,
     NotFound,
+    InternalServerError,
     errorHandler
 }
