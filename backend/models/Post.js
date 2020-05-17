@@ -1,6 +1,7 @@
+// Install these dependencies before you run
 const nodemailer = require('nodemailer');
 const user = require("./User");
-const db = require("./firebase").db;
+const { db } = require("../shared/firebase")
 
 class Post {
     constructor(props) {

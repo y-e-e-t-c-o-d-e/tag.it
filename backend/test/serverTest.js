@@ -20,17 +20,7 @@ describe('index routes', () => {
     server.close();
   })
 
-  it('it should GET a hello world string', (done) => {
-    chai.request(server)
-      .get('/api')
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('object');
-        res.body.should.have.property('response')
-        // Must always call done after each test case to ensure that the test finishes
-        done()
-      })
-    })
+  
     
     it('should protect authenticated routes', (done) => {
       chai.request(server)

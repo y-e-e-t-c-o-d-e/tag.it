@@ -1,5 +1,4 @@
-const db = require("./firebase").db;
-
+const { db } = require("../shared/firebase")
 
 class Comment {
     constructor(props) {
