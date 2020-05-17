@@ -1,9 +1,7 @@
-
 // Install these dependencies before you run
 const nodemailer = require('nodemailer');
 const user = require("./User");
 const { db } = require("../shared/firebase")
-
 
 class Post {
     constructor(props) {
@@ -172,6 +170,8 @@ class Post {
         });
     } 
 }
+
+//TODO: CREATE INITIAL POST
 
 module.exports.pushPostToFirebase = (updateParams) => {
     return new Promise(async (resolve, reject) => {
