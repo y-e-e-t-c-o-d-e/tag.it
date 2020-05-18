@@ -42,5 +42,11 @@ export default {
             headers: authHeaders()
         };
         return axios.get(`${baseURL}/api/post`, config);
+    },
+
+    /** COURSES */
+    // courses is an array of course objects
+    addToCourses: function(courses) {
+        
     }
 }

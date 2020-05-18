@@ -1,0 +1,143 @@
+.tag-section {
+    position: absolute;
+    top: 175px;    
+    left: 25px;
+    width: 220px;
+}
+
+.tagList {
+    border: 3px solid black;
+    padding: 3px;
+    margin: 5px;
+    overflow-y: scroll;
+    width: 200px;
+    height: 400px;
+}
+
+.tagItem {
+    width: 175px;
+    height: 25px;
+    border: 1px solid #429bc5;
+    display: block;
+    white-space: nowrap;
+    text-align: center;
+    background: #91d6e9;
+    padding: 3px;
+    margin: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: 1px 1px 5px grey;;
+    cursor: pointer;
+    font-size: small;
+}
+
+.tagItem:hover {
+    background: #66bcd4 !important;
+}
+
+.search {
+    margin: 5px;
+    width: 129px;
+    background: white;
+    border-color: black;
+}
+
+.btn-style {
+    width: 65px;
+    text-align: center;
+    padding: 3px;
+    margin: 5px;
+    background: #91d6e9;
+    border: 1px solid #429bc5;
+    box-shadow: 2px 2px 5px grey;
+    cursor: pointer;
+    font-size: small;
+}
+
+.search-btn:hover {
+    background: #66bcd4;
+}
+
+.filter-btn {
+    position: relative;
+    float: right;
+    right: 4px;
+}
+
+.filter-btn:hover {
+    background: #91d6e9;
+}
+
+.filter-dropdown {
+    position: relative;
+    display: inline-block;
+    float: right;
+
+}
+
+.filter-dropdown-content {
+    display: none;
+    position: absolute;
+    left: 70px;
+    top: 5px;
+    box-shadow: 2px 2px 5px grey;;
+    z-index: 1;
+}
+
+.filter-dropdown-content button {
+    padding: 5px;
+    font-size: small;
+    text-align: center;
+    text-decoration: none;
+    background: #91d6e9;
+    border: 1px solid #429bc5;
+    width: 65px;
+    display: block;
+}
+
+.filter-dropdown-content button:hover {
+    background: #66bcd4;
+    cursor: pointer;
+}
+
+.filter-dropdown:hover .filter-dropdown-content {
+    display: block;
+}
+
+/*.tagList {
+    position: absolute;
+    top: 200px;
+    left: 25px;
+    right: 25px
+    border: 3px solid black;
+    padding: 3px;
+    overflow-y: scroll;
+    width: 200px;
+    height: 400px;
+}*/
+
+/*.search {
+    position: absolute;
+    top: 155px;
+    left: 25px;
+}
+
+.searchIt {
+    position: absolute;
+    background: #91d6e9;
+    width: 70px;
+    text-align: center;
+    top: 155px;
+    left: 165px;
+    box-shadow: 2px 2px 5px grey;
+}
+
+.filterIt {
+    position: absolute;
+    background: #91d6e9;
+    width: 70px;
+    text-align: center;
+    left: 165px;
+    top: 177px;
+    box-shadow: 2px 2px 5px grey;
+}*/

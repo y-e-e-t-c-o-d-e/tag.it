@@ -10,6 +10,7 @@ import Signup from './pages/Signup/index';
 // Importing Authentication
 import PrivateRoute from "./auth/PrivateRoute";
 import { AuthProvider } from "./auth/Auth";
+import AddClass from './pages/AddClass';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <PrivateRoute exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
+          <Route exact path="/add" component={AddClass} />
         </div>
       </Router>
     </AuthProvider>
