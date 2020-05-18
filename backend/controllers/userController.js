@@ -49,3 +49,25 @@ exports.updateUser = async (req, res) => {
     const updateParams = req.body;
     res.status(200).send("Updated user.");
 };
+
+exports.addUserToCourse = async (req, res) => {
+    const courseID = req.query.courseID;
+    if (!courseID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing paramater: courseID"
+        });
+        return;
+    };
+
+    // Grabs the user based on the userUUID. If fails, responds with an error.
+    try {
+        const courseObj = await user.getCourseById(courseID);
+        res.status(200).json(userObj.props);
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    };
+};
