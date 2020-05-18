@@ -24,7 +24,6 @@ const App = () => {
             <Route exact path="/add" component={AddClass} />
             <Route exact path="/*" component={() => {
               window.location.href = "/";
-              return null;
             }} />
           </Switch>
         </div>
