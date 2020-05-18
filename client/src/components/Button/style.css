@@ -4,8 +4,15 @@
     width: 150px;
     height: 50px;
     cursor: pointer;
+    display: flex;
 }
 
 .button:hover {
     background-color: blue;
+}
+
+.button > p {
+    font-size: 18px;
+    margin: auto;
+    vertical-align: middle;
 }
