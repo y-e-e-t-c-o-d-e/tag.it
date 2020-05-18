@@ -1,0 +1,7 @@
+.addClassPage {
+    text-align: center;
+}
+
+.addClassPage > .button {
+    margin: auto;
+}
