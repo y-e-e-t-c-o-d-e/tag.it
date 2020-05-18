@@ -1,11 +1,11 @@
 import axios from "axios";
-// import { AuthContext } from "./Auth";
-import { AuthContext } from "../auth/Auth"
 import db from "../base"
 
 const authHeaders = () => {
     return { Authorization: `Bearer ${db.auth().currentUser.uid}` }
 }
+
+const baseURL = process.env.NODE_ENV === "development" ? "" : "https://tag-it-server.herokuapp.com";
 
 export default {
     /** USERS */
@@ -16,12 +16,12 @@ export default {
             },
             headers: authHeaders()
         };
-        return axios.get("/api/user", config);
+        return axios.get(`${baseURL}/api/user`, config);
     },
     createUser: function (name, email, uuid) {
         const config = {
             method: 'post', 
-            url: '/api/user',
+            url: `${baseURL}/api/user`,
             data: {
                 name: name,
                 email: email,
@@ -41,7 +41,7 @@ export default {
             },
             headers: authHeaders()
         };
-        return axios.get("/api/post", config);
+        return axios.get(`${baseURL}/api/post`, config);
     },
 
     /** COURSES */
