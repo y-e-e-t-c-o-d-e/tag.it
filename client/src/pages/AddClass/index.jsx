@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import './style.css';
+import Label from '../../components/Label';
 import SuggestionTextField from '../../components/SuggestionTextField';
 import Button from '../../components/Button';
 
-const AddClass = () => {
+const AddClass = ({history}) => {
     // TODO: Replace with dynamic data in future PR once backend is done
     let classes = [
         {
@@ -37,17 +38,40 @@ const AddClass = () => {
         );
     };
 
+    const renderClassLabels = () => {
+        const labels = [
+            "CSE 127",
+            "CSE 120"
+        ];
+        return labels.map((value) => 
+            <Label>{value}</Label>
+        )
+    };
+
     const onSubmit = (e) => {
         // TODO: Add logic to add user to these courses and send them to a course page
         console.log(selectedClasses);
     };
 
     return (
-        <div className="addClassPage">
-            <h1>Add a Class</h1>
-            {renderFields()}
-            <Button text="Add Classes" onSubmit={onSubmit}/>
-        </div>
+        <>
+            <div className="addClassPage">
+                <div className="left-section"> 
+                    <h1>Add a Class</h1>
+                    {renderFields()}
+                    <div className="buttons">
+                        <Button text="Cancel" onSubmit={() => history.push("/")}/>
+                        <Button text="Add Classes" onSubmit={onSubmit}/>
+                    </div>
+                </div>
+                <div className="right-section">
+                    <p>Current Classes</p>
+                    <div className="scrollable-classes">
+                        {renderClassLabels()}
+                    </div>
+                </div>
+            </div>
+        </>
     );
 };
 
