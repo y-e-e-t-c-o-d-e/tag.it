@@ -1,9 +1,6 @@
-// Install these dependencies before you run
-const nodemailer = require('nodemailer');
-const user = require("./User");
 const { db } = require("../shared/firebase")
 
-class Post {
+class Comment {
     constructor(props) {
         this.props = props;
     }
@@ -13,32 +10,32 @@ class Post {
      * 
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
-    getAuthor() {
-        return this.props.author;
+    getContent() {
+        return this.props.content;
     }
 
-    getTitle() {
-        return this.props.title;
+    getAuthor() {
+        return this.props.author;
     }
 
     getUUID() {
         return this.props.uuid;
     }
 
-    getUsersFollowing() {
-        return this.props.followingList;
+    getTime() {
+        return this.props.time;
     }
 
-    getComments() {
-        return this.props.commentList;
+    getPostId() {
+        return this.props.postId;
     }
 
-    getTagList() {
-        return this.props.tagList;
+    getParentComment() {
+        return this.props.parentComment;
     }
 
-    getCommentList() {
-        return commentList;
+    getScore() {
+        return this.props.score;
     }
 
     getCourse() {
@@ -49,27 +46,14 @@ class Post {
         return this.props.score;
     }
 
-    getContent() {
-        return this.props.content;
+    getChildList() {
+        return this.props.childList;
     }
 
-    setTitle = async (newTitle) => {
-        this.props.title = newTitle;
-        await this.push();
-    }
-
-    addFollower = async (userId) => {
-        this.props.followingList.push(userId);
-        await this.push();
-    }
-
-    addComment = async (commentId) => {
-        this.props.commentList.push(commentId);
-        await this.push();
-    }
-
-    addTag = async (tagId) => {
-        this.props.tagList.push(tagId);
+    addChild = async (commentId) => {
+        this.props.childList.push(commentId);
+        let child = await getCommentById(commentId);
+        child.setParentComment(this.props.uuid);
         await this.push();
     }
 
@@ -78,23 +62,8 @@ class Post {
         await this.push();
     }
 
-    setAnnouncement = async (newValue) => {
-        this.props.isAnnouncement = newValue;
-        await this.push();
-    }
-
-    setResolved = async (newValue) => {
-        this.props.isResolved = newValue;
-        await this.push();
-    }
-
-    setPinned = async (newValue) => {
-        this.props.isPinned = newValue;
-        await this.push();
-    }
-
-    setPrivate = async (newValue) => {
-        this.props.isPrivate = newValue;
+    setEndorsed = async (newValue) => {
+        this.props.isEndorsed = newValue;
         await this.push();
     }
 
@@ -103,11 +72,21 @@ class Post {
         await this.push();
     }
 
+    setResolved = async (newValue) => {
+        this.props.isResolved = newValue;
+        await this.push();
+    }
+
     setContent = async (newContent) => {
         this.props.content = newContent;
         await this.push();
     }
 
+    setParentComment = async (commentId) => {
+        this.props.parentComment = commentId;
+        await this.push();
+    }
+/*
     sendUpdate = async () => {
         for (var i = 0; i < this.props.followingList.length; i ++) {
             const currUser = await user.getUserById(this.props.followingList[i]);
@@ -133,17 +112,7 @@ class Post {
             await transporter.sendMail(mailOptions);
         } 
     }
-
-    removeTag = async (tagId) => {
-        for (var i = 0; i < this.props.tagList.length; i ++) {
-            if (this.props.tagList[i] === tagId) {
-                this.props.tagList.splice(i, 1);
-            }
-        }
-        await this.push();
-    }
-
-
+*/
 
     /**
      * Update a given post's data fields.
@@ -151,47 +120,37 @@ class Post {
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
     push = async () => {
-        await db.ref("Posts").child(this.props.uuid).set({
-            title: this.props.title, 
+        await db.ref("Comments").child(this.props.uuid).set({
             content: this.props.content,
             author: this.props.author, 
             uuid: this.props.uuid,
-            tagList: this.props.tagList,
-            commentList: this.props.commentList,
-            followingList: this.props.followingList,
-            isAnnouncement: this.props.isAnnouncement,
-            isPinned: this.props.isPinned,
-            isAnonymous: this.props.isAnonymous,
-            isPrivate: this.props.isPrivate,
-            isResolved: this.props.isResolved,
-            isInstructor: this.props.isInstructor,
+            time: this.props.time,
+            postId: this.props.postId,
+            parentComment: this.props.parentComment,
             score: this.props.score,
-            course: this.props.course
+            childList: this.props.childList,
+            isEndorsed: this.props.isEndorsed,
+            isAnonymous: this.props.isAnonymous,
+            isResolved: this.props.isResolved
         });
     } 
 }
 
-//TODO: CREATE INITIAL POST
-
-module.exports.pushPostToFirebase = (updateParams) => {
+module.exports.pushCommentToFirebase = (updateParams) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await db.ref("Posts").child(updateParams["uuid"]).set({
-                title: updateParams["title"], 
+            await db.ref("Comments").child(updateParams["uuid"]).set({
                 content: updateParams["content"],
                 author: updateParams["author"], 
                 uuid: updateParams["uuid"],
-                tagList: updateParams["tagList"],
-                commentList: updateParams["commentList"],
-                followingList: updateParams["followingList"],
-                isAnnouncement: updateParams["isAnnouncement"],
-                isPinned: updateParams["isPinned"],
-                isAnonymous: updateParams["isAnonymous"],
-                isPrivate: updateParams["isPrivate"],
-                isResolved: updateParams["isResolved"],
-                isInstructor: updateParams["isInstructor"],
+                time: updateParams["time"],
+                postId: updateParams["postId"],
+                parentComment: updateParams["parentComment"],
                 score: updateParams["score"],
-                course: updateParams["course"]
+                childList: updateParams["childList"],
+                isEndorsed: updateParams["isEndorsed"],
+                isAnonymous: updateParams["isAnonymous"],
+                isResolved: updateParams["isResolved"],
             });
             resolve("Everything worked");
         } catch(e) {
@@ -204,12 +163,12 @@ module.exports.pushPostToFirebase = (updateParams) => {
 
 
 
-getPostById = async (uuid) => {
-    const ref = db.ref('Posts/' + uuid);
+getCommentById = async (uuid) => {
+    const ref = db.ref('Comments/' + uuid);
 
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
-            const r = new Post(snapshot.val());
+            const r = new Comment(snapshot.val());
             resolve(r);
         }, function (errorObject) {
             reject(errorObject);
@@ -232,5 +191,5 @@ getPostById = async (uuid) => {
 }
 
    
-module.exports.Post = Post
-module.exports.getPostById = getPostById
+module.exports.Comment = Comment
+module.exports.getCommentById = getCommentById
