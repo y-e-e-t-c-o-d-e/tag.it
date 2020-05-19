@@ -1,7 +1,48 @@
 .addClassPage {
+    display: flex;
+    justify-content: space-between;
     text-align: center;
 }
 
-.addClassPage > .button {
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.left-section {
+    background-color: #EEEEEE;
+    padding: 20px;
+    margin: 20px;
+    margin-top: 40px;
+    width: 65%;
+    height: 600px;
+}
+
+.left-section > div {
+    margin: 30px;
+}
+
+.left-section > .button {
     margin: auto;
+}
+
+.right-section {
+    height: 600px;
+    margin-top: 20px;
+    margin-right: 50px;
+    width: 300px;
+    padding-left: 30px;
+}
+
+.right-section > p {
+    font-size: large;
+}
+
+.scrollable-classes {
+    border-style: solid;
+    border-width: 2px;
+    overflow-y: scroll; 
+    height: 90%;
+    width: 100%;
 }
