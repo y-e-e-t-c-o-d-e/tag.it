@@ -38,28 +38,28 @@ class User {
     addLikedPost = async (postId) => {
         this.props.likedPostList.push(postId);
         let post = await getPostById(postId);
-        post.incrementScore();  // await?
+        post.incrementScore();
         await this.push();
     }
 
     removeLikedPost = async (postId) => {
         this.props.likedPostList.splice(likedPostList.indexOf(postId), 1);
         let post = await getPostById(postId);
-        post.decrementScore();  // await?
+        post.decrementScore();
         await this.push();
     }
 
     addLikedComment = async (commentId) => {
         this.props.likedCommentList.push(commentId);
         let comment = await getCommentById(commentId);
-        comment.incrementScore();  // await?
+        comment.incrementScore();
         await this.push();
     }
 
     removeLikedComment = async (commentId) => {
         this.props.likedCommentList.splice(likedCommentList.indexOf(commentId), 1);
         let comment = await getCommentById(commentId);
-        comment.decrementScore();  // await?
+        comment.decrementScore();
         await this.push();
     }
     

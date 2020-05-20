@@ -8,8 +8,8 @@ router.route("/")
     .get(userController.getUser) // Read
     .put(userController.updateUser) // Update
 
-// Matches with "/api/user/courseID"
-router.route("/courseID")   // regex? how do we format the courseID
+// Matches with "/api/user/courseId"
+router.route("/:courseId")   // regex? how do we format the courseID
     .post(userController.addUserToCourse)
     .get(userController.getUserType)
 module.exports = router;
