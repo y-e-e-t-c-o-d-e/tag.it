@@ -51,8 +51,9 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.addUserToCourse = async (req, res) => {
-    const courseID = req.query.courseID;
-    if (!courseID) {
+    const courseUUID = req.params.courseId;
+    let userObj = req.user;
+    if (!courseUUID || !userObj) {
         res.status(422).json({
             status: 422,
             error: "Missing paramater: courseID"
@@ -60,10 +61,44 @@ exports.addUserToCourse = async (req, res) => {
         return;
     };
 
-    // Grabs the user based on the userUUID. If fails, responds with an error.
+    // Adds the user to the course as a student. If fails, responds with an error. Only works with users we've manually made
     try {
-        const courseObj = await user.getCourseById(courseID);
-        res.status(200).json(userObj.props);
+        let courseObj = await course.getCourseById(courseUUID);
+
+        await courseObj.addStudent(userObj.getUUID());
+        await userObj.addStudentCourse(courseObj.getUUID());
+        res.status(200).send("Added user to course.");
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    };
+};
+
+exports.getUserType = async (req, res) => {
+    const courseUUID = req.params.courseId;
+    const userObj = req.user;
+
+    if (!courseUUID || !userObj) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing parameter: courseUUID or user"
+        });
+        return;
+    };
+
+    // Grabs the user's type based on the courseUUID. If fails, responds with an error.
+    try {
+        const courseObj = await course.getCourseById(courseUUID);
+
+        if (courseObj.getInstructorList().indexOf(userObj.getUUID()) != -1) {
+            res.status(200).send("Instructor"); // send something else??
+        } else if (courseObj.getStudentList().indexOf(userObj.getUUID()) != -1) {
+            res.status(200).send("Student");    // send something else??
+        } else {
+            res.status(200).send("User not in this class");
+        }
     } catch (e) {
         res.status(410).json({
             status: 410,
