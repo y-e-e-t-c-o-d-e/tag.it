@@ -63,10 +63,10 @@ exports.addUserToCourse = async (req, res) => {
         return;
     };
 
+
     // Adds the user to the course as a student. If fails, responds with an error. Only works with users we've manually made
     try {
         let courseObj = await course.getCourseById(courseUUID);
-
         await courseObj.addStudent(userObj.getUUID());
         await userObj.addStudentCourse(courseObj.getUUID());
         res.status(200).send("Added user to course.");

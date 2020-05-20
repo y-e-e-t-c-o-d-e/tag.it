@@ -124,8 +124,9 @@ class User {
             postList: this.props.postList,
             commentList: this.props.commentList,
             followingList: this.props.followingList,
-            likedPostList: this.props.likedPostList,
-            likedCommentList: this.props.likedCommentList,
+            // Add this ternary for new fields to prevent old data from crashing
+            likedPostList: this.props.likedPostList ? this.props.likedPostList : [],
+            likedCommentList: this.props.likedCommentList ? this.props.likedCommentList : [],
             icon: this.props.icon
         });
     } 
@@ -168,7 +169,6 @@ getUserById = async (uuid) => {
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
             const r = new User(snapshot.val());
-            //console.log(r.props.name);
             resolve(r);
         }, function (errorObject) {
             reject(errorObject);
