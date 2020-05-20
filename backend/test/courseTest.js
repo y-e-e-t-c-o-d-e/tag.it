@@ -23,8 +23,8 @@ describe('course', () => {
             name: "cse110", 
             term: "sp20",
             uuid: "course1",
-            instructorList: "user2", 
-            studentList: "user1",
+            instructorList: ["user2"], 
+            studentList: ["user1"],
             tagList: ["dummy_tag"],
             postList: ["dummy_post"],
         }

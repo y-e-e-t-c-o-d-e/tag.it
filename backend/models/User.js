@@ -35,6 +35,34 @@ class User {
         await this.push();
     }
 
+    addLikedPost = async (postId) => {
+        this.props.likedPostList.push(postId);
+        let post = await getPostById(postId);
+        post.incrementScore();
+        await this.push();
+    }
+
+    removeLikedPost = async (postId) => {
+        this.props.likedPostList.splice(likedPostList.indexOf(postId), 1);
+        let post = await getPostById(postId);
+        post.decrementScore();
+        await this.push();
+    }
+
+    addLikedComment = async (commentId) => {
+        this.props.likedCommentList.push(commentId);
+        let comment = await getCommentById(commentId);
+        comment.incrementScore();
+        await this.push();
+    }
+
+    removeLikedComment = async (commentId) => {
+        this.props.likedCommentList.splice(likedCommentList.indexOf(commentId), 1);
+        let comment = await getCommentById(commentId);
+        comment.decrementScore();
+        await this.push();
+    }
+    
     getName() {
         return this.props.name;
     }
@@ -67,6 +95,14 @@ class User {
         return this.props.followingList.slice(1, this.props.followingList.length);
     }
 
+    getLikedPostList() {
+        return this.props.likedPostList.slice(1, this.props.likedPostList.length);
+    }
+
+    getLikedCommentList() {
+        return this.props.likedCommentList.slice(1, this.props.likedCommentList.length);
+    }
+
     getIcon() {
         return this.props.icon;
     }
@@ -88,6 +124,9 @@ class User {
             postList: this.props.postList,
             commentList: this.props.commentList,
             followingList: this.props.followingList,
+            // Add this ternary for new fields to prevent old data from crashing
+            likedPostList: this.props.likedPostList ? this.props.likedPostList : [],
+            likedCommentList: this.props.likedCommentList ? this.props.likedCommentList : [],
             icon: this.props.icon
         });
     } 
@@ -109,6 +148,8 @@ module.exports.pushUserToFirebase = (updateParams) => {
                 postList: ["dummy_post_id"],
                 commentList: ["dummy_comment_id"],
                 followingList: ["dummy_post_id"],
+                likedPostList: ["dummy_post_id"],
+                likedCommentList: ["dummy_comment_id"],
                 icon: "anonymous.jpg"
             });
             resolve("Everything worked");
@@ -128,7 +169,6 @@ getUserById = async (uuid) => {
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
             const r = new User(snapshot.val());
-            //console.log(r.props.name);
             resolve(r);
         }, function (errorObject) {
             reject(errorObject);

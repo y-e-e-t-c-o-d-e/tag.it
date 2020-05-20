@@ -62,6 +62,11 @@ class Comment {
         await this.push();
     }
 
+    decrementScore = async () => {
+        this.props.score--;
+        await this.push();
+    }
+
     setEndorsed = async (newValue) => {
         this.props.isEndorsed = newValue;
         await this.push();
