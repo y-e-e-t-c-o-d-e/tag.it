@@ -93,11 +93,17 @@ exports.getUserType = async (req, res) => {
         const courseObj = await course.getCourseById(courseUUID);
 
         if (courseObj.getInstructorList().indexOf(userObj.getUUID()) != -1) {
-            res.status(200).send("Instructor"); // send something else??
+            res.status(200).json({
+                type: "Instructor"
+            });
         } else if (courseObj.getStudentList().indexOf(userObj.getUUID()) != -1) {
-            res.status(200).send("Student");    // send something else??
+            res.status(200).json({
+                type: "Student"
+            });
         } else {
-            res.status(200).send("User not in this class");
+            res.status(200).json({
+                error: "User not in this class"
+            });
         }
     } catch (e) {
         res.status(410).json({
