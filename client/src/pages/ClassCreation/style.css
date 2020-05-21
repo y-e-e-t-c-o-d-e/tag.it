@@ -1,3 +1,40 @@
+.container {
+    border: 30px solid #A6D1DF;
+    color: #9E7772;
+    font-size: 1.2em;
+    margin: 2.5% 25% 2.5% 25%;
+}
+
+.container-title {
+    text-align: center;
+    border-bottom: 3px solid #9E7772;
+    margin: auto 15%;
+}
+
+.flex-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.flex-row p {
+    margin-right: 20px;
+}
+
+.flex-row input {
+    width: 50%;
+    height: 1.5em;
+}
+
+.flex-row select {
+    height: 2em;
+}
+
 .header {
     background: linear-gradient(#214cdb, #10309c);
+}
+
+.input {
+    width: 100%;
 }

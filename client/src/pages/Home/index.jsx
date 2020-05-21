@@ -4,7 +4,7 @@ import './style.css';
 import db from "../../base";
 import TagList from "../../components/TagList/index.jsx";
 
-const Home = ({ currentUser, ...rest }) => {
+const Home = ({ currentUser, history, ...rest }) => {
     const redirectClassCreation = () => {
         history.push("/createclass");
     }
