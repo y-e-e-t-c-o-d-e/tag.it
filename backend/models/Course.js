@@ -17,7 +17,7 @@ class Course {
     }
 
     getInstructorList() {
-        return this.props.instructorList;
+        return this.props.instructorList.slice(1, this.props.instructorList.length);
     }
 
     getUUID() {
