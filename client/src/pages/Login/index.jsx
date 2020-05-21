@@ -6,7 +6,7 @@ import LoginNav from "../../components/LoginNav";
 import logo from "../../assets/logo.png";
 import './style.css';
 
-var bgColors = {
+const bgColors = {
     "default": "white",
     "error": "#ffcccc",
 };
@@ -25,11 +25,16 @@ const Login = ({ history }) => {
             const { email, password } = event.target.elements;
 
             try {
-                await db
+                // This action will cause the onChangeEventListener to occur (in Auth.jsx)
+                const {user} = await db
                     .auth()
                     .signInWithEmailAndPassword(email.value,
                         password.value);
-                history.push("/");
+
+                // Only reroutes to new page if user's email is verified
+                if (user.emailVerified) {
+                    history.push("/");
+                }
             } catch (error) {
                 alert(error);
             }
@@ -73,7 +78,7 @@ const Login = ({ history }) => {
 
     return (
         <div>
-            <LoginNav/>
+            <LoginNav />
             <div className="container">
                 <div id="center-logo">
                     <img src={logo} alt="Tag.it" height="125" />
