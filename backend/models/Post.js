@@ -77,6 +77,30 @@ class Post {
         await this.push();
     }
 
+    isPrivate() {
+        return this.props.isPrivate;
+    }
+
+    isPinned() {
+        return this.props.isPinned;
+    }
+
+    isAnnouncement() {
+        return this.props.isAnnouncement;
+    }
+
+    isResolved() {
+        return this.props.isResolved;
+    }
+
+    isAnonymous() {
+        return this.props.isAnonymous;
+    }
+
+    isInstructor() {
+        return this.props.isInstructor;
+    }
+
     setAnnouncement = async (newValue) => {
         this.props.isAnnouncement = newValue;
         await this.push();

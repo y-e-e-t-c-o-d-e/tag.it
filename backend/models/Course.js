@@ -77,6 +77,68 @@ class Course {
         return posts;
     }
 
+    classifyUser = async (uuid) => {
+        for (let i = 0; i < this.props.instructorList.length; i ++) {
+            if (this.props.instructorList[i] === uuid) {
+                return "instructor";
+            }
+        }
+        for (let i = 0; i < this.props.studentList.length; i ++) {
+            if (this.props.studentList[i] === uuid) {
+                return "student";
+            }
+        }
+        return "null";
+    }
+
+    getPrivatePosts = async () => {
+        let list = this.getPostList();
+        const posts = [];
+        for (let i = 0; i < list.length; i ++) {
+            const currentPost = await post.getPostById(list[i]);
+            if (currentPost.isPrivate()) {
+                posts.push(currentPost);
+            }
+        }
+        return posts;
+    }
+
+    getPublicPosts = async () => {
+        let list = this.getPostList();
+        const posts = [];
+        for (let i = 0; i < list.length; i ++) {
+            const currentPost = await post.getPostById(list[i]);
+            if (!currentPost.isPrivate()) {
+                posts.push(currentPost);
+            }
+        }
+        return posts;
+    }
+
+    getPinnedPosts = async () => {
+        let list = this.getPostList();
+        const posts = [];
+        for (let i = 0; i < list.length; i ++) {
+            const currentPost = await post.getPostById(list[i]);
+            if (currentPost.isPinned()) {
+                posts.push(currentPost);
+            }
+        }
+        return posts;
+    }
+
+    getAnnouncements = async() => {
+        let list = this.getPostList();
+        const posts = [];
+        for (let i = 0; i < list.length; i ++) {
+            const currentPost = await post.getPostById(list[i]);
+            if (currentPost.isAnnouncement()) {
+                posts.push(currentPost);
+            }
+        }
+        return posts;
+    }
+
     getPostsWithMultipleTags = async (tagList) => {
         let posts = {};
         for(let i = 0; i < tagList.length; i++) {
