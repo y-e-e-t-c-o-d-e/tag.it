@@ -1,4 +1,5 @@
-const { db } = require("../shared/firebase")
+const { db } = require("../shared/firebase");
+const { InternalServerError } = require("../shared/error");
 
 class User {
     constructor(props) {
@@ -11,13 +12,24 @@ class User {
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
     addStudentCourse = async (courseId) => {
-        this.props.studentCourseList.push(courseId);
-        await this.push();
+        // Avoid adding duplicates
+        if (this.props.studentCourseList.indexOf(courseId) < 0) {
+            this.props.studentCourseList.push(courseId);
+            await this.push();
+        } else {
+            throw new InternalServerError(`Student Course ${courseId} already exists.`);
+        }
+        
     }
 
     addInstructorCourse = async (courseId) => {
-        this.props.instructorCourseList.push(courseId);
-        await this.push();
+        // Avoid adding duplicates
+        if (this.props.instructorCourseList.indexOf(courseId) < 0) {
+            this.props.instructorCourseList.push(courseId);
+            await this.push();
+        } else {
+            throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
+        }
     }
 
     addPost = async (postId) => {

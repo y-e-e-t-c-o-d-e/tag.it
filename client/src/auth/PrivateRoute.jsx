@@ -4,7 +4,7 @@ import { AuthContext } from "./Auth";
 import API from '../utils/API';
 
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
-    const { currentUser } = useContext(AuthContext);
+    const { currentUser, pending } = useContext(AuthContext);
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
@@ -29,6 +29,11 @@ const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
         }
     }, [currentUser]);
 
+    // If Firebase is still fetching the current user, render the loading state. 
+    if (pending) {
+        return <h1>waiting to fetch user</h1>         
+    }
+
     return (
         <Route
             {...rest}
@@ -36,7 +41,9 @@ const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
                 !!currentUser ? (
                     <RouteComponent {...routeProps} currentUser={userData}/>
                 ) : (
-                        <Redirect to="/login" />
+                        <Redirect to={{
+                            pathname: '/login',
+                        }}/>
                     )
             }
         />

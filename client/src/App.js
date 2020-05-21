@@ -19,9 +19,10 @@ const App = () => {
         <div>
           <Switch>
             <PrivateRoute exact path="/" component={Home} />
+            <PrivateRoute exact path="/:courseid" component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
-            <Route exact path="/add" component={AddClass} />
+            <PrivateRoute exact path="/add" component={AddClass} />
             <Route exact path="/*" component={() => {
               window.location.href = "/";
             }} />
