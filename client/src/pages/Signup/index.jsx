@@ -37,7 +37,10 @@ const SignUp = ({ history }) => {
                     displayName: name.value
                 });
                 API.createUser(name.value, email.value, user.uid);
-                history.push("/");
+                history.push("/login");
+                user.sendEmailVerification().then(
+                    window.alert("Email Verification Sent!")
+                );
             } catch (error) {
                 alert(error);
             }
