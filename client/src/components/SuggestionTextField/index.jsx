@@ -16,6 +16,7 @@ const defaultTextMap = {
 const SuggestionTextField = ({name, options, onBlur, type}) => {
     const [textValue, setTextValue] = useState('');
     const [suggestions, setSuggestions] = useState([]);
+    const [id, setId] = useState('');
     
     // Changes state value when text field value updates
     const onChange = (e, {newValue}) => {
@@ -27,7 +28,7 @@ const SuggestionTextField = ({name, options, onBlur, type}) => {
         value: textValue,
         placeholder: defaultTextMap[type],
         onChange: onChange,
-        onBlur: onBlur
+        onBlur: () => onBlur(id)
     };
 
     // Specifies what util methods to use 
@@ -44,7 +45,7 @@ const SuggestionTextField = ({name, options, onBlur, type}) => {
                 }}
                 onSuggestionsClearRequested={() => { setSuggestions([]); }}
                 getSuggestionValue={util.getSuggestionValue}
-                renderSuggestion={util.renderSuggestion}
+                renderSuggestion={(suggestion) => util.renderSuggestion(suggestion, setId)}
             />
         </div>
     );

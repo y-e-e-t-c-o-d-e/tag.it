@@ -5,7 +5,9 @@ import db from "../../base";
 
 import TagList from "../../components/TagList/index.jsx";
 
-const Home = () => {
+const Home = ({currentUser, match}) => {    
+    const courseId = match.params.id;
+    
     return (
         <div className="home">
             { // TODO: Will rearrange frontend to handle the user data.

@@ -1,7 +1,7 @@
 // Install these dependencies before you run
 const post = require("../models/Post");
 const { db } = require("../shared/firebase")
-
+const { InternalServerError } = require("../shared/error");
 class Course {
     constructor(props) {
         this.props = props;
@@ -52,8 +52,12 @@ class Course {
     }
 
     addStudent = async (userId) => {
-        this.props.studentList.push(userId);
-        await this.push();
+        if (this.props.studentList.indexOf(userId) < 0) {
+            this.props.studentList.push(userId);
+            await this.push();
+        } else {
+            throw new InternalServerError(`Student ${userId} already exists in this course.`);
+        }
     }
 
     addInstructor = async (userId) => {
@@ -63,7 +67,6 @@ class Course {
 
     addPost = async (postId) => {
         this.props.postList.push(postId);
-
         await this.push();
     }
 

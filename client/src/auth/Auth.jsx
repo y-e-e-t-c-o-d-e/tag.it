@@ -6,7 +6,11 @@ export const AuthContext = React.createContext();
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
 
+    // Pending is set in order to indicate that Firebase is currently fetching the current user. 
+    const [pending, setPending] = useState(true);
+
     useEffect(() => {
+        // Upon loading any page, this method is ALWAYS called.
         db.auth().onAuthStateChanged((user) => {
             // User is signed in 
             if (user) {
@@ -22,11 +26,12 @@ export const AuthProvider = ({ children }) => {
                 // User is signed out
                 setCurrentUser(user);
             }
+            setPending(false);
         });
     }, []);
 
     return (
-        <AuthContext.Provider value={{ currentUser }}>
+        <AuthContext.Provider value={{ currentUser, pending }}>
             {children}
         </AuthContext.Provider>
     );

@@ -46,7 +46,12 @@ export default {
 
     /** COURSES */
     // courses is an array of course objects
-    addToCourses: function(courses) {
-        
+    addToCourse: function(courseId) {
+        const config = {
+            method: 'post',
+            url: `${baseURL}/api/user/${courseId}`,
+            headers: authHeaders()
+        };
+        return axios(config);
     }
 }

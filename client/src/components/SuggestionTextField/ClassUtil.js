@@ -6,9 +6,10 @@ export default {
         return suggestion.courseName;
     },
     
-    renderSuggestion: (suggestion) => {
+    // Sets the id in the state in order to easily fetch from Firebase
+    renderSuggestion: (suggestion, setId) => {
         return (
-            <div className="classSuggestion">
+            <div className="classSuggestion" onClick={() => setId(suggestion.courseId)}>
                 <span>{suggestion.courseName}</span>
                 <span className="courseId">Course Id: {suggestion.courseId}</span>
             </div>

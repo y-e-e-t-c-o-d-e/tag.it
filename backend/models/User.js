@@ -1,8 +1,9 @@
-const db = require("./firebase").db;
 const post = require("./Post");
 const tag = require("./Tag");
 const comment = require("./Comment")
 const course = require("./Course")
+const { db } = require("../shared/firebase");
+const { InternalServerError } = require("../shared/error");
 
 class User {
     constructor(props) {
@@ -15,10 +16,15 @@ class User {
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
     addStudentCourse = async (courseId) => {
-        this.props.studentCourseList.push(courseId);
-        const currentCourse = course.getCourseById(courseId);
-        //await currentCourse.addStudent(this.props.uuid);
-        await this.push();
+        // Avoid adding duplicates
+        if (this.props.studentCourseList.indexOf(courseId) < 0) {
+            this.props.studentCourseList.push(courseId);
+            const currentCourse = course.getCourseById(courseId);
+            //await currentCourse.addStudent(this.props.uuid);
+            await this.push();
+        } else {
+            throw new InternalServerError(`Student Course ${courseId} already exists.`);
+        }
     }
 
     removeStudentCourse = async (courseId) => {
@@ -31,10 +37,15 @@ class User {
     }
 
     addInstructorCourse = async (courseId) => {
-        this.props.instructorCourseList.push(courseId);
-        const currentCourse = course.getCourseById(courseId);
-        //await currentCourse.addInstructor(this.props.uuid);
-        await this.push();
+        // Avoid adding duplicates
+        if (this.props.instructorCourseList.indexOf(courseId) < 0) {
+            this.props.instructorCourseList.push(courseId);
+            const currentCourse = course.getCourseById(courseId);
+            //await currentCourse.addInstructor(this.props.uuid);
+            await this.push();
+        } else {
+            throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
+        }
     }
 
     removeInstructorCourse = async (courseId) => {
