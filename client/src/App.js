@@ -7,6 +7,7 @@ import Home from './pages/Home/index';
 import Login from './pages/Login/index';
 import Signup from './pages/Signup/index';
 import ClassCreation from './pages/ClassCreation/index';
+import Staff from './pages/Staff/index';
 
 // Importing Authentication
 import PrivateRoute from "./auth/PrivateRoute";
@@ -23,6 +24,7 @@ const App = () => {
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
             <PrivateRoute exact path="/createclass" component={ClassCreation} />
+            <PrivateRoute exact path="/staff" component={Staff} />
             <Route exact path="/add" component={AddClass} />
             <Route exact path="/*" component={() => {
               window.location.href = "/";

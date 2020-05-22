@@ -15,7 +15,8 @@ class AutocompleteTags extends React.Component {
                 { id: 1, name: "final exam" },
                 { id: 2, name: "logistics" },
                 { id: 3, name: "quizzes" }
-            ]
+            ],
+            delimiters: [9, 13, 32]
         };
     }
 
@@ -37,7 +38,9 @@ class AutocompleteTags extends React.Component {
                 suggestions={this.state.suggestions}
                 handleDelete={this.handleDelete.bind(this)}
                 handleAddition={this.handleAddition.bind(this)}
-                allowNew={true} />
+                allowNew={true}
+                delimiters={this.state.delimiters}
+                placeholder={this.props.placeholder} />
         );
     }
 }

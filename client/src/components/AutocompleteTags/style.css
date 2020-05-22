@@ -73,7 +73,7 @@
   /* remove styles and layout from this element */
   margin: 0;
   padding: 0;
-  background-color: #FFF;
+  background-color: transparent;
   border: 0;
   outline: none;
 

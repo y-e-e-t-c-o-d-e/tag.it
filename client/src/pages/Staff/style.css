@@ -1,0 +1,9 @@
+.invite-box {
+    background-color: #E6E5E5;
+    border: 5px solid #E0DEDE;
+    color: #C89E98;
+}
+
+.invite-box h1, h2 {
+    color: #856458;
+}
