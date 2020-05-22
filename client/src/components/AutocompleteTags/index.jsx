@@ -37,7 +37,7 @@ class AutocompleteTags extends React.Component {
                 suggestions={this.state.suggestions}
                 handleDelete={this.handleDelete.bind(this)}
                 handleAddition={this.handleAddition.bind(this)}
-                allowNew={this.props.allowNew} />
+                allowNew={true} />
         );
     }
 }

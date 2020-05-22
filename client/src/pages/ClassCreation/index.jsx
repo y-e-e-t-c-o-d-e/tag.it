@@ -132,7 +132,7 @@ const ClassCreation = ({ history }) => {
                         </div>
                         <div className="flex-row">
                             <p>Initial Tags (Optional):</p>
-                            <AutocompleteTags allowNew={true} />
+                            <AutocompleteTags />
                         </div>
                         <button type="submit">Next Step: Adding Instructors</button>
                     </form>
