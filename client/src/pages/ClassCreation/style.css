@@ -27,6 +27,14 @@
     height: 1.5em;
 }
 
+.flex-row textarea {
+    border: 2px solid #CC9966;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    width: 50%;
+}
+
 .flex-row select {
     height: 2em;
 }

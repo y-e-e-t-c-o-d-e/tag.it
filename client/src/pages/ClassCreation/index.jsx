@@ -120,7 +120,7 @@ const ClassCreation = ({ history }) => {
                         </div>
                         <div className="flex-row">
                             <p>Description:</p>
-                            <input name="description" placeholder="Description" onBlur={handleDescChange} style={{ backgroundColor: descBgColor }} />
+                            <textarea name="description" placeholder="Description" onBlur={handleDescChange} style={{ backgroundColor: descBgColor }}></textarea>
                         </div>
                         <div className="flex-row">
                             <p>Course Term:</p>
