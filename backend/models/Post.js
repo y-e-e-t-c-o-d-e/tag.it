@@ -78,6 +78,11 @@ class Post {
         await this.push();
     }
 
+    decrementScore = async () => {
+        this.props.score--;
+        await this.push();
+    }
+
     setAnnouncement = async (newValue) => {
         this.props.isAnnouncement = newValue;
         await this.push();
