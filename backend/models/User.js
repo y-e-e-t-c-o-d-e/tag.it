@@ -56,7 +56,7 @@ class User {
     }
 
     removeLikedPost = async (postId) => {
-        this.props.likedPostList.splice(likedPostList.indexOf(postId), 1);
+        this.props.likedPostList.splice(this.props.likedPostList.indexOf(postId), 1);
         let postObj = await post.getPostById(postId);
         postObj.decrementScore();
         await this.push();
@@ -70,7 +70,7 @@ class User {
     }
 
     removeLikedComment = async (commentId) => {
-        this.props.likedCommentList.splice(likedCommentList.indexOf(commentId), 1);
+        this.props.likedCommentList.splice(this.props.likedCommentList.indexOf(commentId), 1);
         let commentObj = await comment.getCommentById(commentId);
         commentObj.decrementScore();
         await this.push();
