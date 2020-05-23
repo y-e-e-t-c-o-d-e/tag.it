@@ -1,3 +1,6 @@
+const post = require("./Post");
+const comment = require("./Comment");
+
 const { db } = require("../shared/firebase")
 
 class User {
@@ -10,6 +13,16 @@ class User {
      * 
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
+    setName = async (name) => {
+        this.props.name = name;
+        await this.push();
+    }
+
+    setEmail = async (email) => {
+        this.props.email = email;
+        await this.push();
+    }
+
     addStudentCourse = async (courseId) => {
         this.props.studentCourseList.push(courseId);
         await this.push();
@@ -37,32 +50,37 @@ class User {
 
     addLikedPost = async (postId) => {
         this.props.likedPostList.push(postId);
-        let post = await getPostById(postId);
-        post.incrementScore();
+        let postObj = await post.getPostById(postId);
+        postObj.incrementScore();
         await this.push();
     }
 
     removeLikedPost = async (postId) => {
         this.props.likedPostList.splice(likedPostList.indexOf(postId), 1);
-        let post = await getPostById(postId);
-        post.decrementScore();
+        let postObj = await post.getPostById(postId);
+        postObj.decrementScore();
         await this.push();
     }
 
     addLikedComment = async (commentId) => {
         this.props.likedCommentList.push(commentId);
-        let comment = await getCommentById(commentId);
-        comment.incrementScore();
+        let commentObj = await comment.getCommentById(commentId);
+        commentObj.incrementScore();
         await this.push();
     }
 
     removeLikedComment = async (commentId) => {
         this.props.likedCommentList.splice(likedCommentList.indexOf(commentId), 1);
-        let comment = await getCommentById(commentId);
-        comment.decrementScore();
+        let commentObj = await comment.getCommentById(commentId);
+        commentObj.decrementScore();
         await this.push();
     }
     
+    setIcon = async (icon) => {
+        this.props.icon = icon;
+        await this.push();
+    }
+
     getName() {
         return this.props.name;
     }
@@ -157,7 +175,6 @@ module.exports.pushUserToFirebase = (updateParams) => {
             console.log("There was an error: " + e);
             reject("Something went wrong");
         }
-        
     })
 };
 

@@ -36,6 +36,15 @@ class Course {
         return this.props.postList.slice(1, this.props.postList.length);
     }
 
+    setName = async (name) => {
+        this.props.name = name;
+        await this.push();
+    }
+
+    setTerm = async (term) => {
+        this.props.term = term;
+        await this.push();
+    }
 
     addTag = async (tagId) => {
         this.props.tagList.push(tagId);
@@ -107,7 +116,8 @@ class Course {
 }
 
 module.exports.pushCourseToFirebase = (updateParams) => {
-    return new Promise(async (resolve, reject) => {
+    // OLD WAY
+    /*return new Promise(async (resolve, reject) => {
         try {
             await db.ref("Courses").child(updateParams["uuid"]).set({
                 name: updateParams["name"], 
@@ -124,6 +134,29 @@ module.exports.pushCourseToFirebase = (updateParams) => {
             reject("Something went wrong");
         }
         
+    })*/
+
+    // NEW WAY THATS CONSISTENT WITH USER.JS
+    var name = updateParams['name'];
+    var term = updateParams['term'];
+    var uuid = updateParams['uuid'];
+    return new Promise(async (resolve, reject) => {
+        try {
+            // TODO: Implement logic for these lists later.
+            await db.ref("Courses").child(uuid).set({
+                name: name, 
+                term: term, 
+                uuid: uuid, 
+                studentList: ["dummy_user_id"], 
+                instructorList: ["dummy_user_id"],
+                tagList: ["dummy_tag_id"],
+                postList: ["dummy_post_id"],
+            });
+            resolve("Everything worked");
+        } catch(e) {
+            console.log("There was an error: " + e);
+            reject("Something went wrong");
+        }
     })
 };
 
