@@ -8,6 +8,7 @@ const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
+        // Declares new function in order to utilize asynchronous features. 
         const getUser = async () => {
             let user = await API.getUser(currentUser.uid);
 
@@ -20,7 +21,10 @@ const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
             }
             setUserData(user.data);
         }
+
+        // Checks whether user has been verified 
         if (!!currentUser) {
+            // Gets the User data if user is signed in
             getUser();
         }
     }, [currentUser]);
