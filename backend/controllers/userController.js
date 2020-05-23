@@ -44,10 +44,56 @@ exports.getUser = async (req, res) => {
     };
 };
 
+// We can add more deletions in here when we have more remove methods in User model
 exports.updateUser = async (req, res) => {
     // Object of fields and values to update in the user object
-    const updateParams = req.body;
-    res.status(200).send("Updated user.");
+    const bodyParams = req.body;
+    const userObj = req.user;
+
+    try {
+        if ("name" in bodyParams) {
+            userObj.setName(bodyParams["name"]);
+        }
+        if ("email" in bodyParams) {
+            userObj.setEmail(bodyParams["email"]);
+        }
+        if ("studentCourse" in bodyParams) {
+            userObj.addStudentCourse(bodyParams["studentCourse"]);
+        }
+        if ("instructorCourse" in bodyParams) {
+            userObj.addInstructorCourse(bodyParams["instructorCourse"]);
+        }
+        if ("post" in bodyParams) {
+            userObj.addPost(bodyParams["post"]);
+        }
+        if ("comment" in bodyParams) {
+            userObj.addComment(bodyParams["comment"]);
+        }
+        if ("followedPost" in bodyParams) {
+            userObj.addFollowedPost(bodyParams["followedPost"]);
+        }
+        if ("likedPost" in bodyParams) {
+            userObj.addLikedPost(bodyParams["likedPost"]);
+        }
+        if ("rmLikedPost" in bodyParams) {
+            userObj.removeLikedPost(bodyParams["rmLikedPost"]);
+        }
+        if ("likedComment" in bodyParams) {
+            userObj.addLikedComment(bodyParams["likedComment"]);
+        }
+        if ("rmLikedComment" in bodyParams) {
+            userObj.removeLikedComment(bodyParams["rmLikedComment"]);
+        }
+        if ("icon" in bodyParams) {
+            userObj.addIcon(bodyParams["icon"]);
+        }
+        res.status(200).send("Updated user.");
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    };
 };
 
 exports.addUserToCourse = async (req, res) => {
