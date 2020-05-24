@@ -4,6 +4,7 @@ import db from "../base";
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
+    // User object from Firebase Auth
     const [currentUser, setCurrentUser] = useState(null);
 
     // Pending is set in order to indicate that Firebase is currently fetching the current user. 

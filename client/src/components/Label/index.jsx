@@ -3,7 +3,7 @@ import './style.css';
 
 const Label = (props) => {
     return (
-        <div className="label">
+        <div className={`label ${props.type}`}>
             <p>{props.children}</p>
         </div>
     )

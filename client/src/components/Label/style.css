@@ -1,5 +1,4 @@
 .label {
-    background-color: #A6D1DF;
     width: 200px;
     height: 50px;
     text-align: center;
@@ -11,4 +10,12 @@
 .label > p {
     text-align: center;
     width: 100%;
+}
+
+.student {
+    background-color: #A6D1DF;
+}
+
+.instructor {
+    background-color: beige;
 }
