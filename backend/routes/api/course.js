@@ -5,7 +5,7 @@ const courseController = require("../../controllers/courseController");
 // Matches with "/api/course"
 router.route("/")
     .post(courseController.addCourse) // Create
-    .get(courseController.getCourse) // Read
+    .get(courseController.getAllCourses) // Read
     .put(courseController.updateCourse) // Update
 
 module.exports = router;
