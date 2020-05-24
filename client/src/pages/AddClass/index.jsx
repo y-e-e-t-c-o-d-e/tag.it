@@ -1,28 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
 import Label from '../../components/Label';
 import SuggestionTextField from '../../components/SuggestionTextField';
 import Button from '../../components/Button';
 import API from '../../utils/API';
+import { AuthContext } from '../../auth/Auth';
+import { useContext } from 'react';
 
-const AddClass = ({history}) => {
-    // TODO: Replace with dynamic data in future PR once backend is done.
-    let classes = [
-        {
-            courseName: "CSE 100",
-            courseId: "course283"
-        },
-        {
-            courseName: "CSE 105",
-            courseId: "course1"
-        },
-        {
-            courseName: "MATH 183",
-            courseId: "12345"
-        }
-    ];
-
+const AddClass = ({history, currentUser}) => {
     const [selectedClasses, setSelectedClasses] = useState(["", "", "", "", ""]);
+    const [courseOptions, setCourseOptions] = useState([]);
+
+    // console.log(currentUser);
+
+    useEffect(() => {
+        API.getAllCourses().then((res) => {
+            setCourseOptions(res.data);
+        });
+    }, []);
 
     // Used to update page state when text fields are updated
     const onBlurSetClasses = (index, value) => {
@@ -34,19 +29,25 @@ const AddClass = ({history}) => {
     // Renders each of the suggestion text fields
     const renderFields = () => {
         return [1, 2, 3, 4, 5].map((value, index) => 
-            <SuggestionTextField name={`Class ${value}`} options={classes} type={"class"}
+            <SuggestionTextField name={`Class ${value}`} options={courseOptions} type={"class"}
                                  onBlur={(id) => onBlurSetClasses(index, id)} key={index}/>
         );
     };
 
     const renderClassLabels = () => {
-        const labels = [
-            "CSE 127",
-            "CSE 120"
-        ];
-        return labels.map((value) => 
-            <Label>{value}</Label>
-        )
+        console.log(currentUser);
+        if (!currentUser) {
+            return <></>
+        };
+
+        const studentLabels = currentUser.studentCourseList.map((val) => 
+            <Label type="student">{val}</Label>
+        );
+        const instructorLabels = currentUser.instructorCourseList.map((val) => 
+            <Label type="instructor">{val}</Label>
+        );
+        
+        return studentLabels.concat(instructorLabels);
     };
 
     const onSubmit = () => {

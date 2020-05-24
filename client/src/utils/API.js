@@ -53,5 +53,19 @@ export default {
             headers: authHeaders()
         };
         return axios(config);
+    },
+
+    getAllCourses: function() {
+        const config = {
+            headers: authHeaders(),
+            transformResponse: [function (data) {
+                const jsonData = JSON.parse(data);
+                // Convert object to array of objects
+                const courseArray = Object.keys(jsonData).map(i => jsonData[i]);
+                console.log(courseArray);
+                return courseArray;
+            }]
+        };
+        return axios.get(`${baseURL}/api/course`, config);
     }
 }
