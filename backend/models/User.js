@@ -15,8 +15,24 @@ class User {
         await this.push();
     }
 
+    removeStudentCourse = async (courseId) => {
+        var index = this.props.studentCourseList.indexOf(courseId);
+        if (index != -1) {
+            this.props.studentCourseList.splice(index, 1);
+        }
+        await this.push();
+    }
+
     addInstructorCourse = async (courseId) => {
         this.props.instructorCourseList.push(courseId);
+        await this.push();
+    }
+
+    removeInstructorCourse = async (courseId) => {
+        var index = this.props.instructorCourseList.indexOf(courseId);
+        if (index != -1) {
+            this.props.instructorCourseList.splice(index, 1);
+        }
         await this.push();
     }
 
@@ -25,13 +41,37 @@ class User {
         await this.push();
     }
 
+    removePost = async (postId) => {
+        var index = this.props.postList.indexOf(postId);
+        if (index != -1) {
+            this.props.postList.splice(index, 1);
+        }
+        await this.push();
+    }
+
     addComment = async (commentId) => {
         this.props.commentList.push(commentId);
         await this.push();
     }
 
+    removeComment = async (commentId) => {
+        var index = this.props.commentList.indexOf(commentId);
+        if (index != -1) {
+            this.props.commentList.splice(index, 1);
+        }
+        await this.push();
+    }
+
     addFollowedPost = async (postId) => {
         this.props.followingList.push(postId);
+        await this.push();
+    }
+
+    removeFollowedPost = async (postId) => {
+        var index = this.props.followingList.indexOf(postId);
+        if (index != -1) {
+            this.props.studentCofollowingListurseList.splice(index, 1);
+        }
         await this.push();
     }
 
