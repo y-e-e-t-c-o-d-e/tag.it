@@ -141,6 +141,13 @@ class User {
     
     setIcon = async (icon) => {
         this.props.icon = icon;
+    }
+    
+    removeFollowedPost = async (postId) => {
+        var index = this.props.followingList.indexOf(postId);
+        if (index != -1) {
+            this.props.studentCofollowingListurseList.splice(index, 1);
+        }
         await this.push();
     }
 
