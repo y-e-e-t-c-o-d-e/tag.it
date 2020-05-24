@@ -189,30 +189,10 @@ class Course {
 }
 
 module.exports.pushCourseToFirebase = (updateParams) => {
-    // OLD WAY
-    /*return new Promise(async (resolve, reject) => {
-        try {
-            await db.ref("Courses").child(updateParams["uuid"]).set({
-                name: updateParams["name"], 
-                term: updateParams["term"],
-                uuid: updateParams["uuid"],
-                instructorList: updateParams["instructorList"], 
-                studentList: updateParams["studentList"],
-                tagList: updateParams["tagList"],
-                postList: updateParams["postList"],
-            });
-            resolve("Everything worked");
-        } catch(e) {
-            console.log("There was an error: " + e);
-            reject("Something went wrong");
-        }
-        
-    })*/
-
-    // NEW WAY THATS CONSISTENT WITH USER.JS
-    var name = updateParams['name'];
-    var term = updateParams['term'];
-    var uuid = updateParams['uuid'];
+    // Consistent with User.js
+    const name = updateParams['name'];
+    const term = updateParams['term'];
+    const uuid = updateParams['uuid'];
     return new Promise(async (resolve, reject) => {
         try {
             // TODO: Implement logic for these lists later.
