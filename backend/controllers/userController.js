@@ -115,11 +115,11 @@ exports.addUserToCourse = async (req, res) => {
         let courseObj = await course.getCourseById(courseUUID);
         await courseObj.addStudent(userObj.getUUID());
         await userObj.addStudentCourse(courseObj.getUUID());
-        res.status(200).send("Added user to course.");
+        res.status(200).send(courseObj.getUUID());
     } catch (e) {
         res.status(410).json({
             status: 410,
-            error: e
+            error: e.message
         });
     };
 };
