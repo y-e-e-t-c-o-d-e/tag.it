@@ -81,4 +81,33 @@ describe('course', () => {
         expect(posts.length).to.equal(2);
     })
 
+    it('should classify the user according to their status', async () => {
+        const testCourse = await course.getCourseById('course1');
+        expect(testCourse.classifyUser('cse110').to.equal('instructor'));
+        expect(testCourse.classifyUser('Pawan').to.equal('student'));
+        expect(testCourse.classifyUser('Rohith').to.equal('null'));
+    })
+
+    it('should return all the private posts for course1', async () => {
+        const testCourse = await course.getCourseById('course1');
+        expect((await testCourse.getPrivatePosts()).to.equal(['post1']))
+    })
+
+    it('should return all the public posts for course1', async () => {
+        const testCourse = await course.getCourseById('course1');
+        expect((await testCourse.getPublicPosts()).to.equal(['post2']))
+    })
+
+    it('should return all the pinned posts for course1', async () => {
+        const testCourse = await course.getCourseById('course1');
+        expect((await testCourse.getPinnedPosts()).to.equal([]))
+    })
+
+    it('should return all the announcements for course1', async () => {
+        const testCourse = await course.getCourseById('course1');
+        expect(await testCourse.getAnnouncements().to.equal([]))
+    })
+
+
+
 });
