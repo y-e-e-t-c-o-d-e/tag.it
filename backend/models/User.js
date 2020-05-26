@@ -22,6 +22,13 @@ class User {
 
     setEmail = async (email) => {
         this.props.email = email;
+    }
+    
+    removeStudentCourse = async (courseId) => {
+        const index = this.props.studentCourseList.indexOf(courseId);
+        if (index != -1) {
+            this.props.studentCourseList.splice(index, 1);
+        }
         await this.push();
     }
 
@@ -55,6 +62,13 @@ class User {
             await this.push();
         } else {
             throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
+        }
+    }
+    
+    removeInstructorCourse = async (courseId) => {
+        const index = this.props.instructorCourseList.indexOf(courseId);
+        if (index != -1) {
+            this.props.instructorCourseList.splice(index, 1);
         }
     }
 
@@ -144,7 +158,7 @@ class User {
     }
     
     removeFollowedPost = async (postId) => {
-        var index = this.props.followingList.indexOf(postId);
+        const index = this.props.followingList.indexOf(postId);
         if (index != -1) {
             this.props.studentCofollowingListurseList.splice(index, 1);
         }
