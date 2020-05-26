@@ -4,7 +4,7 @@ import './style.css';
 import db from "../../base";
 import TagList from "../../components/TagList/index.jsx";
 
-const Home = ({ currentUser, match }) => {
+const Home = ({ currentUser, history, match }) => {
     if (match) {
         const courseId = match.params.id;
     }

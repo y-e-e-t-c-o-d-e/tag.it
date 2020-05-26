@@ -5,9 +5,14 @@ import './style.css';
 import API from "../../utils/API";
 
 const bgColors = {
-    "default": "white",
+    "default": "#e6e5e5",
     "error": "#ffcccc",
 };
+
+/* hardcoded */
+const currCourse = {
+    instructorList: ["hechan@ucsd.edu"]
+}
 
 const Staff = ({ history }) => {
     /* Function to redirect to Home */
@@ -48,10 +53,41 @@ const Staff = ({ history }) => {
     }
 
     /* Function for handling inviting staff */
-    const handleStaffInvite = async (event) => {
+    const handleStaffInvite = (event) => {
+        console.log('yes');
+        event.preventDefault();
         if (emailValid) {
+            const { email } = event.target.elements;
 
+            // try to add staff to course in database
+            try {
+                // TODO: API stuff, check if already in database
+                currCourse.instructorList.push(email.value);
+                console.log(currCourse.instructorList)
+                event.target.reset();
+            } catch (error) {
+                alert(error);
+            }
+        } else {
+            alert("Please enter a valid instructor email.");
         }
+    }
+
+    const removeInstructor = (event) => {
+        try {
+            // TODO: API stuff, remove course from instructorList
+            currCourse.instructorList.splice(currCourse.instructorList.indexOf(event.target.value), 1);
+        } catch (error) {
+            alert("An error occurred when removing this instructor.");
+        }
+    }
+
+    const renderClassInstructors = () => {
+        console.log("line " + currCourse.instructorList);
+        const instructorEmails = currCourse.instructorList.map((val) =>
+            <button className="email-button" onClick={removeInstructor}>{val}</button>
+        );
+        return instructorEmails;
     }
 
     return (
@@ -67,7 +103,7 @@ const Staff = ({ history }) => {
                         <h2>Enter Instructor Email</h2>
                         <form onSubmit={handleStaffInvite}>
                             <input name="email" type="email" placeholder="Add new instructor email" onBlur={handleEmailChange} style={{ backgroundColor: emailBgColor }} />
-                            <div className="input">
+                            <div className="input invite-button">
                                 <button type="submit">Invite</button>
                             </div>
                         </form>
@@ -80,9 +116,7 @@ const Staff = ({ history }) => {
                 <div className="curr-instructors">
                     <h3>Current Instructors:</h3>
                     <div className="scroll-instructors">
-                        <p>email1</p>
-                        <p>email2</p>
-                        <p>email3</p>
+                        {renderClassInstructors()}
                     </div>
                 </div>
             </div>

@@ -27,8 +27,8 @@ const ClassCreation = ({ history }) => {
 
     /* Main function for handling class creation */
     const handleClassCreation = async (event) => {
+        event.preventDefault();
         if (titleValid && descValid) {
-            event.preventDefault();
             // TODO: add tags if they've been set
             const { title, description, term } = event.target.elements;
 

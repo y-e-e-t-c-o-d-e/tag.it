@@ -1,5 +1,29 @@
+.curr-instructors {
+    flex-grow: 0.2;
+}
+
 .curr-instructors h3 {
     margin-top: 0px;
+}
+
+.email-button {
+    display: block;
+    border: 1px solid #D1D1D1;
+    border-radius: 2px;
+    background: #F1F1F1;
+    margin: 6px 0 6px 0;
+    padding: 6px 8px;
+    width: 90%;
+}
+
+.email-button:after {
+    content: '\2715';
+    color: #AAA;
+    margin-left: 8px;
+}
+
+.email-button:hover, .email-button:focus {
+    border-color: #B1B1B1;
 }
 
 .invite-box {
@@ -14,13 +38,17 @@
     color: #856458;
 }
 
+.invite-button {
+    margin-top: 2.5%;
+}
+
 .invite-content {
     margin: auto 2.5% auto 2.5%;
 }
 
 .flex-instructors {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     margin-top: 2.5%;
 }
 
@@ -30,5 +58,10 @@
 
 .scroll-instructors {
     border: 5px solid #E0DEDE;
-    height: 85.5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 82%;
+    overflow: auto;
+    padding: 6px 0 6px 0;
 }
