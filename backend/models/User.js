@@ -1,4 +1,7 @@
-const { db } = require("../shared/firebase")
+const { db } = require("../shared/firebase");
+const { InternalServerError } = require("../shared/error");
+const post = require("./Post");
+const comment = require("./Comment");
 
 class User {
     constructor(props) {
@@ -10,14 +13,35 @@ class User {
      * 
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
-    addStudentCourse = async (courseId) => {
-        this.props.studentCourseList.push(courseId);
+    setName = async (name) => {
+        this.props.name = name;
         await this.push();
     }
 
-    addInstructorCourse = async (courseId) => {
-        this.props.instructorCourseList.push(courseId);
+    setEmail = async (email) => {
+        this.props.email = email;
         await this.push();
+    }
+
+    addStudentCourse = async (courseId) => {
+        // Avoid adding duplicates
+        if (this.props.studentCourseList.indexOf(courseId) < 0) {
+            this.props.studentCourseList.push(courseId);
+            await this.push();
+        } else {
+            throw new InternalServerError(`Student Course ${courseId} already exists.`);
+        }
+        
+    }
+
+    addInstructorCourse = async (courseId) => {
+        // Avoid adding duplicates
+        if (this.props.instructorCourseList.indexOf(courseId) < 0) {
+            this.props.instructorCourseList.push(courseId);
+            await this.push();
+        } else {
+            throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
+        }
     }
 
     addPost = async (postId) => {
@@ -37,32 +61,37 @@ class User {
 
     addLikedPost = async (postId) => {
         this.props.likedPostList.push(postId);
-        let post = await getPostById(postId);
-        post.incrementScore();
+        let postObj = await post.getPostById(postId);
+        postObj.incrementScore();
         await this.push();
     }
 
     removeLikedPost = async (postId) => {
-        this.props.likedPostList.splice(likedPostList.indexOf(postId), 1);
-        let post = await getPostById(postId);
-        post.decrementScore();
+        this.props.likedPostList.splice(this.props.likedPostList.indexOf(postId), 1);
+        let postObj = await post.getPostById(postId);
+        postObj.decrementScore();
         await this.push();
     }
 
     addLikedComment = async (commentId) => {
         this.props.likedCommentList.push(commentId);
-        let comment = await getCommentById(commentId);
-        comment.incrementScore();
+        let commentObj = await comment.getCommentById(commentId);
+        commentObj.incrementScore();
         await this.push();
     }
 
     removeLikedComment = async (commentId) => {
-        this.props.likedCommentList.splice(likedCommentList.indexOf(commentId), 1);
-        let comment = await getCommentById(commentId);
-        comment.decrementScore();
+        this.props.likedCommentList.splice(this.props.likedCommentList.indexOf(commentId), 1);
+        let commentObj = await comment.getCommentById(commentId);
+        commentObj.decrementScore();
         await this.push();
     }
     
+    setIcon = async (icon) => {
+        this.props.icon = icon;
+        await this.push();
+    }
+
     getName() {
         return this.props.name;
     }
@@ -157,7 +186,6 @@ module.exports.pushUserToFirebase = (updateParams) => {
             console.log("There was an error: " + e);
             reject("Something went wrong");
         }
-        
     })
 };
 

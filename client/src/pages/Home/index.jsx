@@ -4,7 +4,11 @@ import './style.css';
 import db from "../../base";
 import TagList from "../../components/TagList/index.jsx";
 
-const Home = ({ currentUser, history, ...rest }) => {
+const Home = ({ currentUser, match }) => {
+    if (match) {
+        const courseId = match.params.id;
+    }
+
     const redirectClassCreation = () => {
         history.push("/createclass");
     }
