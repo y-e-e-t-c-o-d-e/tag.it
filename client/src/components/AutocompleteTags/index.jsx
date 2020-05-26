@@ -21,6 +21,7 @@ class AutocompleteTags extends React.Component {
     }
 
     handleDelete(i) {
+        // extract into classtagutil? pass in (i, this.state)?
         const tags = this.state.tags.slice(0);
         tags.splice(i, 1);
         this.setState({ tags });
@@ -39,8 +40,7 @@ class AutocompleteTags extends React.Component {
                 handleDelete={this.handleDelete.bind(this)}
                 handleAddition={this.handleAddition.bind(this)}
                 allowNew={true}
-                delimiters={this.state.delimiters}
-                placeholder={this.props.placeholder} />
+                delimiters={this.state.delimiters} />
         );
     }
 }
