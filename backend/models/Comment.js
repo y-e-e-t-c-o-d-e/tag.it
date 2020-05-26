@@ -58,6 +58,16 @@ class Comment {
         await this.push();
     }
 
+    removeChild = async(commentId) => {
+        const index = this.props.childList.indexOf(commentId);
+        let child = await getCommentById(commentId);
+        child.setParentComment("dummy_parent");
+        if (index != -1) {
+            this.props.childList.splice(index, 1);
+        }
+        await this.push();
+    }
+
     incrementScore = async () => {
         this.props.score++;
         await this.push();

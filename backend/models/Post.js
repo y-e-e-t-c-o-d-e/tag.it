@@ -61,14 +61,38 @@ class Post {
         this.props.followingList.push(userId);
         await this.push();
     }
+    removeFollower = async (userId) => {
+        const index = this.props.followingList.indexOf(userId);
+        if (index != -1) {
+            this.props.followingList.splice(index, 1);
+        }
+        await this.push();
+    }
 
     addComment = async (commentId) => {
         this.props.commentList.push(commentId);
         await this.push();
     }
+    
+    removeComment = async (commentId) => {
+        const index = this.props.commentList.indexOf(commentId);
+        if (index != -1) {
+            this.props.commentList.splice(index, 1);
+        }
+        await this.push();
+    }
+    
 
     addTag = async (tagId) => {
         this.props.tagList.push(tagId);
+        await this.push();
+    }
+
+    removeTag = async (tagId) => {
+        const index = this.props.tagList.indexOf(tagId);
+        if (index != -1) {
+            this.props.tagList.splice(index, 1);
+        }
         await this.push();
     }
 
@@ -155,15 +179,6 @@ class Post {
 
             await transporter.sendMail(mailOptions);
         } 
-    }
-
-    removeTag = async (tagId) => {
-        for (var i = 0; i < this.props.tagList.length; i ++) {
-            if (this.props.tagList[i] === tagId) {
-                this.props.tagList.splice(i, 1);
-            }
-        }
-        await this.push();
     }
 
 
