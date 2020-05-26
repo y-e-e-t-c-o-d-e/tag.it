@@ -18,7 +18,7 @@ describe('tag', () => {
 
     });
 
-    it('should create a new tag in Firebase', async () => {
+    /*it('should create a new tag in Firebase', async () => {
         const tagParams = {
             name: "pa1", 
             numUsed: "3",
@@ -45,6 +45,22 @@ describe('tag', () => {
         testTag.addSubTag(subTag);
         //testTag.addPost("post2");
         expect(testTag.props.name).to.equal("pa1");
+    })*/
+
+    /*it('should remove a post from tag in firebase', async() => {
+        const uuid = 'tag1';
+        const testTag = await tag.getTagById(uuid);
+        const postId = 'post4';
+        await testTag.removePost(postId);
+        expect(1).to.equal(1);
+    })*/
+
+    it('should add a subtag to tag in firebase', async() => {
+        const uuid = 'tag1';
+        const testTag = await tag.getTagById(uuid);
+        await testTag.removeSubTag('tag2');
+        //await testTag.removePost(postId);
+        expect(1).to.equal(1);
     })
 
     

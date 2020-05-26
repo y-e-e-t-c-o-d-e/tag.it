@@ -55,18 +55,40 @@ class Tag {
         this.props.postList.push(postId);
         await this.push();
     }
+    removePost = async (postId) => {
+        const index = this.props.postList.indexOf(postId);
+        if (index != -1) {
+            this.props.postList.splice(index, 1);
+        }
+        await this.push();
+    }
 
     setParentTag = async(parentTagId) => {
         this.props.parentTag = parentTagId;
         await this.push();
     }
 
-    addSubTag = async(subTag) => {
-        //var subTag = await getTagById(subTagId);
+    removeParentTag = async() => {
+        this.props.parentTag = "dummy_parent";
+        await this.push();
+    }
+
+    addSubTag = async(subTagId) => {
+        const subTag = await getTagById(subTagId);
         subTag.setParentTag(this.props.uuid);
         this.props.subTags.push(subTag.getUUID());
         await this.push();
-        
+    }
+
+    removeSubTag = async(subTagId) => {
+        const subTag = await getTagById(subTagId);
+        subTag.removeParentTag();
+        const index = this.props.subTags.indexOf(subTag.getUUID());
+        if (index != -1) {
+            this.props.subTags.splice(index, 1);
+        }
+        await this.push();
+
     }
     
     

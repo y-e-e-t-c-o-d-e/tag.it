@@ -16,7 +16,7 @@ class User {
     }
 
     removeStudentCourse = async (courseId) => {
-        var index = this.props.studentCourseList.indexOf(courseId);
+        const index = this.props.studentCourseList.indexOf(courseId);
         if (index != -1) {
             this.props.studentCourseList.splice(index, 1);
         }
@@ -29,7 +29,7 @@ class User {
     }
 
     removeInstructorCourse = async (courseId) => {
-        var index = this.props.instructorCourseList.indexOf(courseId);
+        const index = this.props.instructorCourseList.indexOf(courseId);
         if (index != -1) {
             this.props.instructorCourseList.splice(index, 1);
         }
@@ -42,7 +42,7 @@ class User {
     }
 
     removePost = async (postId) => {
-        var index = this.props.postList.indexOf(postId);
+        const index = this.props.postList.indexOf(postId);
         if (index != -1) {
             this.props.postList.splice(index, 1);
         }
@@ -55,7 +55,7 @@ class User {
     }
 
     removeComment = async (commentId) => {
-        var index = this.props.commentList.indexOf(commentId);
+        const index = this.props.commentList.indexOf(commentId);
         if (index != -1) {
             this.props.commentList.splice(index, 1);
         }
@@ -68,7 +68,7 @@ class User {
     }
 
     removeFollowedPost = async (postId) => {
-        var index = this.props.followingList.indexOf(postId);
+        const index = this.props.followingList.indexOf(postId);
         if (index != -1) {
             this.props.studentCofollowingListurseList.splice(index, 1);
         }
@@ -134,9 +134,9 @@ class User {
 }
 
 module.exports.pushUserToFirebase = (updateParams) => {
-    var name = updateParams['name'];
-    var email = updateParams['email'];
-    var uuid = updateParams['uuid'];
+    const name = updateParams['name'];
+    const email = updateParams['email'];
+    const uuid = updateParams['uuid'];
     return new Promise(async (resolve, reject) => {
         try {
             // TODO: Implement logic for these lists later.
