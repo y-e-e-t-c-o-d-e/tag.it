@@ -12,7 +12,7 @@ const bgColors = {
 const ClassCreation = ({ history }) => {
     /* Function to move forward to Add Staff page */
     const redirectAddStaff = (id) => {
-        history.push("/" + id + "/staff");
+        history.push("/course/" + id + "/staff");
     }
 
     /* Function to redirect to Home */
