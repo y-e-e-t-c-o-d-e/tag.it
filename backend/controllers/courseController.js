@@ -21,7 +21,7 @@ exports.addCourse = async (req, res) => {
        res.status(410).json({
            status: 410,
            error: "Server could not push to firebase"
-       })
+       });
    }
 };
 
@@ -77,3 +77,52 @@ exports.updateCourse = async (req, res) => {
     };
     
 };
+
+exports.verifyCourse = async (req, res) => {
+    
+    console.log("running verify course");
+
+    const bodyParams = req.params;
+    const courseid = bodyParams["courseid"];
+    const inviteId = bodyParams["inviteid"];
+
+    if (!courseid) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing parameter: courseUUID"
+        });
+        return;
+    };
+
+    if (!courseid) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing parameter: inviteid"
+        });
+        return;
+    };
+
+    try {
+        const courseObj = await course.getCourseById(courseid);
+
+        console.log(inviteId);
+        console.log(courseObj.getInviteId());
+        // Verify that invite code is equal
+        if (courseObj.getInviteId() == inviteId) {
+            res.status(200).json({
+                status: 200,
+                verified: true
+            });
+        } else {
+            res.status(500).json({
+                status: 500,
+                verified: false
+            });
+        }   
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: "Course obj not being able to got from Firebase"
+        });
+    }
+}

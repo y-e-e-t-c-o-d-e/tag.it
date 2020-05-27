@@ -2,11 +2,12 @@
 const post = require("../models/Post");
 const { db } = require("../shared/firebase")
 const { InternalServerError } = require("../shared/error");
+const { makeId } = require("../shared/util");
+
 class Course {
     constructor(props) {
         this.props = props;
     }
-
 
     getName() {
         return this.props.name;
@@ -34,6 +35,10 @@ class Course {
 
     getPostList() {
         return this.props.postList.slice(1, this.props.postList.length);
+    }
+
+    getInviteId() {
+        return this.props.inviteId;
     }
 
     setName = async (name) => {
@@ -134,6 +139,7 @@ module.exports.pushCourseToFirebase = (updateParams) => {
                 instructorList: ["dummy_user_id"],
                 tagList: ["dummy_tag_id"],
                 postList: ["dummy_post_id"],
+                inviteId: makeId(6)
             });
             resolve("Everything worked");
         } catch(e) {

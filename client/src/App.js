@@ -12,6 +12,8 @@ import PrivateRoute from "./auth/PrivateRoute";
 import { AuthProvider } from "./auth/Auth";
 import AddClass from './pages/AddClass';
 
+import CourseRoute from './components/CourseRoute';
+
 const App = () => {
   return (
     <AuthProvider>
@@ -19,7 +21,7 @@ const App = () => {
         <div>
           <Switch>
             <PrivateRoute exact path="/" component={Home} />
-            <PrivateRoute exact path="/course/:courseId" component={Home} />
+            <CourseRoute exact path="/course/:courseId" component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
             <PrivateRoute exact path="/add" component={AddClass} />
