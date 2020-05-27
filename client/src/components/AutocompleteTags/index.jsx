@@ -24,12 +24,20 @@ class AutocompleteTags extends React.Component {
         // extract into classtagutil? pass in (i, this.state)?
         const tags = this.state.tags.slice(0);
         tags.splice(i, 1);
-        this.setState({ tags });
+        this.setState({ tags }, () => {
+            if (this.props.onChange) {
+                this.props.onChange(this.state);
+            }
+        });
     }
 
     handleAddition(tag) {
         const tags = [].concat(this.state.tags, tag);
-        this.setState({ tags });
+        this.setState({ tags }, () => {
+            if (this.props.onChange) {
+                this.props.onChange(this.state);
+            }
+        });
     }
 
     render() {

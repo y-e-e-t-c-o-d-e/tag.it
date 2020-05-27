@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import db from "../../base";
 import logo from "../../assets/logo.png";
 import './style.css';
 import API from "../../utils/API";
@@ -12,8 +11,8 @@ const bgColors = {
 
 const ClassCreation = ({ history }) => {
     /* Function to move forward to Add Staff page */
-    const redirectAddStaff = () => {
-        history.push("/staff")
+    const redirectAddStaff = (id) => {
+        history.push("/course/" + id + "/staff");
     }
 
     /* Function to redirect to Home */
@@ -25,18 +24,25 @@ const ClassCreation = ({ history }) => {
     const [titleValid, setTitleValid] = useState(false);
     const [descValid, setDescValid] = useState(false);
 
+    /* Update state of selected tags */
+    const [selectedTags, setSelectedTags] = useState([]);
+
+    const onChangeSetTags = (tagState) => {
+        setSelectedTags(tagState);
+    };
+
     /* Main function for handling class creation */
     const handleClassCreation = async (event) => {
         event.preventDefault();
         if (titleValid && descValid) {
-            // TODO: add tags if they've been set
             const { title, description, term } = event.target.elements;
+            const tags = selectedTags.tags;
 
             /* try to create a course in database */
             try {
                 // TODO: use API to create course
-                await API.createCourse(title.value, term.value, description.value);
-                redirectAddStaff();
+                const courseId = await API.createCourse(title.value, term.value, description.value);
+                redirectAddStaff(courseId); // might need to change depending on how backend implements the return value
             } catch (error) {
                 alert(error);
                 console.error(error);
@@ -134,7 +140,7 @@ const ClassCreation = ({ history }) => {
                         </div>
                         <div className="flex-row">
                             <p>Initial Tags (Optional):</p>
-                            <AutocompleteTags type={"classTag"} />
+                            <AutocompleteTags onChange={onChangeSetTags} />
                         </div>
                         <button type="submit">Next Step: Adding Instructors</button>
                     </form>
