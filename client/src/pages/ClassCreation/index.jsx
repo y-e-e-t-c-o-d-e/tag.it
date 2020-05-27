@@ -30,12 +30,13 @@ const ClassCreation = ({ history }) => {
         event.preventDefault();
         if (titleValid && descValid) {
             // TODO: add tags if they've been set
+            console.log(event)
             const { title, description, term } = event.target.elements;
 
             /* try to create a course in database */
             try {
                 // TODO: use API to create course
-                redirectAddStaff();
+                //redirectAddStaff();
             } catch (error) {
                 alert(error);
             }
@@ -132,7 +133,7 @@ const ClassCreation = ({ history }) => {
                         </div>
                         <div className="flex-row">
                             <p>Initial Tags (Optional):</p>
-                            <AutocompleteTags type={"classTag"} />
+                            <AutocompleteTags />
                         </div>
                         <button type="submit">Next Step: Adding Instructors</button>
                     </form>
