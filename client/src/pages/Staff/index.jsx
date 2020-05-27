@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import db from "../../base";
 import logo from "../../assets/logo.png";
 import './style.css';
 import API from "../../utils/API";
 
 const Staff = ({ history }) => {
-    /* hardcoded */
-    const [currCourses, setCurrCourses] = useState(["hechan@ucsd.edu"]);
+    /* hardcoded
+    const [currCourses, setCurrCourses] = useState([]);
+    */
 
     /* Function to redirect to Home */
     const redirectHome = () => {
