@@ -158,3 +158,25 @@ exports.getUserType = async (req, res) => {
         });
     };
 };
+
+exports.deleteUser = async (req, res) => {
+    const userUUID = req.query.userUUID;
+    if (!userUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing paramater: userUUID"
+        });
+        return;
+    };
+
+    // Grabs the user based on the userUUID. If fails, responds with an error.
+    try {
+        user.deleteUserByID(userUUID);
+        res.status(200).send("removed user with the following userUUID:" + userUUID)
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    };
+};

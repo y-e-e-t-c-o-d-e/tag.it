@@ -245,6 +245,7 @@ module.exports.pushUserToFirebase = (updateParams) => {
 getUserById = async (uuid) => {
     const ref = db.ref('Users/' + uuid);
 
+
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
             const r = new User(snapshot.val());
