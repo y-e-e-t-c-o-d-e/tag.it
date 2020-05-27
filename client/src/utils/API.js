@@ -67,5 +67,18 @@ export default {
             }]
         };
         return axios.get(`${baseURL}/api/course`, config);
+    },
+
+    createCourse: function (name, term, description) {
+        const config = {
+            method: 'post',
+            url: `${baseURL}/api/course`,
+            headers: authHeaders(),
+            data: {
+                name: name,
+                term: term
+            }
+        };
+        return axios(config);
     }
 }

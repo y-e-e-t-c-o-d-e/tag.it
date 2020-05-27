@@ -35,9 +35,11 @@ const ClassCreation = ({ history }) => {
             /* try to create a course in database */
             try {
                 // TODO: use API to create course
+                await API.createCourse(title.value, term.value, description.value);
                 redirectAddStaff();
             } catch (error) {
                 alert(error);
+                console.error(error);
             }
         } else {
             if (!titleValid) { alert("Please enter a course title"); }
