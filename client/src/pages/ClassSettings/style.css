@@ -1,0 +1,91 @@
+/* A big wrapper for everything on this page */
+.content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* The box containing the class settings */
+.box {
+    width: 600px;
+    height: 600px;
+    border: 30px solid #A6D1DF;
+    margin-top:50px; /*Should probably move this into navbar as margin-bottom*/
+}
+
+.center-items{
+    text-align: center;
+}
+
+h1 {
+    font-size: 40px;
+    color: #9E7772;
+}
+
+hr{
+    border-top: 3px solid #d19e98;
+    width: 60%;
+}
+
+/* Gives the form left/right margin and sets text color */
+.course-info {
+    margin: 0 20px 0 20px;
+    color: #9E7772;
+}
+
+/* Makes sure the form contents are lined up */
+.course-info label {
+    display: inline-block;
+    width: 540px;
+    text-align: right;
+    margin: 20px 0 20px 0;
+    align-items: top;
+}
+
+/* Styles the input and textarea and make sure they line up */
+.course-info input {
+    width: 400px;
+    background-color: white;
+    border-bottom: 3px solid #E0DEDE;
+}
+
+.course-info input:focus {
+    border-bottom: 3px solid #FFDBCF;
+}
+.course-info textarea {
+    word-break: break-all;
+    width: 394px; /* 400px(intended length) - 2*3px(border width) */
+    height: 100px;
+    border: 3px solid #E0DEDE;
+    display: inline-block;
+}
+
+.course-info textarea:focus {
+    border: 3px solid #FFDBCF;
+    outline: none;
+}
+
+/* Makes sure they don't break into diff lines */
+.course-title label, .course-title input{
+    float: none;
+    display: inline-block;
+}
+
+.invitation-section {
+    display: flex;
+    margin-left: 25px;
+}
+
+/* Special length and height */
+.invitation-link{
+    max-width: 250px; /* 400px - button width */
+    max-height: 20px;
+}
+
+Button {
+    display: inline-block;
+}
+
+.buttons {
+    display: flex;
+}
