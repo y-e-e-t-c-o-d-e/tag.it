@@ -6,7 +6,7 @@ import TagList from "../../components/TagList/index.jsx";
 
 const Home = ({ currentUser, history, match }) => {
     if (match) {
-        const courseId = match.params.id;
+        const courseId = match.params.courseId;
     }
 
     const redirectClassCreation = () => {

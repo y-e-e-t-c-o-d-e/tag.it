@@ -41,6 +41,7 @@ const ClassCreation = ({ history }) => {
             /* try to create a course in database */
             try {
                 // TODO: use API to create course, generate a courseID, add user to instructorList property of course
+                const courseID = "abgabsda";
                 redirectAddStaff(courseID);
             } catch (error) {
                 alert(error);

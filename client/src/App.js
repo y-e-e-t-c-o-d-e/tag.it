@@ -25,7 +25,7 @@ const App = () => {
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
             <PrivateRoute exact path="/createclass" component={ClassCreation} />
-            <PrivateRoute exact path="/staff" component={Staff} />
+            <PrivateRoute exact path="/course/:courseId/staff" component={Staff} />
             <PrivateRoute exact path="/add" component={AddClass} />
             <Route exact path="/*" component={() => {
               window.location.href = "/";

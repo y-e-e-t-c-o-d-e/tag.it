@@ -3,10 +3,10 @@ import logo from "../../assets/logo.png";
 import './style.css';
 import API from "../../utils/API";
 
-const Staff = ({ history }) => {
-    /* hardcoded
+const Staff = ({ history, match }) => {
+    //' hardcoded
     const [currCourses, setCurrCourses] = useState([]);
-    */
+    const courseId = match.params.courseId;
 
     /* Function to redirect to Home */
     const redirectHome = () => {
