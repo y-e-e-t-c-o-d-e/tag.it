@@ -77,7 +77,7 @@ class Course {
         return posts;
     }
 
-    classifyUser = async (uuid) => {
+    classifyUser = (uuid) => {
         for (let i = 0; i < this.props.instructorList.length; i ++) {
             if (this.props.instructorList[i] === uuid) {
                 return "instructor";
@@ -92,51 +92,59 @@ class Course {
     }
 
     getPrivatePosts = async () => {
-        let list = this.getPostList();
-        const posts = [];
-        for (let i = 0; i < list.length; i ++) {
-            const currentPost = await post.getPostById(list[i]);
-            if (currentPost.isPrivate()) {
-                posts.push(currentPost);
+        return new Promise(async (resolve, reject) => {
+            let list = this.getPostList();
+            const posts = [];
+            for (let i = 0; i < list.length; i ++) {
+                const currentPost = await post.getPostById(list[i]);
+                if (currentPost.isPrivate()) {
+                    posts.push(currentPost.getUUID());
+                }
             }
-        }
-        return posts;
+            resolve(posts);
+        })   
     }
 
     getPublicPosts = async () => {
-        let list = this.getPostList();
-        const posts = [];
-        for (let i = 0; i < list.length; i ++) {
-            const currentPost = await post.getPostById(list[i]);
-            if (!currentPost.isPrivate()) {
-                posts.push(currentPost);
+        return new Promise(async (resolve, reject) => {
+            let list = this.getPostList();
+            const posts = [];
+            for (let i = 0; i < list.length; i ++) {
+                const currentPost = await post.getPostById(list[i]);
+                if (!currentPost.isPrivate()) {
+                    posts.push(currentPost.getUUID());
+                }
             }
-        }
-        return posts;
+            resolve(posts);
+        })      
     }
 
     getPinnedPosts = async () => {
-        let list = this.getPostList();
-        const posts = [];
-        for (let i = 0; i < list.length; i ++) {
-            const currentPost = await post.getPostById(list[i]);
-            if (currentPost.isPinned()) {
-                posts.push(currentPost);
+        return new Promise(async (resolve, reject) => {
+            let list = this.getPostList();
+            const posts = [];
+            for (let i = 0; i < list.length; i ++) {
+                const currentPost = await post.getPostById(list[i]);
+                if (currentPost.isPinned()) {
+                    posts.push(currentPost.getUUID());
+                }
             }
-        }
-        return posts;
+            resolve(posts);
+        })      
     }
 
     getAnnouncements = async() => {
-        let list = this.getPostList();
-        const posts = [];
-        for (let i = 0; i < list.length; i ++) {
-            const currentPost = await post.getPostById(list[i]);
-            if (currentPost.isAnnouncement()) {
-                posts.push(currentPost);
+        return new Promise(async (resolve, reject) => {
+            let list = this.getPostList();
+            const posts = [];
+            for (let i = 0; i < list.length; i ++) {
+                const currentPost = await post.getPostById(list[i]);
+                if (currentPost.isAnnouncement()) {
+                    posts.push(currentPost.getUUID());
+                }
             }
-        }
-        return posts;
+            resolve(posts);
+        })  
     }
 
     getPostsWithMultipleTags = async (tagList) => {
