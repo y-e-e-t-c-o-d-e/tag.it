@@ -23,8 +23,8 @@ describe('course', () => {
             name: "cse110", 
             term: "sp20",
             uuid: "course1",
-            instructorList: "user2", 
-            studentList: "user1",
+            instructorList: ["user2"], 
+            studentList: ["user1"],
             tagList: ["dummy_tag"],
             postList: ["dummy_post"],
         }
@@ -83,29 +83,36 @@ describe('course', () => {
 
     it('should classify the user according to their status', async () => {
         const testCourse = await course.getCourseById('course1');
-        expect(testCourse.classifyUser('cse110').to.equal('instructor'));
-        expect(testCourse.classifyUser('Pawan').to.equal('student'));
-        expect(testCourse.classifyUser('Rohith').to.equal('null'));
+        expect(testCourse.classifyUser('user2')).to.equal('instructor');
+        expect(testCourse.classifyUser('user1')).to.equal('student');
+        expect(testCourse.classifyUser('Rohith')).to.equal('null');
     })
 
     it('should return all the private posts for course1', async () => {
         const testCourse = await course.getCourseById('course1');
-        expect((await testCourse.getPrivatePosts()).to.equal(['post1']))
+        const privatePost = await testCourse.getPrivatePosts();
+        expect(privatePost[0]).to.equal('post2');
     })
 
+    
     it('should return all the public posts for course1', async () => {
         const testCourse = await course.getCourseById('course1');
-        expect((await testCourse.getPublicPosts()).to.equal(['post2']))
+        const publicPost = await testCourse.getPublicPosts();
+        expect(publicPost[0]).to.equal('post1');
     })
 
+    
     it('should return all the pinned posts for course1', async () => {
         const testCourse = await course.getCourseById('course1');
-        expect((await testCourse.getPinnedPosts()).to.equal([]))
+        const pinnedPost = await testCourse.getPinnedPosts();
+        expect(pinnedPost[0]).to.equal('post1');
     })
 
+    
     it('should return all the announcements for course1', async () => {
         const testCourse = await course.getCourseById('course1');
-        expect(await testCourse.getAnnouncements().to.equal([]))
+        const announcements = await testCourse.getAnnouncements();
+        expect(announcements[0]).to.equal('post1');
     })
 
 

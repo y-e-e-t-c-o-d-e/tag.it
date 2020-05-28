@@ -98,7 +98,7 @@ class Course {
             for (let i = 0; i < list.length; i ++) {
                 const currentPost = await post.getPostById(list[i]);
                 if (currentPost.isPrivate()) {
-                    posts.push(currentPost);
+                    posts.push(currentPost.getUUID());
                 }
             }
             resolve(posts);
@@ -112,7 +112,7 @@ class Course {
             for (let i = 0; i < list.length; i ++) {
                 const currentPost = await post.getPostById(list[i]);
                 if (!currentPost.isPrivate()) {
-                    posts.push(currentPost);
+                    posts.push(currentPost.getUUID());
                 }
             }
             resolve(posts);
@@ -126,7 +126,7 @@ class Course {
             for (let i = 0; i < list.length; i ++) {
                 const currentPost = await post.getPostById(list[i]);
                 if (currentPost.isPinned()) {
-                    posts.push(currentPost);
+                    posts.push(currentPost.getUUID());
                 }
             }
             resolve(posts);
@@ -140,7 +140,7 @@ class Course {
             for (let i = 0; i < list.length; i ++) {
                 const currentPost = await post.getPostById(list[i]);
                 if (currentPost.isAnnouncement()) {
-                    posts.push(currentPost);
+                    posts.push(currentPost.getUUID());
                 }
             }
             resolve(posts);
