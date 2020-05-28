@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node app.js",
     "test": "mocha --exit",
-    "test-single": "mocha --timeout 5000 -R nyan --exit"
+    "test-single": "mocha --timeout 5000 -R nyan --exit",
+    "clean" : "rm -rf node_modules/"
   },
   "author": "",
   "license": "ISC",
