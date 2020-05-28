@@ -23,12 +23,8 @@ const App = () => {
             <PrivateRoute exact path="/course/:courseId" component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
-<<<<<<< HEAD
-            <PrivateRoute exact path="/add" component={AddClass} />
-=======
             <Route exact path="/add" component={AddClass} />
             <Route exact path="/class-settings" component={ClassSettings} />
->>>>>>> Basic style, able to copy invitation link to clipboard
             <Route exact path="/*" component={() => {
               window.location.href = "/";
             }} />
