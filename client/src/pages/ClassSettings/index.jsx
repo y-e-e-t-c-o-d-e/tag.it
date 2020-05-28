@@ -73,14 +73,17 @@ function ClassSettings(props){
 
                         <label>
                             <span>Description:{'\u00A0'} {'\u00A0'}</span>
-                            <textarea type="text" value={props.courseDescription}></textarea> 
+                            <textarea type="text">
+                                A course with focus on software engineering and collaboration.
+                                Prerequiisites: None. Course website: cse111.com
+                            </textarea> 
                         </label>
 
                         <label>
                             <div className="invitation-section">
-                                <span>Invitation： {'\u00A0'} {'\u00A0'}</span>
+                                <span>Invitation:{'\u00A0'} {'\u00A0'}</span>
                                 <textarea readOnly ref={invitationRef}
-                                    className="invitation-link" type="text" value="YEET copy success">
+                                    className="invitation-link" type="text" value="https://tag.it/courses/512734">
                                 </textarea> 
                                 <Button text="copy" onSubmit={copyLinkToClipboard}/>
                             </div>
