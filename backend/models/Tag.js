@@ -14,24 +14,42 @@ class Tag {
     /**
      * normal getters and setters
      */
-    getName() {
-        return this.props.name;
+
+    getName = async() => {
+        let currentTag = await getTagById(this.props.uuid);
+        return (await currentTag).props.name;
     }
-    getNumUsed() {
-        return this.props.numUsed;
+
+    getNumUsed = async() => {
+        let currentTag = await getTagById(this.props.uuid);
+        return (await currentTag).props.numUsed;
     }
-    getCourse() {
-        return this.props.course;
+    getCourse = async() => {
+        let currentTag = await getTagById(this.props.uuid);
+        return (await currentTag).props.course;
     }
-    getParentTag() {
-        return this.props.parentTag;
+    getParentTag = async() => {
+        let currentTag = await getTagById(this.props.uuid);
+        return (await currentTag).props.parentTag;
     }
-    getPostList() {
-        return this.props.postList;
+    getPostList = async() => {
+        let currentTag = await getTagById(this.props.uuid);
+        let currentList = currentTag.props.postList;
+        if (currentList[0] == "dummy_post") {
+            return currentList.slice(1, currentList.length);
+        }
+        return currentList;
+        
     }
-    getSubTags() {
-        return this.props.subTags;
+    getSubTags = async() => {
+        let currentTag = await getTagById(this.props.uuid);
+        let currentList = currentTag.props.subTags;
+        if (currentList[0] == "dummy_tag") {
+            return currentList.slice(1, currentList.length);
+        }
+        return currentList;
     }
+
     getUUID() {
         return this.props.uuid;
     }
@@ -75,14 +93,14 @@ class Tag {
 
     addSubTag = async(subTagId) => {
         const subTag = await getTagById(subTagId);
-        subTag.setParentTag(this.props.uuid);
+        await subTag.setParentTag(this.props.uuid);
         this.props.subTags.push(subTag.getUUID());
         await this.push();
     }
 
     removeSubTag = async(subTagId) => {
         const subTag = await getTagById(subTagId);
-        subTag.removeParentTag();
+        await subTag.removeParentTag();
         const index = this.props.subTags.indexOf(subTag.getUUID());
         if (index != -1) {
             this.props.subTags.splice(index, 1);
@@ -118,16 +136,17 @@ class Tag {
 module.exports.pushTagToFirebase = (updateParams) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await db.ref("Tags").child(updateParams["uuid"]).set({
+            const tagRef = db.ref("Tags").push();
+            await tagRef.set({
                 name: updateParams["name"], 
                 numUsed: updateParams["numUsed"],
                 parentTag: updateParams["parentTag"], 
-                uuid: updateParams["uuid"],
+                uuid: (await tagRef).key,
                 subTags: updateParams["subTags"],
                 course: updateParams["course"],
                 postList: updateParams["postList"]
             });
-            resolve("Everything worked");
+            resolve((await tagRef).key);
         } catch(e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");
@@ -150,22 +169,21 @@ getTagById = async (uuid) => {
             reject(errorObject);
         })
     }) 
+}
 
-
-    /**
-     * This is for reference to the callback but, we're using promises now.
-     */
-
-    // // Attach an asynchronous callback to read the data at our posts reference
-    // await ref.once("value", function(snapshot) {
-    //     const r = new User(snapshot.val());
-    //     console.log(r.props.name);
-    //     callback(r);
-    // }, function (errorObject) {
-    //     console.log("The read failed: " + errorObject.code);
-    // })
+deleteTagByID = async (uuid) => {
+    
+    const ref = db.ref('Tags/' + uuid);
+    ref.remove()
+    .then(function() {
+        console.log("Remove succeeded.")
+      })
+      .catch(function(error) {
+        console.log("Remove failed: " + error.message)
+      });
 }
 
    
 module.exports.Tag = Tag
 module.exports.getTagById = getTagById
+module.exports.deleteTagByID = deleteTagByID
