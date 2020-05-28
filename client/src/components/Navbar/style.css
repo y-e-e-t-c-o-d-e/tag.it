@@ -1,5 +1,5 @@
 #navbar-body {
-    background-color: #b3ecff;
+    background-color: #3C7996 !important;
     overflow: hidden;
     padding-left: 20px;
     padding-right: 50px;
@@ -16,7 +16,7 @@
 }
 
 #nav-right a {
-    color: #ffc61a;
+    color: white !important;
     text-align: center;
     padding: 20px 26px;
     text-decoration: none;
@@ -25,18 +25,18 @@
 }
 
 #nav-right a:hover{
-    background-color: #ffd24d; /*#ccf3ff*/
-    color: white;
+    background-color: #FCDF64; /*#ccf3ff*/
+    color: #005D83 !important;
 }
 
 #nav-right a.active{
-    background-color: #ffc61a;
-    color: white;
+    background-color: #FCDF64;
+    color: #005D83;
 }
 
 #nav-right a.active:hover{
-    background-color: #ffc61a;
-    color: white;
+    background-color: #FCDF64;
+    color: #005D83;
 }
 
 #logo {
