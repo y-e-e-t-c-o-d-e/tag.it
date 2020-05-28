@@ -53,7 +53,7 @@ hr{
     border-bottom: 3px solid #FFDBCF;
 }
 .course-info textarea {
-    word-break: break-all;
+    word-break: break-word;
     width: 394px; /* 400px(intended length) - 2*3px(border width) */
     height: 100px;
     border: 3px solid #E0DEDE;
@@ -73,17 +73,14 @@ hr{
 
 .invitation-section {
     display: flex;
-    margin-left: 25px;
+    margin-left: 50px;
 }
 
 /* Special length and height */
 .invitation-link{
-    max-width: 250px; /* 400px - button width */
+    max-width: 240px; /* 400px - button width - textarea margin */
     max-height: 20px;
-}
-
-Button {
-    display: inline-block;
+    margin-right: 10px;
 }
 
 .buttons {
