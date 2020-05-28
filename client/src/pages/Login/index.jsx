@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Redirect } from "react-router-dom";
 import { AuthContext } from "../../auth/Auth";
 import db from "../../base";
-import NavBar from "../../components/LoginNav";
+import NavBar from "../../components/Navbar";
 import logo from "../../assets/logo.png";
 import './style.css';
 
