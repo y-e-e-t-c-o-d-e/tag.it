@@ -3,6 +3,7 @@ import { AuthContext } from "../../auth/Auth";
 import {NavLink} from "react-router-dom";
 import './style.css';
 import logo from '../../assets/logo.png';
+import db from "../../base"
 
 const loginRender = () => (
     <div id="navbar-body">
@@ -25,7 +26,7 @@ const regularRender = () => (
             <nav>
                 <NavLink to="/login">courses</NavLink>
                 <NavLink to="/calendar">calendar</NavLink>
-                <NavLink to="/logout">logout</NavLink>
+                <NavLink to="/logout" onClick={() => db.auth().signOut()}>logout</NavLink>
             </nav>
         </div>
     </div>
