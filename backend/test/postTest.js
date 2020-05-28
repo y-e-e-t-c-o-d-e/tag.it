@@ -109,26 +109,6 @@ describe('post', async () => {
         tag.deleteTagById(tagKey);
     })
 
-    
-    const postParams = {
-        title: "i need help", 
-        content: "my code is broken",
-        author: "user1", 
-        uuid: "post2",
-        tagList: ["tag1"],
-        commentList: ["comment1"],
-        followingList: ["user1"],
-        isAnnouncement: false,
-        isPinned: false,
-        isAnonymous: true,
-        isPrivate: true,
-        isResolved: false,
-        isInstructor: false,
-        score: 283,
-        course: "course1",
-    }
-
-    await post.pushPostToFirebase(postParams);
 
     // This test will not send the email, since Node returns before finishing the call. How to fix, idk.
     /*it('should send an email to the user from us', async () => {

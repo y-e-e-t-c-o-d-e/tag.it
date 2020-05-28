@@ -1,0 +1,27 @@
+.post-creator {
+    border: 3px solid black;
+    width: 750px;
+    position: relative;
+    margin: 5px;
+    flex: .8;
+    background: lightgrey;
+}
+
+h3 {
+    position: relative;
+    padding-left: 15px;
+}
+
+.question {
+    height: 10%;
+}
+
+.description {
+    height: 50%;
+}
+
+#post-as {
+    position: relative;
+    bottom: 40px;
+}
+
