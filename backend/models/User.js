@@ -192,7 +192,7 @@ getUserById = async (uuid) => {
 }
 
 deleteUserByID = async (uuid) => {
-    console.log("yeet")
+    //console.log("yeet")
     const ref = db.ref('Users/' + uuid);
     ref.remove()
     .then(function() {
