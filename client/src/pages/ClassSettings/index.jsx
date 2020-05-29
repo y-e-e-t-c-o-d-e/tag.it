@@ -67,14 +67,14 @@ function ClassSettings(props){
                             <input name="courseTitle" 
                                 onChange={handleClassNameChange} onBlur={handleClassNameChange} 
                                 style={{ backgroundColor: classNameBgColor }}
-                                type="text" value={props.courseTitle}
+                                type="text" value="CSE 111 - Hardware Engineering"
                             /> 
                         </label>
 
                         <label>
                             <span>Description:{'\u00A0'} {'\u00A0'}</span>
                             <textarea type="text">
-                                A course with focus on software engineering and collaboration.
+                                A course with focus on hardware engineering and collaboration.
                                 Prerequiisites: None. Course website: cse111.com
                             </textarea> 
                         </label>
@@ -88,7 +88,9 @@ function ClassSettings(props){
                                 <Button text="copy" onSubmit={copyLinkToClipboard}/>
                             </div>
                         </label>
-                        <button type="submit">Submit</button>
+                        <div className="center-button">
+                            <button type="submit">Submit</button>
+                        </div>
                     </form>
                     <div className="buttons">
                         <Button text="instructors"/>
