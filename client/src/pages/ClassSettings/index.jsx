@@ -10,16 +10,29 @@ const bgColors = {
 
 function ClassSettings(props){
 
-    const [courseNameValid, setCourseNameValid] = useState(false); // Invalid if empty
+    const [courseNameValid, setCourseNameValid] = useState(true); // Invalid if empty
+    const [courseName, setCourseName] = useState("Default Class Name");
     const invitationRef = useRef(null);
 
     const [courseName, setCourseName] = useState("idk");
 
+    const uuid = props.uuid || "FakeUUID";
+    var link = "https://tag.it/courses/" + uuid;
+
+    useEffect(() => {
+        API.getCourse(uuid).then((course) => {
+            setCourseName(course.name)
+        }).catch(() => {
+            setCourseName('Default Class Name')
+        })
+        console.log(courseName);
+    }, [])
+    
     /* Updates the DB with the new class name and description */
     const handleSettingsChange = async (event) =>{
         if(courseNameValid) {
             event.preventDefault();
-            const { className, courseDescription } = event.target.elements;
+            const className = courseName;
             // updated the course name
             // TODO: Get some way to get the courseUUID (via props?)
             const uuid = props.uuid || "FakeUUID";
@@ -44,6 +57,7 @@ function ClassSettings(props){
 
     const handleClassNameChange = (event) =>{
         const classNameInput = event.target.value;
+        setCourseName(classNameInput);
         if(classNameInput === ""){
             setClassNameBgColor(bgColors.error);
             setCourseNameValid(false);
@@ -74,7 +88,7 @@ function ClassSettings(props){
                             <input name="courseTitle" 
                                 onChange={handleClassNameChange} onBlur={handleClassNameChange} 
                                 style={{ backgroundColor: classNameBgColor }}
-                                type="text" value="CSE 111 - Hardware Engineering"
+                                type="text" value={courseName}
                             /> 
                         </label>
 
@@ -90,7 +104,7 @@ function ClassSettings(props){
                             <div className="invitation-section">
                                 <span>Invitation:{'\u00A0'} {'\u00A0'}</span>
                                 <textarea readOnly ref={invitationRef}
-                                    className="invitation-link" type="text" value="https://tag.it/courses/512734">
+                                    className="invitation-link" type="text" value={link}>
                                 </textarea> 
                                 <Button text="copy" onSubmit={copyLinkToClipboard}/>
                             </div>
