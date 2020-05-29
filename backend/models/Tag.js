@@ -1,7 +1,10 @@
+ 
+// Install these dependencies before you run
 const user = require("./User");
 const post = require("./Post");
-const { db } = require("../shared/firebase")
-
+const db = require("../shared/firebase").db;
+ 
+ 
 class Tag {
     constructor(props) {
         //super(props);
@@ -126,7 +129,7 @@ class Tag {
         });
     } 
 }
-
+ 
 module.exports.pushTagToFirebase = (updateParams) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -148,9 +151,9 @@ module.exports.pushTagToFirebase = (updateParams) => {
         
     })
 };
-
-
-
+ 
+ 
+ 
 getTagById = async (uuid) => {
     const ref = db.ref('Tags/' + uuid);
 
