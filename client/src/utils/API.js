@@ -48,5 +48,28 @@ export default {
     // courses is an array of course objects
     addToCourses: function(courses) {
         
+    },
+
+    getCourse: function (uuid) {
+        const config = {
+            params: {
+                courseUUID: uuid
+            },
+            headers: authHeaders()
+        };
+        return axios.get(`${baseURL}/api/course`, config);
+    },
+
+    updateCourse: function (courseUUID, courseName) {
+        const config = {
+            method: 'put', 
+            url: `${baseURL}/api/course`,
+            data: {
+                courseUUID: courseUUID,
+                courseName: courseName,
+            },
+            headers: authHeaders()
+        };
+        return axios(config);
     }
 }

@@ -1,6 +1,7 @@
-import React, {useRef, useState} from "react";
+import React, {useRef, useState, useEffect } from "react";
 import Button from "../../components/Button/index";
 import './style.css';
+import API from "../../utils/API";
 
 const bgColors = {
     "default": "white",
@@ -12,11 +13,17 @@ function ClassSettings(props){
     const [courseNameValid, setCourseNameValid] = useState(false); // Invalid if empty
     const invitationRef = useRef(null);
 
+    const [courseName, setCourseName] = useState("idk");
+
     /* Updates the DB with the new class name and description */
     const handleSettingsChange = async (event) =>{
-        if(courseNameValid){
+        if(courseNameValid) {
             event.preventDefault();
             const { className, courseDescription } = event.target.elements;
+            // updated the course name
+            // TODO: Get some way to get the courseUUID (via props?)
+            const uuid = props.uuid || "FakeUUID";
+            await API.updateCourse(uuid, className);
             console.log("yeet");
         }
         else{alert("Course name can not be empty");}
@@ -63,7 +70,7 @@ function ClassSettings(props){
                     {/* Actual form with course info */}
                     <form className="course-info" onSubmit={handleSettingsChange}>
                         <label>
-                            Course Title:{'\u00A0'} {'\u00A0'}
+                            Course Title:{'\u00A0'} {'\u00A0'} { courseName }
                             <input name="courseTitle" 
                                 onChange={handleClassNameChange} onBlur={handleClassNameChange} 
                                 style={{ backgroundColor: classNameBgColor }}
