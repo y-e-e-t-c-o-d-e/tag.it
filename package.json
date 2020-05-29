@@ -20,7 +20,8 @@
     "serverTest": "cd backend && yarn test",
     "start": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "test": "yarn clientTest && yarn serverTest",
-    "install": "cd client/ && yarn && cd ../ && cd backend/ && yarn && cd ../"
+    "install": "cd client/ && yarn && cd ../ && cd backend/ && yarn && cd ../",
+    "clean": "rm -rf node_modules/ && cd client/ && yarn clean && cd ../ && cd backend/ && yarn clean && cd ../"
   },
   "repository": {
     "type": "git",
