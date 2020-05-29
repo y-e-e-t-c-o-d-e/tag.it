@@ -12,7 +12,7 @@ const loginRender = () => (
         <Navbar.Brand href="#home"><img
             alt=""
             src={tagit}
-            width="50"
+            width="130"
             height="50"
             className="d-inline-block align-top"
         />{'   '}
