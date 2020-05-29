@@ -62,7 +62,6 @@ export default {
                 const jsonData = JSON.parse(data);
                 // Convert object to array of objects
                 const courseArray = Object.keys(jsonData).map(i => jsonData[i]);
-                console.log(courseArray);
                 return courseArray;
             }]
         };
