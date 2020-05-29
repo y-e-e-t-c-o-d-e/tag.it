@@ -96,7 +96,7 @@ exports.updateUser = async (req, res) => {
     };
 };
 
-// DEFAULTS TO ADDING USER AS A STUDENT if field is there, add user as instructor
+// Defaults to adding as a student. If req body contains "type" : "instructor", adds user as instructor
 exports.addUserToCourse = async (req, res) => {
     const courseUUID = req.params.courseId;
     const bodyParams = req.body;
@@ -110,13 +110,18 @@ exports.addUserToCourse = async (req, res) => {
         return;
     };
 
-
-    // Adds the user to the course as a student. If fails, responds with an error. Only works with users we've manually made
     try {
         let courseObj = await course.getCourseById(courseUUID);
-        await courseObj.addStudent(userObj.getUUID());
-        await userObj.addStudentCourse(courseObj.getUUID());
-        res.status(200).send(courseObj.getUUID());
+
+        if ("type" in bodyParams && bodyParams["type"] == "instructor") {
+            await courseObj.addInstructor(userObj.getUUID());
+            await userObj.addInstructorCourse(courseObj.getUUID());
+            res.status(200).send("Added user as instructor to course " + courseObj.getUUID());
+        } else {
+            await courseObj.addStudent(userObj.getUUID());
+            await userObj.addStudentCourse(courseObj.getUUID());
+            res.status(200).send("Added user as student to course " + courseObj.getUUID());
+        }
     } catch (e) {
         res.status(410).json({
             status: 410,
