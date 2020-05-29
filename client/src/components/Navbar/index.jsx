@@ -2,7 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { AuthContext } from "../../auth/Auth";
 import './style.css';
-import tagit from '../../assets/tagit-darkercoral\ 1.svg'
+import logo from '../../assets/tagit-darkercoral\ 1.svg'
+import tagit from '../../assets/logo.png'
 import db from "../../base"
 import API from "../../utils/API"
 
@@ -32,7 +33,7 @@ const regularRender = (courses) => {
             <Navbar.Brand href="#home"><img
                 alt=""
                 src={tagit}
-                width="50"
+                width="130"
                 height="50"
                 className="d-inline-block align-top"
             />{'   '}
