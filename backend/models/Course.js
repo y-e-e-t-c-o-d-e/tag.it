@@ -188,7 +188,7 @@ class Course {
     } 
 }
 
-module.exports.pushCourseToFirebase = (updateParams) => {
+module.exports.pushCourseToFirebase = (updateParams, user) => {
     return new Promise(async (resolve, reject) => {
         try {
             // TODO: Implement logic for these lists later.
@@ -197,10 +197,10 @@ module.exports.pushCourseToFirebase = (updateParams) => {
                 name: updateParams['name'], 
                 term: updateParams['term'], 
                 uuid: (await courseRef).key, 
-                studentList: ["dummy_user_id"],     // Do we want to change these from dummy values?
-                instructorList: ["dummy_user_id"],
-                tagList: ["dummy_tag_id"],
-                postList: ["dummy_post_id"],
+                studentList: [],     // Do we want to change these from dummy values?
+                instructorList: [user.uuid],
+                tagList: [],
+                postList: [],
             });
             resolve((await courseRef).key);
         } catch(e) {
