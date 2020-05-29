@@ -118,21 +118,26 @@ class Course {
     } 
 }
 
-module.exports.pushCourseToFirebase = (updateParams, user) => {
+module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // TODO: Implement logic for these lists later.
-            const courseRef = db.ref("Courses").push();
-            await courseRef.set({
-                name: updateParams['name'], 
-                term: updateParams['term'], 
-                uuid: (await courseRef).key, 
-                studentList: [],     // Do we want to change these from dummy values?
-                instructorList: [user.uuid],
-                tagList: [],
-                postList: [],
-            });
-            resolve((await courseRef).key);
+            if (courseUUID) {
+                await db.ref("Courses").child(courseUUID).set(updateParams);
+                resolve(courseUUID);
+            } else {
+                // TODO: Implement logic for these lists later.
+                const courseRef = db.ref("Courses").push();
+                await courseRef.set({
+                    name: updateParams['name'], 
+                    term: updateParams['term'], 
+                    uuid: (await courseRef).key, 
+                    studentList: [],     // Do we want to change these from dummy values?
+                    instructorList: [user.uuid],
+                    tagList: [],
+                    postList: [],
+                });
+                resolve((await courseRef).key);
+            }
         } catch(e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");
