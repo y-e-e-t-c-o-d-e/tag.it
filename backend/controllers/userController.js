@@ -97,10 +97,12 @@ exports.updateUser = async (req, res) => {
     };
 };
 
-// DEFAULTS TO ADDING USER AS A STUDENT
+// DEFAULTS TO ADDING USER AS A STUDENT if field is there, add user as instructor
 exports.addUserToCourse = async (req, res) => {
     const courseUUID = req.params.courseId;
+    const bodyParams = req.body;
     let userObj = req.user;
+
     if (!courseUUID || !userObj) {
         res.status(422).json({
             status: 422,
