@@ -66,7 +66,7 @@ hr{
 }
 
 /* Makes sure they don't break into diff lines */
-.course-title label, .course-title input{
+.course-title label, .course-title input {
     float: none;
     display: inline-block;
 }
@@ -77,12 +77,32 @@ hr{
 }
 
 /* Special length and height */
-.invitation-link{
+.invitation-link {
     max-width: 240px; /* 400px - button width - textarea margin */
     max-height: 20px;
     margin-right: 10px;
 }
 
+.invitation-section p {
+    color: black;
+    font-weight: normal;
+}
+
 .buttons {
     display: flex;
+}
+
+.center-button {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.center-button button {
+    display: inline-block;
+    background: aqua;
+    padding: 15px 10px;
+}
+
+.center-button button:hover{
+    background: blue;
 }
