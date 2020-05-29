@@ -43,7 +43,6 @@ describe('tag', () => {
  
    it('should add a post to testTag in firebase', async() => {
        await testTag.addPost('post3');
-       debugger;
        let list = await testTag.getPostList();
        expect(list.length).to.equal(2);
    })
@@ -81,8 +80,6 @@ describe('tag', () => {
        } catch(e) {
            console.log(e);
        }
-       debugger;
- 
        let subTags = await testTag.getSubTags();
        expect(subTags.length).to.equal(0);
        await testTag.addSubTag(key2);
