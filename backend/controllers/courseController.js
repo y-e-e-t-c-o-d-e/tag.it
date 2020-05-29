@@ -15,7 +15,7 @@ exports.addCourse = async (req, res) => {
    };
 
    try {
-       await course.pushCourseToFirebase(bodyParams);
+       await course.pushCourseToFirebase(bodyParams, req.user);
        res.status(200).send(`Added course ${bodyParams.name}`)
    } catch (e) {
        res.status(410).json({
