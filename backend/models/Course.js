@@ -119,23 +119,20 @@ class Course {
 }
 
 module.exports.pushCourseToFirebase = (updateParams) => {
-    // Consistent with User.js
-    const name = updateParams['name'];
-    const term = updateParams['term'];
-    const uuid = updateParams['uuid'];
     return new Promise(async (resolve, reject) => {
         try {
             // TODO: Implement logic for these lists later.
-            await db.ref("Courses").child(uuid).set({
-                name: name, 
-                term: term, 
-                uuid: uuid, 
-                studentList: ["dummy_user_id"], 
+            const courseRef = db.ref("Courses").push();
+            await courseRef.set({
+                name: updateParams['name'], 
+                term: updateParams['term'], 
+                uuid: (await courseRef).key, 
+                studentList: ["dummy_user_id"],     // Do we want to change these from dummy values?
                 instructorList: ["dummy_user_id"],
                 tagList: ["dummy_tag_id"],
                 postList: ["dummy_post_id"],
             });
-            resolve("Everything worked");
+            resolve((await courseRef).key);
         } catch(e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");
