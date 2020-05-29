@@ -3,20 +3,21 @@ import React from 'react';
 
 export default {
     getSuggestionValue: (suggestion) => {
-        return suggestion.courseName;
+        return `${suggestion.name} - ${suggestion.term}`;
     },
     
-    renderSuggestion: (suggestion) => {
+    // Sets the id in the state in order to easily fetch from Firebase
+    renderSuggestion: (suggestion, setId) => {
         return (
-            <div className="classSuggestion">
-                <span>{suggestion.courseName}</span>
-                <span className="courseId">Course Id: {suggestion.courseId}</span>
+            <div className="classSuggestion" onClick={() => setId(suggestion.uuid)}>
+                <span>{suggestion.name} - {suggestion.term}</span>
+                <span className="courseId">Course Id: {suggestion.uuid}</span>
             </div>
             
         );
     },
     
     getSuggestions: (value, options) => {
-        return options.filter((x) => x.courseName.toLowerCase().indexOf(value.value.toLowerCase()) >= 0);
+        return options.filter((x) => x.name.toLowerCase().indexOf(value.value.toLowerCase()) >= 0);
     },
 }

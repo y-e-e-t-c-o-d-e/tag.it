@@ -117,11 +117,11 @@ exports.addUserToCourse = async (req, res) => {
         let courseObj = await course.getCourseById(courseUUID);
         await courseObj.addStudent(userObj.getUUID());
         await userObj.addStudentCourse(courseObj.getUUID());
-        res.status(200).send("Added user to course.");
+        res.status(200).send(courseObj.getUUID());
     } catch (e) {
         res.status(410).json({
             status: 410,
-            error: e
+            error: e.message
         });
     };
 };
@@ -155,6 +155,28 @@ exports.getUserType = async (req, res) => {
                 error: "User not in this class"
             });
         }
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    };
+};
+
+exports.deleteUser = async (req, res) => {
+    const userUUID = req.query.userUUID;
+    if (!userUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing paramater: userUUID"
+        });
+        return;
+    };
+
+    // Grabs the user based on the userUUID. If fails, responds with an error.
+    try {
+        user.deleteUserByID(userUUID);
+        res.status(200).send("removed user with the following userUUID:" + userUUID)
     } catch (e) {
         res.status(410).json({
             status: 410,
