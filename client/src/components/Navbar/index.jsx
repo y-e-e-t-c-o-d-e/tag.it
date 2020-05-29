@@ -1,45 +1,83 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { AuthContext } from "../../auth/Auth";
-import {NavLink} from "react-router-dom";
 import './style.css';
-import logo from '../../assets/logo.png';
+import tagit from '../../assets/tagit-darkercoral\ 1.svg'
 import db from "../../base"
+import API from "../../utils/API"
 
 const loginRender = () => (
-    <div id="navbar-body">
-        <img id="logo" src={logo} alt="tag.it" />
-
-        <div id="nav-right">
-            <nav>
-                <NavLink to="/login">Log In</NavLink>
-                <NavLink to="/signup">Sign Up</NavLink>
-            </nav>
-        </div>
-    </div>
+    <Navbar expand="lg" inverse fluid>
+        <Navbar.Brand href="#home"><img
+            alt=""
+            src={tagit}
+            width="50"
+            height="50"
+            className="d-inline-block align-top"
+        />{'   '}
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse className="">
+            <Nav className="ml-auto" >
+                <Nav.Link href="/login">login</Nav.Link>
+                <Nav.Link href="/signup">sign up</Nav.Link>
+            </Nav>
+        </Navbar.Collapse>
+    </Navbar>
 )
 
-const regularRender = () => (
-    <div id="navbar-body">
-        <img id="logo" src={logo} alt="tag.it" />
+const regularRender = (courses) => {
+    return (
+        <Navbar expand="lg" inverse fluid>
+            <Navbar.Brand href="#home"><img
+                alt=""
+                src={tagit}
+                width="50"
+                height="50"
+                className="d-inline-block align-top"
+            />{'   '}
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse className="">
+                <Nav className="ml-auto" >
+                    { courses.length > 0 && 
+                        <NavDropdown title="courses" id="basic-nav-dropdown">
+                            {
+                                courses.map((course, key) => {
+                                   return <NavDropdown.Item key={key} href={`/courses/${course.uuid}`}>{course.name}</NavDropdown.Item>
+                                })
+                            }
+                        </NavDropdown>
+                    }
+                    <Nav.Link href="/calendar">calendar</Nav.Link>
+                    <Nav.Link href="/" onClick={ () => { db.auth().signOut() } }>logout</Nav.Link>
+                </Nav>
+            </Navbar.Collapse>
+        </Navbar>
+    )
+}
 
-        <div id="nav-right">
-            <nav>
-                <NavLink to="/login">courses</NavLink>
-                <NavLink to="/calendar">calendar</NavLink>
-                <NavLink to="/logout" onClick={() => db.auth().signOut()}>logout</NavLink>
-            </nav>
-        </div>
-    </div>
-)
-
-const NavBar = ({}) => {
+const Navigation = ({}) => {
     const { currentUser } = useContext(AuthContext);
+    
+    const [courses, setCourses] = useState([ { name: "Courses Loading", uuid: "/" } ])
+
+    useEffect(() => {
+        if (!currentUser) { return; } // don't look for courses if the user isn't logged in
+
+        API.getAllCourses().then(courses => {
+            console.log(courses.data)
+            setCourses(courses.data);
+        }).catch(() => {
+            setCourses([ { name: "Error Loading Courses", uuid: "/" }])
+        })
+    }, [])
+    
     if (currentUser) {
-        return regularRender();
-        // return <Redirect to="/" />;
+        return regularRender(courses);
     } else {
         return loginRender();
     }
 }
 
-export default NavBar;
+export default Navigation;

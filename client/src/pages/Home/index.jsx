@@ -2,7 +2,7 @@ import React from 'react';
 import Button from "../../components/Button/index.jsx";
 import './style.css';
 import db from "../../base";
-import NavBar from "../../components/Navbar";
+import Navigation from "../../components/Navbar";
 import TagList from "../../components/TagList/index.jsx";
 
 const Home = ({currentUser, match}) => { 
@@ -12,7 +12,7 @@ const Home = ({currentUser, match}) => {
 
     return (
         <div className="home">
-            <NavBar/>
+            <Navigation/>
             { // TODO: Will rearrange frontend to handle the user data.
                 currentUser ? <p>{currentUser.name}</p> : <></>
             }
