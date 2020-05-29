@@ -1,13 +1,44 @@
 //Uncomment this wheen the models are good
-//const course = require("../models/Course");
+const course = require("../models/Course");
+const { db } = require("../shared/firebase")
 
+// Adds a course to the database based on req body
 exports.addCourse = async (req, res) => {
-    // TODO: Handle later with models
-    res.status(200).send("Added course");
+   // Check that required data is given
+   const bodyParams = req.body;
+   if (!("name" in bodyParams || "term" in bodyParams || "uuid" in bodyParams)) {
+       res.status(422).json({
+           status: 422,
+           error: "Missing one of the following parameters: name, term, or uuid"
+       });
+       return;
+   };
+
+   try {
+       await course.pushCourseToFirebase(bodyParams);
+       res.status(200).send(`Added course ${bodyParams.uuid}`)
+   } catch (e) {
+       res.status(410).json({
+           status: 410,
+           error: "Server could not push to firebase"
+       })
+   }
 };
 
-exports.getCourse = async (req, res) => {
-    const courseUUID = req.query.courseUUID;
+// Gets all the courses currently in the database
+exports.getAllCourses = async (req, res) => {
+    const ref = db.ref('Courses');
+    ref.once("value", function(snapshot) {
+        res.status(200).json(snapshot.val());
+    });
+};
+
+// We can add more deletions in here when we have more remove methods in Course model
+exports.updateCourse = async (req, res) => {
+    // Object of fields and values to update in the user object
+    const bodyParams = req.body;
+    const courseUUID = bodyParams["uuid"];
+
     if (!courseUUID) {
         res.status(422).json({
             status: 422,
@@ -16,20 +47,33 @@ exports.getCourse = async (req, res) => {
         return;
     };
 
-    // TODO: Delete mockData and replace with dynamic course model data.
-    const mockData = {
-        name: "CSE 283",
-        instructorList: ["some instructor id", "another instuctor id"],
-        studentList: ["some student id", "another student id"], 
-        postList: ["some post id", "other post id"],
-        tagList: ["some tag id", "other tag id"],
-        isArchived: false
-    };
-    res.status(200).json(mockData);
-};
+    try {
+        const courseObj = await course.getCourseById(courseUUID);
 
-exports.updateCourse = async (req, res) => {
-    // Object of fields and values to update in the user object
-    const updateParams = req.body;
-    res.status(200).send("Updated course");
+        if ("name" in bodyParams) {
+            courseObj.setName(bodyParams["name"]);
+        }
+        if ("term" in bodyParams) {
+            courseObj.setTerm(bodyParams["term"]);
+        }
+        if ("tag" in bodyParams) {
+            courseObj.addTag(bodyParams["tag"]);
+        }
+        if ("post" in bodyParams) {
+            courseObj.addPost(bodyParams["post"]);
+        }
+        if ("student" in bodyParams) {
+            courseObj.addStudent(bodyParams["student"]);
+        }
+        if ("instructor" in bodyParams) {
+            courseObj.addInstructor(bodyParams["instructor"]);
+        }
+        res.status(200).send("Updated course");
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    };
+    
 };

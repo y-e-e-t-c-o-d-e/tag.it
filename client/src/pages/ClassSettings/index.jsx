@@ -15,6 +15,16 @@ function ClassSettings(props){
 
     const [courseName, setCourseName] = useState("idk");
 
+    const uuid = props.uuid || "FakeUUID";
+
+    useEffect(() => {
+        API.getCourse(uuid).then((course) => {
+            setCourseName(course.name)
+        }).catch(() => {
+            setCourseName('gghd')
+        })
+    }, [])
+    
     /* Updates the DB with the new class name and description */
     const handleSettingsChange = async (event) =>{
         if(courseNameValid) {
@@ -70,29 +80,35 @@ function ClassSettings(props){
                     {/* Actual form with course info */}
                     <form className="course-info" onSubmit={handleSettingsChange}>
                         <label>
-                            Course Title:{'\u00A0'} {'\u00A0'} { courseName }
+                            Course Title:{'\u00A0'} {'\u00A0'}
                             <input name="courseTitle" 
                                 onChange={handleClassNameChange} onBlur={handleClassNameChange} 
                                 style={{ backgroundColor: classNameBgColor }}
-                                type="text" value={props.courseTitle}
+                                type="text"
+                                placeholder={courseName}
                             /> 
                         </label>
 
                         <label>
                             <span>Description:{'\u00A0'} {'\u00A0'}</span>
-                            <textarea type="text" value={props.courseDescription}></textarea> 
+                            <textarea type="text">
+                                A course with focus on hardware engineering and collaboration.
+                                Prerequiisites: None. Course website: cse111.com
+                            </textarea> 
                         </label>
 
                         <label>
                             <div className="invitation-section">
-                                <span>Invitation： {'\u00A0'} {'\u00A0'}</span>
+                                <span>Invitation:{'\u00A0'} {'\u00A0'}</span>
                                 <textarea readOnly ref={invitationRef}
-                                    className="invitation-link" type="text" value="YEET copy success">
+                                    className="invitation-link" type="text" value="https://tag.it/courses/512734">
                                 </textarea> 
                                 <Button text="copy" onSubmit={copyLinkToClipboard}/>
                             </div>
                         </label>
-                        <button type="submit">Submit</button>
+                        <div className="center-button">
+                            <button type="submit">Submit</button>
+                        </div>
                     </form>
                     <div className="buttons">
                         <Button text="instructors"/>
