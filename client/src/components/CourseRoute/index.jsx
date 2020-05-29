@@ -14,6 +14,12 @@ const CourseRoute = ({ component: RouteComponent, match, location, ...rest }) =>
     // Field to check whether user is verified
     const [verified, setVerified] = useState(false);
     const [pending, setPending] = useState(true);
+
+    /**
+     * 3 states to account for:
+     *   1) User is in the class --> redirect to normal course page without query params
+     *   2) User is NOT in the class --> check if invite id exists
+     */
     
     useEffect(() => {
         const verifyInvite = async () => {
@@ -36,6 +42,9 @@ const CourseRoute = ({ component: RouteComponent, match, location, ...rest }) =>
             }
         }
 
+        // Check if user is in the class
+        
+
         verifyInvite();
     }, []);
 
@@ -44,7 +53,8 @@ const CourseRoute = ({ component: RouteComponent, match, location, ...rest }) =>
             {...rest}
             render={routeProps => 
                 pending ? <h1>Verifying Invitation Link</h1> 
-                  : verified ? <Redirect to={`course/${courseId}`} />
+                    
+                        : verified ? <Redirect to={location.pathname} />
                              : <Redirect to="/" />
             }
         />
