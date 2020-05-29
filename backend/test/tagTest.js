@@ -96,7 +96,7 @@ describe('tag', () => {
     
     it('should remove a subtag from testTag in firebase', async() => {
         const tagParams3 = {
-            name: "pa1c", 
+            name: "pa1d", 
             numUsed: "1",
             parentTag: "dummy_parent", 
             subTags: ["dummy_tag"],

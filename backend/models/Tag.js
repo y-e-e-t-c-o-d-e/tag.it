@@ -183,7 +183,7 @@ deleteTagByID = async (uuid) => {
       });
 }
 
-   
+
 module.exports.Tag = Tag
 module.exports.getTagById = getTagById
 module.exports.deleteTagByID = deleteTagByID
