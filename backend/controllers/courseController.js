@@ -117,7 +117,24 @@ exports.getCourseInfo = async (req, res) => {
     };
 };
 
-// TODO: implement this delete function
+// Deletes course
 exports.deleteCourse = async (req, res) => {
-    res.status(200).send("Course has been deleted");
+    const courseUUID = req.params.courseId;
+    if (!courseUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing paramater: courseUUID"
+        });
+        return;
+    };
+
+    try {
+        course.deleteCourseById(courseUUID);
+        res.status(200).send("removed course with the following courseUUID:" + courseUUID)
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    };
 };

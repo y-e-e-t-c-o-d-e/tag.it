@@ -146,8 +146,6 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
     })
 };
 
-
-
 getCourseById = async (uuid) => {
     const ref = db.ref('Courses/' + uuid);
 
@@ -175,6 +173,18 @@ getCourseById = async (uuid) => {
     // })
 }
 
+deleteCourseById = async (uuid) => {
+    //console.log("yeet")
+    const ref = db.ref('Courses/' + uuid);
+    ref.remove()
+    .then(function() {
+        console.log("Remove succeeded.")
+      })
+      .catch(function(error) {
+        console.log("Remove failed: " + error.message)
+      });
+}
    
 module.exports.Course = Course
 module.exports.getCourseById = getCourseById
+module.exports.deleteCourseById = deleteCourseById
