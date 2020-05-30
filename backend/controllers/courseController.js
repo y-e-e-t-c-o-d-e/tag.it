@@ -75,5 +75,49 @@ exports.updateCourse = async (req, res) => {
             error: e
         });
     };
-    
+};
+
+// Gets info on the given course based on the user type
+exports.getCourseInfo = async (req, res) => {
+    const courseUUID = req.params.courseId;
+    const userObj = req.user;
+
+    if (!courseUUID || !userObj) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing parameter: courseUUID or userUUID"
+        });
+        return;
+    };
+
+    try {
+        const courseObj = await course.getCourseById(courseUUID);
+        
+        // Check if user is an instructor or student, student can't see studentList
+        if (courseObj.getInstructorList().indexOf(userObj.getUUID()) != -1) {
+            res.status(200).json(courseObj);
+        } else if (courseObj.getStudentList().indexOf(userObj.getUUID()) != -1) {
+            res.status(200).json({
+                name: courseObj.getName(),
+                term: courseObj.getTerm(),
+                instructorList: courseObj.getInstructorList(),
+                tagList: courseObj.getTagList(),
+                postList: courseObj.getPostList()
+            });
+        } else {
+            res.status(200).json({
+                error: "Course info is not available"
+            });
+        }
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e.message
+        });
+    };
+};
+
+// TODO: implement this delete function
+exports.deleteCourse = async (req, res) => {
+    res.status(200).send("Course has been deleted");
 };

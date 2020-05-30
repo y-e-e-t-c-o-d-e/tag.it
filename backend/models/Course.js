@@ -131,10 +131,10 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                     name: updateParams['name'], 
                     term: updateParams['term'], 
                     uuid: (await courseRef).key, 
-                    studentList: [],
-                    instructorList: [user.getUUID()],
-                    tagList: [],
-                    postList: [],
+                    studentList: ["dummy_val"],         // Firebase doesn't initialize a list if its empty
+                    instructorList: ["dummy_val", user.getUUID()],
+                    tagList: ["dummy_val"],
+                    postList: ["dummy_val"],
                 });
                 await user.addInstructorCourse((await courseRef).key);
                 resolve((await courseRef).key);
