@@ -1,0 +1,19 @@
+.invite-message{
+    margin-top: 50px;
+    font-size: 20px;
+    margin-bottom: 50px;
+}
+
+.invite-course-title{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.invite-buttons{
+    display: flex;
+    justify-content: center;
+}
+
+.invite-buttons Button {
+    margin-right: 5px;
+}
