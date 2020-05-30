@@ -37,8 +37,12 @@ class Course {
         return this.props.postList.slice(1, this.props.postList.length);
     }
 
-    getInviteId() {
-        return this.props.inviteId;
+    getStudentInviteId() {
+        return this.props.studentInviteId;
+    }
+
+    getTeacherInviteId() {
+        return this.props.teacherInviteId;
     }
 
     setName = async (name) => {
@@ -119,6 +123,8 @@ class Course {
             studentList: this.props.studentList,
             tagList: this.props.tagList,
             postList: this.props.postList,
+            studentInviteId: this.props.studentInviteId,
+            teacherInviteId: this.props.teacherInviteId
         });
     } 
 }
@@ -140,6 +146,8 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                     instructorList: [user.getUUID()],
                     tagList: [],
                     postList: [],
+                    studentInviteId: makeId(10),
+                    teacherInviteId: makeId(10)
                 });
                 await user.addInstructorCourse((await courseRef).key);
                 resolve((await courseRef).key);

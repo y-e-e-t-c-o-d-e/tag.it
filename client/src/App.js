@@ -13,8 +13,6 @@ import PrivateRoute from "./auth/PrivateRoute";
 import { AuthProvider } from "./auth/Auth";
 import AddClass from './pages/AddClass';
 
-import CourseRoute from './components/CourseRoute';
-
 const App = () => {
   return (
     <AuthProvider>

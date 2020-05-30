@@ -3,18 +3,34 @@ import Button from "../../components/Button/index";
 import './style.css';
 import API from "../../utils/API";
 
-function Invitation( {history}, props){
+function Invitation(props){
 
     const [courseName, setCourseName] = useState("CSE 111 - Hardware Engineering");
-    const uuid = props.uuid || "FakeUUID";
+    const [status, setStatus] = useState({
+        pending: true,
+        accountType: null // Either "student" or "instructor" (indicates verification)
+    });
+
+    const history = props.history;
+    const courseId = props.match.params.courseId;
+    const inviteId = props.match.params.inviteId;
 
     useEffect(() => {
-        API.getCourse(uuid).then((course) => {
-            setCourseName(course.name)
+        API.getCourse(courseId).then((course) => {
+            setCourseName(course.name);
+            setStatus({
+                pending: false,
+                accountType: course.studentInviteId === inviteId ? "student" :
+                                course.teacherInviteId === inviteId ? "teacher" : null
+            });
         }).catch(() => {
-            setCourseName('CSE 111 - Hardware Engineering')
-        })
-        console.log(courseName);
+            // Default
+            setCourseName('CSE 111 - Hardware Engineering');
+            setStatus({
+                pending: false,
+                accountType: null
+            })
+        }); 
     }, [])
 
     const redirectHome = () => {
@@ -23,9 +39,19 @@ function Invitation( {history}, props){
     }
 
     const redirectClass = () => {
-        let link = "/course/" + uuid;
-        alert("Invitation accepted! Redirecting to class...");
-        history.push(link);
+        API.addToCourse(courseId).then((val) => {
+            let link = `/course/${courseId}`;
+            alert("Invitation accepted! Redirecting to class...");
+            history.push(link);
+        }).catch((e) => alert(e))
+    }
+
+    if (status.pending) {
+        return <h1>Verifying Invite Link</h1>
+    } 
+
+    if (!status.accountType) {
+        return <h1>Invite Id is not Valid</h1>
     }
     
     return(
