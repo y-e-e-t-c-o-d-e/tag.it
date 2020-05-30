@@ -30,8 +30,7 @@
 
 /* Gives the form left/right margin and sets text color */
 .course-info {
-    margin: 0 20px 0 20px;
-    color: #9E7772;
+    color: #1D7B99;
 }
 
 /* Makes sure the form contents are lined up */
@@ -46,23 +45,25 @@
 /* Styles the input and textarea and make sure they line up */
 .course-info input {
     width: 400px;
+    margin-right: 20px;
     background-color: white;
-    border-bottom: 3px solid #E0DEDE;
+    border-bottom: 3px solid #A6D1DF;
 }
 
 .course-info input:focus {
-    border-bottom: 3px solid #FFDBCF;
+    border-bottom: 3px solid #FDEEAE;
 }
 .course-info textarea {
     word-break: break-word;
     width: 394px; /* 400px(intended length) - 2*3px(border width) */
     height: 100px;
-    border: 3px solid #E0DEDE;
+    border: 3px solid #A6D1DF;
     display: inline-block;
+    margin-right: 20px;
 }
 
 .course-info textarea:focus {
-    border: 3px solid #FFDBCF;
+    border: 3px solid #FDEEAE;
     outline: none;
 }
 
@@ -75,12 +76,14 @@
 .invitation-section {
     display: flex;
     margin-left: 50px;
+    margin-right: 20px;
 }
 
 /* Special length and height */
 .invitation-link {
     max-width: 240px; /* 400px - button width - textarea margin */
-    max-height: 20px;
+    min-height: 2em;
+    max-height: 2em;
     margin-right: 10px;
 }
 
@@ -89,21 +92,33 @@
     font-weight: normal;
 }
 
+.invitation-section button {
+    background: #F9D127;
+    color: #005D83;
+    border: none;
+}
+
+.invitation-section button:hover {
+    background: #EABD00;
+    color: #005D83;
+}
+
 .buttons {
     display: flex;
+}
+
+.buttons button {
+    background: #F9D127;
+    color: #005D83;
+    border: none;
+}
+
+.buttons button:hover{
+    background: #EABD00;
+    color: #005D83;
 }
 
 .center-button {
     text-align: center;
     margin-bottom: 20px;
-}
-
-.center-button button {
-    display: inline-block;
-    background: aqua;
-    padding: 15px 10px;
-}
-
-.center-button button:hover{
-    background: blue;
 }
