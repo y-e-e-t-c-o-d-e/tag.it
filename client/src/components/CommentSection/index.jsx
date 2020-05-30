@@ -49,7 +49,7 @@ const CommentSection = ({ commentList }) => {
                                     <Dropdown.Item as="button" onClick={() => { setVisiblity("private") }} >private</Dropdown.Item>
                                 </DropdownButton>
                             </div>
-                            <Button id="cancel-button" onClick={() => { setNewComment(false) }}>Cancel</Button>
+                            <Button id="cancel-button" onClick={() => { setNewComment(false) }}>cancel</Button>
                             <Button id="create-button">create.it</Button>
                         </div>
                     </form>
@@ -57,7 +57,7 @@ const CommentSection = ({ commentList }) => {
             );
         }
         return (
-            <Button id="new-comment-button" onClick={() => { setNewComment(true) }}>Create a new comment</Button>
+            <Button id="new-comment-button" onClick={() => { setNewComment(true) }}>discuss.it</Button>
         );
     };
 
