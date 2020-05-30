@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import "./style.css";
 
 import Comment from "./Comment/index.jsx";
-import API from "../../utils/API.js"
+import API from "../../utils/API.js";
+import { Dropdown, DropdownButton, Button } from "react-bootstrap";
 
 // Post.commentList should be passed in, list of Comment objects
 const CommentSection = ({ commentList }) => {
 
     const [newComment, setNewComment] = useState(false);
+    const [visibility, setVisiblity] = useState("public, visible");
 
     const renderComments = () => {
         // sort comments by most recent using time property
@@ -41,26 +43,21 @@ const CommentSection = ({ commentList }) => {
                         <div className="comment-options">
                             <div className="select-anonymous">
                                 <p>Discuss as: </p>
-                                <div className="select-type">
-                                    <select name="anon-type">
-                                        <option value="anon">Anonymous to everyone</option>
-                                        <option value="public">Public to everyone</option>
-                                    </select>
-                                </div>
+                                <DropdownButton id="dropdown-button-form" title={visibility} drop="up">
+                                    <Dropdown.Item as="button" onClick={() => { setVisiblity("public, visible") }} >public, visible</Dropdown.Item>
+                                    <Dropdown.Item as="button" onClick={() => { setVisiblity("public, anonymous") }} >public, anonymous</Dropdown.Item>
+                                    <Dropdown.Item as="button" onClick={() => { setVisiblity("private") }} >private</Dropdown.Item>
+                                </DropdownButton>
                             </div>
-                            <div className="comment-buttons">
-                                <button onClick={() => { setNewComment(false) }}>Cancel</button>
-                                <button type="submit">create.it</button>
-                            </div>
+                            <Button id="cancel-button" onClick={() => { setNewComment(false) }}>Cancel</Button>
+                            <Button id="create-button">create.it</Button>
                         </div>
                     </form>
                 </div>
             );
         }
         return (
-            <div className="comment-buttons new-comment-button">
-                <button onClick={() => { setNewComment(true) }}>Create a new comment</button>
-            </div>
+            <Button id="new-comment-button" onClick={() => { setNewComment(true) }}>Create a new comment</Button>
         );
     };
 

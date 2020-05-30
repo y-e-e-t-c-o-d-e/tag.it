@@ -1,23 +1,19 @@
-.comment-buttons button {
-    background: none;
-    background-color: #F9D127;
-    border: 1px solid #005D83;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
-    color: #005D83;
-    margin: 10px 20px 0 0;
-}
-
 .comment-options {
     display: flex;
     justify-content: space-evenly;
     flex: 1 1 0;
+    margin-top: 10px;
 }
 
 .comment-text textarea {
     width: 100%;
 }
 
-.new-comment-button {
+#cancel-button {
+    margin-right: 25px;
+}
+
+#new-comment-button {
     margin-left: 25px;
 }
 
