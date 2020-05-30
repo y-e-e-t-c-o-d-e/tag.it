@@ -22,8 +22,8 @@ const App = () => {
             <PrivateRoute exact path="/course/:courseId" component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
-            <Route exact path="/add" component={AddClass} />
-            <Route exact path="/class-settings" component={ClassSettings} />
+            <PrivateRoute exact path="/course/:courseId/settings" component={ClassSettings} />
+            <PrivateRoute exact path="/add" component={AddClass} />
             <Route exact path="/*" component={() => {
               window.location.href = "/";
             }} />

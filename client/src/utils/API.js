@@ -91,3 +91,5 @@ export default {
         return axios(config);
     }
 }
+
+export {baseURL};

@@ -17,7 +17,7 @@ function ClassSettings(props){
     const [courseName, setCourseName] = useState("idk");
 
     const uuid = props.uuid || "FakeUUID";
-    var link = "https://tag.it/courses/" + uuid;
+    let link = "https://tagdotit.netlify.app/course/" + uuid;
 
     useEffect(() => {
         API.getCourse(uuid).then((course) => {
