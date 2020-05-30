@@ -24,7 +24,21 @@ exports.addUser = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
-    res.status(200).json(req.user.props);
+    const userUUID = req.query.userUUID;
+    if (!userUUID) {
+        res.status(200).json(req.user.props);
+    };
+
+    // Grabs the user based on the userUUID. If fails, responds with an error.
+    try {
+        const userObj = await user.getUserById(userUUID);
+        res.status(200).json(userObj.props);
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    };
 };
 
 // We can add more deletions in here when we have more remove methods in User model
@@ -151,7 +165,10 @@ exports.getUserType = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
-    const userUUID = req.user.props.uuid;
+    let userUUID = req.query.userUUID;
+    if (!userUUID) {
+        userUUID = req.user.props.uuid;
+    };
 
     // Grabs the user based on the userUUID. If fails, responds with an error.
     try {
