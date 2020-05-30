@@ -14,16 +14,17 @@
 }
 
 .center-items{
+    margin-top: 1em;
     text-align: center;
 }
 
-h1 {
+.center-items h1 {
     font-size: 40px;
-    color: #9E7772;
+    color: #005D83;
 }
 
-hr{
-    border-top: 3px solid #d19e98;
+.center-items hr{
+    border-top: 2px solid #1D7B99;
     width: 60%;
 }
 
