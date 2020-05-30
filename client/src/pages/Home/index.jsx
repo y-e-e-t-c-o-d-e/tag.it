@@ -14,12 +14,7 @@ const Home = ({currentUser, ...rest}) => {
                 currentUser ? <p>{currentUser.name}</p> : <></>
             }
             <h1>Tag.it</h1>
-            <Button text="Click Me"></Button>
-            <button onClick={() => db.auth().signOut()}>Sign Out</button>
-            <div className="body">
-                <TagList />
-                <PostCreator />
-            </div>
+            <TagList />
         </div>
     )
 };
