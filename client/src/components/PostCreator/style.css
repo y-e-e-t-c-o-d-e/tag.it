@@ -1,10 +1,22 @@
 .post-creator {
-    border: 3px solid black;
+    border: 15px solid #A6D1DF;
     width: 750px;
     position: relative;
     margin: 5px;
     flex: .8;
-    background: lightgrey;
+    background: #E4ECEE;
+    padding: 2.5%;
+}
+
+.form-label {
+    color: #005D83;
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+.form-control {
+    border: 3px solid #E0DEDE;
+    border-radius: 0;
 }
 
 h3 {
@@ -20,8 +32,22 @@ h3 {
     height: 50%;
 }
 
-#post-as {
-    position: relative;
-    bottom: 40px;
+#dropdown-button-form,
+#dropdown-button-tags,
+#create-button {
+    background: #F9D127;
+    color: #005D83;
+    /* border: 2px solid #429bc5; */
 }
 
+.dropdown-menu.show {
+    background: #91d6e9;
+}
+
+.dropdown-item {
+    background: #91d6e9;
+}
+
+.dropdown-item:hover {
+    background: #66bcd4;
+}
