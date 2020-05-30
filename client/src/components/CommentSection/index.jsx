@@ -33,16 +33,20 @@ const CommentSection = ({ commentList }) => {
     const renderCreateNewComment = () => {
         if (newComment) {
             return (
-                <div className="post-comment-form">
-                    <form onSubmit={handleCreateComment}>
-                        <textarea name="new-comment" placeholder="Create a new followup comment"></textarea>
+                <div>
+                    <form onSubmit={handleCreateComment} className="post-comment-form">
+                        <div className="comment-text">
+                            <textarea name="new-comment" placeholder="Create a new followup comment"></textarea>
+                        </div>
                         <div className="comment-options">
                             <div className="select-anonymous">
                                 <p>Discuss as: </p>
-                                <select name="anon-type">
-                                    <option value="anon">Anonymous to everyone</option>
-                                    <option value="public">Public to everyone</option>
-                                </select>
+                                <div className="select-type">
+                                    <select name="anon-type">
+                                        <option value="anon">Anonymous to everyone</option>
+                                        <option value="public">Public to everyone</option>
+                                    </select>
+                                </div>
                             </div>
                             <div className="comment-buttons">
                                 <button onClick={() => { setNewComment(false) }}>Cancel</button>
@@ -54,7 +58,7 @@ const CommentSection = ({ commentList }) => {
             );
         }
         return (
-            <div className="create-new-comment">
+            <div className="comment-buttons new-comment-button">
                 <button onClick={() => { setNewComment(true) }}>Create a new comment</button>
             </div>
         );
