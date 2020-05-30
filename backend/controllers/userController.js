@@ -45,10 +45,56 @@ exports.getUser = async (req, res) => {
     };
 };
 
+// We can add more deletions in here when we have more remove methods in User model
 exports.updateUser = async (req, res) => {
     // Object of fields and values to update in the user object
-    const updateParams = req.body;
-    res.status(200).send("Updated user.");
+    const bodyParams = req.body;
+    const userObj = req.user;
+
+    try {
+        if ("name" in bodyParams) {
+            userObj.setName(bodyParams["name"]);
+        }
+        if ("email" in bodyParams) {
+            userObj.setEmail(bodyParams["email"]);
+        }
+        if ("studentCourse" in bodyParams) {
+            userObj.addStudentCourse(bodyParams["studentCourse"]);
+        }
+        if ("instructorCourse" in bodyParams) {
+            userObj.addInstructorCourse(bodyParams["instructorCourse"]);
+        }
+        if ("post" in bodyParams) {
+            userObj.addPost(bodyParams["post"]);
+        }
+        if ("comment" in bodyParams) {
+            userObj.addComment(bodyParams["comment"]);
+        }
+        if ("followedPost" in bodyParams) {
+            userObj.addFollowedPost(bodyParams["followedPost"]);
+        }
+        if ("likedPost" in bodyParams) {
+            userObj.addLikedPost(bodyParams["likedPost"]);
+        }
+        if ("rmLikedPost" in bodyParams) {
+            userObj.removeLikedPost(bodyParams["rmLikedPost"]);
+        }
+        if ("likedComment" in bodyParams) {
+            userObj.addLikedComment(bodyParams["likedComment"]);
+        }
+        if ("rmLikedComment" in bodyParams) {
+            userObj.removeLikedComment(bodyParams["rmLikedComment"]);
+        }
+        if ("icon" in bodyParams) {
+            userObj.addIcon(bodyParams["icon"]);
+        }
+        res.status(200).send("Updated user.");
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    };
 };
 
 // DEFAULTS TO ADDING USER AS A STUDENT
@@ -69,11 +115,11 @@ exports.addUserToCourse = async (req, res) => {
         let courseObj = await course.getCourseById(courseUUID);
         await courseObj.addStudent(userObj.getUUID());
         await userObj.addStudentCourse(courseObj.getUUID());
-        res.status(200).send("Added user to course.");
+        res.status(200).send(courseObj.getUUID());
     } catch (e) {
         res.status(410).json({
             status: 410,
-            error: e
+            error: e.message
         });
     };
 };
@@ -107,6 +153,28 @@ exports.getUserType = async (req, res) => {
                 error: "User not in this class"
             });
         }
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    };
+};
+
+exports.deleteUser = async (req, res) => {
+    const userUUID = req.query.userUUID;
+    if (!userUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing paramater: userUUID"
+        });
+        return;
+    };
+
+    // Grabs the user based on the userUUID. If fails, responds with an error.
+    try {
+        user.deleteUserByID(userUUID);
+        res.status(200).send("removed user with the following userUUID:" + userUUID)
     } catch (e) {
         res.status(410).json({
             status: 410,

@@ -1,7 +1,7 @@
 // Install these dependencies before you run
 const post = require("../models/Post");
 const { db } = require("../shared/firebase")
-
+const { InternalServerError } = require("../shared/error");
 class Course {
     constructor(props) {
         this.props = props;
@@ -36,6 +36,15 @@ class Course {
         return this.props.postList.slice(1, this.props.postList.length);
     }
 
+    setName = async (name) => {
+        this.props.name = name;
+        await this.push();
+    }
+
+    setTerm = async (term) => {
+        this.props.term = term;
+        await this.push();
+    }
 
     addTag = async (tagId) => {
         this.props.tagList.push(tagId);
@@ -43,8 +52,12 @@ class Course {
     }
 
     addStudent = async (userId) => {
-        this.props.studentList.push(userId);
-        await this.push();
+        if (this.props.studentList.indexOf(userId) < 0) {
+            this.props.studentList.push(userId);
+            await this.push();
+        } else {
+            throw new InternalServerError(`Student ${userId} already exists in this course.`);
+        }
     }
 
     addInstructor = async (userId) => {
@@ -54,7 +67,6 @@ class Course {
 
     addPost = async (postId) => {
         this.props.postList.push(postId);
-
         await this.push();
     }
 
@@ -107,23 +119,27 @@ class Course {
 }
 
 module.exports.pushCourseToFirebase = (updateParams) => {
+    // Consistent with User.js
+    const name = updateParams['name'];
+    const term = updateParams['term'];
+    const uuid = updateParams['uuid'];
     return new Promise(async (resolve, reject) => {
         try {
-            await db.ref("Courses").child(updateParams["uuid"]).set({
-                name: updateParams["name"], 
-                term: updateParams["term"],
-                uuid: updateParams["uuid"],
-                instructorList: updateParams["instructorList"], 
-                studentList: updateParams["studentList"],
-                tagList: updateParams["tagList"],
-                postList: updateParams["postList"],
+            // TODO: Implement logic for these lists later.
+            await db.ref("Courses").child(uuid).set({
+                name: name, 
+                term: term, 
+                uuid: uuid, 
+                studentList: ["dummy_user_id"], 
+                instructorList: ["dummy_user_id"],
+                tagList: ["dummy_tag_id"],
+                postList: ["dummy_post_id"],
             });
             resolve("Everything worked");
         } catch(e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");
         }
-        
     })
 };
 

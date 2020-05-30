@@ -16,10 +16,10 @@ class PostCreator extends React.Component {
                 <div className="description">
                     <PostEditor />
                 </div>
-                <DropdownButton id="dropdown-item-button" title="Dropdown button" drop="up">
-                    <Dropdown.Item as="button">Action</Dropdown.Item>
-                    <Dropdown.Item as="button">Another action</Dropdown.Item>
-                    <Dropdown.Item as="button">Something else</Dropdown.Item>
+                <DropdownButton id="dropdown-button-privacy" title="public, visible" drop="up">
+                    <Dropdown.Item as="button">public, visible</Dropdown.Item>
+                    <Dropdown.Item as="button">public, anonymous</Dropdown.Item>
+                    <Dropdown.Item as="button">private</Dropdown.Item>
                 </DropdownButton>
             </div>
         );
