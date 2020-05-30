@@ -1,7 +1,5 @@
 .tag-section {
-    position: absolute;
-    top: 175px;    
-    left: 25px;
+    position: relative;  
     width: 220px;
 }
 
@@ -10,8 +8,9 @@
     padding: 3px;
     margin: 5px;
     overflow-y: scroll;
-    width: 200px;
-    height: 400px;
+    overflow-x: hidden;
+    width: 215px;
+    height: 80%;
 }
 
 .tagItem {
@@ -32,7 +31,7 @@
 }
 
 .tagItem:hover {
-    background: #66bcd4 !important;
+    background: #66bcd4;
 }
 
 .search {

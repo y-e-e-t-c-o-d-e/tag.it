@@ -4,6 +4,7 @@ import './style.css';
 import db from "../../base";
 import Navigation from "../../components/Navbar";
 import TagList from "../../components/TagList/index.jsx";
+import PostCreator from "../../components/PostCreator/index.jsx"
 
 const Home = ({currentUser, match}) => { 
     if (match) {
@@ -19,7 +20,10 @@ const Home = ({currentUser, match}) => {
             <h1>Tag.it</h1>
             <Button text="Click Me"></Button>
             <button onClick={() => db.auth().signOut()}>Sign Out</button>
-            <TagList />
+            <div className="body">
+                <TagList />
+                <PostCreator />
+            </div>
         </div>
     )
 };
