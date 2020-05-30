@@ -15,11 +15,7 @@ const PostCreator = ({}) => {
                     <Form.Label>Question Summary</Form.Label>
                     <Form.Control type="value" placeholder="How do I build a rock from sand?" />
                 </Form.Group>
-
-                <Form.Group controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control as="textarea" rows="5" />
-                </Form.Group> 
+                <PostEditor></PostEditor>
             </Form>
             
             <div className="post-buttons">
