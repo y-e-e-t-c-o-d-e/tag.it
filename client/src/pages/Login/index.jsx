@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { Button } from "react-bootstrap"
 import { Redirect } from "react-router-dom";
 import { AuthContext } from "../../auth/Auth";
 import db from "../../base";
@@ -102,12 +103,12 @@ const Login = ({ history }) => {
                                 <a href="/" id="pwdRecover">Forgot your password?</a>
                             </div>
 
-                            <button type="submit">Log In</button>
+                            <Button type="submit">Log In</Button>
                         </form>
                     </div>
                     <div className="input">
                         <h3>Don't have an account?</h3>
-                        <button onClick={redirectSignUp}>Sign Up</button>
+                        <Button onClick={redirectSignUp}>Sign Up</Button>
                     </div>
                 </div>
             </div>
