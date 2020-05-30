@@ -15,7 +15,7 @@ function ClassSettings(props){
     const invitationRef = useRef(null);
 
     const uuid = props.uuid || "FakeUUID";
-    var link = "https://tag.it/courses/" + uuid;
+    let link = "https://tagdotit.netlify.app/course/" + uuid;
 
     useEffect(() => {
         API.getCourse(uuid).then((course) => {

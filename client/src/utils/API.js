@@ -96,3 +96,5 @@ export default {
         return axios.get(`${baseURL}/api/course`, config);
     }
 }
+
+export {baseURL};
