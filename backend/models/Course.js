@@ -29,7 +29,7 @@ class Course {
         return this.props.tagList.slice(1, this.props.tagList.length);
     }
 
-    getStudentList() {
+    getStudentList() {a
         return this.props.studentList.slice(1, this.props.studentList.length);
     }
 
@@ -41,8 +41,8 @@ class Course {
         return this.props.studentInviteId;
     }
 
-    getTeacherInviteId() {
-        return this.props.teacherInviteId;
+    getInstructorInviteId() {
+        return this.props.instructorInviteId;
     }
 
     setName = async (name) => {
@@ -123,8 +123,8 @@ class Course {
             studentList: this.props.studentList,
             tagList: this.props.tagList,
             postList: this.props.postList,
-            studentInviteId: this.props.studentInviteId,
-            teacherInviteId: this.props.teacherInviteId
+            studentInviteId: this.props.studentInviteId ? this.props.studentInviteId : makeId(10),
+            instructorInviteId: this.props.teacherInviteId ? this.props.teacherInviteId : makeId(10)
         });
     } 
 }
@@ -143,7 +143,7 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                     term: updateParams['term'], 
                     uuid: (await courseRef).key, 
                     studentInviteId: makeId(10),
-                    teacherInviteId: makeId(10),
+                    instructorInviteId: makeId(10),
                     studentList: ["dummy_val"],         // Firebase doesn't initialize a list if its empty
                     instructorList: ["dummy_val", user.getUUID()],
                     tagList: ["dummy_val"],

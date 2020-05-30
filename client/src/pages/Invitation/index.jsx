@@ -17,11 +17,13 @@ function Invitation(props){
 
     useEffect(() => {
         API.getCourse(courseId).then((course) => {
+            console.log("running");
+
             setCourseName(course.name);
             setStatus({
                 pending: false,
                 accountType: course.studentInviteId === inviteId ? "student" :
-                                course.teacherInviteId === inviteId ? "teacher" : null
+                                course.instructorInviteId === inviteId ? "teacher" : null
             });
         }).catch(() => {
             // Default

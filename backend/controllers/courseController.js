@@ -81,41 +81,45 @@ exports.updateCourse = async (req, res) => {
 
 exports.verifyCourse = async (req, res) => {
 
-    console.log("running verify course");
+    console.log("running verification");
 
     const bodyParams = req.params;
-    const courseid = bodyParams["courseid"];
-    const inviteId = bodyParams["inviteid"];
+    const courseid = bodyParams["courseId"];
+    const inviteId = bodyParams["inviteId"];
 
     if (!courseid) {
         res.status(422).json({
             status: 422,
-            error: "Missing parameter: courseUUID"
+            error: "Missing parameter: courseId"
         })
     }
 
     if (!inviteId) {
         res.status(422).json({
             status: 422,
-            error: "Missing parameter: inviteid"
+            error: "Missing parameter: inviteId"
         })
     }
 
     try {
         const courseObj = await course.getCourseById(courseid);
 
-        console.log(inviteId);
-        console.log(courseObj.getInviteId());
         // Verify that invite code is equal
-        if (courseObj.getInviteId() == inviteId) {
+        if (courseObj.getStudentInviteId() === inviteId) {
             res.status(200).json({
                 status: 200,
-                verified: true
+                type: "student"
             });
+        } else if (courseObj.getTeacher() === inviteId) {
+            res.status(200).json({
+                status: 200,
+                type: "instructor"
+            })
         } else {
             res.status(500).json({
                 status: 500,
-                verified: false
+                type: null,
+                error: "Invite id is not valid"
             });
         }
     } catch (e) {
@@ -137,7 +141,6 @@ exports.getCourseInfo = async (req, res) => {
             error: "Missing parameter: courseUUID or userUUID"
         });
     }
-
 
     try {
         const courseObj = await course.getCourseById(courseUUID);
