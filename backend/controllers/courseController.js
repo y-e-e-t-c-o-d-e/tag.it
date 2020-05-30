@@ -123,7 +123,7 @@ exports.deleteCourse = async (req, res) => {
     if (!courseUUID) {
         res.status(422).json({
             status: 422,
-            error: "Missing paramater: courseUUID"
+            error: "Missing parameter: courseUUID"
         });
         return;
     };
