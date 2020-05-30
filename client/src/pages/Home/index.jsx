@@ -55,14 +55,14 @@ const Home = ({ currentUser, match }) => {
 
     return (
         <div className="home">
-            <Navigation/>
+            <Navigation />
             { // TODO: Will rearrange frontend to handle the user data.
                 currentUser ? <p>{currentUser.name}</p> : <></>
             }
             <h1>Tag.it</h1>
             <Button text="Click Me"></Button>
             <button onClick={() => db.auth().signOut()}>Sign Out</button>
-            <TagList />
+            {/* <TagList /> */}
             <CommentSection commentList={comments} />
         </div>
     )

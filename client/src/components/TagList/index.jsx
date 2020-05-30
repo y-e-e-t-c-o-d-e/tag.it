@@ -10,7 +10,7 @@ const EachTag = props => {
 
 // Hard-coded tags
 let hctags = [];
-for (var i = 0; i < 20; i++) {
+for (let i = 0; i < 20; i++) {
     hctags.push({
         title: "tag" + i
     })
@@ -34,7 +34,7 @@ export class TagList extends React.Component {
 
     render() {
         return (
-            <div className="tag-section" style={{ visibility: "hidden" }}>
+            <div className="tag-section">
                 <input className="search" type="text" placeholder="Search..." />
                 <button className="btn-style search-btn"><b>search.it</b></button>
                 <div className="filter-dropdown">

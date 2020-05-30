@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import "./style.css";
+
 import Comment from "./Comment/index.jsx";
+import API from "../../utils/API.js"
 
 // Post.commentList should be passed in, list of Comment objects
 const CommentSection = ({ commentList }) => {
@@ -18,8 +20,14 @@ const CommentSection = ({ commentList }) => {
         });
     };
 
-    const handleCreateComment = () => {
+    const handleCreateComment = (e) => {
         // TODO: handle submit logic for adding post comment to commentList
+        e.preventDefault();
+        const TEXT_AREA_IDX = 0, SELECT_IDX = 1;
+        const commentContent = e.target.elements[TEXT_AREA_IDX].value;
+        const visibility = e.target.elements[SELECT_IDX].value;
+
+        API.createComment(commentContent, visibility);
     };
 
     const renderCreateNewComment = () => {
@@ -32,12 +40,12 @@ const CommentSection = ({ commentList }) => {
                             <div className="select-anonymous">
                                 <p>Discuss as: </p>
                                 <select name="anon-type">
-                                    <option value="true">Anonymous to everyone</option>
-                                    <option value="false">Public to everyone</option>
+                                    <option value="anon">Anonymous to everyone</option>
+                                    <option value="public">Public to everyone</option>
                                 </select>
                             </div>
                             <div className="comment-buttons">
-                                <button onClick={setNewComment(false)}>Cancel</button>
+                                <button onClick={() => { setNewComment(false) }}>Cancel</button>
                                 <button type="submit">create.it</button>
                             </div>
                         </div>
@@ -47,7 +55,7 @@ const CommentSection = ({ commentList }) => {
         }
         return (
             <div className="create-new-comment">
-                <button onClick={setNewComment(true)}>Create a new comment</button>
+                <button onClick={() => { setNewComment(true) }}>Create a new comment</button>
             </div>
         );
     };
@@ -55,7 +63,7 @@ const CommentSection = ({ commentList }) => {
     return (
         <div className="comment-section">
             <h2>Followup:</h2>
-            {renderCreateNewComment}
+            {renderCreateNewComment()}
             <div className="comment-list">
                 {renderComments()}
             </div>

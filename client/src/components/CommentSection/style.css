@@ -1,0 +1,15 @@
+.comment-options {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.select-anonymous {
+    display: flex;
+    align-items: center;
+}
+
+.select-anonymous p {
+    margin-right: 10px;
+    margin-bottom: 0;
+    font-size: 1.2em;
+}

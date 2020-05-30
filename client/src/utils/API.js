@@ -20,7 +20,7 @@ export default {
     },
     createUser: function (name, email, uuid) {
         const config = {
-            method: 'post', 
+            method: 'post',
             url: `${baseURL}/api/user`,
             data: {
                 name: name,
@@ -46,7 +46,7 @@ export default {
 
     /** COURSES */
     // courses is an array of course objects
-    addToCourse: function(courseId) {
+    addToCourse: function (courseId) {
         const config = {
             method: 'post',
             url: `${baseURL}/api/user/${courseId}`,
@@ -55,7 +55,7 @@ export default {
         return axios(config);
     },
 
-    getAllCourses: function() {
+    getAllCourses: function () {
         const config = {
             headers: authHeaders(),
             transformResponse: [function (data) {
@@ -66,5 +66,44 @@ export default {
             }]
         };
         return axios.get(`${baseURL}/api/course`, config);
+    },
+
+    /** COMMENTS */
+    createComment: function (content, visibility) {
+        const config = {
+            method: 'post',
+            url: `${baseURL}/api/comment`,
+            headers: authHeaders(),
+            data: {
+                content: content,
+                visibility: visibility
+            }
+        };
+        return axios(config);
+    },
+
+    getComments: function (postUUID) {
+        return [
+            {
+                username: "Anonymous",
+                content: "Wow I really enjoy this new comment experience, it feels like \n the reddit platform",
+                date: ""
+            }
+        ]
+        /** Uncomment when backend is live
+        const config = {
+            headers: authHeaders(),
+            query: {
+                postUUID: postUUID
+            },
+            transformResponse: [function (data) {
+                const jsonData = JSON.parse(data);
+                // Convert object to array of objects
+                const courseArray = Object.keys(jsonData).map(i => jsonData[i]);
+                return courseArray;
+            }]
+        };
+        return axios.get(`${baseURL}/api/comment`, config);
+        */
     }
 }
