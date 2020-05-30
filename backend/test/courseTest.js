@@ -30,9 +30,8 @@ describe('course', () => {
         }
 
         try {
-            const result = await course.pushCourseToFirebase(courseParams);
-            expect(result).to.equal("Everything worked");
-            //expect(1).to.equal(1);
+            const result = await course.pushCourseToFirebase(courseParams, { uuid: "fakeUser" }, courseParams.uuid);
+            expect(result).to.equal(courseParams.uuid);
         } catch(e) {
             console.log(e);
         }  
