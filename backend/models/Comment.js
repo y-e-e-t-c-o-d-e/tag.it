@@ -47,8 +47,20 @@ class Comment {
         return this.props.score;
     }
 
+    getEndorsed() {
+        return this.props.isEndorsed;
+    }
+
+    getResolved() {
+        return this.props.isResolved;
+    }
+
+    getAnonymous() {
+        return this.props.isAnonymous;
+    }
+
     getChildList() {
-        return this.props.childList;
+        return this.props.childList.slice(1, this.props.childList.length);;
     }
 
     addChild = async (commentId) => {
@@ -60,9 +72,9 @@ class Comment {
 
     removeChild = async(commentId) => {
         const index = this.props.childList.indexOf(commentId);
-        let child = await getCommentById(commentId);
-        child.setParentComment("dummy_parent");
         if (index != -1) {
+            let child = await getCommentById(commentId);
+            child.setParentComment("dummy_parent");
             this.props.childList.splice(index, 1);
         }
         await this.push();
@@ -70,6 +82,11 @@ class Comment {
 
     incrementScore = async () => {
         this.props.score++;
+        await this.push();
+    }
+
+    decrementScore = async () => {
+        this.props.score--;
         await this.push();
     }
 
@@ -150,20 +167,21 @@ class Comment {
 module.exports.pushCommentToFirebase = (updateParams) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await db.ref("Comments").child(updateParams["uuid"]).set({
+            const commentRef = db.ref("Comments").push();
+            await commentRef.set({
                 content: updateParams["content"],
                 author: updateParams["author"], 
-                uuid: updateParams["uuid"],
-                time: updateParams["time"],
+                uuid: (await commentRef).key,
+                time: Date.now(),
                 postId: updateParams["postId"],
                 parentComment: updateParams["parentComment"],
-                score: updateParams["score"],
-                childList: updateParams["childList"],
+                score: 0,
+                childList: ["dummy_child"],
                 isEndorsed: updateParams["isEndorsed"],
                 isAnonymous: updateParams["isAnonymous"],
                 isResolved: updateParams["isResolved"],
             });
-            resolve("Everything worked");
+            resolve((await commentRef).key);
         } catch(e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");
@@ -185,22 +203,18 @@ getCommentById = async (uuid) => {
             reject(errorObject);
         })
     }) 
+}
 
-
-    /**
-     * This is for reference to the callback but, we're using promises now.
-     */
-
-    // // Attach an asynchronous callback to read the data at our posts reference
-    // await ref.once("value", function(snapshot) {
-    //     const r = new User(snapshot.val());
-    //     console.log(r.props.name);
-    //     callback(r);
-    // }, function (errorObject) {
-    //     console.log("The read failed: " + errorObject.code);
-    // })
+deleteCommentById = async (uuid) => {
+    const ref = db.ref('Comments/'+uuid);
+    ref.remove().then(function() {
+        console.log("Remove succeeded.");
+    }).catch(function(error) {
+        console.log("Remove failed: " + error.message)
+    });
 }
 
    
 module.exports.Comment = Comment
 module.exports.getCommentById = getCommentById
+module.exports.deleteCommentById = deleteCommentById

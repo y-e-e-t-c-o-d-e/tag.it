@@ -5,27 +5,17 @@ const comment = require("../models/Comment");
 
 // User test suite 
 describe('comment', () => {
+    let key;
+    let testComment;
 
-    // Setup function before every test is run 
-    beforeEach(() => {
-
-    });
-
-    // Teardown function after every test is run 
-    afterEach(() => {
-
-    });
-
-    /*it('should create a new comment in Firebase', async () => {
+    // Setup function before test is run 
+    before(async () => {
+        console.log("Setup for Comment Test Suite")
         const commentParams = {
             content: "yo this makes no sense",
             author: "user2", 
-            uuid: "comment1",
-            time: "05122020 14:33",
             postId: "post1",
             parentComment: "",
-            score: 12,
-            childList: ["comment2", "comment4"],
             isEndorsed: false,
             isAnonymous: true,
             isResolved: false
@@ -46,23 +36,71 @@ describe('comment', () => {
         }
 
         try {
-            const result = await comment.pushCommentToFirebase(commentParams);
-            expect(result).to.equal("Everything worked");
-
-            const replyResult = await comment.pushCommentToFirebase(replyComment);
-            expect(replyResult).to.equal("Everything worked");
-            //expect(1).to.equal(1);
+            key = await comment.pushCommentToFirebase(commentParams);
+            testComment = await comment.getCommentById(key);
         } catch(e) {
             console.log(e);
-        }  
+        }
+    });
+
+    // Teardown function after test is run 
+    after(async () => {
+        console.log("Teardown for Comment Test Suite");
+        //comment.deleteCommentById(key);
+    });
+
+    it('should get testComment Firebase', async () => {
+        expect(testComment.props.author).to.equal("user2");
     })
 
-    it('should get comment from firebase', async () => {
-        const uuid = 'comment1';
-        const testComment = await comment.getCommentById(uuid);
-        expect(testComment.props.content).to.equal("yo this makes no sense");
-    })*/
+    it('should increment testComment score', async () => {
+        testComment.incrementScore();
+        expect(testComment.getScore()).to.equal(1);
+    })
 
+    it('should decrement testComment score', async () => {
+        testComment.decrementScore();
+        expect(testComment.getScore()).to.equal(0);
+    })
+
+    it('should resolve testComment', async () => {
+        testComment.setResolved(true);
+        expect(testComment.getResolved()).to.equal(true);
+    })
+
+    it('should update testComments content', async () => {
+        testComment.setContent("yo this makes little to no sense");
+        expect(testComment.getContent()).to.equal("yo this makes little to no sense");
+    })
+
+    it('should add replyComment to testComment childList', async () => {
+        const replyCommentParams = {
+            content: "agreed",
+            author: "user3", 
+            postId: "post1",
+            parentComment: "",
+            isEndorsed: false,
+            isAnonymous: false,
+            isResolved: false
+        }
+        try {
+            replyKey = await comment.pushCommentToFirebase(replyCommentParams);
+            replyComment = await comment.getCommentById(replyKey);
+        } catch(e) {
+            console.log(e);
+        }
+        
+        await testComment.addChild(replyKey);
+        expect(testComment.getChildList().length).to.equal(1);
+        await testComment.removeChild(replyKey);
+        expect(testComment.getChildList().length).to.equal(0);
+        comment.deleteCommentById(replyKey);
+    })
+
+
+
+
+    /*
     it('should add comment to comments commentList', async () => {
         const uuid = 'comment1';
         const commentId = 'comment283';
@@ -73,7 +111,7 @@ describe('comment', () => {
 
         //const replyTest = await comment.getCommentById(commentId);
         //expect(replyTest.props.parentComment).to.equal("comment1");
-    })
+    })*/
 
     /*it('should modify comments content', async () => {
         const uuid = 'comment283';
