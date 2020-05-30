@@ -53,6 +53,10 @@ class Post {
         return this.props.content;
     }
 
+    getTime() {
+        return this.props.time;
+    }
+
     setTitle = async (newTitle) => {
         this.props.title = newTitle;
         await this.push();
@@ -171,7 +175,8 @@ class Post {
             isResolved: this.props.isResolved,
             isInstructor: this.props.isInstructor,
             score: this.props.score,
-            course: this.props.course
+            course: this.props.course,
+            time: this.props.time
         });
     } 
 }
@@ -196,7 +201,8 @@ module.exports.pushPostToFirebase = (updateParams) => {
                 isResolved: updateParams["isResolved"],
                 isInstructor: updateParams["isInstructor"],
                 score: updateParams["score"],
-                course: updateParams["course"]
+                course: updateParams["course"],
+                time: Date.now()
             });
             resolve("Everything worked");
         } catch(e) {

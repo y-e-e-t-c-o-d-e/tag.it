@@ -8,4 +8,8 @@ router.route("/")
     .get(courseController.getAllCourses) // Read
     .put(courseController.updateCourse) // Update
 
+// Matches with "/api/course/courseId"
+router.route("/:courseId")
+    .get(courseController.getCourseInfo)
+    .delete(courseController.deleteCourse)
 module.exports = router;
