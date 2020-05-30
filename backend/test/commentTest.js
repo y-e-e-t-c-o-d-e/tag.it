@@ -46,7 +46,7 @@ describe('comment', () => {
     // Teardown function after test is run 
     after(async () => {
         console.log("Teardown for Comment Test Suite");
-        //comment.deleteCommentById(key);
+        comment.deleteCommentById(key);
     });
 
     it('should get testComment Firebase', async () => {
