@@ -1,4 +1,5 @@
 import React, {useRef, useState, useEffect } from "react";
+import Navigation from "../../components/Navbar"
 import Button from "../../components/Button/index";
 import './style.css';
 import API from "../../utils/API";
@@ -8,13 +9,16 @@ const bgColors = {
     "error": "#ffcccc",
 };
 
-function ClassSettings(props){
+const ClassSettings = ({classUuid, match}) => { 
+    if (match) {
+        const courseId = match.params.id;
+    }
 
     const [courseNameValid, setCourseNameValid] = useState(true); // Invalid if empty
     const [courseName, setCourseName] = useState("Default Class Name");
     const invitationRef = useRef(null);
 
-    const uuid = props.uuid || "FakeUUID";
+    const uuid = classUuid || "FakeUUID";
     let link = "https://tagdotit.netlify.app/course/" + uuid;
 
     useEffect(() => {
@@ -33,7 +37,7 @@ function ClassSettings(props){
             const className = courseName;
             // updated the course name
             // TODO: Get some way to get the courseUUID (via props?)
-            const uuid = props.uuid || "FakeUUID";
+            const uuid = classUuid || "FakeUUID";
             await API.updateCourse(uuid, className);
             console.log("yeet");
         }
@@ -69,7 +73,7 @@ function ClassSettings(props){
 
     return(
         <div>
-            {/* Insert Nav bar here... */}
+            <Navigation/>
             <div className="content">
                 <div className="box">
 
