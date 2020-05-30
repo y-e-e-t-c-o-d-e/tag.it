@@ -224,7 +224,8 @@ class Post {
             isResolved: this.props.isResolved,
             isInstructor: this.props.isInstructor,
             score: this.props.score,
-            course: this.props.course
+            course: this.props.course,
+            time: this.props.time
         });
     } 
 }
