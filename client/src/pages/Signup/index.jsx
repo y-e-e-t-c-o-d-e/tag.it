@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import db from "../../base";
 import './style.css';
 import logo from '../../assets/logo.png';
-import LoginNav from "../../components/LoginNav";
+import NavBar from "../../components/Navbar";
 import API from "../../utils/API";
 
 var bgColors = {
@@ -163,7 +163,7 @@ const SignUp = ({ history }) => {
 
     return (
         <div>
-            <LoginNav/>
+            <NavBar />
             <div className="centered">
                 <div className="contents">
                     {/* The tag.it logo*/}

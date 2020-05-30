@@ -1,11 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import './App.css';
 
 // Importing Pages
 import Home from './pages/Home/index';
 import Login from './pages/Login/index';
 import Signup from './pages/Signup/index';
+import ClassSettings from './pages/ClassSettings/index';
+import Invitation from './pages/Invitation/index';
 
 // Importing Authentication
 import PrivateRoute from "./auth/PrivateRoute";
@@ -21,9 +22,11 @@ const App = () => {
         <div>
           <Switch>
             <PrivateRoute exact path="/" component={Home} />
-            <CourseRoute exact path="/course/:courseId" component={Home} />
+            <PrivateRoute exact path="/course/:courseId" component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
+            <PrivateRoute exact path="/course/:courseId/settings" component={ClassSettings} />
+            <PrivateRoute exact path="/course/:courseId/invite/:inviteId" component={Invitation} />
             <PrivateRoute exact path="/add" component={AddClass} />
             <Route exact path="/*" component={() => {
               window.location.href = "/";
