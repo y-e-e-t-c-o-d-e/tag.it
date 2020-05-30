@@ -4,6 +4,7 @@ import './style.css';
 import db from "../../base";
 
 import TagList from "../../components/TagList/index.jsx";
+import InviteVerification from "../../pages/InviteVerification/index";
 
 const Home = ({currentUser, match}) => { 
     if (match) {
