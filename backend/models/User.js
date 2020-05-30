@@ -194,6 +194,7 @@ module.exports.pushUserToFirebase = (updateParams) => {
 getUserById = async (uuid) => {
     const ref = db.ref('Users/' + uuid);
 
+
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
             const r = new User(snapshot.val());
@@ -218,6 +219,28 @@ getUserById = async (uuid) => {
     // })
 }
 
+deleteUserByID = async (uuid) => {
+    //console.log("yeet")
+    const ref = db.ref('Users/' + uuid);
+    ref.remove()
+    .then(function() {
+        console.log("Remove succeeded.")
+      })
+      .catch(function(error) {
+        console.log("Remove failed: " + error.message)
+      });
+
+    // return new Promise((resolve, reject) => {
+    //     ref.once("value", function(snapshot) {
+    //         ref.remove()
+    //         resolve()
+    //     }, function (errorObject) {
+    //         reject(errorObject);
+    //     })
+    // })  
+}
+
    
 module.exports.User = User
 module.exports.getUserById = getUserById
+module.exports.deleteUserByID = deleteUserByID

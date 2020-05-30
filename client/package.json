@@ -7,9 +7,11 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
+    "bootstrap": "^4.5.0",
     "firebase": "^7.14.3",
     "react": "^16.13.1",
     "react-autosuggest": "^10.0.2",
+    "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-markdown": "^4.3.1",
     "react-router-dom": "^5.1.2",
@@ -21,8 +23,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test --watchAll=false --passWithNoTests",
+    "eject": "react-scripts eject",
+    "clean": "rm -rf node_modules/"
   },
   "eslintConfig": {
     "extends": "react-app"
