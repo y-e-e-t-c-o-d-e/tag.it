@@ -10,6 +10,8 @@ const Home = ({currentUser, match}) => {
         const courseId = match.params.id;
     }
 
+    
+
     return (
         <div className="home">
             <Navigation/>

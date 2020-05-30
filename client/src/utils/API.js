@@ -93,6 +93,15 @@ export default {
             }]
         };
         return axios.get(`${baseURL}/api/course`, config);
+    },
+
+    confirmVerificationLink: function(courseId, inviteId) {
+        const config = {
+            headers: authHeaders()
+        };
+        console.log(courseId);
+        console.log(inviteId);
+        return axios.get(`${baseURL}/api/course/${courseId}/${inviteId}`, config);
     }
 }
 
