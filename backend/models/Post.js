@@ -1,4 +1,3 @@
-// Install these dependencies before you run
 const nodemailer = require('nodemailer');
 const user = require("./User");
 const tag = require("./Tag");
@@ -187,7 +186,6 @@ class Post {
                   pass: "4320d95a84005b"
                 }
               });
-
             var mailOptions = {
                 from: 'tagitcse110',
                 to: email,
@@ -195,7 +193,6 @@ class Post {
                 // TODO: Need field for post url to add to updated email.
                 text: 'Check it out here'
             };
-
             await transporter.sendMail(mailOptions);
         }
     }*/
@@ -224,8 +221,7 @@ class Post {
             isResolved: this.props.isResolved,
             isInstructor: this.props.isInstructor,
             score: this.props.score,
-            course: this.props.course,
-            time: this.props.time
+            course: this.props.course
         });
     } 
 }
