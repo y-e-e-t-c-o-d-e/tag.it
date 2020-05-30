@@ -41,16 +41,16 @@ const regularRender = (courses) => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="">
                 <Nav className="ml-auto" >
-                    { courses.length > 0 && 
-                        <NavDropdown title="courses" id="basic-nav-dropdown">
-                            {
-                                courses.map((course, key) => {
-                                   return <NavDropdown.Item key={key} href={`/courses/${course.uuid}`}>{course.name}</NavDropdown.Item>
-                                })
-                            }
-                        </NavDropdown>
-                    }
-                    <Nav.Link href="/calendar">calendar</Nav.Link>
+                    <NavDropdown title="courses" id="basic-nav-dropdown">
+                        { courses.length > 0 && 
+                            courses.map((course, key) => {
+                                return <NavDropdown.Item key={key} href={`/courses/${course.uuid}`}>{course.name}</NavDropdown.Item>
+                            })
+                        }
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item href={`/add`}>Add a Course</NavDropdown.Item>
+                    </NavDropdown>
+                    <Nav.Link href="/settings">settings</Nav.Link>
                     <Nav.Link href="/" onClick={ () => { db.auth().signOut() } }>logout</Nav.Link>
                 </Nav>
             </Navbar.Collapse>

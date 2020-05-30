@@ -79,7 +79,7 @@ hr{
 /* Special length and height */
 .invitation-link {
     max-width: 240px; /* 400px - button width - textarea margin */
-    max-height: 20px;
+    /* max-height: 20px; */
     margin-right: 10px;
 }
 
