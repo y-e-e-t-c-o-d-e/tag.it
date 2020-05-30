@@ -1,7 +1,6 @@
 import React, {useRef, useState, useEffect } from "react";
 import {Button} from 'react-bootstrap';
 import Navigation from "../../components/Navbar"
-//import Button from "../../components/Button/index";
 import './style.css';
 import API from "../../utils/API";
 
