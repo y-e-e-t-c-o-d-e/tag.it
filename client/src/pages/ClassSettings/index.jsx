@@ -14,8 +14,6 @@ function ClassSettings(props){
     const [courseName, setCourseName] = useState("Default Class Name");
     const invitationRef = useRef(null);
 
-    const [courseName, setCourseName] = useState("idk");
-
     const uuid = props.uuid || "FakeUUID";
     let link = "https://tagdotit.netlify.app/course/" + uuid;
 
@@ -84,7 +82,7 @@ function ClassSettings(props){
                     {/* Actual form with course info */}
                     <form className="course-info" onSubmit={handleSettingsChange}>
                         <label>
-                            Course Title:{'\u00A0'} {'\u00A0'} { courseName }
+                            Course Title:{'\u00A0'} {'\u00A0'}
                             <input name="courseTitle" 
                                 onChange={handleClassNameChange} onBlur={handleClassNameChange} 
                                 style={{ backgroundColor: classNameBgColor }}
