@@ -131,11 +131,12 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                     name: updateParams['name'], 
                     term: updateParams['term'], 
                     uuid: (await courseRef).key, 
-                    studentList: [],     // Do we want to change these from dummy values?
-                    instructorList: [user.uuid],
+                    studentList: [],
+                    instructorList: [user.getUUID()],
                     tagList: [],
                     postList: [],
                 });
+                await user.addInstructorCourse((await courseRef).key);
                 resolve((await courseRef).key);
             }
         } catch(e) {

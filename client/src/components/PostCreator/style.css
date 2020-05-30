@@ -1,0 +1,53 @@
+.post-creator {
+    border: 15px solid #A6D1DF;
+    width: 750px;
+    position: relative;
+    margin: 5px;
+    flex: .8;
+    background: #E4ECEE;
+    padding: 2.5%;
+}
+
+.form-label {
+    color: #005D83;
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+.form-control {
+    border: 3px solid #E0DEDE;
+    border-radius: 0;
+}
+
+h3 {
+    position: relative;
+    padding-left: 15px;
+}
+
+.question {
+    height: 10%;
+}
+
+.description {
+    height: 50%;
+}
+
+#dropdown-button-form,
+#dropdown-button-tags,
+#create-button {
+    background: #F9D127;
+    color: #005D83;
+    /* border: 2px solid #429bc5; */
+}
+
+.dropdown-menu.show {
+    background: #91d6e9;
+}
+
+.dropdown-item {
+    background: #91d6e9;
+}
+
+.dropdown-item:hover {
+    background: #66bcd4;
+}
