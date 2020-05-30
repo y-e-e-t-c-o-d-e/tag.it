@@ -34,12 +34,12 @@ export class TagList extends React.Component {
 
     render() {
         return (
-            <div className="tag-section">
+            <div className="tag-section" style={{ visibility: "hidden" }}>
                 <input className="search" type="text" placeholder="Search..." />
                 <button className="btn-style search-btn"><b>search.it</b></button>
                 <div className="filter-dropdown">
                     <button className="btn-style filter-btn"><b>filter.it</b></button>
-                    <div className="filter-dropdown-content"> 
+                    <div className="filter-dropdown-content">
                         <button ><b>Pinned</b></button>
                         <button ><b>Most Liked</b></button>
                     </div>
