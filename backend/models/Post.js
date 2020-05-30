@@ -1,5 +1,7 @@
 const nodemailer = require('nodemailer');
 const user = require("./User");
+const tag = require("./Tag");
+const comment = require("./Comment")
 const db = require("./firebase").db;
 
 class Post {
@@ -25,19 +27,19 @@ class Post {
     }
 
     getUsersFollowing() {
-        return this.props.followingList;
-    }
-
-    getComments() {
-        return this.props.commentList;
-    }
-
-    getTagList() {
-        return this.props.tagList;
+        return this.props.followingList.slice(1, this.props.followingList.length);
     }
 
     getCommentList() {
-        return commentList;
+        return this.props.commentList.slice(1, this.props.commentList.length);
+    }
+
+    getTagList() {
+        if (this.props.tagList[0] == "dummy_tag") {
+            return this.props.tagList.slice(1, this.props.tagList.length);
+        }
+        return this.props.tagList;
+        
     }
 
     getCourse() {
@@ -77,6 +79,8 @@ class Post {
     removeComment = async (commentId) => {
         const index = this.props.commentList.indexOf(commentId);
         if (index != -1) {
+            // may or may not be necessary depending on how front end implements deleteComment
+            await comment.deleteCommentById(commentId);
             this.props.commentList.splice(index, 1);
         }
         await this.push();
@@ -85,6 +89,8 @@ class Post {
 
     addTag = async (tagId) => {
         this.props.tagList.push(tagId);
+        const addedTag = await tag.getTagById(tagId);
+        await addedTag.addPost(this.props.uuid);
         await this.push();
     }
 
@@ -92,12 +98,19 @@ class Post {
         const index = this.props.tagList.indexOf(tagId);
         if (index != -1) {
             this.props.tagList.splice(index, 1);
+            const removedTag = await tag.getTagById(tagId);
+            await removedTag.removePost(this.props.uuid);
         }
         await this.push();
     }
 
     incrementScore = async () => {
         this.props.score++;
+        await this.push();
+    }
+
+    decrementScore = async() => {
+        this.props.score--;
         await this.push();
     }
 
@@ -155,7 +168,7 @@ class Post {
         await this.push();
     }
 
-    sendUpdate = async () => {
+    /*sendUpdate = async () => {
         for (var i = 0; i < this.props.followingList.length; i ++) {
             const currUser = await user.getUserById(this.props.followingList[i]);
             const email = await currUser.getEmail();
@@ -178,8 +191,8 @@ class Post {
             };
 
             await transporter.sendMail(mailOptions);
-        } 
-    }
+        }
+    }*/
 
 
 
@@ -214,24 +227,25 @@ class Post {
 module.exports.pushPostToFirebase = (updateParams) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await db.ref("Posts").child(updateParams["uuid"]).set({
+            const postRef = db.ref("Posts").push();
+            await (await postRef).set({
                 title: updateParams["title"], 
                 content: updateParams["content"],
                 author: updateParams["author"], 
-                uuid: updateParams["uuid"],
+                uuid: (await postRef).key,
                 tagList: updateParams["tagList"],
-                commentList: updateParams["commentList"],
-                followingList: updateParams["followingList"],
+                commentList: ['dummy_comment'],
+                followingList: ['dummy_user'],
                 isAnnouncement: updateParams["isAnnouncement"],
                 isPinned: updateParams["isPinned"],
                 isAnonymous: updateParams["isAnonymous"],
                 isPrivate: updateParams["isPrivate"],
-                isResolved: updateParams["isResolved"],
+                isResolved: false,
                 isInstructor: updateParams["isInstructor"],
-                score: updateParams["score"],
+                score: 0,
                 course: updateParams["course"]
             });
-            resolve("Everything worked");
+            resolve((await postRef).key);
         } catch(e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");
@@ -253,22 +267,18 @@ getPostById = async (uuid) => {
             reject(errorObject);
         })
     }) 
+}
 
-
-    /**
-     * This is for reference to the callback but, we're using promises now.
-     */
-
-    // // Attach an asynchronous callback to read the data at our posts reference
-    // await ref.once("value", function(snapshot) {
-    //     const r = new User(snapshot.val());
-    //     console.log(r.props.name);
-    //     callback(r);
-    // }, function (errorObject) {
-    //     console.log("The read failed: " + errorObject.code);
-    // })
+deletePostById = async (uuid) => {
+    const ref = db.ref('Posts/'+uuid);
+    ref.remove().then(function() {
+        console.log("Remove succeeded.");
+    }).catch(function(error) {
+        console.log("Remove failed: " + error.message)
+    });
 }
 
    
 module.exports.Post = Post
 module.exports.getPostById = getPostById
+module.exports.deletePostById = deletePostById

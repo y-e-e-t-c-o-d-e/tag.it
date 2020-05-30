@@ -16,17 +16,14 @@ class Tag {
      */
 
     getName = async() => {
-        let currentTag = await getTagById(this.props.uuid);
-        return (await currentTag).props.name;
+        return this.props.name;
     }
 
     getNumUsed = async() => {
-        let currentTag = await getTagById(this.props.uuid);
-        return (await currentTag).props.numUsed;
+        return this.props.numUsed;
     }
     getCourse = async() => {
-        let currentTag = await getTagById(this.props.uuid);
-        return (await currentTag).props.course;
+        return this.props.course;
     }
     getParentTag = async() => {
         let currentTag = await getTagById(this.props.uuid);
@@ -171,7 +168,7 @@ getTagById = async (uuid) => {
     }) 
 }
 
-deleteTagByID = async (uuid) => {
+deleteTagById = async (uuid) => {
     
     const ref = db.ref('Tags/' + uuid);
     ref.remove()
@@ -186,4 +183,4 @@ deleteTagByID = async (uuid) => {
 
 module.exports.Tag = Tag
 module.exports.getTagById = getTagById
-module.exports.deleteTagByID = deleteTagByID
+module.exports.deleteTagById = deleteTagById

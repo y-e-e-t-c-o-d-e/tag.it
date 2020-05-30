@@ -60,7 +60,7 @@ class Comment {
     }
 
     getChildList() {
-        return this.props.childList.slice(1, this.props.childList.length);;
+        return this.props.childList.slice(1, this.props.childList.length);
     }
 
     addChild = async (commentId) => {
@@ -194,7 +194,6 @@ module.exports.pushCommentToFirebase = (updateParams) => {
 
 getCommentById = async (uuid) => {
     const ref = db.ref('Comments/' + uuid);
-
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
             const r = new Comment(snapshot.val());
