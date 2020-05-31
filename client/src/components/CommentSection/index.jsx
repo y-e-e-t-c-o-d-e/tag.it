@@ -5,7 +5,7 @@ import Comment from "./Comment/index.jsx";
 import API from "../../utils/API.js";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
 
-// Post.commentList should be passed in, list of Comment objects
+// Post.commentList and Post.uuid should be passed in
 const CommentSection = ({ commentList, postID }) => {
 
     const [newComment, setNewComment] = useState(false);
