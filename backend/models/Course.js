@@ -82,6 +82,10 @@ class Course {
         return this.props.instructorInviteId;
     }
 
+    getPendingInstructorList() {
+        return this.props.pendingInstructorList.slice(1, this.props.pendingInstructorList.length);
+    }
+
     setName = async (name) => {
         this.props.name = name;
         await this.push();
@@ -111,6 +115,12 @@ class Course {
     addInstructor = async (userId) => {
         this.updateCourse();
         this.props.instructorList.push(userId);
+
+        // Checks if instructor is in pendingInstructorList and removes if so
+        if (this.props.pendingInstructorList.indexOf(userId) >= 0) {
+            this.props.pendingInstructorList.splice(this.props.instructorList.indexOf(userId), 1);
+        }
+
         await this.push();
     }
 
@@ -120,6 +130,21 @@ class Course {
         await this.push();
     }
 
+    addPendingInstructor = async (userEmail) => {
+        this.updateCourse();
+        if (this.props.pendingInstructorList.indexOf(userEmail) < 0) {
+            this.props.pendingInstructorList.push(userEmail);
+            await this.push();
+        }
+    }
+
+    removePendingInstructor = async (userEmail) => {
+        this.updateCourse();
+        if (this.props.pendingInstructorList.indexOf(userEmail) >= 0) {
+            this.props.pendingInstructorList.splice(this.props.instructorList.indexOf(userEmail), 1);
+            await this.push();
+        }
+    }
 
     getPostsWithTag = async (tagId) => {
         let list = this.getPostList();
@@ -208,6 +233,7 @@ class Course {
             resolve(posts);
         })  
     }
+
     getPostsWithMultipleTags = async (tagList) => {
         let posts = {};
         for(let i = 0; i < tagList.length; i++) {
@@ -234,7 +260,8 @@ class Course {
             tagList: this.props.tagList,
             postList: this.props.postList,
             studentInviteId: this.props.studentInviteId ? this.props.studentInviteId : makeId(10),
-            instructorInviteId: this.props.instructorInviteId ? this.props.instructorInviteId : makeId(10)
+            instructorInviteId: this.props.instructorInviteId ? this.props.instructorInviteId : makeId(10),
+            pendingInstructorList: this.props.pendingInstructorList ? this.props.pendingInstructorList : ["dummy_val"]
         });
     } 
 }
@@ -246,7 +273,6 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                 await db.ref("Courses").child(courseUUID).set(updateParams);
                 resolve(courseUUID);
             } else {
-                // TODO: Implement logic for these lists later.
                 const courseRef = db.ref("Courses").push();
                 await courseRef.set({
                     name: updateParams['name'],
@@ -256,6 +282,7 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                     instructorInviteId: makeId(10),
                     studentList: ["dummy_val"],         // Firebase doesn't initialize a list if its empty
                     instructorList: ["dummy_val", user.getUUID()],
+                    pendingInstructorList: ["dummy_val"],
                     tagList: ["dummy_val"],
                     postList: ["dummy_val"],
                 });

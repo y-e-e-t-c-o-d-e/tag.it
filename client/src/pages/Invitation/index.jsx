@@ -5,8 +5,8 @@ import API from "../../utils/API";
 
 function Invitation(props){
 
-    const [courseName, setCourseName] = useState("CSE 111 - Hardware Engineering");
-    const [status, setStatus] = useState({
+     const [state, setState] = useState({
+        courseName: "CSE 111 - Hardware Engineering",
         pending: true,
         accountType: null // Either "student" or "instructor" (indicates verification)
     });
@@ -19,18 +19,20 @@ function Invitation(props){
         API.getCourse(courseId).then((course) => {
             console.log("running");
 
-            setCourseName(course.name);
-            setStatus({
-                pending: false,
-                accountType: course.studentInviteId === inviteId ? "student" :
-                                course.instructorInviteId === inviteId ? "teacher" : null
-            });
+            // Runs second backend request to verify
+            API.confirmVerificationLink(courseId, inviteId).then((result) => {
+                setState({
+                    courseName: course.name,
+                    pending: false,
+                    accountType: result.data.type
+                });
+            })
         }).catch(() => {
             // Default
-            setCourseName('CSE 111 - Hardware Engineering');
-            setStatus({
+            setState({
                 pending: false,
-                accountType: null
+                accountType: null,
+                courseName: 'CSE 111 - Hardware Engineering'
             })
         }); 
     }, [])
@@ -48,11 +50,11 @@ function Invitation(props){
         }).catch((e) => alert(e))
     }
 
-    if (status.pending) {
+    if (state.pending) {
         return <h1>Verifying Invite Link</h1>
     } 
 
-    if (!status.accountType) {
+    if (!state.accountType) {
         return <h1>Invite Id is not Valid</h1>
     }
     
@@ -68,7 +70,7 @@ function Invitation(props){
                         <hr/>
                         <div className="invite-message">
                             <p>You have been invited to join</p>
-                            <p className="invite-course-title">{courseName}</p>
+                            <p className="invite-course-title">{state.courseName}</p>
                         </div>
 
                         <div className="invite-buttons">

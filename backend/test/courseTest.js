@@ -113,4 +113,25 @@ describe('course', () => {
         const announcements = await testCourse.getAnnouncements();
         expect(announcements[0]).to.equal('post1');
     })
+
+    it('should add instructor to pending list', async () => {
+        const testCourse = await course.getCourseById('course1');
+        await testCourse.addPendingInstructor("user1");
+        const pendingInstructorList = await testCourse.getPendingInstructorList();
+        expect(pendingInstructorList.length).to.equal(1);
+    })
+
+    it('should add instructor to pending list', async () => {
+        const testCourse = await course.getCourseById('course1');
+        await testCourse.addPendingInstructor("d1truong@ucsd.edu");
+        const pendingInstructorList = await testCourse.getPendingInstructorList();
+        expect(pendingInstructorList.length).to.equal(1);
+    })
+
+    it('should remove instructor off pending list', async () => {
+        const testCourse = await course.getCourseById('course1');
+        await testCourse.removePendingInstructor("d1truong@ucsd.edu");
+        const pendingInstructorList = await testCourse.getPendingInstructorList();
+        expect(pendingInstructorList.length).to.equal(0);
+    })
 });

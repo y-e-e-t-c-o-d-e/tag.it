@@ -82,24 +82,25 @@ exports.updateCourse = async (req, res) => {
 
 exports.verifyCourse = async (req, res) => {
 
-    console.log("running verification");
-
     const bodyParams = req.params;
-    const courseid = bodyParams["courseId"];
-    const inviteId = bodyParams["inviteId"];
+    const userObj = req.user;
+    const courseid = bodyParams["courseid"];
+    const inviteId = bodyParams["inviteid"];
 
     if (!courseid) {
         res.status(422).json({
             status: 422,
-            error: "Missing parameter: courseId"
+            error: "Missing parameter: courseid"
         })
+        return;
     }
 
     if (!inviteId) {
         res.status(422).json({
             status: 422,
-            error: "Missing parameter: inviteId"
+            error: "Missing parameter: inviteid"
         })
+        return;
     }
 
     try {
@@ -111,17 +112,32 @@ exports.verifyCourse = async (req, res) => {
                 status: 200,
                 type: "student"
             });
-        } else if (courseObj.getTeacher() === inviteId) {
-            res.status(200).json({
-                status: 200,
-                type: "instructor"
-            })
+            return;
+        } else if (courseObj.getInstructorInviteId() === inviteId) {
+            let errorMsg = "";
+            let status = 200; 
+            let type = "instructor";
+
+            // Return if user is not in instructor list
+            if (courseObj.getPendingInstructorList().indexOf(userObj.getEmail()) < 0) {
+                errorMsg = "User has not been invited to join staff by the instructors";
+                status = 410;
+                type = null;
+            };
+
+            res.status(status).json({
+                status: status,
+                type: type,
+                error: errorMsg
+            });
+            return;
         } else {
             res.status(500).json({
                 status: 500,
                 type: null,
                 error: "Invite id is not valid"
             });
+            return;
         }
     } catch (e) {
         res.status(410).json({
@@ -261,6 +277,10 @@ exports.sendEmail = async (req, res) => {
 
     try {
         const courseObj = await course.getCourseById(courseUUID);
+
+        // Adds user to pending instructor list
+        await courseObj.addPendingInstructor(bodyParams["email"]);
+
         let inviteURL;
         if ("type" in bodyParams && bodyParams["type"] == "instructor") {
             inviteURL = "https://tagdotit.netlify.app/course/"+courseUUID+"/invite/"+courseObj.getInstructorInviteId();
