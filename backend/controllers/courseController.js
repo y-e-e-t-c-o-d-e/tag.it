@@ -2,23 +2,25 @@
 const course = require("../models/Course");
 const nodemailer = require('nodemailer');
 const post = require("../models/Post");
+const tag = require("../models/Tag");
+const user = require("../models/User");
 const { db } = require("../shared/firebase")
 
 // Adds a course to the database based on req body
 exports.addCourse = async (req, res) => {
    // Check that required data is given
    const bodyParams = req.body;
-   if (!("name" in bodyParams && "term" in bodyParams)) {
+   if (!("name" in bodyParams && "term" in bodyParams && "description")) {
        res.status(422).json({
            status: 422,
-           error: "Missing one of the following parameters: name or term"
+           error: "Missing one of the following parameters: name or term or description"
        });
        return;
    };
 
    try {
-       await course.pushCourseToFirebase(bodyParams, req.user);
-       res.status(200).send(`Added course ${bodyParams.name}`)
+       const courseId = await course.pushCourseToFirebase(bodyParams, req.user);
+       res.status(200).send(courseId);
    } catch (e) {
        res.status(410).json({
            status: 410,
@@ -185,8 +187,8 @@ exports.deleteCourse = async (req, res) => {
     };
 };
 
-// Sends an email to the passed in user (defaults to student)
-exports.sendEmail = async (req, res) => {
+// Gets all the course users
+exports.getCourseUsers = async (req, res) => {
     const courseUUID = req.params.courseId;
     if (!courseUUID) {
         res.status(422).json({
@@ -195,6 +197,38 @@ exports.sendEmail = async (req, res) => {
         });
         return;
     };
+
+    try {
+        const courseObj = await course.getCourseById(courseUUID);
+        
+        const filledInInstructors = await Promise.all(courseObj.getInstructorList().map(
+            async (instructorId) => (await user.getUserById(instructorId)).props));
+        const filledInStudents = await Promise.all(courseObj.getStudentList().map(
+            async (studentId) => (await user.getUserById(studentId)).props));
+
+        res.status(200).json({
+            students: filledInStudents,
+            instructors: filledInInstructors
+        });
+    } catch (e) {
+        res.status(410).json({
+            error: e.message
+        })
+    }
+}
+
+// Sends an email to the passed in user (defaults to student)
+exports.sendEmail = async (req, res) => {
+
+    const courseUUID = req.params.courseId;
+    if (!courseUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing parameter: courseUUID"
+        });
+        return;
+    };
+
 
     const bodyParams = req.body;
     if (!("email" in bodyParams)) {
@@ -237,5 +271,43 @@ exports.sendEmail = async (req, res) => {
             status: 410,
             error: e
         });
-    };
-};
+    }
+}
+
+
+
+exports.removeUser = async (req, res) => {
+    const courseUUID = req.params.courseId;
+    const userUUID = req.params.userId;
+    
+    if (!courseUUID || !userUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing parameter: courseUUID or userUUID"
+        });
+        return;
+    }
+
+    try {
+        const courseObj = await course.getCourseById(courseUUID);
+        const userType = courseObj.classifyUser(userUUID);
+
+        if (userType === "student") {
+            await courseObj.removeStudent(userUUID);
+        } else if (userType === "instructor") {
+            await courseObj.removeInstructor(userUUID);
+        } else {
+            res.status(410).send({
+                error: "User is not in the course"
+            })
+            return;
+        }
+
+        res.status(200).send(`User removed as a ${userType}`);
+
+    } catch (e) {
+        res.status(410).json({
+            error: e.message
+        })
+    }
+}

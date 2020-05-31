@@ -106,6 +106,20 @@ export default {
         return axios.get(`${baseURL}/api/course`, config);
     },
 
+    createCourse: function (name, term, description) {
+        const config = {
+            method: 'post',
+            url: `${baseURL}/api/course`,
+            headers: authHeaders(),
+            data: {
+                name: name,
+                term: term,
+                description: description
+            }
+        };
+        return axios(config);
+    }, 
+
     /** COMMENTS */
     createComment: function (content, visibility, parentComment, postId) {
         const anonymous = visibility === "public, anonymous"
@@ -118,6 +132,34 @@ export default {
                 isAnonymous: anonymous,
                 parentComment: parentComment,
                 postId: postId
+            }
+        };
+        return axios(config);
+    },
+
+    getCourseUsers: function (courseUUID) {
+        const config = {
+            headers: authHeaders(),
+        };
+        return axios.get(`${baseURL}/api/course/${courseUUID}/users`, config);
+    },
+
+    removeUserFromCourse: function (courseUUID, userUUID) {
+        const config = {
+            headers: authHeaders()
+        };
+        return axios.delete(`${baseURL}/api/course/${courseUUID}/${userUUID}`, config);
+    },
+
+    inviteUserToCourse: function (courseUUID, userEmail) {
+        console.log(userEmail);
+        console.log(courseUUID);
+        const config = {
+            method: 'post',
+            url: `${baseURL}/api/course/${courseUUID}/invite`,
+            headers: authHeaders(),
+            data: {
+                email: userEmail
             }
         };
         return axios(config);
@@ -137,7 +179,6 @@ export default {
             }]
         };
         return axios.get(`${baseURL}/api/comment`, config);
-        
     }
 }
 
