@@ -152,7 +152,7 @@ class User {
         }
     }
 
-    removeStduentCourse = async (courseId) => {
+    removeStudentCourse = async (courseId) => {
         await this.updateStudentCourses();
         
         if (this.props.studentCourseList.indexOf(courseId) >= 0) {
