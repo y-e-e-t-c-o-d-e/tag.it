@@ -2,24 +2,10 @@ import React, { useState } from 'react'
 import './style.css';
 import { Button, ListGroup, Row, Col } from "react-bootstrap";
 
-// Display a single tag
-const EachTag = props => {
-    return (
-        <button className="tagItem"><b>{props.tag.title}</b></button>
-    );
-}
 
-const TagList = ({}) => {
-    // Hard-coded tags
-    let hctags = [];
-    for (let i = 0; i < 20; i++) {
-        hctags.push({
-            title: "tag" + i,
-            uuid: i
-        })
-    }
-
-    const [tags, setTags] = useState(hctags);
+const TagList = ({tags}) => {
+    
+    console.log(tags)
     const [search, setSearch] = useState(""); // default to no search input
     
     return (

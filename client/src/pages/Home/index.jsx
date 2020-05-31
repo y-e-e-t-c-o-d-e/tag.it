@@ -8,10 +8,6 @@ import { Row, Col, Nav } from 'react-bootstrap';
 import CoursesView from '../../components/CoursesView/index.jsx';
 
 const Home = ({currentUser, match}) => { 
-    if (match) {
-        const courseId = match.params.id;
-    }
-
     const displayName = currentUser ? currentUser.name : "Loading"
 
     return (
