@@ -102,7 +102,8 @@ export default {
             headers: authHeaders(),
             data: {
                 name: name,
-                term: term
+                term: term,
+                description: description
             }
         };
         return axios(config);

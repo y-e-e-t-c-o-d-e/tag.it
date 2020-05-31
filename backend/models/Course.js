@@ -36,6 +36,10 @@ class Course {
         return this.props.postList.slice(1, this.props.postList.length);
     }
 
+    getDescription() {
+        return this.props.description;
+    }
+
     setName = async (name) => {
         this.props.name = name;
         await this.push();
@@ -43,6 +47,11 @@ class Course {
 
     setTerm = async (term) => {
         this.props.term = term;
+        await this.push();
+    }
+
+    setDescription = async (desc) => {
+        this.props.description = desc;
         await this.push();
     }
 
@@ -135,6 +144,7 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                     instructorList: ["dummy_val", user.getUUID()],
                     tagList: ["dummy_val"],
                     postList: ["dummy_val"],
+                    description: updateParams['description']
                 });
                 await user.addInstructorCourse((await courseRef).key);
                 resolve((await courseRef).key);

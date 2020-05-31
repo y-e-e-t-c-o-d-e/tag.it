@@ -41,7 +41,7 @@ const ClassCreation = ({ history }) => {
             /* try to create a course in database */
             try {
                 // TODO: use API to create course
-                const courseId = await API.createCourse(title.value, term.value, description.value);
+                const courseId = (await API.createCourse(title.value, term.value, description.value)).data;
                 redirectAddStaff(courseId); // might need to change depending on how backend implements the return value
             } catch (error) {
                 alert(error);

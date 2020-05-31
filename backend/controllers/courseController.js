@@ -8,17 +8,19 @@ const { db } = require("../shared/firebase")
 exports.addCourse = async (req, res) => {
    // Check that required data is given
    const bodyParams = req.body;
-   if (!("name" in bodyParams || "term" in bodyParams)) {
+   if (!("name" in bodyParams && "term" in bodyParams && "description")) {
        res.status(422).json({
            status: 422,
-           error: "Missing one of the following parameters: name or term"
+           error: "Missing one of the following parameters: name or term or description"
        });
        return;
    };
 
+   // TODO(daniel): Add tags in this route as well
+
    try {
-       await course.pushCourseToFirebase(bodyParams, req.user);
-       res.status(200).send(`Added course ${bodyParams.name}`)
+       const courseId = await course.pushCourseToFirebase(bodyParams, req.user);
+       res.status(200).send(courseId);
    } catch (e) {
        res.status(410).json({
            status: 410,

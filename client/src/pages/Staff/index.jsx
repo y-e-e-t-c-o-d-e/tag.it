@@ -3,9 +3,10 @@ import logo from "../../assets/logo.png";
 import './style.css';
 import API from "../../utils/API";
 
-const Staff = ({ history, match }) => {
+const Staff = ({ history, match, currentUser }) => {
     //' hardcoded
     const [currCourses, setCurrCourses] = useState([]);
+    console.log(currentUser);
     const courseId = match.params.courseId;
 
     /* Function to redirect to Home */
