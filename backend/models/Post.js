@@ -3,6 +3,7 @@ const user = require("./User");
 const tag = require("./Tag");
 const comment = require("./Comment")
 const { db } = require("../shared/firebase")
+const Course = require("./Course")
 
 class Post {
     constructor(props) {
@@ -250,7 +251,9 @@ module.exports.pushPostToFirebase = (updateParams) => {
                 score: 0,
                 course: updateParams["course"]
             });
-            resolve((await postRef).key);
+            const post = (await postRef)
+            await ((await (Course.getCourseById(updateParams["course"]))).addPost(post.key))
+            resolve(post.key);
         } catch(e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");

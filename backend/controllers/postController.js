@@ -13,8 +13,8 @@ exports.addPost = async (req, res) => {
         return
     }
     try {
-        await post.pushPostToFirebase(bodyParams);
-        res.status(200).send(`Added post ${bodyParams.uuid}`)
+        const key = await post.pushPostToFirebase(bodyParams);
+        res.status(200).send(`Added post ${key}`)
     } catch (e) {
         res.status(410).json({
             status: 410,
