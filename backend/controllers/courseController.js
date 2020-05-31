@@ -2,6 +2,8 @@
 const course = require("../models/Course");
 const user = require("../models/User");
 const nodemailer = require('nodemailer');
+const post = require("../models/Post");
+const tag = require("../models/Tag");
 const { db } = require("../shared/firebase")
 
 // Adds a course to the database based on req body
@@ -94,23 +96,65 @@ exports.getCourseInfo = async (req, res) => {
 
     try {
         const courseObj = await course.getCourseById(courseUUID);
-        
+        let type = "";
         // Check if user is an instructor or student, student can't see studentList
         if (courseObj.getInstructorList().indexOf(userObj.getUUID()) != -1) {
-            res.status(200).json(courseObj);
+            type = "student";
         } else if (courseObj.getStudentList().indexOf(userObj.getUUID()) != -1) {
-            res.status(200).json({
-                name: courseObj.getName(),
-                term: courseObj.getTerm(),
-                instructorList: courseObj.getInstructorList(),
-                tagList: courseObj.getTagList(),
-                postList: courseObj.getPostList()
-            });
+            type = "instructor";
         } else {
             res.status(200).json({
                 error: "Course info is not available"
             });
+            return;
         }
+
+        // Gets all the Post Objects
+        let postContentList = await courseObj.getPostList().reduce(async (acc, postId, index) => {
+            // Ensures that only a certain amount of posts are rendered
+            try {
+                const postObj = await post.getPostById(postId);
+                (await acc).push(postObj.props);
+                return acc;
+            } catch (e) {
+                return acc;
+            }
+        }, Promise.resolve([]));   
+        
+        // Gets all the Tag Objects
+        const tagContentList = await courseObj.getPostList().reduce(async (acc, postId) => {
+            try {
+                const tagObj = await post.getPostById(postId);
+                (await acc).push(tagObj.props);
+                return acc;
+            } catch (e) {
+                return acc;
+            }
+        }, Promise.resolve([]));   
+
+        // Sort Posts based on time
+        postContentList.sort((post1, post2) => {
+            // Date Format: MMDDYYYY HH:MM
+            const a = post1.time;
+            const b = post2.time;
+
+            // Date Object Format - Date(year, month, day, hour, minute, seconds)
+            const date1 = new Date(a.substr(4,4), parseInt(a.substr(0,2)) - 1, a.substr(2,2), a.substr(9,2), a.substr(12,2));
+            const date2 = new Date(b.substr(4,4), parseInt(b.substr(0,2)) - 1, b.substr(2,2), b.substr(9,2), b.substr(12,2));
+            
+            if (date1 < date2) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
+
+        res.status(200).json({
+            ...courseObj.props, 
+            postList: postContentList, 
+            tagList: tagContentList,
+            type: type
+        });
     } catch (e) {
         res.status(410).json({
             status: 410,
@@ -141,7 +185,7 @@ exports.deleteCourse = async (req, res) => {
     };
 };
 
-// Sends an email to the passed in user, if possible
+// Sends an email to the passed in user
 exports.sendEmail = async (req, res) => {
     const courseUUID = req.params.courseId;
     if (!courseUUID) {
@@ -153,7 +197,7 @@ exports.sendEmail = async (req, res) => {
     };
 
     const bodyParams = req.body;
-    if (!("email" in bodyParams)) {
+    if (!("email" in bodyParams || "type" in bodyParams)) {
        res.status(422).json({
            status: 422,
            error: "Missing the following parameter: email"
@@ -163,36 +207,36 @@ exports.sendEmail = async (req, res) => {
 
     try {
         const courseObj = course.getCourseById(courseUUID);
-        const studentList = courseObj.getStudentList();
-        let student;
-        for (let i = 0; i < studentList.length; i++) {
-            student = user.getUserById(studentList[i]);
-            if (student.getEmail() == bodyParams["email"]) {
-                let transporter = nodemailer.createTransport({
-                    host: "smtp.mailtrap.io",
-                    port: 2525,
-                    auth: {
-                      user: "60438c70e2cd80",
-                      pass: "4320d95a84005b"
-                    }
-                  });
-    
-                let mailOptions = {
-                    from: 'tagitcse110',
-                    to: bodyParams["email"],
-                    subject: this.props.title + ' has been updated!',
-                    // TODO: Need field for post url to add to updated email.
-                    text: 'Check it out here'
-                };
-    
-                await transporter.sendMail(mailOptions);
-            }
+        let inviteURL;
+        if (bodyParams["type"] == "instructor") {
+            inviteURL = "https://tagdotit.netlify.app/course/"+courseUUID+"/invite/"+courseObj.getInstructorId();
+        } else if (bodyParams["type"] == "student") {
+            inviteURL = "https://tagdotit.netlify.app/course/"+courseUUID+"/invite/"+courseObj.getStudentId();
+        } else {
+            res.status(200).send("Invalid type")
         }
-        res.status(200).send("User not in course")
+
+        let transporter = nodemailer.createTransport({
+            host: "smtp.mailtrap.io",
+            port: 2525,
+            auth: {
+                user: "cf3d98a2d7c95b",
+                pass: "3aa9caeb1f6943"
+            }
+        });
+
+        let mailOptions = {
+            from: 'tag.it',
+            to: bodyParams["email"],
+            subject: "Invite link for new course" + courseObj.getName() + "on tag.it!",
+            text: "You've been invited to use the sickest platform to grace this planet. Check it out here: " + inviteURL
+        };
+
+        await transporter.sendMail(mailOptions);
     } catch (e) {
         res.status(410).json({
             status: 410,
             error: e
         });
     };
-}
+};

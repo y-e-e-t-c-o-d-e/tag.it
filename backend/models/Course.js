@@ -2,6 +2,8 @@
 const post = require("../models/Post");
 const { db } = require("../shared/firebase")
 const { InternalServerError } = require("../shared/error");
+const { makeId } = require("../shared/util");
+
 class Course {
     constructor(props) {
         this.props = props;
@@ -40,8 +42,8 @@ class Course {
         return this.props.studentInviteId;
     }
 
-    getTeacherInviteId() {
-        return this.props.teacherInviteId;
+    getInstructorInviteId() {
+        return this.props.instructorInviteId;
     }
 
     setName = async (name) => {
@@ -97,6 +99,75 @@ class Course {
         return posts;
     }
 
+    classifyUser = (uuid) => {
+        for (let i = 0; i < this.props.instructorList.length; i ++) {
+            if (this.props.instructorList[i] === uuid) {
+                return "instructor";
+            }
+        }
+        for (let i = 0; i < this.props.studentList.length; i ++) {
+            if (this.props.studentList[i] === uuid) {
+                return "student";
+            }
+        }
+        return "null";
+    }
+
+    getPrivatePosts = async () => {
+        return new Promise(async (resolve, reject) => {
+            let list = this.getPostList();
+            const posts = [];
+            for (let i = 0; i < list.length; i ++) {
+                const currentPost = await post.getPostById(list[i]);
+                if (currentPost.isPrivate()) {
+                    posts.push(currentPost.getUUID());
+                }
+            }
+            resolve(posts);
+        })   
+    }
+
+    getPublicPosts = async () => {
+        return new Promise(async (resolve, reject) => {
+            let list = this.getPostList();
+            const posts = [];
+            for (let i = 0; i < list.length; i ++) {
+                const currentPost = await post.getPostById(list[i]);
+                if (!currentPost.isPrivate()) {
+                    posts.push(currentPost.getUUID());
+                }
+            }
+            resolve(posts);
+        })      
+    }
+
+    getPinnedPosts = async () => {
+        return new Promise(async (resolve, reject) => {
+            let list = this.getPostList();
+            const posts = [];
+            for (let i = 0; i < list.length; i ++) {
+                const currentPost = await post.getPostById(list[i]);
+                if (currentPost.isPinned()) {
+                    posts.push(currentPost.getUUID());
+                }
+            }
+            resolve(posts);
+        })      
+    }
+
+    getAnnouncements = async() => {
+        return new Promise(async (resolve, reject) => {
+            let list = this.getPostList();
+            const posts = [];
+            for (let i = 0; i < list.length; i ++) {
+                const currentPost = await post.getPostById(list[i]);
+                if (currentPost.isAnnouncement()) {
+                    posts.push(currentPost.getUUID());
+                }
+            }
+            resolve(posts);
+        })  
+    }
     getPostsWithMultipleTags = async (tagList) => {
         let posts = {};
         for(let i = 0; i < tagList.length; i++) {
@@ -122,8 +193,8 @@ class Course {
             studentList: this.props.studentList,
             tagList: this.props.tagList,
             postList: this.props.postList,
-            studentInviteId: this.props.studentInviteId,
-            teacherInviteId: this.props.teacherInviteId
+            studentInviteId: this.props.studentInviteId ? this.props.studentInviteId : makeId(10),
+            instructorInviteId: this.props.instructorInviteId ? this.props.instructorInviteId : makeId(10)
         });
     } 
 }
@@ -142,7 +213,7 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                     term: updateParams['term'], 
                     uuid: (await courseRef).key,
                     studentInviteId: makeId(10),
-                    teacherInviteId: makeId(10),
+                    instructorInviteId: makeId(10),
                     studentList: ["dummy_val"],         // Firebase doesn't initialize a list if its empty
                     instructorList: ["dummy_val", user.getUUID()],
                     tagList: ["dummy_val"],
@@ -200,3 +271,4 @@ deleteCourseById = async (uuid) => {
 module.exports.Course = Course
 module.exports.getCourseById = getCourseById
 module.exports.deleteCourseById = deleteCourseById
+

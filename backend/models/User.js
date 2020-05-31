@@ -1,6 +1,8 @@
+const post = require("./Post");
+const tag = require("./Tag");
+const course = require("./Course")
 const { db } = require("../shared/firebase");
 const { InternalServerError } = require("../shared/error");
-const post = require("./Post");
 const comment = require("./Comment");
 
 class User {
@@ -15,6 +17,75 @@ class User {
      */
     setName = async (name) => {
         this.props.name = name;
+    }
+    
+    addStudentCourse = async (courseId) => {
+        this.props.studentCourseList.push(courseId);
+        const currentCourse = course.getCourseById(courseId);
+        //await currentCourse.addStudent(this.props.uuid);
+        await this.push();
+    }
+
+    setEmail = async (email) => {
+        this.props.email = email;
+    }
+    
+    removeStudentCourse = async (courseId) => {
+        const index = this.props.studentCourseList.indexOf(courseId);
+        if (index != -1) {
+            // is this where i handle removing self from course's studentList?
+            this.props.studentCourseList.splice(index, 1);
+        }
+        await this.push();
+    }
+
+    addStudentCourse = async (courseId) => {
+        // Avoid adding duplicates
+        if (this.props.studentCourseList.indexOf(courseId) < 0) {
+            this.props.studentCourseList.push(courseId);
+            const currentCourse = course.getCourseById(courseId);
+            //await currentCourse.addStudent(this.props.uuid);
+            await this.push();
+        } else {
+            throw new InternalServerError(`Student Course ${courseId} already exists.`);
+        }
+    }
+
+    removeStudentCourse = async (courseId) => {
+        const index = this.props.studentCourseList.indexOf(courseId);
+        if (index != -1) {
+            // is this where i handle removing self from course's studentList?
+            this.props.studentCourseList.splice(index, 1);
+        }
+        await this.push();
+    }
+
+    addInstructorCourse = async (courseId) => {
+        // Avoid adding duplicates
+        if (this.props.instructorCourseList.indexOf(courseId) < 0) {
+            this.props.instructorCourseList.push(courseId);
+            const currentCourse = course.getCourseById(courseId);
+            //await currentCourse.addInstructor(this.props.uuid);
+            await this.push();
+        } else {
+            throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
+        }
+    }
+    
+    removeInstructorCourse = async (courseId) => {
+        const index = this.props.instructorCourseList.indexOf(courseId);
+        if (index != -1) {
+            // is this where i handle removing self from course's studentList?
+            this.props.instructorCourseList.splice(index, 1);
+        }
+    }
+
+    removeInstructorCourse = async (courseId) => {
+        const index = this.props.instructorCourseList.indexOf(courseId);
+        if (index != -1) {
+            // is this where i handle removing self from course's studentList?
+            this.props.instructorCourseList.splice(index, 1);
+        }
         await this.push();
     }
 
@@ -49,13 +120,84 @@ class User {
         await this.push();
     }
 
+    removePost = async (postId) => {
+        const index = this.props.postList.indexOf(postId);
+        if (index != -1) {
+            await post.deletePostById(postId);
+            this.props.postList.splice(index, 1);
+        }
+        await this.push();
+    }
+
     addComment = async (commentId) => {
         this.props.commentList.push(commentId);
         await this.push();
     }
 
+    removeComment = async (commentId) => {
+        const index = this.props.commentList.indexOf(commentId);
+        if (index != -1) {
+            this.props.commentList.splice(index, 1);
+        }
+        await this.push();
+    }
+
     addFollowedPost = async (postId) => {
         this.props.followingList.push(postId);
+        const currentPost = await post.getPostById(postId);
+        await currentPost.addFollower(this.props.uuid);
+        await this.push();
+    }
+
+    removeFollowedPost = async (postId) => {
+        const index = this.props.followingList.indexOf(postId);
+        if (index != -1) {
+            const currentPost = await post.getPostById(postId);
+            await currentPost.removeFollower(this.props.uuid);
+            this.props.followingList.splice(index, 1);
+        }
+        await this.push();
+    }
+        
+    addLikedPost = async (postId) => {
+        this.props.likedPostList.push(postId);
+        let postObj = await post.getPostById(postId);
+        postObj.incrementScore();
+        await this.push();
+    }
+
+    removeLikedPost = async (postId) => {
+        this.props.likedPostList.splice(this.props.likedPostList.indexOf(postId), 1);
+        let postObj = await post.getPostById(postId);
+        postObj.decrementScore();
+        await this.push();
+    }
+
+    addLikedComment = async (commentId) => {
+        this.props.likedCommentList.push(commentId);
+        let commentObj = await comment.getCommentById(commentId);
+        commentObj.incrementScore();
+        await this.push();
+    }
+
+    removeLikedComment = async (commentId) => {
+        this.props.likedCommentList.splice(this.props.likedCommentList.indexOf(commentId), 1);
+        let commentObj = await comment.getCommentById(commentId);
+        commentObj.decrementScore();
+        await this.push();
+    }
+    
+    setIcon = async (icon) => {
+        this.props.icon = icon;
+    }
+    
+    removeFollowedPost = async (postId) => {
+        const index = this.props.followingList.indexOf(postId);
+        if (index != -1) {
+            const currentPost = await post.getPostById(postId);
+            await currentPost.removeFollower(this.props.uuid);
+            this.props.followingList.splice(index, 1);
+        }
         await this.push();
     }
 
@@ -139,7 +281,7 @@ class User {
     //getters for everything, add post, add comment, add followedPost
 
     /**
-     * Uupdate a given user's data fields.
+     * Update a given user's data fields.
      * 
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
@@ -162,12 +304,11 @@ class User {
 }
 
 module.exports.pushUserToFirebase = (updateParams) => {
-    var name = updateParams['name'];
-    var email = updateParams['email'];
-    var uuid = updateParams['uuid'];
+    const name = updateParams['name'];
+    const email = updateParams['email'];
+    const uuid = updateParams['uuid'];
     return new Promise(async (resolve, reject) => {
         try {
-            // TODO: Implement logic for these lists later.
             await db.ref("Users").child(uuid).set({
                 name: name, 
                 email: email, 
@@ -181,7 +322,7 @@ module.exports.pushUserToFirebase = (updateParams) => {
                 likedCommentList: ["dummy_comment_id"],
                 icon: "anonymous.jpg"
             });
-            resolve("Everything worked");
+            resolve(updateParams['uuid']);
         } catch(e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");
@@ -203,44 +344,18 @@ getUserById = async (uuid) => {
             reject(errorObject);
         })
     }) 
-
-
-    /**
-     * This is for reference to the callback but, we're using promises now.
-     */
-
-    // // Attach an asynchronous callback to read the data at our posts reference
-    // await ref.once("value", function(snapshot) {
-    //     const r = new User(snapshot.val());
-    //     console.log(r.props.name);
-    //     callback(r);
-    // }, function (errorObject) {
-    //     console.log("The read failed: " + errorObject.code);
-    // })
 }
 
-deleteUserByID = async (uuid) => {
-    //console.log("yeet")
-    const ref = db.ref('Users/' + uuid);
-    ref.remove()
-    .then(function() {
-        console.log("Remove succeeded.")
-      })
-      .catch(function(error) {
+
+deleteUserById = async (uuid) => {
+    const ref = db.ref('Users/'+uuid);
+    ref.remove().then(function() {
+        console.log("Remove succeeded.");
+    }).catch(function(error) {
         console.log("Remove failed: " + error.message)
-      });
-
-    // return new Promise((resolve, reject) => {
-    //     ref.once("value", function(snapshot) {
-    //         ref.remove()
-    //         resolve()
-    //     }, function (errorObject) {
-    //         reject(errorObject);
-    //     })
-    // })  
+    });
 }
-
    
 module.exports.User = User
 module.exports.getUserById = getUserById
-module.exports.deleteUserByID = deleteUserByID
+module.exports.deleteUserById = deleteUserById
