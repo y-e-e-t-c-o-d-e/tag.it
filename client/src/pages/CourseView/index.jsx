@@ -24,7 +24,9 @@ const CourseView = ({currentUser, match}) => {
     useEffect(() => {
         API.getCourse(courseId).then(response => {
             setCourse(response.data)
-            console.log(response.data)
+            console.log(response)
+        }).catch(err => {
+            console.log(err)
         })
     }, [])
 

@@ -66,9 +66,6 @@ export default {
 
     getCourse: function (uuid) {
         const config = {
-            params: {
-                courseUUID: uuid
-            },
             headers: authHeaders()
         };
         return axios.get(`${baseURL}/api/course/${uuid}`, config);
