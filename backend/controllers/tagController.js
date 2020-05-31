@@ -1,6 +1,6 @@
 // TODO: uncomment when models are done
-const tag = require("../models/tag");
-const course = require("../models/course");
+const tag = require("../models/Tag");
+const course = require("../models/Course");
 
 exports.addTag = async (req, res) => {
     const bodyParams = req.body;
