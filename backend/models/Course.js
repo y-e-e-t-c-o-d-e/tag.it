@@ -36,6 +36,14 @@ class Course {
         return this.props.postList.slice(1, this.props.postList.length);
     }
 
+    getStudentInviteId() {
+        return this.props.studentInviteId;
+    }
+
+    getTeacherInviteId() {
+        return this.props.teacherInviteId;
+    }
+
     setName = async (name) => {
         this.props.name = name;
         await this.push();
@@ -114,6 +122,8 @@ class Course {
             studentList: this.props.studentList,
             tagList: this.props.tagList,
             postList: this.props.postList,
+            studentInviteId: this.props.studentInviteId,
+            teacherInviteId: this.props.teacherInviteId
         });
     } 
 }
@@ -130,7 +140,9 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                 await courseRef.set({
                     name: updateParams['name'], 
                     term: updateParams['term'], 
-                    uuid: (await courseRef).key, 
+                    uuid: (await courseRef).key,
+                    studentInviteId: makeId(10),
+                    teacherInviteId: makeId(10),
                     studentList: ["dummy_val"],         // Firebase doesn't initialize a list if its empty
                     instructorList: ["dummy_val", user.getUUID()],
                     tagList: ["dummy_val"],
