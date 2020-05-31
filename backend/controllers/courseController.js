@@ -153,7 +153,6 @@ exports.verifyCourse = async (req, res) => {
 exports.getCourseInfo = async (req, res) => {
     const courseUUID = req.params.courseId;
     const userObj = req.user;
-    console.log(`recieved request`)
     
     if (!courseUUID || !userObj) {
         res.status(422).json({

@@ -13,7 +13,7 @@ describe('comment', () => {
         console.log("Setup for Comment Test Suite")
         const commentParams = {
             content: "yo this makes no sense",
-            author: "user2", 
+            author: "user1", 
             postId: "post1",
             isAnonymous : true
         }
@@ -33,7 +33,7 @@ describe('comment', () => {
     });
 
     it('should get testComment Firebase', async () => {
-        expect(testComment.props.author).to.equal("user2");
+        expect(testComment.props.author).to.equal("user1");
     })
 
     it('should increment testComment score', async () => {
@@ -59,7 +59,7 @@ describe('comment', () => {
     it('should add replyComment to testComment childList', async () => {
         const replyCommentParams = {
             content: "agreed",
-            author: "user3", 
+            author: "User1", 
             postId: "post1",
         }
         try {
