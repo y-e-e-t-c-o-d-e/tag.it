@@ -163,6 +163,7 @@ export default {
             }
         };
         return axios(config);
+    },
 
     getComments: function (postUUID) {
         const config = {
