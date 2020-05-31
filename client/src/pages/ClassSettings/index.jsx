@@ -1,5 +1,6 @@
 import React, {useRef, useState, useEffect } from "react";
-import Button from "../../components/Button/index";
+import {Button} from 'react-bootstrap';
+import Navigation from "../../components/Navbar"
 import './style.css';
 import API from "../../utils/API";
 
@@ -8,13 +9,16 @@ const bgColors = {
     "error": "#ffcccc",
 };
 
-function ClassSettings(props){
+const ClassSettings = ({classUuid, match}) => { 
+    if (match) {
+        const courseId = match.params.id;
+    }
 
     const [courseNameValid, setCourseNameValid] = useState(true); // Invalid if empty
     const [courseName, setCourseName] = useState("Default Class Name");
     const invitationRef = useRef(null);
 
-    const uuid = props.uuid || "FakeUUID";
+    const uuid = classUuid || "FakeUUID";
     let link = "https://tagdotit.netlify.app/course/" + uuid;
 
     useEffect(() => {
@@ -23,7 +27,6 @@ function ClassSettings(props){
         }).catch(() => {
             setCourseName('Default Class Name')
         })
-        console.log(courseName);
     }, [])
     
     /* Updates the DB with the new class name and description */
@@ -33,9 +36,9 @@ function ClassSettings(props){
             const className = courseName;
             // updated the course name
             // TODO: Get some way to get the courseUUID (via props?)
-            const uuid = props.uuid || "FakeUUID";
+            const uuid = classUuid || "FakeUUID";
             await API.updateCourse(uuid, className);
-            console.log("yeet");
+            alert("Course updated!");
         }
         else{alert("Course name can not be empty");}
     };
@@ -69,7 +72,7 @@ function ClassSettings(props){
 
     return(
         <div>
-            {/* Insert Nav bar here... */}
+            <Navigation/>
             <div className="content">
                 <div className="box">
 
@@ -104,19 +107,19 @@ function ClassSettings(props){
                                 <textarea readOnly ref={invitationRef}
                                     className="invitation-link" type="text" value={link}>
                                 </textarea> 
-                                <Button text="copy" onSubmit={copyLinkToClipboard}/>
+                                <Button onClick={copyLinkToClipboard}>Copy</Button>
                             </div>
                         </label>
                         <div className="center-button">
-                            <button type="submit">Submit</button>
                         </div>
+                            <div className="buttons">
+                                <Button>Instructors</Button>
+                                <Button>Tags</Button>
+                                <Button>Archive</Button>
+                                <Button>Disable</Button>
+                                <Button type="submit">Save Changes</Button>
+                            </div>
                     </form>
-                    <div className="buttons">
-                        <Button text="instructors"/>
-                        <Button text="Tags"/>
-                        <Button text="Archive"/>
-                        <Button text="Disable"/>
-                    </div>
                 </div>
             </div>
         </div>

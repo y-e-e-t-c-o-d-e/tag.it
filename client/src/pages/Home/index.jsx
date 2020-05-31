@@ -4,6 +4,8 @@ import './style.css';
 import db from "../../base";
 import Navigation from "../../components/Navbar";
 import TagList from "../../components/TagList/index.jsx";
+import PostCreator from "../../components/PostCreator/index.jsx"
+import { Row, Col, Nav } from 'react-bootstrap';
 
 const Home = ({currentUser, match}) => { 
     if (match) {
@@ -13,13 +15,16 @@ const Home = ({currentUser, match}) => {
     return (
         <div className="home">
             <Navigation/>
-            { // TODO: Will rearrange frontend to handle the user data.
-                currentUser ? <p>{currentUser.name}</p> : <></>
-            }
-            <h1>Tag.it</h1>
-            <Button text="Click Me"></Button>
-            <button onClick={() => db.auth().signOut()}>Sign Out</button>
-            <TagList />
+            <div className="cont">
+            <Row>
+                <Col xs={4}>
+                    <TagList />
+                </Col>
+                <Col>
+                    <PostCreator/>
+                </Col>
+            </Row>
+            </div>
         </div>
     )
 };

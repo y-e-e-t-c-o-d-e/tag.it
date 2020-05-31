@@ -89,6 +89,75 @@ class Course {
         return posts;
     }
 
+    classifyUser = (uuid) => {
+        for (let i = 0; i < this.props.instructorList.length; i ++) {
+            if (this.props.instructorList[i] === uuid) {
+                return "instructor";
+            }
+        }
+        for (let i = 0; i < this.props.studentList.length; i ++) {
+            if (this.props.studentList[i] === uuid) {
+                return "student";
+            }
+        }
+        return "null";
+    }
+
+    getPrivatePosts = async () => {
+        return new Promise(async (resolve, reject) => {
+            let list = this.getPostList();
+            const posts = [];
+            for (let i = 0; i < list.length; i ++) {
+                const currentPost = await post.getPostById(list[i]);
+                if (currentPost.isPrivate()) {
+                    posts.push(currentPost.getUUID());
+                }
+            }
+            resolve(posts);
+        })   
+    }
+
+    getPublicPosts = async () => {
+        return new Promise(async (resolve, reject) => {
+            let list = this.getPostList();
+            const posts = [];
+            for (let i = 0; i < list.length; i ++) {
+                const currentPost = await post.getPostById(list[i]);
+                if (!currentPost.isPrivate()) {
+                    posts.push(currentPost.getUUID());
+                }
+            }
+            resolve(posts);
+        })      
+    }
+
+    getPinnedPosts = async () => {
+        return new Promise(async (resolve, reject) => {
+            let list = this.getPostList();
+            const posts = [];
+            for (let i = 0; i < list.length; i ++) {
+                const currentPost = await post.getPostById(list[i]);
+                if (currentPost.isPinned()) {
+                    posts.push(currentPost.getUUID());
+                }
+            }
+            resolve(posts);
+        })      
+    }
+
+    getAnnouncements = async() => {
+        return new Promise(async (resolve, reject) => {
+            let list = this.getPostList();
+            const posts = [];
+            for (let i = 0; i < list.length; i ++) {
+                const currentPost = await post.getPostById(list[i]);
+                if (currentPost.isAnnouncement()) {
+                    posts.push(currentPost.getUUID());
+                }
+            }
+            resolve(posts);
+        })  
+    }
     getPostsWithMultipleTags = async (tagList) => {
         let posts = {};
         for(let i = 0; i < tagList.length; i++) {
@@ -131,10 +200,10 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                     name: updateParams['name'], 
                     term: updateParams['term'], 
                     uuid: (await courseRef).key, 
-                    studentList: [],
-                    instructorList: [user.getUUID()],
-                    tagList: [],
-                    postList: [],
+                    studentList: ["dummy_val"],         // Firebase doesn't initialize a list if its empty
+                    instructorList: ["dummy_val", user.getUUID()],
+                    tagList: ["dummy_val"],
+                    postList: ["dummy_val"],
                 });
                 await user.addInstructorCourse((await courseRef).key);
                 resolve((await courseRef).key);
@@ -145,8 +214,6 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
         }
     })
 };
-
-
 
 getCourseById = async (uuid) => {
     const ref = db.ref('Courses/' + uuid);
@@ -175,6 +242,19 @@ getCourseById = async (uuid) => {
     // })
 }
 
+deleteCourseById = async (uuid) => {
+    //console.log("yeet")
+    const ref = db.ref('Courses/' + uuid);
+    ref.remove()
+    .then(function() {
+        console.log("Remove succeeded.")
+      })
+      .catch(function(error) {
+        console.log("Remove failed: " + error.message)
+      });
+}
    
 module.exports.Course = Course
 module.exports.getCourseById = getCourseById
+module.exports.deleteCourseById = deleteCourseById
+
