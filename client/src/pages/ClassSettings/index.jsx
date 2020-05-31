@@ -16,14 +16,16 @@ const ClassSettings = ({ currentUser, classUuid, match}) => {
 
     const [courseNameValid, setCourseNameValid] = useState(true); // Invalid if empty
     const [courseName, setCourseName] = useState("Default Class Name");
+    const [courseInviteLink, setCourseInviteLink] = useState("");
     const invitationRef = useRef(null);
 
     const uuid = classUuid || "FakeUUID";
-    let link = "https://tagdotit.netlify.app/course/" + uuid;
 
     useEffect(() => {
         API.getCourse(uuid).then((course) => {
             setCourseName(course.name)
+            setCourseInviteLink(`https://tagdotit.netlify.app/course/${uuid}/invite/${course.studentInviteId}`)
+            // TODO(daniel): Hook settings page with backend.
         }).catch(() => {
             setCourseName('Default Class Name')
         })
@@ -105,7 +107,7 @@ const ClassSettings = ({ currentUser, classUuid, match}) => {
                             <div className="invitation-section">
                                 <span>Invitation:{'\u00A0'} {'\u00A0'}</span>
                                 <textarea readOnly ref={invitationRef}
-                                    className="invitation-link" type="text" value={link}>
+                                    className="invitation-link" type="text" value={courseInviteLink}>
                                 </textarea> 
                                 <Button onClick={copyLinkToClipboard}>Copy</Button>
                             </div>

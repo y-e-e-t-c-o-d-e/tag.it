@@ -15,8 +15,9 @@ const states = {
     createPost: "make.it"
 }
 
-const CourseView = ({currentUser, match}) => { 
+const CourseView = ({currentUser}) => { 
     const { courseId } = useParams();
+
     const [course, setCourse] = useState({name: "Loading", postList: [], uuid: "Loading"});
     const [tags, setTags] = useState([])
 

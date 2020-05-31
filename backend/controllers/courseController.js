@@ -118,6 +118,8 @@ exports.verifyCourse = async (req, res) => {
             let status = 200; 
             let type = "instructor";
 
+            console.log(courseObj.getPendingInstructorList())
+
             // Return if user is not in instructor list
             if (courseObj.getPendingInstructorList().indexOf(userObj.getEmail()) < 0) {
                 errorMsg = "User has not been invited to join staff by the instructors";
@@ -151,7 +153,6 @@ exports.verifyCourse = async (req, res) => {
 exports.getCourseInfo = async (req, res) => {
     const courseUUID = req.params.courseId;
     const userObj = req.user;
-    debugger
     console.log(`recieved request`)
     
     if (!courseUUID || !userObj) {
@@ -161,22 +162,9 @@ exports.getCourseInfo = async (req, res) => {
         });
     }
 
-
-    console.log(`recieved request for ${courseUUID}`)
     try {
         const courseObj = await course.getCourseById(courseUUID);
-        let type = "";
-        // Check if user is an instructor or student, student can't see studentList
-        if (courseObj.getInstructorList().indexOf(userObj.getUUID()) != -1) {
-            type = "student";
-        } else if (courseObj.getStudentList().indexOf(userObj.getUUID()) != -1) {
-            type = "instructor";
-        } else {
-            res.status(200).json({
-                error: "Course info is not available"
-            });
-            return;
-        }
+        let type = courseObj.classifyUser(req.user.getUUID());
 
         // Gets all the Post Objects
         let postContentList = await courseObj.getPostList().reduce(async (acc, postId, index) => {

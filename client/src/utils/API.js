@@ -84,11 +84,14 @@ export default {
         return axios(config);
     },
 
-    addToCourse: function(courseId) {
+    addToCourse: function(courseId, accountType) {
         const config = {
             method: 'post',
             url: `${baseURL}/api/user/${courseId}`,
-            headers: authHeaders()
+            headers: authHeaders(),
+            data: {
+                type: accountType
+            }
         };
         return axios(config);
     },

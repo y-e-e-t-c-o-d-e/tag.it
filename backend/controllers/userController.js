@@ -133,7 +133,6 @@ exports.addUserToCourse = async (req, res) => {
         let courseObj = await course.getCourseById(courseUUID);
 
         if ("type" in bodyParams && bodyParams["type"] == "instructor") {
-            await courseObj.addInstructor(userObj.getUUID());
             await userObj.addInstructorCourse(courseObj.getUUID());
             res.status(200).send("Added user as instructor to course " + courseObj.getUUID());
         } else {

@@ -17,22 +17,30 @@ function Invitation(props){
 
     useEffect(() => {
         API.getCourse(courseId).then((course) => {
-            console.log("running");
+            // Check if user is in course, if so immediately redirect
+            if (!!course.data.type) {
+                let link = `/course/${course.data.courseId}`;
+                history.push(link)
+            }
 
             // Runs second backend request to verify
             API.confirmVerificationLink(courseId, inviteId).then((result) => {
                 setState({
-                    courseName: course.name,
+                    courseName: course.data.name,
                     pending: false,
                     accountType: result.data.type
                 });
+            }).catch((result) => {
+                setState({
+                    ...state,
+                    pending: false
+                })
             })
         }).catch(() => {
             // Default
             setState({
-                pending: false,
-                accountType: null,
-                courseName: 'CSE 111 - Hardware Engineering'
+                ...state,
+                pending: false
             })
         }); 
     }, [])
@@ -43,10 +51,11 @@ function Invitation(props){
     }
 
     const redirectClass = () => {
-        API.addToCourse(courseId).then((val) => {
+        API.addToCourse(courseId, state.accountType).then((val) => {
             let link = `/course/${courseId}`;
             alert("Invitation accepted! Redirecting to class...");
             history.push(link);
+            return null;
         }).catch((e) => alert(e))
     }
 
@@ -55,7 +64,7 @@ function Invitation(props){
     } 
 
     if (!state.accountType) {
-        return <h1>Invite Id is not Valid</h1>
+        return <h1>Invite Id is not Valid. Contact the instructor for this issue.</h1>
     }
     
     return(
@@ -71,6 +80,7 @@ function Invitation(props){
                         <div className="invite-message">
                             <p>You have been invited to join</p>
                             <p className="invite-course-title">{state.courseName}</p>
+                            <p>as a {state.accountType}</p>
                         </div>
 
                         <div className="invite-buttons">

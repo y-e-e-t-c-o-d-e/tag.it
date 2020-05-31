@@ -66,7 +66,7 @@ class Course {
         return this.props.tagList.slice(1, this.props.tagList.length);
     }
 
-    getStudentList() {a
+    getStudentList() {
         return this.props.studentList.slice(1, this.props.studentList.length);
     }
 
@@ -112,13 +112,13 @@ class Course {
         }
     }
 
-    addInstructor = async (userId) => {
+    addInstructor = async (userId, userEmail = null) => {
         this.updateCourse();
         this.props.instructorList.push(userId);
 
         // Checks if instructor is in pendingInstructorList and removes if so
-        if (this.props.pendingInstructorList.indexOf(userId) >= 0) {
-            this.props.pendingInstructorList.splice(this.props.instructorList.indexOf(userId), 1);
+        while (this.props.pendingInstructorList.indexOf(userEmail) >= 0) {
+            this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
         }
 
         await this.push();
@@ -175,7 +175,7 @@ class Course {
                 return "student";
             }
         }
-        return "null";
+        return null;
     }
 
     getPrivatePosts = async () => {
