@@ -183,7 +183,7 @@ exports.deleteCourse = async (req, res) => {
     };
 };
 
-// Sends an email to the passed in user
+// Sends an email to the passed in user (defaults to student)
 exports.sendEmail = async (req, res) => {
     const courseUUID = req.params.courseId;
     if (!courseUUID) {
@@ -195,23 +195,21 @@ exports.sendEmail = async (req, res) => {
     };
 
     const bodyParams = req.body;
-    if (!("email" in bodyParams && "type" in bodyParams)) {
+    if (!("email" in bodyParams)) {
        res.status(422).json({
            status: 422,
-           error: "Missing one of the following parameters: email or type"
+           error: "Missing the following parameters: email"
        });
        return;
     };
 
     try {
-        const courseObj = course.getCourseById(courseUUID);
+        const courseObj = await course.getCourseById(courseUUID);
         let inviteURL;
-        if (bodyParams["type"] == "instructor") {
-            inviteURL = "https://tagdotit.netlify.app/course/"+courseUUID+"/invite/"+courseObj.getInstructorId();
-        } else if (bodyParams["type"] == "student") {
-            inviteURL = "https://tagdotit.netlify.app/course/"+courseUUID+"/invite/"+courseObj.getStudentId();
+        if ("type" in bodyParams && bodyParams["type"] == "instructor") {
+            inviteURL = "https://tagdotit.netlify.app/course/"+courseUUID+"/invite/"+courseObj.getInstructorInviteId();
         } else {
-            res.status(200).send("Invalid type")
+            inviteURL = "https://tagdotit.netlify.app/course/"+courseUUID+"/invite/"+courseObj.getStudentInviteId();
         }
 
         let transporter = nodemailer.createTransport({
@@ -226,11 +224,12 @@ exports.sendEmail = async (req, res) => {
         let mailOptions = {
             from: 'tag.it',
             to: bodyParams["email"],
-            subject: "Invite link for new course" + courseObj.getName() + "on tag.it!",
-            text: "You've been invited to use the sickest platform to grace this planet. Check it out here: " + inviteURL
+            subject: "Invite link for new course " + courseObj.getName() + " on tag.it!",
+            text: "You've been invited to use the sickest platform to grace this planet! Check it out here: " + inviteURL
         };
 
         await transporter.sendMail(mailOptions);
+        res.status(200).send("Invite sent!");
     } catch (e) {
         res.status(410).json({
             status: 410,
