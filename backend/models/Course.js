@@ -234,11 +234,7 @@ class Course {
             tagList: this.props.tagList,
             postList: this.props.postList,
             studentInviteId: this.props.studentInviteId ? this.props.studentInviteId : makeId(10),
-<<<<<<< HEAD
-            instructorInviteId: this.props.teacherInviteId ? this.props.teacherInviteId : makeId(10)
-=======
             instructorInviteId: this.props.instructorInviteId ? this.props.instructorInviteId : makeId(10)
->>>>>>> 9cc6ecad12d7324724cbf608b5e275e0bc797287
         });
     } 
 }
