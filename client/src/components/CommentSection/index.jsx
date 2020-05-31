@@ -6,7 +6,7 @@ import API from "../../utils/API.js";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
 
 // Post.commentList should be passed in, list of Comment objects
-const CommentSection = ({ commentList }) => {
+const CommentSection = ({ commentList, postID }) => {
 
     const [newComment, setNewComment] = useState(false);
     const [visibility, setVisiblity] = useState("public, visible");
@@ -17,7 +17,7 @@ const CommentSection = ({ commentList }) => {
 
         return comments.map((comment) => {
             return (
-                <Comment key={comment.uuid} comment={comment} />
+                <Comment key={comment.uuid} comment={comment} parentID={null} postID={postID} />
             );
         });
     };
@@ -29,7 +29,7 @@ const CommentSection = ({ commentList }) => {
         const commentContent = e.target.elements[TEXT_AREA_IDX].value;
         const visibility = e.target.elements[SELECT_IDX].value;
 
-        API.createComment(commentContent, visibility);
+        API.createComment(commentContent, visibility, null, postID);
     };
 
     const renderCreateNewComment = () => {

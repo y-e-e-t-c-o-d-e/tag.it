@@ -5,14 +5,20 @@ import API from "../../../utils/API.js";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
 
 /* recursive functional component for comments */
-const Comment = ({ comment }) => {
+const Comment = ({ comment, parentID, postID }) => {
 
     const [liked, setLike] = useState(false);
     const [newReply, setNewReply] = useState(false);
     const [visibility, setVisiblity] = useState("public, visible");
 
-    const handleCreateReply = () => {
+    const handleCreateReply = (e) => {
+        e.preventDefault();
 
+        const TEXT_AREA_IDX = 0, SELECT_IDX = 1;
+        const replyContent = e.target.elements[TEXT_AREA_IDX].value;
+        const visibility = e.target.elements[SELECT_IDX].value;
+
+        API.createComment(replyContent, visibility, parentID, postID);
     };
 
     const formatDate = (date) => {
@@ -56,8 +62,8 @@ const Comment = ({ comment }) => {
     const renderNestedComments = () => {
         const nestedComments = comment.childList.slice().sort((a, b) => b.time - a.time);
 
-        return nestedComments.map(comment => {
-            return <Comment key={comment.uuid} comment={comment} type="child" />
+        return nestedComments.map(childComment => {
+            return <Comment key={childComment.uuid} comment={childComment} parentID={comment.uuid} postID={postID} type="child" />
         });
     };
 
