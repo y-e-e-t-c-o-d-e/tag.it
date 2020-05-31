@@ -10,7 +10,6 @@ class Tag {
         //super(props);
         this.props = props;
     }
-
     /**
      * normal getters and setters
      */
@@ -46,7 +45,6 @@ class Tag {
         }
         return currentList;
     }
-
     getUUID() {
         return this.props.uuid;
     }
@@ -57,7 +55,8 @@ class Tag {
     }
 
     incrementNumUsed = async() => {
-        this.props.numUsed ++;
+
+        this.props.numUsed++;
         await this.push();
     }
 
@@ -66,11 +65,43 @@ class Tag {
         await this.push();
     }
 
+    arraysEqual = (a, b) => {
+        if (a === b) return true;
+        if (a == null || b == null) return false;
+        if (a.length != b.length) return false;
+      
+        // If you don't care about the order of the elements inside
+        // the array, you should sort both arrays here.
+        // Please note that calling sort on an array will modify that array.
+        // you might want to clone your array first.
+      
+        for (var i = 0; i < a.length; ++i) {
+          if (a[i] !== b[i]) return false;
+        }
+        return true;
+    }
+
+    
+    postListEqual = (otherTag) => {
+        return this.arraysEqual(otherTag.props.postList, this.props.postList);
+    }
+
+    updatePostList = async () => {
+        let tag = await getTagById(this.props.uuid);
+        while(!this.postListEqual(tag)) {
+            this.props.postList = tag.props.postList;
+            tag = await getTagById(this.props.uuid);
+        }
+    }
+
     addPost = async(postId) => {
+        await this.updatePostList();
         this.props.postList.push(postId);
         await this.push();
     }
+
     removePost = async (postId) => {
+        await this.updatePostList();
         const index = this.props.postList.indexOf(postId);
         if (index != -1) {
             this.props.postList.splice(index, 1);
@@ -78,7 +109,8 @@ class Tag {
         await this.push();
     }
 
-    setParentTag = async(parentTagId) => {
+
+    setParentTag = async (parentTagId) => {
         this.props.parentTag = parentTagId;
         await this.push();
     }
@@ -87,17 +119,31 @@ class Tag {
         this.props.parentTag = "dummy_parent";
         await this.push();
     }
+    updateSubTagList = async () => {
+        let tag = await getTagById(this.props.uuid);
+        while(!this.subTagListEqual(tag)) {
+            this.props.postList = tag.props.postList;
+            tag = await getTagById(this.props.uuid);
+        }
+    }
 
-    addSubTag = async(subTagId) => {
+    subTagListEqual = (otherTag) => {
+        return this.arraysEqual(otherTag.props.subTags, this.props.subTags);
+    }
+
+    addSubTag = async (subTagId) => {
         const subTag = await getTagById(subTagId);
-        await subTag.setParentTag(this.props.uuid);
+        subTag.setParentTag(this.props.uuid);
+        await this.updateSubTagList();
         this.props.subTags.push(subTag.getUUID());
         await this.push();
     }
 
     removeSubTag = async(subTagId) => {
         const subTag = await getTagById(subTagId);
+        if (subTag.props === null) return;
         await subTag.removeParentTag();
+        await this.updateSubTagList();
         const index = this.props.subTags.indexOf(subTag.getUUID());
         if (index != -1) {
             this.props.subTags.splice(index, 1);
@@ -106,11 +152,6 @@ class Tag {
 
     }
     
-    
-
-    
-
-
     /**
      * Update a given tag's data fields.
      * 

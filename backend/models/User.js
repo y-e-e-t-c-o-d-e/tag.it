@@ -10,6 +10,45 @@ class User {
         this.props = props;
     }
 
+    equalTo = (otherUser) => {
+        return (
+            this.arraysEqual(this.props.commentList, otherUser.props.commentList) &&
+            this.arraysEqual(this.props.followingList, otherUser.props.followingList) &&
+            this.arraysEqual(this.props.instructorCourseList, otherUser.props.instructorCourseList) &&
+            this.arraysEqual(this.props.postList, otherUser.props.postList) &&
+            this.arraysEqual(this.props.studentCourseList, otherUser.props.studentCourseList) &&
+            this.props.email === otherUser.props.email &&
+            this.props.uuid === otherUser.props.uuid &&
+            this.props.icon === otherUser.props.icon &&
+            this.props.name === otherUser.props.name
+        )
+    }
+
+    
+    arraysEqual = (a, b) => {
+        if (a === b) return true;
+        if (a == null || b == null) return false;
+        if (a.length != b.length) return false;
+      
+        // If you don't care about the order of the elements inside
+        // the array, you should sort both arrays here.
+        // Please note that calling sort on an array will modify that array.
+        // you might want to clone your array first.
+      
+        for (var i = 0; i < a.length; ++i) {
+          if (a[i] !== b[i]) return false;
+        }
+        return true;
+    }
+
+    updateUser = async () => {
+        let user = await getUserById(this.props.uuid);
+        while(!this.equalTo(user)) {
+            this.props = user.props;
+            user = await getUserById(this.props.uuid);
+        }
+    }
+
     /**
      * Update a given user's data fields.
      * 
@@ -20,6 +59,7 @@ class User {
     }
     
     addStudentCourse = async (courseId) => {
+        await this.updateUser();
         this.props.studentCourseList.push(courseId);
         const currentCourse = course.getCourseById(courseId);
         //await currentCourse.addStudent(this.props.uuid);
@@ -31,6 +71,7 @@ class User {
     }
     
     removeStudentCourse = async (courseId) => {
+        await this.updateUser();
         const index = this.props.studentCourseList.indexOf(courseId);
         if (index != -1) {
             // is this where i handle removing self from course's studentList?
@@ -40,6 +81,7 @@ class User {
     }
 
     addStudentCourse = async (courseId) => {
+        await this.updateUser();
         // Avoid adding duplicates
         if (this.props.studentCourseList.indexOf(courseId) < 0) {
             this.props.studentCourseList.push(courseId);
@@ -52,6 +94,7 @@ class User {
     }
 
     removeStudentCourse = async (courseId) => {
+        await this.updateUser();
         const index = this.props.studentCourseList.indexOf(courseId);
         if (index != -1) {
             // is this where i handle removing self from course's studentList?
@@ -61,6 +104,7 @@ class User {
     }
 
     addInstructorCourse = async (courseId) => {
+        await this.updateUser();
         // Avoid adding duplicates
         if (this.props.instructorCourseList.indexOf(courseId) < 0) {
             this.props.instructorCourseList.push(courseId);
@@ -73,6 +117,7 @@ class User {
     }
     
     removeInstructorCourse = async (courseId) => {
+        await this.updateUser();
         const index = this.props.instructorCourseList.indexOf(courseId);
         if (index != -1) {
             // is this where i handle removing self from course's studentList?
@@ -81,6 +126,7 @@ class User {
     }
 
     removeInstructorCourse = async (courseId) => {
+        await this.updateUser();
         const index = this.props.instructorCourseList.indexOf(courseId);
         if (index != -1) {
             // is this where i handle removing self from course's studentList?
@@ -94,18 +140,39 @@ class User {
         await this.push();
     }
 
+
+    updateStudentCourses = async () => {
+        let user = await getUserById(this.props.uuid);
+        while(!this.arraysEqual(this.props.studentCourseList, user.props.studentCourseList)) {
+            this.props.studentCourseList = tag.props.studentCourseList;
+            user = await getUserById(this.props.uuid);
+        }
+    }
+
     addStudentCourse = async (courseId) => {
+        await this.updateStudentCourses();
         // Avoid adding duplicates
         if (this.props.studentCourseList.indexOf(courseId) < 0) {
             this.props.studentCourseList.push(courseId);
             await this.push();
         } else {
+            // I don't know if this should throw an error, unless we want frontend to catch it.
+            // I think it should just return failure
             throw new InternalServerError(`Student Course ${courseId} already exists.`);
         }
         
     }
 
+    updateInstructorCourses = async () => {
+        let user = await getUserById(this.props.uuid);
+        while(!this.arraysEqual(this.props.instructorCourseList, user.props.instructorCourseList)) {
+            this.props.instructorCourseList = tag.props.instructorCourseList;
+            user = await getUserById(this.props.uuid);
+        }
+    }
+
     addInstructorCourse = async (courseId) => {
+        await this.updateInstructorCourses();
         // Avoid adding duplicates
         if (this.props.instructorCourseList.indexOf(courseId) < 0) {
             this.props.instructorCourseList.push(courseId);
@@ -115,12 +182,22 @@ class User {
         }
     }
 
+    updatePosts = async () => {
+        let user = await getUserById(this.props.uuid);
+        while(!this.arraysEqual(this.props.postList, user.props.postList)) {
+            this.props.postList = tag.props.postList;
+            user = await getUserById(this.props.uuid);
+        }
+    }
+    
     addPost = async (postId) => {
+        await this.updatePosts();
         this.props.postList.push(postId);
         await this.push();
     }
 
     removePost = async (postId) => {
+        await this.updateUser();
         const index = this.props.postList.indexOf(postId);
         if (index != -1) {
             await post.deletePostById(postId);
@@ -130,11 +207,13 @@ class User {
     }
 
     addComment = async (commentId) => {
+        await this.updateUser();
         this.props.commentList.push(commentId);
         await this.push();
     }
 
     removeComment = async (commentId) => {
+        await this.updateUser();
         const index = this.props.commentList.indexOf(commentId);
         if (index != -1) {
             this.props.commentList.splice(index, 1);
@@ -143,6 +222,7 @@ class User {
     }
 
     addFollowedPost = async (postId) => {
+        await this.updateUser();
         this.props.followingList.push(postId);
         const currentPost = await post.getPostById(postId);
         await currentPost.addFollower(this.props.uuid);
@@ -150,6 +230,7 @@ class User {
     }
 
     removeFollowedPost = async (postId) => {
+        await this.updateUser();
         const index = this.props.followingList.indexOf(postId);
         if (index != -1) {
             const currentPost = await post.getPostById(postId);
@@ -160,6 +241,7 @@ class User {
     }
         
     addLikedPost = async (postId) => {
+        await this.updateUser();
         this.props.likedPostList.push(postId);
         let postObj = await post.getPostById(postId);
         postObj.incrementScore();
@@ -167,6 +249,7 @@ class User {
     }
 
     removeLikedPost = async (postId) => {
+        await this.updateUser();
         this.props.likedPostList.splice(this.props.likedPostList.indexOf(postId), 1);
         let postObj = await post.getPostById(postId);
         postObj.decrementScore();
@@ -174,6 +257,7 @@ class User {
     }
 
     addLikedComment = async (commentId) => {
+        await this.updateUser();
         this.props.likedCommentList.push(commentId);
         let commentObj = await comment.getCommentById(commentId);
         commentObj.incrementScore();
@@ -181,6 +265,7 @@ class User {
     }
 
     removeLikedComment = async (commentId) => {
+        await this.updateUser();
         this.props.likedCommentList.splice(this.props.likedCommentList.indexOf(commentId), 1);
         let commentObj = await comment.getCommentById(commentId);
         commentObj.decrementScore();
@@ -189,49 +274,6 @@ class User {
     
     setIcon = async (icon) => {
         this.props.icon = icon;
-    }
-    
-    removeFollowedPost = async (postId) => {
-        const index = this.props.followingList.indexOf(postId);
-        if (index != -1) {
-            const currentPost = await post.getPostById(postId);
-            await currentPost.removeFollower(this.props.uuid);
-            this.props.followingList.splice(index, 1);
-        }
-        await this.push();
-    }
-
-    addLikedPost = async (postId) => {
-        this.props.likedPostList.push(postId);
-        let postObj = await post.getPostById(postId);
-        postObj.incrementScore();
-        await this.push();
-    }
-
-    removeLikedPost = async (postId) => {
-        this.props.likedPostList.splice(this.props.likedPostList.indexOf(postId), 1);
-        let postObj = await post.getPostById(postId);
-        postObj.decrementScore();
-        await this.push();
-    }
-
-    addLikedComment = async (commentId) => {
-        this.props.likedCommentList.push(commentId);
-        let commentObj = await comment.getCommentById(commentId);
-        commentObj.incrementScore();
-        await this.push();
-    }
-
-    removeLikedComment = async (commentId) => {
-        this.props.likedCommentList.splice(this.props.likedCommentList.indexOf(commentId), 1);
-        let commentObj = await comment.getCommentById(commentId);
-        commentObj.decrementScore();
-        await this.push();
-    }
-    
-    setIcon = async (icon) => {
-        this.props.icon = icon;
-        await this.push();
     }
 
     getName() {
