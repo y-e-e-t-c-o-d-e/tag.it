@@ -13,7 +13,6 @@ const CoursesView = ({currentUser, username}) => {
     
     if (currentUser && instructorCourses.length !== currentUser.filledInInstructorCourseList.length) {
         setInstructorCourses(currentUser.filledInInstructorCourseList)
-        console.log(currentUser)
     }
 
     return (

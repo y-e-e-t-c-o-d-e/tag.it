@@ -39,13 +39,11 @@ exports.getUser = async (req, res) => {
         // get all the courses
         userObj.props.filledInStudentCourseList = await Promise.all(userObj.getStudentCourseList().map(async uuid => {
             const toReturn =  (await course.getCourseById(uuid)).props;
-            console.log(toReturn)
             return toReturn
         }))
 
         userObj.props.filledInInstructorCourseList = await Promise.all(userObj.getInstructorCourseList().map(async uuid => {
             const toReturn =  (await course.getCourseById(uuid)).props;
-            console.log(toReturn)
             return toReturn
         }))
 
