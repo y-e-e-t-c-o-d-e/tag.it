@@ -1,6 +1,7 @@
-// Install these dependencies before you run
 const nodemailer = require('nodemailer');
 const user = require("./User");
+const tag = require("./Tag");
+const comment = require("./Comment")
 const { db } = require("../shared/firebase")
 
 class Post {
@@ -29,16 +30,16 @@ class Post {
         return this.props.followingList;
     }
 
-    getComments() {
-        return this.props.commentList;
+    getCommentList() {
+        return this.props.commentList.slice(1, this.props.commentList.length);
     }
 
     getTagList() {
+        if (this.props.tagList[0] == "dummy_tag") {
+            return this.props.tagList.slice(1, this.props.tagList.length);
+        }
         return this.props.tagList;
-    }
-
-    getCommentList() {
-        return commentList;
+        
     }
 
     getCourse() {
@@ -66,14 +67,44 @@ class Post {
         this.props.followingList.push(userId);
         await this.push();
     }
+    removeFollower = async (userId) => {
+        const index = this.props.followingList.indexOf(userId);
+        if (index != -1) {
+            this.props.followingList.splice(index, 1);
+        }
+        await this.push();
+    }
 
     addComment = async (commentId) => {
         this.props.commentList.push(commentId);
         await this.push();
     }
+    
+    removeComment = async (commentId) => {
+        const index = this.props.commentList.indexOf(commentId);
+        if (index != -1) {
+            // may or may not be necessary depending on how front end implements deleteComment
+            await comment.deleteCommentById(commentId);
+            this.props.commentList.splice(index, 1);
+        }
+        await this.push();
+    }
+    
 
     addTag = async (tagId) => {
         this.props.tagList.push(tagId);
+        const addedTag = await tag.getTagById(tagId);
+        await addedTag.addPost(this.props.uuid);
+        await this.push();
+    }
+
+    removeTag = async (tagId) => {
+        const index = this.props.tagList.indexOf(tagId);
+        if (index != -1) {
+            this.props.tagList.splice(index, 1);
+            const removedTag = await tag.getTagById(tagId);
+            await removedTag.removePost(this.props.uuid);
+        }
         await this.push();
     }
 
@@ -82,9 +113,33 @@ class Post {
         await this.push();
     }
 
-    decrementScore = async () => {
+    decrementScore = async() => {
         this.props.score--;
         await this.push();
+    }
+
+    isPrivate() {
+        return this.props.isPrivate;
+    }
+
+    isPinned() {
+        return this.props.isPinned;
+    }
+
+    isAnnouncement() {
+        return this.props.isAnnouncement;
+    }
+
+    isResolved() {
+        return this.props.isResolved;
+    }
+
+    isAnonymous() {
+        return this.props.isAnonymous;
+    }
+
+    isInstructor() {
+        return this.props.isInstructor;
     }
 
     setAnnouncement = async (newValue) => {
@@ -117,7 +172,7 @@ class Post {
         await this.push();
     }
 
-    sendUpdate = async () => {
+    /*sendUpdate = async () => {
         for (var i = 0; i < this.props.followingList.length; i ++) {
             const currUser = await user.getUserById(this.props.followingList[i]);
             const email = await currUser.getEmail();
@@ -130,7 +185,6 @@ class Post {
                   pass: "4320d95a84005b"
                 }
               });
-
             var mailOptions = {
                 from: 'tagitcse110',
                 to: email,
@@ -138,19 +192,9 @@ class Post {
                 // TODO: Need field for post url to add to updated email.
                 text: 'Check it out here'
             };
-
             await transporter.sendMail(mailOptions);
-        } 
-    }
-
-    removeTag = async (tagId) => {
-        for (var i = 0; i < this.props.tagList.length; i ++) {
-            if (this.props.tagList[i] === tagId) {
-                this.props.tagList.splice(i, 1);
-            }
         }
-        await this.push();
-    }
+    }*/
 
 
 
@@ -165,6 +209,7 @@ class Post {
             content: this.props.content,
             author: this.props.author, 
             uuid: this.props.uuid,
+            time: this.props.time,
             tagList: this.props.tagList,
             commentList: this.props.commentList,
             followingList: this.props.followingList,
@@ -186,25 +231,26 @@ class Post {
 module.exports.pushPostToFirebase = (updateParams) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await db.ref("Posts").child(updateParams["uuid"]).set({
+            const postRef = db.ref("Posts").push();
+            await (await postRef).set({
                 title: updateParams["title"], 
                 content: updateParams["content"],
                 author: updateParams["author"], 
-                uuid: updateParams["uuid"],
-                tagList: updateParams["tagList"],
-                commentList: updateParams["commentList"],
-                followingList: updateParams["followingList"],
-                isAnnouncement: updateParams["isAnnouncement"],
-                isPinned: updateParams["isPinned"],
-                isAnonymous: updateParams["isAnonymous"],
-                isPrivate: updateParams["isPrivate"],
-                isResolved: updateParams["isResolved"],
-                isInstructor: updateParams["isInstructor"],
-                score: updateParams["score"],
-                course: updateParams["course"],
-                time: Date.now()
+                uuid: (await postRef).key,
+                time: Date.now(),
+                tagList: "tagList" in updateParams ? updateParams["tagList"] : ["dummy_tag"],
+                commentList: ['dummy_comment'],
+                followingList: [updateParams["author"]],
+                isAnnouncement: "isAnnouncement" in updateParams ? updateParams["isAnnouncement"] : false,
+                isPinned: "isPinned" in updateParams ? updateParams["isPinned"] : false,
+                isAnonymous: "isAnonymous" in updateParams ? updateParams["isAnonymous"] : false,
+                isPrivate: "isPrivate" in updateParams ? updateParams["isPrivate"] : false,
+                isResolved: false,
+                isInstructor: "isInstructor" in updateParams ? updateParams["isInstructor"] : false,
+                score: 0,
+                course: updateParams["course"]
             });
-            resolve("Everything worked");
+            resolve((await postRef).key);
         } catch(e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");
@@ -226,22 +272,18 @@ getPostById = async (uuid) => {
             reject(errorObject);
         })
     }) 
+}
 
-
-    /**
-     * This is for reference to the callback but, we're using promises now.
-     */
-
-    // // Attach an asynchronous callback to read the data at our posts reference
-    // await ref.once("value", function(snapshot) {
-    //     const r = new User(snapshot.val());
-    //     console.log(r.props.name);
-    //     callback(r);
-    // }, function (errorObject) {
-    //     console.log("The read failed: " + errorObject.code);
-    // })
+deletePostById = async (uuid) => {
+    const ref = db.ref('Posts/'+uuid);
+    ref.remove().then(function() {
+        console.log("Remove succeeded.");
+    }).catch(function(error) {
+        console.log("Remove failed: " + error.message)
+    });
 }
 
    
 module.exports.Post = Post
 module.exports.getPostById = getPostById
+module.exports.deletePostById = deletePostById
