@@ -12,8 +12,6 @@ const AddClass = ({history, currentUser}) => {
     const [selectedClasses, setSelectedClasses] = useState(["", "", "", "", ""]);
     const [courseOptions, setCourseOptions] = useState([]);
 
-    // console.log(currentUser);
-
     useEffect(() => {
         API.getAllCourses().then((res) => {
             setCourseOptions(res.data);
@@ -36,7 +34,6 @@ const AddClass = ({history, currentUser}) => {
     };
 
     const renderClassLabels = () => {
-        console.log(currentUser);
         if (!currentUser) {
             return <></>
         };
@@ -79,7 +76,7 @@ const AddClass = ({history, currentUser}) => {
 
     return (
         <>
-            <NavBar/>
+            <NavBar currentUser={currentUser}/>
             <div className="addClassPage">
                 <div className="left-section"> 
                     <h1>Add a Class</h1>

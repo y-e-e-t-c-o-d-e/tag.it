@@ -39,18 +39,45 @@ describe('tag', () => {
    it('should get testTag from firebase', async () => {
        expect(testTag.props.name).to.equal("pa1");
    })
+
+   
+    const sleep = (milliseconds) => {
+        var start = new Date().getTime();
+        for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+            break;
+        }
+        }
+    }
  
-   it('should add a post to testTag in firebase', async() => {
-       await testTag.addPost('post3');
-       let list = await testTag.getPostList();
-       expect(list.length).to.equal(2);
+   it('should add a post to testTag in firebase', async() => {   
+        await testTag.addPost('post3');
+        let list = await testTag.getPostList();
+        expect(list.length).to.equal(2);
    })
+
+   it('should add a post to testTag in firebase and not get confused by async stuff', async() => {   
+        const upToDateTag = await tag.getTagById(testTag.getUUID());
+        await upToDateTag.addPost('post4');
+        await testTag.addPost('post5');
+        let list = await testTag.getPostList();
+        expect(list.length).to.equal(4);
+        //console.log("lkasdjfkjlasdflkaskldfkla;s" + list);
+    })
  
    it('should remove a post from testTag in firebase', async() => {
        await testTag.removePost('post2');
        let list = await testTag.getPostList();
-       expect(list.length).to.equal(1);
+       expect(list.length).to.equal(3);
    })
+
+   it('should remove a post from testTag in firebase and not get wrecked by async changes', async() => {
+        const upToDateTag = await tag.getTagById(testTag.getUUID());
+        await upToDateTag.removePost('post1');
+        await testTag.removePost('post3');
+        let list = await testTag.getPostList();
+        expect(list.length).to.equal(2);
+    })
  
    it('should increment testTag numUsed in firebase', async() => {
        await testTag.incrementNumUsed();
@@ -58,7 +85,7 @@ describe('tag', () => {
    })
  
    it('should update testTag name in firebase', async() => {
-       await testTag.updateName("HW4");
+       await testTag.setName("HW4");
        expect(await testTag.getName()).to.equal("HW4");
    })
  
@@ -75,7 +102,6 @@ describe('tag', () => {
  
        try {
            key2 = await tag.pushTagToFirebase(tagParams2);
-           testTag2 = await tag.getTagById(key2);
        } catch(e) {
            console.log(e);
        }
@@ -84,6 +110,7 @@ describe('tag', () => {
        await testTag.addSubTag(key2);
        subTags = await testTag.getSubTags();
        expect(subTags.length).to.equal(1);
+       testTag2 = await tag.getTagById(key2);
        expect(await testTag2.getParentTag()).to.equal(testTag.getUUID());
       
        tag.deleteTagById(key2)

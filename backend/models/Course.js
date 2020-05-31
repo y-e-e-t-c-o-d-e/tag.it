@@ -2,9 +2,49 @@
 const post = require("../models/Post");
 const { db } = require("../shared/firebase")
 const { InternalServerError } = require("../shared/error");
+const { makeId } = require("../shared/util");
+
 class Course {
     constructor(props) {
         this.props = props;
+    }
+
+    
+    equalTo = (other) => {
+        return (
+            this.arraysEqual(this.props.tagList, other.props.tagList) &&
+            this.arraysEqual(this.props.instructorList, other.props.instructorList) &&
+            this.arraysEqual(this.props.postList, other.props.postList) &&
+            this.arraysEqual(this.props.studentList, other.props.studentList) &&
+            this.props.uuid === other.props.uuid &&
+            this.props.term === other.props.term &&
+            this.props.name === other.props.name
+        )
+    }
+
+    
+    arraysEqual = (a, b) => {
+        if (a === b) return true;
+        if (a == null || b == null) return false;
+        if (a.length != b.length) return false;
+      
+        // If you don't care about the order of the elements inside
+        // the array, you should sort both arrays here.
+        // Please note that calling sort on an array will modify that array.
+        // you might want to clone your array first.
+      
+        for (var i = 0; i < a.length; ++i) {
+          if (a[i] !== b[i]) return false;
+        }
+        return true;
+    }
+
+    updateCourse = async () => {
+        let other = await getCourseById(this.props.uuid);
+        while(!this.equalTo(other)) {
+            this.props = other.props;
+            other = await getCourseById(this.props.uuid);
+        }
     }
 
 
@@ -36,6 +76,14 @@ class Course {
         return this.props.postList.slice(1, this.props.postList.length);
     }
 
+    getStudentInviteId() {
+        return this.props.studentInviteId;
+    }
+
+    getInstructorInviteId() {
+        return this.props.instructorInviteId;
+    }
+
     setName = async (name) => {
         this.props.name = name;
         await this.push();
@@ -47,11 +95,13 @@ class Course {
     }
 
     addTag = async (tagId) => {
+        this.updateCourse();
         this.props.tagList.push(tagId);
         await this.push();
     }
 
     addStudent = async (userId) => {
+        this.updateCourse();
         if (this.props.studentList.indexOf(userId) < 0) {
             this.props.studentList.push(userId);
             await this.push();
@@ -61,11 +111,13 @@ class Course {
     }
 
     addInstructor = async (userId) => {
+        this.updateCourse();
         this.props.instructorList.push(userId);
         await this.push();
     }
 
     addPost = async (postId) => {
+        this.updateCourse();
         this.props.postList.push(postId);
         await this.push();
     }
@@ -183,6 +235,8 @@ class Course {
             studentList: this.props.studentList,
             tagList: this.props.tagList,
             postList: this.props.postList,
+            studentInviteId: this.props.studentInviteId ? this.props.studentInviteId : makeId(10),
+            instructorInviteId: this.props.instructorInviteId ? this.props.instructorInviteId : makeId(10)
         });
     } 
 }
@@ -197,9 +251,11 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                 // TODO: Implement logic for these lists later.
                 const courseRef = db.ref("Courses").push();
                 await courseRef.set({
-                    name: updateParams['name'], 
+                    name: updateParams['name'],
                     term: updateParams['term'], 
-                    uuid: (await courseRef).key, 
+                    uuid: (await courseRef).key,
+                    studentInviteId: makeId(10),
+                    instructorInviteId: makeId(10),
                     studentList: ["dummy_val"],         // Firebase doesn't initialize a list if its empty
                     instructorList: ["dummy_val", user.getUUID()],
                     tagList: ["dummy_val"],
@@ -245,13 +301,13 @@ getCourseById = async (uuid) => {
 deleteCourseById = async (uuid) => {
     //console.log("yeet")
     const ref = db.ref('Courses/' + uuid);
-    ref.remove()
-    .then(function() {
-        console.log("Remove succeeded.")
-      })
-      .catch(function(error) {
-        console.log("Remove failed: " + error.message)
-      });
+    try{
+        const result = await ref.remove();
+        return true;
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
 }
    
 module.exports.Course = Course

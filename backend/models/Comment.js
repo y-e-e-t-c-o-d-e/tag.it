@@ -175,7 +175,7 @@ module.exports.pushCommentToFirebase = (updateParams) => {
                 postId: updateParams["postId"],
                 parentComment: "parentComment" in updateParams ? updateParams["parentComment"] : "dummy_parent",
                 score: 0,
-                childList: ["dummy_child"],
+                childList: ["dummy_child"]  ,
                 isEndorsed: "isEndorsed" in updateParams ? updateParams["isEndorsed"] : false,
                 isAnonymous: "isAnonymous" in updateParams ? updateParams["isAnonymous"] : false,
                 isResolved: false,
@@ -206,11 +206,13 @@ getCommentById = async (uuid) => {
 
 deleteCommentById = async (uuid) => {
     const ref = db.ref('Comments/'+uuid);
-    ref.remove().then(function() {
-        console.log("Remove succeeded.");
-    }).catch(function(error) {
-        console.log("Remove failed: " + error.message)
-    });
+    try{
+        const result = await ref.remove();
+        return true;
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
 }
 
    
