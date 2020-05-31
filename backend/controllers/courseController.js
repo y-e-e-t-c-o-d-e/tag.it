@@ -1,9 +1,7 @@
 //Uncomment this wheen the models are good
 const course = require("../models/Course");
-const user = require("../models/User");
 const nodemailer = require('nodemailer');
 const post = require("../models/Post");
-const tag = require("../models/Tag");
 const { db } = require("../shared/firebase")
 
 // Adds a course to the database based on req body
@@ -176,7 +174,7 @@ exports.deleteCourse = async (req, res) => {
 
     try {
         course.deleteCourseById(courseUUID);
-        res.status(200).send("removed course with the following courseUUID:" + courseUUID)
+        res.status(200).send("removed course with the following courseUUID:" + courseUUID);
     } catch (e) {
         res.status(410).json({
             status: 410,
