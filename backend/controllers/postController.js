@@ -1,15 +1,11 @@
 // TODO: uncomment when models are done
-<<<<<<< HEAD
-const post = require("../models/post");
-=======
 const post = require("../models/Post");
->>>>>>> master
 
 exports.addPost = async (req, res) => {
     // TODO: Handle later with models
     const bodyParams = req.body;
     // Checking if all values are present, and defaulting if not present
-    if (!("title" in bodyParams || "content" in bodyParams || "author" in bodyParams || "course" in bodyParams) ) {
+    if (!("title" in bodyParams && "content" in bodyParams && "author" in bodyParams && "course" in bodyParams) ) {
         res.status(422).json({
             status: 422,
             error: "Missing one of the following: title, content, author, or course"
@@ -63,7 +59,7 @@ exports.updatePost = async (req, res) => {
 };
 
 // Adds user to post's following list if not there already, removes user otherwise
-exports.toggleFollowing = async (req, res) => {
+exports.toggleFollow = async (req, res) => {
     const userObj = req.user;
     const postUUID = req.query.postUUID;
     if (!postUUID) {
@@ -78,9 +74,11 @@ exports.toggleFollowing = async (req, res) => {
         let postObj = await post.getPostById(postUUID);
         const userUUID = userObj.getUUID();
         if (postObj.getUsersFollowing().indexOf(userUUID) == -1) {
-            postObj.addFollower(userUUID);
+            userObj.addFollowedPost(postUUID);
+            res.status(200).send("Added user as a follower");
         } else {
-            postObj.removeFollower(userUUID);
+            userObj.removeFollowedPost(postUUID);
+            res.status(200).send("Removed user as a follower");
         }
     } catch (e) {
         res.status(410).json({

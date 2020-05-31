@@ -2,6 +2,7 @@
 // Install these dependencies before you run
 const user = require("./User");
 const post = require("./Post");
+const course = require("./Course");
 const db = require("../shared/firebase").db;
  
  
@@ -51,7 +52,7 @@ class Tag {
         return this.props.uuid;
     }
 
-    updateName = async(newName) => {
+    setName = async(newName) => {
         this.props.name = newName;
         await this.push();
     }
@@ -143,6 +144,8 @@ module.exports.pushTagToFirebase = (updateParams) => {
                 course: updateParams["course"],
                 postList: "postList" in updateParams ? updateParams["postList"] : ["dummy_post"],
             });
+            const courseObj = await course.getCourseById(updateParams["course"]);
+            await courseObj.addTag((await tagRef).key);
             resolve((await tagRef).key);
         } catch(e) {
             console.log("There was an error: " + e);

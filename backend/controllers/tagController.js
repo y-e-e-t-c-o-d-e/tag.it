@@ -3,9 +3,8 @@ const tag = require("../models/tag");
 const course = require("../models/course");
 
 exports.addTag = async (req, res) => {
-    // TODO: Handle later with models
     const bodyParams = req.body;
-    if (!("name" in bodyParams || "course" in bodyParams)) {
+    if (!("name" in bodyParams && "course" in bodyParams)) {
         res.status(422).json({
             status: 422,
             error: "Missing one of the following parameters: name or course"
@@ -36,8 +35,8 @@ exports.getTag = async (req, res) => {
     };
 
     try {
-        const courseObj = course.getCourseById(courseUUID);
-        res.status(200).send(courseObj.getTagList())
+        const courseObj = await course.getCourseById(courseUUID);
+        res.status(200).json(courseObj.getTagList())
     } catch (e) {
         res.status(410).json({
             status: 410,
@@ -59,9 +58,9 @@ exports.updateTag = async (req, res) => {
     };
 
     try {
-        tagObj = getTagById(tagUUID);
+        const tagObj = await getTagById(tagUUID);
         if ("name" in bodyParams) {
-            tagObj.updateName(bodyParams["name"]);  // Change to setName in the future?
+            tagObj.setName(bodyParams["name"]);
         }
         if ("parentTag" in bodyParams) {
             tagObj.setParentTag(bodyParams["parentTag"]);
@@ -102,7 +101,7 @@ exports.deleteTag = async (req, res) => {
     };
 
     try {
-        tag.deleteTagByID(tagUUID);
+        await tag.deleteTagById(tagUUID);
         res.status(200).send("removed tag with the following tagUUID:" + tagUUID)
     } catch (e) {
         res.status(410).json({

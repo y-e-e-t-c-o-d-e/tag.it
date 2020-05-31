@@ -8,7 +8,7 @@ const { db } = require("../shared/firebase")
 exports.addCourse = async (req, res) => {
    // Check that required data is given
    const bodyParams = req.body;
-   if (!("name" in bodyParams || "term" in bodyParams)) {
+   if (!("name" in bodyParams && "term" in bodyParams)) {
        res.status(422).json({
            status: 422,
            error: "Missing one of the following parameters: name or term"
@@ -195,13 +195,13 @@ exports.sendEmail = async (req, res) => {
     };
 
     const bodyParams = req.body;
-    if (!("email" in bodyParams || "type" in bodyParams)) {
+    if (!("email" in bodyParams && "type" in bodyParams)) {
        res.status(422).json({
            status: 422,
-           error: "Missing the following parameter: email"
+           error: "Missing one of the following parameters: email or type"
        });
        return;
-   };
+    };
 
     try {
         const courseObj = course.getCourseById(courseUUID);
