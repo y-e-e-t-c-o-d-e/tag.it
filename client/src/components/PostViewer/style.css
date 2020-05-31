@@ -32,6 +32,7 @@
     margin-right: 2em;
     max-height: 40px;
     padding: 0 0.5em;
+    margin: 1px 0;
 }
 
 .post-content-section {
@@ -78,9 +79,16 @@
 
 .post-view-buttons {
     display: flex;
+    max-height: 100px;
+    overflow: scroll;
+}
+
+.post-view-buttons .row {
+    margin: 1px 0;
 }
 
 .likes {
     display: inline-block;
     text-align: center;
+    width: 30px;
 }

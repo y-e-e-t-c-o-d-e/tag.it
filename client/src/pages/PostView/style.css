@@ -80,6 +80,15 @@
     display: flex;
 }
 
+.like-discuss {
+    overflow: hidden;
+}
+
+.tag-buttons {
+    max-height: 100px;
+    overflow: scroll;
+}
+
 .likes {
     display: inline-block;
     text-align: center;

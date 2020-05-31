@@ -48,7 +48,11 @@ const PostView = ({ currentUser, match }) => {
         })
     }, [])
 
+    const tagButtons = post.tagList.map((tag)=>{
+        return(<Button variant="primary" block key={tag.uuid} className="tagItem"><b>{tag.title}</b></Button>);
+    });
     return (
+
         <div className="home">
             <Navigation currentUser={currentUser} />
             <div className="cont">
@@ -60,6 +64,7 @@ const PostView = ({ currentUser, match }) => {
                     <Col>
 
                         <div className="post-viewer">
+                            {/* Section with post title and change / actions */}
                             <div className="post-title-section">
                                 <Row>
                                     <Col xs={8}>
@@ -77,15 +82,18 @@ const PostView = ({ currentUser, match }) => {
                                     </DropdownButton>
                                 </div>
                             </div>
+
+                            {/* Post content with footer saying posted by */}
                             <div className="post-content-section">
                                 <ReactMarkdown className="post-content-view" source={post.content} />
                                 <div className="posted-by">Posted by: {post.author}</div>
                             </div>
+
+                            {/* Like / discuss/ tags */}
                             <Container className="post-view-buttons">
-                                <Row>
-                                    <Col xs={6} md={4}>
+                                    <Col className="like-discuss" xs={6} md={4}>
                                         <Row>
-                                            <div className="likes">18</div>
+                                            <div className="likes">{post.score}</div>
                                             <Button className="yellow-button">like.it</Button>
                                         </Row>
 
@@ -94,10 +102,9 @@ const PostView = ({ currentUser, match }) => {
                                         </Row>
 
                                     </Col>
-                                    <Col>
-                                        Hi...?
-                            </Col>
-                                </Row>
+                                    <Col className="tagButtons">
+                                        {tagButtons}
+                                    </Col>
                             </Container>
 
                         </div>
