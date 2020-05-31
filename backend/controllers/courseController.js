@@ -196,7 +196,7 @@ exports.getCourseUsers = async (req, res) => {
     if (!courseUUID) {
         res.status(422).json({
             status: 422,
-            error: "Missing paramater: courseUUID"
+            error: "Missing parameter: courseUUID"
         });
         return;
     };
@@ -227,7 +227,7 @@ exports.sendEmail = async (req, res) => {
     if (!courseUUID) {
         res.status(422).json({
             status: 422,
-            error: "Missing paramater: courseUUID"
+            error: "Missing parameter: courseUUID"
         });
         return;
     };
@@ -286,7 +286,7 @@ exports.removeUser = async (req, res) => {
     if (!courseUUID || !userUUID) {
         res.status(422).json({
             status: 422,
-            error: "Missing paramater: courseUUID or userUUID"
+            error: "Missing parameter: courseUUID or userUUID"
         });
         return;
     }
