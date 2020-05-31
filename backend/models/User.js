@@ -17,6 +17,12 @@ class User {
      */
     setName = async (name) => {
         this.props.name = name;
+    }
+    
+    addStudentCourse = async (courseId) => {
+        this.props.studentCourseList.push(courseId);
+        const currentCourse = course.getCourseById(courseId);
+        //await currentCourse.addStudent(this.props.uuid);
         await this.push();
     }
 
@@ -27,6 +33,7 @@ class User {
     removeStudentCourse = async (courseId) => {
         const index = this.props.studentCourseList.indexOf(courseId);
         if (index != -1) {
+            // is this where i handle removing self from course's studentList?
             this.props.studentCourseList.splice(index, 1);
         }
         await this.push();
@@ -68,6 +75,7 @@ class User {
     removeInstructorCourse = async (courseId) => {
         const index = this.props.instructorCourseList.indexOf(courseId);
         if (index != -1) {
+            // is this where i handle removing self from course's studentList?
             this.props.instructorCourseList.splice(index, 1);
         }
     }
@@ -160,7 +168,9 @@ class User {
     removeFollowedPost = async (postId) => {
         const index = this.props.followingList.indexOf(postId);
         if (index != -1) {
-            this.props.studentCofollowingListurseList.splice(index, 1);
+            const currentPost = await post.getPostById(postId);
+            await currentPost.removeFollower(this.props.uuid);
+            this.props.followingList.splice(index, 1);
         }
         await this.push();
     }
