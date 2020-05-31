@@ -1,23 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./style.css";
 
 import Comment from "./Comment/index.jsx";
 import API from "../../utils/API.js";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
+import { createToast } from '../../utils';
 
 // Post.commentList and Post.uuid should be passed in
 const CommentSection = ({ commentList, postId }) => {
 
     const [newComment, setNewComment] = useState(false);
+    const [refreshComments, setRefreshComments] = useState(false);
     const [visibility, setVisiblity] = useState("public, visible");
+    const [comments, setComments] = useState([{uuid: "loading", author: "Loading", time: Date.now(), content: "Loading", childList: []}]);
+
+    useEffect(() => {
+        API.getComments(postId)
+            .then(response => {
+                setComments(response.data)
+                setNewComment(false)
+            })
+            .catch(error => {
+
+            })
+    }, [newComment, refreshComments])
 
     const renderComments = () => {
         // sort comments by most recent using time property
-        const comments = commentList.slice().sort((a, b) => b.time - a.time);
-
+        // const comments = commentList.slice().sort((a, b) => b.time - a.time);
         return comments.map((comment) => {
             return (
-                <Comment key={comment.uuid} comment={comment} postId={postId} />
+                <Comment key={comment.uuid} comment={comment} refresh={setRefreshComments} postId={postId} />
             );
         });
     };
@@ -29,7 +42,13 @@ const CommentSection = ({ commentList, postId }) => {
         const commentContent = e.target.elements[TEXT_AREA_IDX].value;
         const visibility = e.target.elements[SELECT_IDX].textContent;
 
-        API.createComment(commentContent, visibility, null, postId);
+        API.createComment(commentContent, visibility, null, postId).then(response => {
+            createToast("comment created!")
+            setNewComment(false);
+            // use effect go again
+        }).catch(err => {
+            createToast("an error occurred")
+        });
     };
 
     const renderCreateNewComment = () => {

@@ -1,4 +1,5 @@
 const { db } = require("../shared/firebase")
+const User = require("./User")
 
 class Comment {
     constructor(props) {
@@ -64,9 +65,13 @@ class Comment {
 
     addChild = async (commentId) => {
         this.props.childList.push(commentId);
+        console.log('lets get this child')
         let child = await getCommentById(commentId);
+        console.log('we got the child')
         child.setParentComment(this.props.uuid);
+        console.log('push time')
         await this.push();
+        console.log('push complete')
     }
 
     removeChild = async(commentId) => {
@@ -147,19 +152,24 @@ class Comment {
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
     push = async () => {
-        await db.ref("Comments").child(this.props.uuid).set({
-            content: this.props.content,
-            author: this.props.author, 
-            uuid: this.props.uuid,
-            time: this.props.time,
-            postId: this.props.postId,
-            parentComment: this.props.parentComment,
-            score: this.props.score,
-            childList: this.props.childList,
-            isEndorsed: this.props.isEndorsed,
-            isAnonymous: this.props.isAnonymous,
-            isResolved: this.props.isResolved
-        });
+        console.log(`we gunna push ${this.props.uuid}`)
+        try {
+            await db.ref("Comments").child(this.props.uuid).set({
+                content: this.props.content,
+                author: this.props.author, 
+                uuid: this.props.uuid,
+                time: this.props.time,
+                postId: this.props.postId,
+                parentComment: "parentComment" in this.props ? this.props.parentComment : "dummy_parent",
+                score: this.props.score,
+                childList: this.props.childList,
+                isEndorsed: this.props.isEndorsed,
+                isAnonymous: this.props.isAnonymous,
+                isResolved: this.props.isResolved
+            });
+        } catch (err) {
+            console.log(err)
+        }
     } 
 }
 
@@ -197,7 +207,11 @@ getCommentById = async (uuid) => {
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
             const r = new Comment(snapshot.val());
-            resolve(r);
+            // now get the user's name
+            User.getUserById(r.getAuthor()).then(user => {
+                r.props.authorName = user.getName();
+                resolve(r);
+            }).catch(reject)
         }, function (errorObject) {
             reject(errorObject);
         })

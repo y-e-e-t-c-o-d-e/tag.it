@@ -108,13 +108,14 @@ export default {
 
     /** COMMENTS */
     createComment: function (content, visibility, parentComment, postId) {
+        const anonymous = visibility === "public, anonymous"
         const config = {
             method: 'post',
             url: `${baseURL}/api/comment`,
             headers: authHeaders(),
             data: {
                 content: content,
-                visibility: visibility,
+                isAnonymous: anonymous,
                 parentComment: parentComment,
                 postId: postId
             }
@@ -123,17 +124,9 @@ export default {
     },
 
     getComments: function (postUUID) {
-        return [
-            {
-                username: "Anonymous",
-                content: "Wow I really enjoy this new comment experience, it feels like \n the reddit platform",
-                date: ""
-            }
-        ]
-        /** Uncomment when backend is live
         const config = {
             headers: authHeaders(),
-            query: {
+            params: {
                 postUUID: postUUID
             },
             transformResponse: [function (data) {
@@ -144,7 +137,7 @@ export default {
             }]
         };
         return axios.get(`${baseURL}/api/comment`, config);
-        */
+        
     }
 }
 

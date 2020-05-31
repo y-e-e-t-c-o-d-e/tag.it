@@ -48,49 +48,6 @@ const PostView = ({currentUser, match}) => {
         })
     }, [])
 
-
-    // testing purposes
-    const comments = [
-        {
-            author: "Henry Chan",
-            uuid: 1,
-            time: new Date('December 17, 1995 03:24:00'),
-            content: "this is a dummy comment",
-            childList: [
-                {
-                    author: "Daniel Truong",
-                    uuid: 2,
-                    time: new Date('January 10, 2000 04:20:00'),
-                    content: "this is a reply",
-                    childList: [
-                        {
-                            author: "Maggie Mao",
-                            uuid: 3,
-                            time: new Date('September 20, 2015 04:00:00'),
-                            content: "no u",
-                            childList: []
-                        }
-                    ]
-                },
-                {
-                    author: "Rohith Kasar",
-                    uuid: 4,
-                    time: new Date('October 31, 2010 01:00:00'),
-                    content: "this is another reply",
-                    childList: []
-                }
-            ]
-        },
-        {
-            author: "Jeffrey Ho",
-            uuid: 5,
-            time: new Date('December 17, 1995 05:23:00'),
-            content: "you are a dummy",
-            childList: []
-        }
-    ];
-
-
     return (
         <div className="home">
             <Navigation currentUser={currentUser} />
@@ -106,7 +63,7 @@ const PostView = ({currentUser, match}) => {
                     </Row>
 
                     <ReactMarkdown className="liveView" source={post.content} />
-                    <CommentSection commentList={comments} postId={183} />
+                    <CommentSection postId={postId} />
 
                 </Col>
             </Row>

@@ -3,9 +3,10 @@ import "./style.css";
 
 import API from "../../../utils/API.js";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
+import { createToast } from '../../../utils';
 
 /* recursive functional component for comments */
-const Comment = ({ comment, postId }) => {
+const Comment = ({ comment, postId, refresh }) => {
 
     const [liked, setLike] = useState(false);
     const [newReply, setNewReply] = useState(false);
@@ -18,10 +19,15 @@ const Comment = ({ comment, postId }) => {
         const replyContent = e.target.elements[TEXT_AREA_IDX].value;
         const visibility = e.target.elements[SELECT_IDX].textContent;
 
-        API.createComment(replyContent, visibility, comment, postId);
+        API.createComment(replyContent, visibility, comment.uuid, postId).then(() => {
+            createToast("Comment created!")
+            refresh(true);
+            setNewReply(false);
+        })
     };
 
-    const formatDate = (date) => {
+    const formatDate = (rawDate) => {
+        const date = new Date(rawDate);
         var hours = date.getHours();
         var minutes = date.getMinutes();
         var ampm = hours >= 12 ? 'pm' : 'am';
@@ -63,13 +69,14 @@ const Comment = ({ comment, postId }) => {
         const nestedComments = comment.childList.slice().sort((a, b) => b.time - a.time);
 
         return nestedComments.map(childComment => {
-            return <Comment key={childComment.uuid} comment={childComment} postId={postId} type="child" />
+            if (childComment === "dummy_child") { return <></> }
+            return <Comment key={childComment.uuid} refresh={refresh} comment={childComment} postId={postId} type="child" />
         });
     };
 
     return (
         <div className="comment">
-            <span id="username">{comment.author}</span>
+            <span id="username">{comment.authorName}</span>
             <span id="date">{formatDate(comment.time)}</span>
             <div>{comment.content}</div>
             <div className="comment-options">
