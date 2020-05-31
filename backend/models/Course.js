@@ -3,6 +3,8 @@ const post = require("../models/Post");
 const { db } = require("../shared/firebase")
 const { InternalServerError } = require("../shared/error");
 const User = require("./User");
+const { makeId } = require("../shared/util");
+
 class Course {
     constructor(props) {
         this.props = props;
@@ -77,6 +79,14 @@ class Course {
 
     getDescription() {
         return this.props.description;
+    }
+    
+    getStudentInviteId() {
+        return this.props.studentInviteId;
+    }
+
+    getInstructorInviteId() {
+        return this.props.instructorInviteId;
     }
 
     setName = async (name) => {
@@ -256,6 +266,8 @@ class Course {
             studentList: this.props.studentList,
             tagList: this.props.tagList,
             postList: this.props.postList,
+            studentInviteId: this.props.studentInviteId ? this.props.studentInviteId : makeId(10),
+            instructorInviteId: this.props.instructorInviteId ? this.props.instructorInviteId : makeId(10)
         });
     } 
 }
@@ -272,7 +284,9 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                 await courseRef.set({
                     name: updateParams['name'],
                     term: updateParams['term'], 
-                    uuid: (await courseRef).key, 
+                    uuid: (await courseRef).key,
+                    studentInviteId: makeId(10),
+                    instructorInviteId: makeId(10),
                     studentList: ["dummy_val"],         // Firebase doesn't initialize a list if its empty
                     instructorList: ["dummy_val", user.getUUID()],
                     tagList: ["dummy_val"],
