@@ -1,0 +1,86 @@
+.post-viewer {
+    border: 15px solid #A6D1DF;
+    width: 750px;
+    position: relative;
+    margin: 5px;
+    flex: .8;
+    background: #E4ECEE;
+    padding: 2.5%;
+}
+
+.yellow-button {
+    background-color: #F9D127;
+    color: #1D7B99;
+    border: 0;
+}
+
+.yellow-button:hover {
+    background-color: #EABD00;
+    color: #1D7B99;
+    border: 0;
+}
+
+.post-title-section {
+    display: flex;
+}
+
+.post-viewer input {
+    border: 3px solid #E0DEDE;
+    background-color: white;
+    border-radius: 0;
+    width: 500px;
+    margin-right: 2em;
+    max-height: 40px;
+    padding: 0 0.5em;
+}
+
+.post-content-section {
+    margin-bottom: 0.5em;
+}
+
+.post-content-view {
+    margin-top: 0.5em;
+    margin-right: 2em;
+    border: 3px solid #E0DEDE;
+    border-bottom: 0;
+    background-color: white;
+    border-radius: 0;
+    width: 600px;
+    padding: 0.5em 0.5em;
+    min-height: 300px;
+    justify-content: end;
+}
+
+.posted-by {
+    background-color: white;
+    padding-right: 0.5em;
+    width: 600px;
+    text-align: right;
+    border: 3px solid #E0DEDE;
+    border-top: 0;
+    padding-top: 1em;
+    height: 100%;
+    color: #1D7B99;
+    font-size: small;
+}
+
+.title-button-section {
+    display: block;
+}
+
+.post-title-section button {
+    height: 30px;
+    width: 70px;
+    font-size: 12px;
+    padding: 4px 8px;
+    margin: 1px 0;
+}
+
+.post-view-buttons {
+    display: flex;
+}
+
+.likes {
+    display: inline-block;
+    text-align: center;
+}

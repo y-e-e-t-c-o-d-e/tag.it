@@ -6,6 +6,7 @@ import Navigation from "../../components/Navbar";
 import TagList from "../../components/TagList/index.jsx";
 import { Row, Col, Nav } from 'react-bootstrap';
 import CoursesView from '../../components/CoursesView/index.jsx';
+import PostViewer from '../../components/PostViewer/index';
 
 const Home = ({currentUser, match}) => { 
     if (match) {
@@ -26,6 +27,7 @@ const Home = ({currentUser, match}) => {
                     <Col xs={2}></Col>
                 </Row>
             </div>
+            <PostViewer/>
         </div>
     )
 };
