@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { Button } from "react-bootstrap";
 import db from "../../base";
 import './style.css';
 import logo from '../../assets/logo.png';
-import LoginNav from "../../components/LoginNav";
+import NavBar from "../../components/Navbar";
 import API from "../../utils/API";
 
 var bgColors = {
@@ -163,7 +164,7 @@ const SignUp = ({ history }) => {
 
     return (
         <div>
-            <LoginNav/>
+            <NavBar />
             <div className="centered">
                 <div className="contents">
                     {/* The tag.it logo*/}
@@ -210,14 +211,14 @@ const SignUp = ({ history }) => {
                                     />
                                 </label>
                                 <br />
-                                <button type="submit" id="signup-button">Sign Up</button>
+                                <Button variant="primary" type="submit">Sign Up</Button>
                             </form>
                         </div>
 
                         {/* Redirect to Log in */}
                         <div className="input">
                             <h3>Already have an account?</h3>
-                            <button onClick={redirectLogIn}>Log In</button>
+                            <Button variant="primary" onClick={redirectLogIn}>Log In</Button>
                         </div>
                     </div>
                 </div>

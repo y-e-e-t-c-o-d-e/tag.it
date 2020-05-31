@@ -46,6 +46,33 @@ export default {
 
     /** COURSES */
     // courses is an array of course objects
+    addToCourses: function(courses) {
+        
+    },
+
+    getCourse: function (uuid) {
+        const config = {
+            params: {
+                courseUUID: uuid
+            },
+            headers: authHeaders()
+        };
+        return axios.get(`${baseURL}/api/course/${uuid}`, config);
+    },
+
+    updateCourse: function (courseUUID, courseName) {
+        const config = {
+            method: 'put', 
+            url: `${baseURL}/api/course`,
+            data: {
+                uuid: courseUUID,
+                name: courseName,
+            },
+            headers: authHeaders()
+        };
+        return axios(config);
+    },
+
     addToCourse: function(courseId) {
         const config = {
             method: 'post',
@@ -54,7 +81,6 @@ export default {
         };
         return axios(config);
     },
-
     getAllCourses: function() {
         const config = {
             headers: authHeaders(),
@@ -62,7 +88,6 @@ export default {
                 const jsonData = JSON.parse(data);
                 // Convert object to array of objects
                 const courseArray = Object.keys(jsonData).map(i => jsonData[i]);
-                console.log(courseArray);
                 return courseArray;
             }]
         };
@@ -82,3 +107,5 @@ export default {
         return axios(config);
     }
 }
+
+export {baseURL};

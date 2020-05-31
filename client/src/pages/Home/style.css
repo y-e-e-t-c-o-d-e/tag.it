@@ -1,3 +1,18 @@
 .home {
-    background-color: aliceblue;
+    background-color: white;
 }
+
+.body {
+    display: flex;
+    justify-content: space-evenly;
+    width: 99%;
+    height: 75vh;
+    margin: 5px;
+}
+
+.cont {
+    margin-top: 2.5%;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+}
+

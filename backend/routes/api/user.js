@@ -7,9 +7,10 @@ router.route("/")
     .post(userController.addUser) // Create
     .get(userController.getUser) // Read
     .put(userController.updateUser) // Update
+    .delete(userController.deleteUser) // Delete
 
 // Matches with "/api/user/courseId"
-router.route("/:courseId")   // regex? how do we format the courseID
+router.route("/:courseId")
     .post(userController.addUserToCourse)
     .get(userController.getUserType)
 module.exports = router;
