@@ -65,13 +65,9 @@ class Comment {
 
     addChild = async (commentId) => {
         this.props.childList.push(commentId);
-        console.log('lets get this child')
         let child = await getCommentById(commentId);
-        console.log('we got the child')
         child.setParentComment(this.props.uuid);
-        console.log('push time')
         await this.push();
-        console.log('push complete')
     }
 
     removeChild = async(commentId) => {
@@ -152,7 +148,6 @@ class Comment {
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
     push = async () => {
-        console.log(`we gunna push ${this.props.uuid}`)
         try {
             await db.ref("Comments").child(this.props.uuid).set({
                 content: this.props.content,
