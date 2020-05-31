@@ -132,6 +132,35 @@ class User {
         }
     }
 
+    addInstructorCourse = async (courseId) => {
+        await this.updateInstructorCourses();
+        // Avoid adding duplicates
+        if (this.props.instructorCourseList.indexOf(courseId) < 0) {
+            this.props.instructorCourseList.push(courseId);
+            await this.push();
+        } else {
+            throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
+        }
+    }
+
+    removeInstructorCourse = async (courseId) => {
+        await this.updateInstructorCourses();
+        
+        if (this.props.instructorCourseList.indexOf(courseId) >= 0) {
+            this.props.instructorCourseList.splice(this.props.instructorCourseList.indexOf(courseId), 1);
+            await this.push();
+        }
+    }
+
+    removeStudentCourse = async (courseId) => {
+        await this.updateStudentCourses();
+        
+        if (this.props.studentCourseList.indexOf(courseId) >= 0) {
+            this.props.studentCourseList.splice(this.props.studentCourseList.indexOf(courseId), 1);
+            await this.push();
+        }
+    }
+
     updatePosts = async () => {
         let user = await getUserById(this.props.uuid);
         while(!this.arraysEqual(this.props.postList, user.props.postList)) {

@@ -13,6 +13,12 @@ router.route("/:courseId")
     .get(courseController.getCourseInfo)
     .delete(courseController.deleteCourse)
 
+router.route("/:courseId/:userId")
+    .delete(courseController.removeUser)
+
+router.route("/:courseId/users")
+    .get(courseController.getCourseUsers)
+
 // Matches with "/api/course/:courseId/invite"
 router.route("/:courseId/invite")
     .post(courseController.sendEmail)
