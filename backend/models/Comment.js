@@ -175,7 +175,7 @@ module.exports.pushCommentToFirebase = (updateParams) => {
                 postId: updateParams["postId"],
                 parentComment: "parentComment" in updateParams ? updateParams["parentComment"] : "dummy_parent",
                 score: 0,
-                childList: ["dummy_child"],
+                childList: ["dummy_child"]  ,
                 isEndorsed: "isEndorsed" in updateParams ? updateParams["isEndorsed"] : false,
                 isAnonymous: "isAnonymous" in updateParams ? updateParams["isAnonymous"] : false,
                 isResolved: false,

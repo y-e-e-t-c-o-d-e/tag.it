@@ -6,22 +6,34 @@ exports.addComment = async (req, res) => {
     // TODO: Fix this later.
     const bodyParams = req.body;
 
-    const visibility = bodyParams["visibility"];
+    // parentComment is optional
     const content = bodyParams["content"];
-    const postId = bodyParams["postId"]
-    const parentUUID = bodyParams["parentUUID"];
+    const postId = bodyParams["postId"];
+    const parentComment = bodyParams["parentComment"];
+    bodyParams["author"] = req.user.getUUID();
 
-    if (!visibility || !content) {
+    if (!postId || !content) {
         res.status(422).json({
             status: 422,
-            error: "Missing one of the following parameters: visibility or content"
+            error: "Missing one of the following parameters: postId or content"
         });
         return;
     };
 
     try {
-        const commentObj = await comment.pushCommentToFirebase(bodyParams);
-        res.status(200).json("Created");
+        const commentObjKey = await comment.pushCommentToFirebase(bodyParams);
+        const commentObj = await comment.getCommentById(commentObjKey);
+
+        // Provided parentComment id
+        if (parentComment) {
+            const parentCommentObj = await comment.getCommentById(parentComment);
+            parentCommentObj.addChild(commentObjKey);
+        } else {
+            const postObj = await post.getPostById(postId);
+            postObj.addComment(commentObjKey);
+        }
+
+        res.status(200).json("Comment added");
     } catch (e) {
         res.status(410).json({
             error: "Yikes",
@@ -46,7 +58,9 @@ exports.getComment = async (req, res) => {
         const postObj = await post.getPostById(postUUID);
 
         // Gets all the high level comments
-        const commentsList = postObj.getComments();
+        const commentsList = postObj.getCommentList();
+        debugger;
+
         const allComments = await commentsList.reduce(async (acc, val) => {
             let commentObj = await comment.getCommentById(val);
 
@@ -90,7 +104,6 @@ const getSubComments = async (commentObj) => {
             let subComment = await comment.getCommentById(subCommentId);
             subComment = await getSubComments(subComment);
             (await acc).push(subComment.props);
-            console.log(acc);
             return acc;
         } catch (e) {
             return acc;
