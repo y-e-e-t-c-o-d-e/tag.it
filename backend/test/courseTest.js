@@ -113,7 +113,4 @@ describe('course', () => {
         const announcements = await testCourse.getAnnouncements();
         expect(announcements[0]).to.equal('post1');
     })
-
-
-
 });

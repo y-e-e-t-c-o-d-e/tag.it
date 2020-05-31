@@ -15,6 +15,7 @@ describe('tag', () => {
        console.log("Setup for Tag Test Suite")
        const tagParams = {
            name: "pa1",
+
            parentTag: "dummy_parent",
            course: "course1",
            postList: ["post2"],

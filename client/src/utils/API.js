@@ -81,7 +81,6 @@ export default {
         };
         return axios(config);
     },
-
     getAllCourses: function() {
         const config = {
             headers: authHeaders(),
@@ -93,29 +92,6 @@ export default {
             }]
         };
         return axios.get(`${baseURL}/api/course`, config);
-    },
-
-    getCourse: function (uuid) {
-        const config = {
-            params: {
-                courseUUID: uuid
-            },
-            headers: authHeaders()
-        };
-        return axios.get(`${baseURL}/api/course`, config);
-    },
-
-    updateCourse: function (courseUUID, courseName) {
-        const config = {
-            method: 'put', 
-            url: `${baseURL}/api/course`,
-            data: {
-                courseUUID: courseUUID,
-                courseName: courseName,
-            },
-            headers: authHeaders()
-        };
-        return axios(config);
     }
 }
 

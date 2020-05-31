@@ -4,7 +4,6 @@ const tag = require("./Tag");
 const comment = require("./Comment")
 const { db } = require("../shared/firebase")
 
-
 class Post {
     constructor(props) {
         this.props = props;
@@ -221,7 +220,8 @@ class Post {
             isResolved: this.props.isResolved,
             isInstructor: this.props.isInstructor,
             score: this.props.score,
-            course: this.props.course
+            course: this.props.course,
+            time: this.props.time
         });
     } 
 }

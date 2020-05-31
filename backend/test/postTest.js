@@ -11,6 +11,7 @@ describe('post', async () => {
     let key;
     let testPost;
 
+
     // Setup function before test is run 
     before(async () => {
         console.log("Setup for Post Test Suite")
@@ -108,7 +109,6 @@ describe('post', async () => {
         expect(testPost.getTagList().length).to.equal(2);
         tag.deleteTagById(tagKey);
     })
-
 
     // This test will not send the email, since Node returns before finishing the call. How to fix, idk.
     /*it('should send an email to the user from us', async () => {

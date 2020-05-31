@@ -9,18 +9,26 @@
     margin: 5px;
     overflow-y: scroll;
     overflow-x: hidden;
-    width: 200px;
-    height: 80%;
+    max-width: 130%;
+    max-height: 70vh;
 }
 
 .search {
     margin: 5px;
+    width: 129px;
+    background: white;
+    border-color: black;
+
 }
 
 .filter-btn {
     position: relative;
     float: right;
     right: 4px;
+}
+
+.filter-btn:hover {
+    background: #91d6e9;
 }
 
 .filter-dropdown {
@@ -43,14 +51,14 @@
     font-size: small;
     text-align: center;
     text-decoration: none;
-    background-color: #91d6e9;
+    background: #91d6e9;
     border: 1px solid #429bc5;
     width: 65px;
     display: block;
 }
 
 .filter-dropdown-content button:hover {
-    background-color: #66bcd4;
+    background: #66bcd4;
     cursor: pointer;
 }
 

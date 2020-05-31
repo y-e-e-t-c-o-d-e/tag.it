@@ -17,7 +17,7 @@ class Course {
     }
 
     getInstructorList() {
-        return this.props.instructorList;
+        return this.props.instructorList.slice(1, this.props.instructorList.length);
     }
 
     getUUID() {
@@ -158,7 +158,6 @@ class Course {
             resolve(posts);
         })  
     }
-
     getPostsWithMultipleTags = async (tagList) => {
         let posts = {};
         for(let i = 0; i < tagList.length; i++) {
@@ -258,3 +257,4 @@ deleteCourseById = async (uuid) => {
 module.exports.Course = Course
 module.exports.getCourseById = getCourseById
 module.exports.deleteCourseById = deleteCourseById
+

@@ -89,6 +89,32 @@ class User {
         await this.push();
     }
 
+    setEmail = async (email) => {
+        this.props.email = email;
+        await this.push();
+    }
+
+    addStudentCourse = async (courseId) => {
+        // Avoid adding duplicates
+        if (this.props.studentCourseList.indexOf(courseId) < 0) {
+            this.props.studentCourseList.push(courseId);
+            await this.push();
+        } else {
+            throw new InternalServerError(`Student Course ${courseId} already exists.`);
+        }
+        
+    }
+
+    addInstructorCourse = async (courseId) => {
+        // Avoid adding duplicates
+        if (this.props.instructorCourseList.indexOf(courseId) < 0) {
+            this.props.instructorCourseList.push(courseId);
+            await this.push();
+        } else {
+            throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
+        }
+    }
+
     addPost = async (postId) => {
         this.props.postList.push(postId);
         await this.push();
@@ -175,6 +201,39 @@ class User {
         await this.push();
     }
 
+    addLikedPost = async (postId) => {
+        this.props.likedPostList.push(postId);
+        let postObj = await post.getPostById(postId);
+        postObj.incrementScore();
+        await this.push();
+    }
+
+    removeLikedPost = async (postId) => {
+        this.props.likedPostList.splice(this.props.likedPostList.indexOf(postId), 1);
+        let postObj = await post.getPostById(postId);
+        postObj.decrementScore();
+        await this.push();
+    }
+
+    addLikedComment = async (commentId) => {
+        this.props.likedCommentList.push(commentId);
+        let commentObj = await comment.getCommentById(commentId);
+        commentObj.incrementScore();
+        await this.push();
+    }
+
+    removeLikedComment = async (commentId) => {
+        this.props.likedCommentList.splice(this.props.likedCommentList.indexOf(commentId), 1);
+        let commentObj = await comment.getCommentById(commentId);
+        commentObj.decrementScore();
+        await this.push();
+    }
+    
+    setIcon = async (icon) => {
+        this.props.icon = icon;
+        await this.push();
+    }
+
     getName() {
         return this.props.name;
     }
@@ -208,11 +267,11 @@ class User {
     }
 
     getLikedPostList() {
-        return this.props.likedPostList;
+        return this.props.likedPostList.slice(1, this.props.likedPostList.length);
     }
 
     getLikedCommentList() {
-        return this.props.likedCommentList;
+        return this.props.likedCommentList.slice(1, this.props.likedCommentList.length);
     }
 
     getIcon() {
@@ -276,6 +335,7 @@ module.exports.pushUserToFirebase = (updateParams) => {
 getUserById = async (uuid) => {
     const ref = db.ref('Users/' + uuid);
 
+
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
             const r = new User(snapshot.val());
@@ -285,6 +345,7 @@ getUserById = async (uuid) => {
         })
     }) 
 }
+
 
 deleteUserById = async (uuid) => {
     const ref = db.ref('Users/'+uuid);

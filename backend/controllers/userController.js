@@ -1,4 +1,5 @@
 const user = require("../models/User");
+const course = require("../models/Course");
 
 exports.addUser = async (req, res) => {
     // Check that required data is given
@@ -105,7 +106,7 @@ exports.addUserToCourse = async (req, res) => {
     if (!courseUUID || !userObj) {
         res.status(422).json({
             status: 422,
-            error: "Missing paramater: courseID"
+            error: "Missing parameter: courseUUID or userUUID"
         });
         return;
     };
