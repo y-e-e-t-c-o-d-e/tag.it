@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
+import { Button } from "react-bootstrap"
 import { Redirect } from "react-router-dom";
 import { AuthContext } from "../../auth/Auth";
 import db from "../../base";
-import LoginNav from "../../components/LoginNav";
+import NavBar from "../../components/Navbar";
 import logo from "../../assets/logo.png";
 import './style.css';
 
@@ -78,7 +79,7 @@ const Login = ({ history }) => {
 
     return (
         <div>
-            <LoginNav />
+            <NavBar />
             <div className="container">
                 <div id="center-logo">
                     <img src={logo} alt="Tag.it" height="125" />
@@ -102,12 +103,12 @@ const Login = ({ history }) => {
                                 <a href="/" id="pwdRecover">Forgot your password?</a>
                             </div>
 
-                            <button type="submit">Log In</button>
+                            <Button type="submit">Log In</Button>
                         </form>
                     </div>
                     <div className="input">
                         <h3>Don't have an account?</h3>
-                        <button onClick={redirectSignUp}>Sign Up</button>
+                        <Button onClick={redirectSignUp}>Sign Up</Button>
                     </div>
                 </div>
             </div>

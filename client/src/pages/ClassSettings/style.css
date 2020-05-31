@@ -1,0 +1,124 @@
+/* A big wrapper for everything on this page */
+.content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* The box containing the class settings */
+.box {
+    width: 600px;
+    height: 600px;
+    border: 30px solid #A6D1DF;
+    margin-top:50px; /*Should probably move this into navbar as margin-bottom*/
+}
+
+.center-items{
+    margin-top: 1em;
+    text-align: center;
+}
+
+.center-items h1 {
+    font-size: 40px;
+    color: #005D83;
+}
+
+.center-items hr{
+    border-top: 2px solid #1D7B99;
+    width: 60%;
+}
+
+/* Gives the form left/right margin and sets text color */
+.course-info {
+    color: #1D7B99;
+}
+
+/* Makes sure the form contents are lined up */
+.course-info label {
+    display: inline-block;
+    width: 540px;
+    text-align: right;
+    margin: 20px 0 20px 0;
+    align-items: top;
+}
+
+/* Styles the input and textarea and make sure they line up */
+.course-info input {
+    width: 400px;
+    margin-right: 20px;
+    background-color: white;
+    border-bottom: 3px solid #A6D1DF;
+}
+
+.course-info input:focus {
+    border-bottom: 3px solid #FDEEAE;
+}
+.course-info textarea {
+    word-break: break-word;
+    width: 394px; /* 400px(intended length) - 2*3px(border width) */
+    height: 100px;
+    border: 3px solid #A6D1DF;
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.course-info textarea:focus {
+    border: 3px solid #FDEEAE;
+    outline: none;
+}
+
+/* Makes sure they don't break into diff lines */
+.course-title label, .course-title input {
+    float: none;
+    display: inline-block;
+}
+
+.invitation-section {
+    display: flex;
+    margin-left: 50px;
+    margin-right: 20px;
+}
+
+/* Special length and height */
+.invitation-link {
+    max-width: 240px; /* 400px - button width - textarea margin */
+    min-height: 2em;
+    max-height: 2em;
+    margin-right: 10px;
+}
+
+.invitation-section p {
+    color: black;
+    font-weight: normal;
+}
+
+.invitation-section button {
+    background: #F9D127;
+    color: #005D83;
+    border: none;
+}
+
+.invitation-section button:hover {
+    background: #EABD00;
+    color: #005D83;
+}
+
+.buttons {
+    display: flex;
+}
+
+.buttons button {
+    background: #F9D127;
+    color: #005D83;
+    border: none;
+}
+
+.buttons button:hover{
+    background: #EABD00;
+    color: #005D83;
+}
+
+.center-button {
+    text-align: center;
+    margin-bottom: 20px;
+}

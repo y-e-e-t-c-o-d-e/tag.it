@@ -6,6 +6,7 @@ import Button from '../../components/Button';
 import API from '../../utils/API';
 import { AuthContext } from '../../auth/Auth';
 import { useContext } from 'react';
+import NavBar from "../../components/Navbar"
 
 const AddClass = ({history, currentUser}) => {
     const [selectedClasses, setSelectedClasses] = useState(["", "", "", "", ""]);
@@ -78,6 +79,7 @@ const AddClass = ({history, currentUser}) => {
 
     return (
         <>
+            <NavBar/>
             <div className="addClassPage">
                 <div className="left-section"> 
                     <h1>Add a Class</h1>

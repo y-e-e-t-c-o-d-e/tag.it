@@ -118,32 +118,33 @@ class Course {
     } 
 }
 
-module.exports.pushCourseToFirebase = (updateParams) => {
-    // Consistent with User.js
-    const name = updateParams['name'];
-    const term = updateParams['term'];
-    const uuid = updateParams['uuid'];
+module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // TODO: Implement logic for these lists later.
-            await db.ref("Courses").child(uuid).set({
-                name: name, 
-                term: term, 
-                uuid: uuid, 
-                studentList: ["dummy_user_id"], 
-                instructorList: ["dummy_user_id"],
-                tagList: ["dummy_tag_id"],
-                postList: ["dummy_post_id"],
-            });
-            resolve("Everything worked");
+            if (courseUUID) {
+                await db.ref("Courses").child(courseUUID).set(updateParams);
+                resolve(courseUUID);
+            } else {
+                // TODO: Implement logic for these lists later.
+                const courseRef = db.ref("Courses").push();
+                await courseRef.set({
+                    name: updateParams['name'], 
+                    term: updateParams['term'], 
+                    uuid: (await courseRef).key, 
+                    studentList: ["dummy_val"],         // Firebase doesn't initialize a list if its empty
+                    instructorList: ["dummy_val", user.getUUID()],
+                    tagList: ["dummy_val"],
+                    postList: ["dummy_val"],
+                });
+                await user.addInstructorCourse((await courseRef).key);
+                resolve((await courseRef).key);
+            }
         } catch(e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");
         }
     })
 };
-
-
 
 getCourseById = async (uuid) => {
     const ref = db.ref('Courses/' + uuid);
@@ -172,6 +173,18 @@ getCourseById = async (uuid) => {
     // })
 }
 
+deleteCourseById = async (uuid) => {
+    //console.log("yeet")
+    const ref = db.ref('Courses/' + uuid);
+    ref.remove()
+    .then(function() {
+        console.log("Remove succeeded.")
+      })
+      .catch(function(error) {
+        console.log("Remove failed: " + error.message)
+      });
+}
    
 module.exports.Course = Course
 module.exports.getCourseById = getCourseById
+module.exports.deleteCourseById = deleteCourseById

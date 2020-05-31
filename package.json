@@ -8,6 +8,7 @@
     "mocha": "^7.1.2",
     "nodemailer": "^6.4.6",
     "nodemon": "^2.0.3",
+    "react-autosuggest": "^10.0.2",
     "react-bootstrap": "^1.0.1"
   },
   "devDependencies": {
@@ -20,7 +21,8 @@
     "serverTest": "cd backend && yarn test",
     "start": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "test": "yarn clientTest && yarn serverTest",
-    "install": "cd client/ && yarn && cd ../ && cd backend/ && yarn && cd ../"
+    "install": "cd client/ && yarn && cd ../ && cd backend/ && yarn && cd ../",
+    "clean": "rm -rf node_modules/ && cd client/ && yarn clean && cd ../ && cd backend/ && yarn clean && cd ../"
   },
   "repository": {
     "type": "git",
