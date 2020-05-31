@@ -85,7 +85,7 @@ describe('tag', () => {
    })
  
    it('should update testTag name in firebase', async() => {
-       await testTag.updateName("HW4");
+       await testTag.setName("HW4");
        expect(await testTag.getName()).to.equal("HW4");
    })
  
