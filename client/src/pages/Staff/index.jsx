@@ -1,13 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from "../../assets/logo.png";
 import './style.css';
 import API from "../../utils/API";
 
 const Staff = ({ history, match, currentUser }) => {
-    //' hardcoded
+
     const [currCourses, setCurrCourses] = useState([]);
-    console.log(currentUser);
+    const [emailToIdMap, setEmailToIdMap] = useState({});
+
     const courseId = match.params.courseId;
+    let pendingRequest = false;
+
+    useEffect(() => {
+        API.getCourseUsers(courseId).then((data) => {
+            setCurrCourses(data.data.instructors.map((instructorObj) => instructorObj.email));
+            setEmailToIdMap(data.data.instructors.reduce((acc, instructorObj) => {
+                acc[instructorObj.email] = instructorObj.uuid;
+                return acc;
+            }, {}))
+        });
+    }, []);    
 
     /* Function to redirect to Home */
     const redirectHome = () => {
@@ -15,24 +27,33 @@ const Staff = ({ history, match, currentUser }) => {
     }
 
     /* Function for handling inviting staff */
-    const handleStaffInvite = (event) => {
+    const handleStaffInvite = async (event) => {
         event.preventDefault();
         const { email } = event.target.elements;
 
         // try to add staff to course in database
         try {
-            // TODO: API stuff, check if already in database
+            const userId = await API.inviteUser(email);
+            const mapCopy = {...emailToIdMap};
+            mapCopy[userId] = email;
+            setEmailToIdMap(mapCopy);
             setCurrCourses(currCourses.concat(email.value));
+
             event.target.reset();
         } catch (error) {
             alert(error);
         }
     }
 
-    const removeInstructor = (instructor) => {
+    const removeInstructor = async (instructor) => {
         try {
-            // TODO: API stuff, remove course from instructorList
-            setCurrCourses(currCourses.filter((val) => val !== instructor));
+            if (!pendingRequest) {
+                pendingRequest = true;
+                await API.removeUserFromCourse(courseId, emailToIdMap[instructor]);
+                pendingRequest = false;
+                setCurrCourses(currCourses.filter((val) => val !== instructor));
+            }
+            
         } catch (error) {
             alert("An error occurred when removing this instructor.");
         }

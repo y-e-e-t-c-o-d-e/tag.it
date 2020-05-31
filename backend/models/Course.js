@@ -2,6 +2,7 @@
 const post = require("../models/Post");
 const { db } = require("../shared/firebase")
 const { InternalServerError } = require("../shared/error");
+const User = require("./User");
 class Course {
     constructor(props) {
         this.props = props;
@@ -121,6 +122,27 @@ class Course {
         await this.push();
     }
 
+    removeInstructor = async (userId) => {
+        this.updateCourse();
+        if (this.props.instructorList.indexOf(userId) >= 0) {
+            this.props.instructorList.splice(this.props.instructorList.indexOf(userId), 1);
+            await this.push();
+
+            const userObj = await User.getUserById(userId);
+            await userObj.removeInstructorCourse(userId);
+        }
+    }
+
+    removeStudent = async (userId) => {
+        this.updateCourse();
+        if (this.props.studentList.indexOf(userId) >= 0) {
+            this.props.studentList.splice(this.props.studentList.indexOf(userId), 1);
+            await this.push();
+
+            const userObj = await User.getUserById(userId);
+            await userObj.removeStudentCourse(userId);
+        }
+    }
 
     getPostsWithTag = async (tagId) => {
         let list = this.getPostList();

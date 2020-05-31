@@ -2,6 +2,7 @@
 const course = require("../models/Course");
 const post = require("../models/Post");
 const tag = require("../models/Tag");
+const user = require("../models/User");
 const { db } = require("../shared/firebase")
 
 // Adds a course to the database based on req body
@@ -184,3 +185,70 @@ exports.deleteCourse = async (req, res) => {
         });
     };
 };
+
+// Gets all the course users
+exports.getCourseUsers = async (req, res) => {
+    const courseUUID = req.params.courseId;
+    if (!courseUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing paramater: courseUUID"
+        });
+        return;
+    };
+
+    try {
+        const courseObj = await course.getCourseById(courseUUID);
+        
+        // TODO: Filter the data to not send unnecessary stuff
+        const filledInInstructors = await Promise.all(courseObj.getInstructorList().map(
+            async (instructorId) => (await user.getUserById(instructorId)).props));
+        const filledInStudents = await Promise.all(courseObj.getStudentList().map(
+            async (studentId) => (await user.getUserById(studentId)).props));
+
+        res.status(200).json({
+            students: filledInStudents,
+            instructors: filledInInstructors
+        });
+    } catch (e) {
+        res.status(410).json({
+            error: e.message
+        })
+    }
+}
+
+exports.removeUser = async (req, res) => {
+    const courseUUID = req.params.courseId;
+    const userUUID = req.params.userId;
+    
+    if (!courseUUID || !userUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing paramater: courseUUID or userUUID"
+        });
+        return;
+    };
+
+    try {
+        const courseObj = await course.getCourseById(courseUUID);
+        const userType = courseObj.classifyUser(userUUID);
+
+        if (userType === "student") {
+            await courseObj.removeStudent(userUUID);
+        } else if (userType === "instructor") {
+            await courseObj.removeInstructor(userUUID);
+        } else {
+            res.status(410).send({
+                error: "User is not in the course"
+            })
+            return;
+        }
+
+        res.status(200).send(`User removed as a ${userType}`);
+
+    } catch (e) {
+        res.status(410).json({
+            error: e.message
+        })
+    }
+}

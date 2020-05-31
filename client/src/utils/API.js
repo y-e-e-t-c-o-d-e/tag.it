@@ -106,6 +106,27 @@ export default {
             }
         };
         return axios(config);
+    },
+
+    getCourseUsers: function (courseUUID) {
+        const config = {
+            headers: authHeaders(),
+        };
+        return axios.get(`${baseURL}/api/course/${courseUUID}/users`, config);
+    },
+
+    removeUserFromCourse: function (courseUUID, userUUID) {
+        const config = {
+            headers: authHeaders()
+        };
+        return axios.delete(`${baseURL}/api/course/${courseUUID}/${userUUID}`, config);
+    },
+
+    inviteUserToCourse: function (courseUUID, userUUID) {
+        const config = {
+            headers: authHeaders()
+        };
+        return axios.post(/**Yeet */)
     }
 }
 

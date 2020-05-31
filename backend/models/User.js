@@ -182,6 +182,24 @@ class User {
         }
     }
 
+    removeInstructorCourse = async (courseId) => {
+        await this.updateInstructorCourses();
+        
+        if (this.props.instructorCourseList.indexOf(courseId) >= 0) {
+            this.props.instructorCourseList.splice(this.props.instructorCourseList.indexOf(courseId), 1);
+            await this.push();
+        }
+    }
+
+    removeStduentCourse = async (courseId) => {
+        await this.updateStudentCourses();
+        
+        if (this.props.studentCourseList.indexOf(courseId) >= 0) {
+            this.props.studentCourseList.splice(this.props.studentCourseList.indexOf(courseId), 1);
+            await this.push();
+        }
+    }
+
     updatePosts = async () => {
         let user = await getUserById(this.props.uuid);
         while(!this.arraysEqual(this.props.postList, user.props.postList)) {
