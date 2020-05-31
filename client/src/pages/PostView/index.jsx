@@ -6,7 +6,7 @@ import Navigation from "../../components/Navbar";
 import TagList from "../../components/TagList/index.jsx";
 import { Row, Col, Nav, Button } from 'react-bootstrap';
 import CoursesView from '../../components/CoursesView/index.jsx';
-import QuestionList from "../../components/QuestionList"
+import CommentSection from "../../components/CommentSection"
 import PostCreator from "../../components/PostCreator"
 import { API, createToast } from '../../utils';
 import PostEditor from '../../components/PostEditor';
@@ -63,6 +63,8 @@ const PostView = ({currentUser, match}) => {
                     </Row>
 
                     <ReactMarkdown className="liveView" source={post.content} />
+                    <CommentSection postId={postId} />
+
                 </Col>
             </Row>
             </div>

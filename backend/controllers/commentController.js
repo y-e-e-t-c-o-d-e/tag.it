@@ -23,7 +23,6 @@ exports.addComment = async (req, res) => {
     try {
         const commentObjKey = await comment.pushCommentToFirebase(bodyParams);
         const commentObj = await comment.getCommentById(commentObjKey);
-
         // Provided parentComment id
         if (parentComment) {
             const parentCommentObj = await comment.getCommentById(parentComment);
@@ -36,7 +35,7 @@ exports.addComment = async (req, res) => {
         res.status(200).json("Comment added");
     } catch (e) {
         res.status(410).json({
-            error: "Yikes",
+            error: e,
             status: 410
         });
     }
@@ -98,8 +97,10 @@ const getSubComments = async (commentObj) => {
     const subComments = await commentObj.getChildList().reduce(async (acc, subCommentId) => {
         try {
             let subComment = await comment.getCommentById(subCommentId);
+
             subComment = await getSubComments(subComment);
             (await acc).push(subComment.props);
+
             return acc;
         } catch (e) {
             return acc;
