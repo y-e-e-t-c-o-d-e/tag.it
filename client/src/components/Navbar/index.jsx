@@ -28,7 +28,7 @@ const loginRender = () => (
     </Navbar>
 )
 
-const regularRender = (courses) => {
+const regularRender = (studentCourses, instructorCourses) => {
     return (
         <Navbar expand="lg" inverse fluid>
             <Navbar.Brand href="#home"><img
@@ -43,8 +43,14 @@ const regularRender = (courses) => {
             <Navbar.Collapse className="">
                 <Nav className="ml-auto" >
                     <NavDropdown title="courses" id="basic-nav-dropdown">
-                        { courses.length > 0 && 
-                            courses.map((course, key) => {
+                        { studentCourses.length > 0 && 
+                            studentCourses.map((course, key) => {
+                                return <NavDropdown.Item key={key} href={courseToLink(course.uuid)}>{course.name}</NavDropdown.Item>
+                            })
+                        }
+                        <NavDropdown.Divider />
+                        { instructorCourses.length > 0 && 
+                            instructorCourses.map((course, key) => {
                                 return <NavDropdown.Item key={key} href={courseToLink(course.uuid)}>{course.name}</NavDropdown.Item>
                             })
                         }
@@ -59,24 +65,21 @@ const regularRender = (courses) => {
     )
 }
 
-const Navigation = ({}) => {
-    const { currentUser } = useContext(AuthContext);
+const Navigation = ({currentUser}) => {    
+    const [studentCourses, setStudentCourses] = useState([])
+    const [instructorCourses, setInstructorCourses] = useState([])
+
+    if (currentUser && studentCourses.length !== currentUser.filledInStudentCourseList.length) {
+        setStudentCourses(currentUser.filledInStudentCourseList)
+    }
     
-    const [courses, setCourses] = useState([ { name: "Courses Loading", uuid: "/" } ])
-
-    useEffect(() => {
-        if (!currentUser) { return; } // don't look for courses if the user isn't logged in
-
-        API.getAllCourses().then(courses => {
-            console.log(courses.data)
-            setCourses(courses.data);
-        }).catch(() => {
-            setCourses([ { name: "Error Loading Courses", uuid: "/" }])
-        })
-    }, [])
+    if (currentUser && instructorCourses.length !== currentUser.filledInInstructorCourseList.length) {
+        setInstructorCourses(currentUser.filledInInstructorCourseList)
+        console.log(currentUser)
+    }
     
     if (currentUser) {
-        return regularRender(courses);
+        return regularRender(studentCourses, instructorCourses);
     } else {
         return loginRender();
     }

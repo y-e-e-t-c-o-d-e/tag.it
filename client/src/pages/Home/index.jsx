@@ -16,12 +16,12 @@ const Home = ({currentUser, match}) => {
 
     return (
         <div className="home">
-            <Navigation/>
+            <Navigation currentUser={currentUser} />
             <div className="cont">
                 <Row>
                     <Col xs={2}></Col>
                     <Col xs={8}>
-                        <CoursesView username={displayName}/>
+                        <CoursesView currentUser={currentUser} username={displayName}/>
                     </Col>
                     <Col xs={2}></Col>
                 </Row>

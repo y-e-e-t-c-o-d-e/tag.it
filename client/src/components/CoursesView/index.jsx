@@ -3,17 +3,18 @@ import { Button, Jumbotron, Row, Col } from "react-bootstrap";
 import { API, courseToLink } from "../../utils"
 import './style.css';
 
-const CoursesView = ({username}) => {
-    const [courses, setCourses] = useState([ { name: "Courses Loading", uuid: "/" } ])
+const CoursesView = ({currentUser, username}) => {
+    const [studentCourses, setStudentCourses] = useState([])
+    const [instructorCourses, setInstructorCourses] = useState([])
 
-    useEffect(() => {
-        API.getAllCourses().then(courses => {
-            console.log(courses.data)
-            setCourses(courses.data);
-        }).catch(() => {
-            setCourses([ { name: "Error Loading Courses", uuid: "/" }])
-        })
-    }, [])
+    if (currentUser && studentCourses.length !== currentUser.filledInStudentCourseList.length) {
+        setStudentCourses(currentUser.filledInStudentCourseList)
+    }
+    
+    if (currentUser && instructorCourses.length !== currentUser.filledInInstructorCourseList.length) {
+        setInstructorCourses(currentUser.filledInInstructorCourseList)
+        console.log(currentUser)
+    }
 
     return (
         <div className="courses-view">
@@ -23,13 +24,26 @@ const CoursesView = ({username}) => {
                     This is tag.it! Choose or add a course below to engage in your classes.
                 </p>
                 <div className="courses-container">
-                    { courses.map((course, key) => {
-                        return (<div>
-                            <Button className="course-btn" key={key} variant="primary" href={courseToLink(course.uuid)}>{course.name}</Button>
-                            <br/>
-                            </div>
-                        )
-                    })}
+                    { studentCourses.length > 0 && <h3>Student Courses</h3> }
+                    { studentCourses.length > 0 &&
+                        studentCourses.map((course, key) => {
+                            return (<div>
+                                <Button className="course-btn" key={key} variant="primary" href={courseToLink(course.uuid)}>{course.name}</Button>
+                                <br/>
+                                </div>
+                            )
+                        })
+                    }
+                    { instructorCourses.length > 0 && <h3>Instructor Courses</h3> }
+                    { instructorCourses.length > 0 &&
+                        instructorCourses.map((course, key) => {
+                            return (<div>
+                                <Button className="course-btn" key={key} variant="success" href={courseToLink(course.uuid)}>{course.name}</Button>
+                                <br/>
+                                </div>
+                            )
+                        })
+                    }
                 </div>
             </Jumbotron>
         </div>

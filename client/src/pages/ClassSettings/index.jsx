@@ -9,7 +9,7 @@ const bgColors = {
     "error": "#ffcccc",
 };
 
-const ClassSettings = ({classUuid, match}) => { 
+const ClassSettings = ({ currentUser, classUuid, match}) => { 
     if (match) {
         const courseId = match.params.id;
     }
@@ -72,7 +72,7 @@ const ClassSettings = ({classUuid, match}) => {
 
     return(
         <div>
-            <Navigation/>
+            <Navigation currentUser={currentUser} />
             <div className="content">
                 <div className="box">
 
