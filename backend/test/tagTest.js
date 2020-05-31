@@ -15,9 +15,8 @@ describe('tag', () => {
        console.log("Setup for Tag Test Suite")
        const tagParams = {
            name: "pa1",
-           numUsed: "3",
+
            parentTag: "dummy_parent",
-           subTags: ["dummy_tag"],
            course: "course1",
            postList: ["post2"],
        }
@@ -33,7 +32,7 @@ describe('tag', () => {
    // Teardown function after test is run
    after(async () => {
        console.log("Teardown for Tag Test Suite");
-       tag.deleteTagByID(key)
+       tag.deleteTagById(key)
    });
  
  
@@ -82,7 +81,7 @@ describe('tag', () => {
  
    it('should increment testTag numUsed in firebase', async() => {
        await testTag.incrementNumUsed();
-       expect(await testTag.getNumUsed()).to.equal(4);
+       expect(await testTag.getNumUsed()).to.equal(2);
    })
  
    it('should update testTag name in firebase', async() => {
@@ -114,7 +113,7 @@ describe('tag', () => {
        testTag2 = await tag.getTagById(key2);
        expect(await testTag2.getParentTag()).to.equal(testTag.getUUID());
       
-       tag.deleteTagByID(key2)
+       tag.deleteTagById(key2)
    })
  
   
@@ -139,6 +138,6 @@ describe('tag', () => {
        let subTags = await testTag.getSubTags()
        expect(subTags.length).to.equal(1);
        expect(await testTag3.getParentTag()).to.equal("dummy_parent");
-       tag.deleteTagByID(key3);
+       tag.deleteTagById(key3);
    })
 });

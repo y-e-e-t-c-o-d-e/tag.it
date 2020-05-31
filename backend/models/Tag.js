@@ -13,23 +13,37 @@ class Tag {
     /**
      * normal getters and setters
      */
-    getName() {
+
+    getName = async() => {
         return this.props.name;
     }
-    getNumUsed() {
+
+    getNumUsed = async() => {
         return this.props.numUsed;
     }
-    getCourse() {
+    getCourse = async() => {
         return this.props.course;
     }
-    getParentTag() {
-        return this.props.parentTag;
+    getParentTag = async() => {
+        let currentTag = await getTagById(this.props.uuid);
+        return (await currentTag).props.parentTag;
     }
-    getPostList() {
-        return this.props.postList;
+    getPostList = async() => {
+        let currentTag = await getTagById(this.props.uuid);
+        let currentList = currentTag.props.postList;
+        if (currentList[0] == "dummy_post") {
+            return currentList.slice(1, currentList.length);
+        }
+        return currentList;
+        
     }
-    getSubTags() {
-        return this.props.subTags.slice(1, this.props.subTags.length);
+    getSubTags = async() => {
+        let currentTag = await getTagById(this.props.uuid);
+        let currentList = currentTag.props.subTags;
+        if (currentList[0] == "dummy_tag") {
+            return currentList.slice(1, currentList.length);
+        }
+        return currentList;
     }
     getUUID() {
         return this.props.uuid;
@@ -41,6 +55,7 @@ class Tag {
     }
 
     incrementNumUsed = async() => {
+
         this.props.numUsed++;
         await this.push();
     }
@@ -50,6 +65,7 @@ class Tag {
         await this.push();
     }
 
+pawan/fixingAsyncModelUpdatesPart2
     arraysEqual = (a, b) => {
         if (a === b) return true;
         if (a == null || b == null) return false;
@@ -94,6 +110,7 @@ class Tag {
         await this.push();
     }
 
+
     setParentTag = async (parentTagId) => {
         this.props.parentTag = parentTagId;
         await this.push();
@@ -103,7 +120,6 @@ class Tag {
         this.props.parentTag = "dummy_parent";
         await this.push();
     }
-
     updateSubTagList = async () => {
         let tag = await getTagById(this.props.uuid);
         while(!this.subTagListEqual(tag)) {
@@ -127,9 +143,8 @@ class Tag {
     removeSubTag = async(subTagId) => {
         const subTag = await getTagById(subTagId);
         if (subTag.props === null) return;
-        //console.log(subTag);
-        subTag.removeParentTag();
-        //console.log('Should be true' + await this.updateSubTagList());
+        await subTag.removeParentTag();
+        await this.updateSubTagList();
         const index = this.props.subTags.indexOf(subTag.getUUID());
         if (index != -1) {
             this.props.subTags.splice(index, 1);
@@ -138,82 +153,76 @@ class Tag {
 
     }
     
-  
-  
- 
-  
- 
- 
-   /**
-    * Update a given tag's data fields.
-    *
-    * @param updateParams - Object consisting of keys & values that will be updated for the user
-    */
-   push = async () => {
-       await db.ref("Tags").child(this.props.uuid).set({
-           name: this.props.name,
-           numUsed: this.props.numUsed,
-           parentTag: this.props.parentTag,
-           uuid: this.props.uuid,
-           subTags: this.props.subTags,
-           course: this.props.course,
-           postList: this.props.postList,
-          
-       });
-   }
+    /**
+     * Update a given tag's data fields.
+     * 
+     * @param updateParams - Object consisting of keys & values that will be updated for the user
+     */
+    push = async () => {
+        await db.ref("Tags").child(this.props.uuid).set({
+            name: this.props.name, 
+            numUsed: this.props.numUsed,
+            parentTag: this.props.parentTag, 
+            uuid: this.props.uuid,
+            subTags: this.props.subTags,
+            course: this.props.course,
+            postList: this.props.postList,
+            
+        });
+    } 
 }
  
 module.exports.pushTagToFirebase = (updateParams) => {
-   return new Promise(async (resolve, reject) => {
-       try {
-           const tagRef = db.ref("Tags").push();
-           await tagRef.set({
-               name: updateParams["name"],
-               numUsed: updateParams["numUsed"],
-               parentTag: updateParams["parentTag"],
-               uuid: (await tagRef).key,
-               subTags: updateParams["subTags"],
-               course: updateParams["course"],
-               postList: updateParams["postList"]
-           });
-           resolve((await tagRef).key);
-       } catch(e) {
-           console.log("There was an error: " + e);
-           reject("Something went wrong");
-       }
-      
-   })
+    return new Promise(async (resolve, reject) => {
+        try {
+            const tagRef = db.ref("Tags").push();
+            await tagRef.set({
+                name: updateParams["name"], 
+                numUsed: "postList" in updateParams ? updateParams["postList"].length : 0,
+                parentTag: "parentTag" in updateParams ? updateParams["parentTag"] : "dummy_parent", 
+                uuid: (await tagRef).key,
+                subTags: "subTags" in updateParams ? updateParams["subTags"] : ["dummy_tag"],
+                course: updateParams["course"],
+                postList: "postList" in updateParams ? updateParams["postList"] : ["dummy_post"],
+            });
+            resolve((await tagRef).key);
+        } catch(e) {
+            console.log("There was an error: " + e);
+            reject("Something went wrong");
+        }
+        
+    })
 };
  
  
  
 getTagById = async (uuid) => {
-   const ref = db.ref('Tags/' + uuid);
- 
-   return new Promise((resolve, reject) => {
-       ref.once("value", function(snapshot) {
-           const r = new Tag(snapshot.val());
-           //console.log(r.props.author);
-           resolve(r);
-       }, function (errorObject) {
-           reject(errorObject);
-       })
-   })
+    const ref = db.ref('Tags/' + uuid);
+
+    return new Promise((resolve, reject) => {
+        ref.once("value", function(snapshot) {
+            const r = new Tag(snapshot.val());
+            //console.log(r.props.author);
+            resolve(r);
+        }, function (errorObject) {
+            reject(errorObject);
+        })
+    }) 
 }
- 
-deleteTagByID = async (uuid) => {
-  
-   const ref = db.ref('Tags/' + uuid);
-   ref.remove()
-   .then(function() {
-       console.log("Remove succeeded.")
-     })
-     .catch(function(error) {
-       console.log("Remove failed: " + error.message)
-     });
+
+deleteTagById = async (uuid) => {
+    
+    const ref = db.ref('Tags/' + uuid);
+    ref.remove()
+    .then(function() {
+        console.log("Remove succeeded.")
+      })
+      .catch(function(error) {
+        console.log("Remove failed: " + error.message)
+      });
 }
- 
- 
+
+
 module.exports.Tag = Tag
 module.exports.getTagById = getTagById
-module.exports.deleteTagByID = deleteTagByID
+module.exports.deleteTagById = deleteTagById
