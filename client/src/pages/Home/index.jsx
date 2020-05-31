@@ -9,10 +9,6 @@ import CoursesView from '../../components/CoursesView/index.jsx';
 import PostViewer from '../../components/PostViewer/index';
 
 const Home = ({currentUser, match}) => { 
-    if (match) {
-        const courseId = match.params.id;
-    }
-
     const displayName = currentUser ? currentUser.name : "Loading"
 
     return (

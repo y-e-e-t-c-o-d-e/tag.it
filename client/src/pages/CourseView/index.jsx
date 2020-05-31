@@ -18,10 +18,12 @@ const states = {
 const CourseView = ({currentUser, match}) => { 
     const { courseId } = useParams();
     const [course, setCourse] = useState({name: "Loading", postList: [], uuid: "Loading"});
-    
+    const [tags, setTags] = useState([])
+
     useEffect(() => {
         API.getCourse(courseId).then(response => {
             setCourse(response.data)
+            setTags(response.data.tagList)
         }).catch(err => {
             setCourse({name: "Error", postList: [], uuid: err})
         })
@@ -46,7 +48,7 @@ const CourseView = ({currentUser, match}) => {
                 <h1>{course.name}</h1>
             <Row>
                 <Col xs={4}>
-                    <TagList />
+                    <TagList tags={tags} />
                 </Col>
                 <Col>
                     <Row>
