@@ -171,13 +171,13 @@ getTagById = async (uuid) => {
 deleteTagById = async (uuid) => {
     
     const ref = db.ref('Tags/' + uuid);
-    ref.remove()
-    .then(function() {
-        console.log("Remove succeeded.")
-      })
-      .catch(function(error) {
-        console.log("Remove failed: " + error.message)
-      });
+    try{
+        const result = await ref.remove();
+        return true;
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
 }
 
 
