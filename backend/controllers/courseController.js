@@ -1,5 +1,7 @@
 //Uncomment this wheen the models are good
 const course = require("../models/Course");
+const user = require("../models/User");
+const nodemailer = require('nodemailer');
 const { db } = require("../shared/firebase")
 
 // Adds a course to the database based on req body
@@ -138,3 +140,59 @@ exports.deleteCourse = async (req, res) => {
         });
     };
 };
+
+// Sends an email to the passed in user, if possible
+exports.sendEmail = async (req, res) => {
+    const courseUUID = req.params.courseId;
+    if (!courseUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing parameter: courseUUID"
+        });
+        return;
+    };
+
+    const bodyParams = req.body;
+    if (!("email" in bodyParams)) {
+       res.status(422).json({
+           status: 422,
+           error: "Missing the following parameter: email"
+       });
+       return;
+   };
+
+    try {
+        const courseObj = course.getCourseById(courseUUID);
+        const studentList = courseObj.getStudentList();
+        let student;
+        for (let i = 0; i < studentList.length; i++) {
+            student = user.getUserById(studentList[i]);
+            if (student.getEmail() == bodyParams["email"]) {
+                let transporter = nodemailer.createTransport({
+                    host: "smtp.mailtrap.io",
+                    port: 2525,
+                    auth: {
+                      user: "60438c70e2cd80",
+                      pass: "4320d95a84005b"
+                    }
+                  });
+    
+                let mailOptions = {
+                    from: 'tagitcse110',
+                    to: bodyParams["email"],
+                    subject: this.props.title + ' has been updated!',
+                    // TODO: Need field for post url to add to updated email.
+                    text: 'Check it out here'
+                };
+    
+                await transporter.sendMail(mailOptions);
+            }
+        }
+        res.status(200).send("User not in course")
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    };
+}
