@@ -18,8 +18,6 @@ exports.addCourse = async (req, res) => {
        return;
    };
 
-   // TODO(daniel): Add tags in this route as well
-
    try {
        const courseId = await course.pushCourseToFirebase(bodyParams, req.user);
        res.status(200).send(courseId);
