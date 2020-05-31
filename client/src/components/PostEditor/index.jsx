@@ -5,9 +5,7 @@ import API from '../../utils/API';
 import './style.css';
 
 // TODO: Grab text from backend route & set better styling. Add Submit Button. Add HTML parsing.
-const PostEditor = (props) => {
-    const [postText, setPostText] = useState("**b**");
-
+const PostEditor = ({postText, setPostText}) => {
     return (
         <div className="postEditor">
             <ReactMarkdown className="liveView" source={postText} />
