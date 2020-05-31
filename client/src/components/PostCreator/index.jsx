@@ -15,7 +15,6 @@ const PostCreator = ({courseId, setView, views}) => {
     
     const createPost = () => {
         API.createPost(questionTitle, questionContent, courseId).then((response) => {
-            console.log(response)
             createToast(response.data)
             setView(views.questions)
         })
