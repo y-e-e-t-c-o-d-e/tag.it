@@ -197,7 +197,7 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                 // TODO: Implement logic for these lists later.
                 const courseRef = db.ref("Courses").push();
                 await courseRef.set({
-                    name: updateParams['name'], 
+                    name: updateParams['name'],
                     term: updateParams['term'], 
                     uuid: (await courseRef).key, 
                     studentList: ["dummy_val"],         // Firebase doesn't initialize a list if its empty
@@ -245,13 +245,13 @@ getCourseById = async (uuid) => {
 deleteCourseById = async (uuid) => {
     //console.log("yeet")
     const ref = db.ref('Courses/' + uuid);
-    ref.remove()
-    .then(function() {
-        console.log("Remove succeeded.")
-      })
-      .catch(function(error) {
-        console.log("Remove failed: " + error.message)
-      });
+    try{
+        const result = await ref.remove();
+        return true;
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
 }
    
 module.exports.Course = Course
