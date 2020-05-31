@@ -1,5 +1,5 @@
 // TODO: uncomment when models are done
-//const post = require("../models/post");
+const post = require("../models/post");
 
 exports.addPost = async (req, res) => {
     // TODO: Handle later with models
@@ -40,3 +40,31 @@ exports.updatePost = async (req, res) => {
     const updateParams = req.body;
     res.status(200).send("Updated Post.");
 };
+
+// Adds user to post's following list if not there already, removes user otherwise
+exports.toggleFollowing = async (req, res) => {
+    const userObj = req.user;
+    const postUUID = req.query.postUUID;
+    if (!postUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing parameter: postUUID"
+        });
+        return;
+    };
+    
+    try {
+        let postObj = await post.getPostById(postUUID);
+        const userUUID = userObj.getUUID();
+        if (postObj.getUsersFollowing().indexOf(userUUID) == -1) {
+            postObj.addFollower(userUUID);
+        } else {
+            postObj.removeFollower(userUUID);
+        }
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e.message
+        });
+    };
+}
