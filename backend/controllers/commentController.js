@@ -40,8 +40,6 @@ exports.addComment = async (req, res) => {
             status: 410
         });
     }
-
-    res.status(200).send("Added comment");
 };
 
 exports.getComment = async (req, res) => {
