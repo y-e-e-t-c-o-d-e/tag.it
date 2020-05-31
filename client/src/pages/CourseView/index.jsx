@@ -6,8 +6,9 @@ import Navigation from "../../components/Navbar";
 import TagList from "../../components/TagList/index.jsx";
 import { Row, Col, Nav } from 'react-bootstrap';
 import CoursesView from '../../components/CoursesView/index.jsx';
+import QuestionList from "../../components/QuestionList"
 
-const Home = ({currentUser, match}) => { 
+const CourseView = ({currentUser, match}) => { 
     if (match) {
         const courseId = match.params.id;
     }
@@ -17,18 +18,10 @@ const Home = ({currentUser, match}) => {
     return (
         <div className="home">
             <Navigation currentUser={currentUser} />
-            <div className="cont">
-                <Row>
-                    <Col xs={2}></Col>
-                    <Col xs={8}>
-                        <CoursesView currentUser={currentUser} username={displayName}/>
-                    </Col>
-                    <Col xs={2}></Col>
-                </Row>
-            </div>
+            <QuestionList/>
         </div>
     )
 
 };
 
-export default Home;
+export default CourseView;
