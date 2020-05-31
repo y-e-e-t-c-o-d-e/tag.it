@@ -6,6 +6,7 @@ import logo from '../../assets/tagit-darkercoral\ 1.svg'
 import tagit from '../../assets/logo.png'
 import db from "../../base"
 import API from "../../utils/API"
+import { courseToLink } from '../../utils';
 
 const loginRender = () => (
     <Navbar expand="lg" inverse fluid>
@@ -44,7 +45,7 @@ const regularRender = (courses) => {
                     <NavDropdown title="courses" id="basic-nav-dropdown">
                         { courses.length > 0 && 
                             courses.map((course, key) => {
-                                return <NavDropdown.Item key={key} href={`/courses/${course.uuid}`}>{course.name}</NavDropdown.Item>
+                                return <NavDropdown.Item key={key} href={courseToLink(course.uuid)}>{course.name}</NavDropdown.Item>
                             })
                         }
                         <NavDropdown.Divider />
