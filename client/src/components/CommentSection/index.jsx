@@ -40,7 +40,7 @@ const CommentSection = ({ commentList }) => {
                         <div className="comment-text">
                             <textarea name="new-comment" placeholder="Create a new followup comment"></textarea>
                         </div>
-                        <div className="comment-options">
+                        <div className="comment-post-options">
                             <div className="select-anonymous">
                                 <p>Discuss as: </p>
                                 <DropdownButton id="dropdown-button-form" title={visibility} drop="up">
@@ -50,7 +50,7 @@ const CommentSection = ({ commentList }) => {
                                 </DropdownButton>
                             </div>
                             <Button id="cancel-button" onClick={() => { setNewComment(false) }}>cancel</Button>
-                            <Button id="create-button">create.it</Button>
+                            <Button id="create-button" type="submit">create.it</Button>
                         </div>
                     </form>
                 </div>
