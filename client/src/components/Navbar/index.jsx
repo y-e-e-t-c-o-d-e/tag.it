@@ -2,8 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { AuthContext } from "../../auth/Auth";
 import './style.css';
-import logo from '../../assets/tagit-darkercoral\ 1.svg'
-import tagit from '../../assets/logo.png'
+import logo from '../../assets/logo.png'
 import db from "../../base"
 import API from "../../utils/API"
 import { courseToLink } from '../../utils';
@@ -12,7 +11,7 @@ const loginRender = () => (
     <Navbar expand="lg" inverse fluid>
         <Navbar.Brand href="#home"><img
             alt=""
-            src={tagit}
+            src={logo}
             width="130"
             height="50"
             className="d-inline-block align-top"
@@ -33,7 +32,7 @@ const regularRender = (studentCourses, instructorCourses) => {
         <Navbar expand="lg" inverse fluid>
             <Navbar.Brand href="#home"><img
                 alt=""
-                src={tagit}
+                src={logo}
                 width="130"
                 height="50"
                 className="d-inline-block align-top"
@@ -42,6 +41,7 @@ const regularRender = (studentCourses, instructorCourses) => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="">
                 <Nav className="ml-auto" >
+                    <Nav.Link href="/">home</Nav.Link>
                     <NavDropdown title="courses" id="basic-nav-dropdown">
                         { studentCourses.length > 0 && 
                             studentCourses.map((course, key) => {

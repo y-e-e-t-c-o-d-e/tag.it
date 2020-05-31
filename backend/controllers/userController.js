@@ -4,7 +4,7 @@ const course = require("../models/Course");
 exports.addUser = async (req, res) => {
     // Check that required data is given
     const bodyParams = req.body;
-    if (!("name" in bodyParams || "email" in bodyParams || "uuid" in bodyParams)) {
+    if (!("name" in bodyParams && "email" in bodyParams && "uuid" in bodyParams)) {
         res.status(422).json({
             status: 422,
             error: "Missing one of the following parameters: name, email, or uuid"

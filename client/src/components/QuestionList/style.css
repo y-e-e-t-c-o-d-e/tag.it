@@ -1,0 +1,11 @@
+.qList {
+    border: none;
+    position: relative;
+    margin: 5px;
+    flex: .8;
+    background: #E4ECEE;
+    padding: 2.5%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 100%;
+}
