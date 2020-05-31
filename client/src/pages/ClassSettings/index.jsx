@@ -1,6 +1,6 @@
 import React, {useRef, useState, useEffect } from "react";
+import {Button} from 'react-bootstrap';
 import Navigation from "../../components/Navbar"
-import Button from "../../components/Button/index";
 import './style.css';
 import API from "../../utils/API";
 
@@ -27,7 +27,6 @@ const ClassSettings = ({classUuid, match}) => {
         }).catch(() => {
             setCourseName('Default Class Name')
         })
-        console.log(courseName);
     }, [])
     
     /* Updates the DB with the new class name and description */
@@ -39,7 +38,7 @@ const ClassSettings = ({classUuid, match}) => {
             // TODO: Get some way to get the courseUUID (via props?)
             const uuid = classUuid || "FakeUUID";
             await API.updateCourse(uuid, className);
-            console.log("yeet");
+            alert("Course updated!");
         }
         else{alert("Course name can not be empty");}
     };
@@ -108,19 +107,19 @@ const ClassSettings = ({classUuid, match}) => {
                                 <textarea readOnly ref={invitationRef}
                                     className="invitation-link" type="text" value={link}>
                                 </textarea> 
-                                <Button text="copy" onSubmit={copyLinkToClipboard}/>
+                                <Button onClick={copyLinkToClipboard}>Copy</Button>
                             </div>
                         </label>
                         <div className="center-button">
-                            <button type="submit">Submit</button>
                         </div>
+                            <div className="buttons">
+                                <Button>Instructors</Button>
+                                <Button>Tags</Button>
+                                <Button>Archive</Button>
+                                <Button>Disable</Button>
+                                <Button type="submit">Save Changes</Button>
+                            </div>
                     </form>
-                    <div className="buttons">
-                        <Button text="instructors"/>
-                        <Button text="Tags"/>
-                        <Button text="Archive"/>
-                        <Button text="Disable"/>
-                    </div>
                 </div>
             </div>
         </div>
