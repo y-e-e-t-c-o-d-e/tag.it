@@ -338,6 +338,7 @@ getUserById = async (uuid) => {
     }) 
 }
 
+
 deleteUserById = async (uuid) => {
     const ref = db.ref('Users/'+uuid);
     try{
