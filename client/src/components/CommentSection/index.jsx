@@ -27,7 +27,7 @@ const CommentSection = ({ commentList, postId }) => {
         e.preventDefault();
         const TEXT_AREA_IDX = 0, SELECT_IDX = 1;
         const commentContent = e.target.elements[TEXT_AREA_IDX].value;
-        const visibility = e.target.elements[SELECT_IDX].value;
+        const visibility = e.target.elements[SELECT_IDX].textContent;
 
         API.createComment(commentContent, visibility, null, postId);
     };
@@ -44,9 +44,9 @@ const CommentSection = ({ commentList, postId }) => {
                             <div className="select-anonymous">
                                 <p>Discuss as: </p>
                                 <DropdownButton id="dropdown-button-form" title={visibility} drop="up">
-                                    <Dropdown.Item as="button" onClick={() => { setVisiblity("public, visible") }} >public, visible</Dropdown.Item>
-                                    <Dropdown.Item as="button" onClick={() => { setVisiblity("public, anonymous") }} >public, anonymous</Dropdown.Item>
-                                    <Dropdown.Item as="button" onClick={() => { setVisiblity("private") }} >private</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => { setVisiblity("public, visible") }} >public, visible</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => { setVisiblity("public, anonymous") }} >public, anonymous</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => { setVisiblity("private") }} >private</Dropdown.Item>
                                 </DropdownButton>
                             </div>
                             <Button id="cancel-button" onClick={() => { setNewComment(false) }}>cancel</Button>

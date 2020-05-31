@@ -67,7 +67,7 @@ const Home = ({ currentUser, match }) => {
                     </Col>
                 </Row>
             </div>
-            <CommentSection commentList={comments} />
+            <CommentSection commentList={comments} postId={183} />
         </div>
     )
 };
