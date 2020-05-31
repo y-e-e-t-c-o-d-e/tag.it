@@ -26,10 +26,10 @@ exports.addComment = async (req, res) => {
         // Provided parentComment id
         if (parentComment) {
             const parentCommentObj = await comment.getCommentById(parentComment);
-            await parentCommentObj.addChild(commentObjKey);
+            parentCommentObj.addChild(commentObjKey);
         } else {
             const postObj = await post.getPostById(postId);
-            await postObj.addComment(commentObjKey);
+            postObj.addComment(commentObjKey);
         }
 
         res.status(200).json("Comment added");
@@ -97,10 +97,10 @@ const getSubComments = async (commentObj) => {
     const subComments = await commentObj.getChildList().reduce(async (acc, subCommentId) => {
         try {
             let subComment = await comment.getCommentById(subCommentId);
-            if (subComment) {
-                subComment = await getSubComments(subComment);
-                (await acc).push(subComment.props);
-            }
+
+            subComment = await getSubComments(subComment);
+            (await acc).push(subComment.props);
+
             return acc;
         } catch (e) {
             return acc;
