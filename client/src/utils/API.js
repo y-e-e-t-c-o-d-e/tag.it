@@ -20,7 +20,7 @@ export default {
     },
     createUser: function (name, email, uuid) {
         const config = {
-            method: 'post', 
+            method: 'post',
             url: `${baseURL}/api/user`,
             data: {
                 name: name,
@@ -60,8 +60,8 @@ export default {
     },
     /** COURSES */
     // courses is an array of course objects
-    addToCourses: function(courses) {
-        
+    addToCourses: function (courses) {
+
     },
 
     getCourse: function (uuid) {
@@ -73,7 +73,7 @@ export default {
 
     updateCourse: function (courseUUID, courseName) {
         const config = {
-            method: 'put', 
+            method: 'put',
             url: `${baseURL}/api/course`,
             data: {
                 uuid: courseUUID,
@@ -84,7 +84,7 @@ export default {
         return axios(config);
     },
 
-    addToCourse: function(courseId) {
+    addToCourse: function (courseId) {
         const config = {
             method: 'post',
             url: `${baseURL}/api/user/${courseId}`,
@@ -93,6 +93,7 @@ export default {
         return axios(config);
     },
     getAllCourses: function() {
+
         const config = {
             headers: authHeaders(),
             transformResponse: [function (data) {
@@ -114,6 +115,23 @@ export default {
                 name: name,
                 term: term,
                 description: description
+            }
+        };
+        return axios(config);
+    }, 
+
+    /** COMMENTS */
+    createComment: function (content, visibility, parentComment, postId) {
+        const anonymous = visibility === "public, anonymous"
+        const config = {
+            method: 'post',
+            url: `${baseURL}/api/comment`,
+            headers: authHeaders(),
+            data: {
+                content: content,
+                isAnonymous: anonymous,
+                parentComment: parentComment,
+                postId: postId
             }
         };
         return axios(config);
@@ -145,7 +163,22 @@ export default {
             }
         };
         return axios(config);
+
+    getComments: function (postUUID) {
+        const config = {
+            headers: authHeaders(),
+            params: {
+                postUUID: postUUID
+            },
+            transformResponse: [function (data) {
+                const jsonData = JSON.parse(data);
+                // Convert object to array of objects
+                const courseArray = Object.keys(jsonData).map(i => jsonData[i]);
+                return courseArray;
+            }]
+        };
+        return axios.get(`${baseURL}/api/comment`, config);
     }
 }
 
-export {baseURL};
+export { baseURL };

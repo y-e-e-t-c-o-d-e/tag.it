@@ -1,0 +1,27 @@
+#username {
+    font-weight: bold;
+    margin-right: 5px;
+    color: #005D83;
+}
+
+#date {
+    color: rgba(0, 0, 0, 0.25);
+}
+
+.comment {
+    margin: 10px 0 0 25px;
+    border-left: 1.5px solid #E0DEDE;
+    padding: 5px;
+}
+
+.comment-options a {
+    color: #3E697A;
+    text-decoration: none;
+    margin-right: 10px;
+    transition: color 0.1s linear;
+}
+
+.comment-options a:hover {
+    color: #F9D127;
+    transition: color 0.1s linear;
+}

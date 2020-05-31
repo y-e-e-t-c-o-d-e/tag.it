@@ -85,8 +85,6 @@ exports.updateCourse = async (req, res) => {
 exports.getCourseInfo = async (req, res) => {
     const courseUUID = req.params.courseId;
     const userObj = req.user;
-    debugger
-    console.log(`recieved request`)
     
     if (!courseUUID || !userObj) {
         res.status(422).json({
@@ -96,7 +94,6 @@ exports.getCourseInfo = async (req, res) => {
         return;
     };
 
-    console.log(`recieved request for ${courseUUID}`)
     try {
         const courseObj = await course.getCourseById(courseUUID);
         let type = "";
