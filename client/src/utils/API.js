@@ -81,7 +81,6 @@ export default {
         };
         return axios(config);
     },
-
     getAllCourses: function() {
         const config = {
             headers: authHeaders(),
