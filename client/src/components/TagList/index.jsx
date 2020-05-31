@@ -4,8 +4,6 @@ import { Button, ListGroup, Row, Col } from "react-bootstrap";
 
 
 const TagList = ({tags}) => {
-    
-    console.log(tags)
     const [search, setSearch] = useState(""); // default to no search input
     
     return (
