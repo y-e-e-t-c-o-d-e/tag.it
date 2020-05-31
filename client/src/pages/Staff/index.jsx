@@ -31,17 +31,12 @@ const Staff = ({ history, match, currentUser }) => {
     /* Function for handling inviting staff */
     const handleStaffInvite = async (event) => {
         event.preventDefault();
-        const { email } = event.target.elements;
+        const email = event.target.elements.email.value;
 
         // try to add staff to course in database
         try {
-            const userId = await API.inviteUser(email);
-            const mapCopy = {...emailToIdMap};
-            mapCopy[userId] = email;
-            setEmailToIdMap(mapCopy);
-            setCurrCourses(currCourses.concat(email.value));
-
-            event.target.reset();
+            await API.inviteUserToCourse(courseId, email);
+            setCurrCourses(currCourses.concat(email));
         } catch (error) {
             alert(error);
         }
@@ -51,11 +46,14 @@ const Staff = ({ history, match, currentUser }) => {
         try {
             if (!pendingRequest) {
                 pendingRequest = true;
-                await API.removeUserFromCourse(courseId, emailToIdMap[instructor]);
-                pendingRequest = false;
-                setCurrCourses(currCourses.filter((val) => val !== instructor));
+
+                // Map only contains confirmed users
+                if (emailToIdMap[instructor]) {
+                    await API.removeUserFromCourse(courseId, emailToIdMap[instructor]);
+                    pendingRequest = false;
+                }
             }
-            
+            setCurrCourses(currCourses.filter((val) => val !== instructor));
         } catch (error) {
             alert("An error occurred when removing this instructor.");
         }
@@ -78,7 +76,7 @@ const Staff = ({ history, match, currentUser }) => {
                         <p>Currently inviting instructors for</p>
                         <h2>Enter Instructor Email (e.g. username@ucsd.edu)</h2>
                         <form onSubmit={handleStaffInvite}>
-                            <input name="email" type="email" placeholder="Add new instructor email" required="required" pattern=".+@ucsd\.edu" style={{ backgroundColor: "#e6e5e5" }} />
+                            <input name="email" type="email" placeholder="Add new instructor email" required="required"  style={{ backgroundColor: "#e6e5e5" }} />
                             <div className="input">
                                 <Button id="invite-button" type="submit">Invite</Button>
                             </div>

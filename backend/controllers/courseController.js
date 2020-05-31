@@ -221,6 +221,16 @@ exports.getCourseUsers = async (req, res) => {
 // Sends an email to the passed in user (defaults to student)
 exports.sendEmail = async (req, res) => {
 
+    const courseUUID = req.params.courseId;
+    if (!courseUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing paramater: courseUUID"
+        });
+        return;
+    };
+
+
     const bodyParams = req.body;
     if (!("email" in bodyParams)) {
        res.status(422).json({
@@ -230,31 +240,39 @@ exports.sendEmail = async (req, res) => {
        return;
     };
 
-    let inviteURL;
-    if ("type" in bodyParams && bodyParams["type"] == "instructor") {
-        inviteURL = "https://tagdotit.netlify.app/course/"+courseUUID+"/invite/"+courseObj.getInstructorInviteId();
-    } else {
-        inviteURL = "https://tagdotit.netlify.app/course/"+courseUUID+"/invite/"+courseObj.getStudentInviteId();
-    }
-
-    let transporter = nodemailer.createTransport({
-        host: "smtp.mailtrap.io",
-        port: 2525,
-        auth: {
-            user: "927580363f9fc5",
-            pass: "81ac04611559b3"
+    try {
+        const courseObj = await course.getCourseById(courseUUID);
+        let inviteURL;
+        if ("type" in bodyParams && bodyParams["type"] == "instructor") {
+            inviteURL = "https://tagdotit.netlify.app/course/"+courseUUID+"/invite/"+courseObj.getInstructorInviteId();
+        } else {
+            inviteURL = "https://tagdotit.netlify.app/course/"+courseUUID+"/invite/"+courseObj.getStudentInviteId();
         }
-    });
 
-    let mailOptions = {
-        from: 'tag.it',
-        to: bodyParams["email"],
-        subject: "Invite link for new course " + courseObj.getName() + " on tag.it!",
-        text: "You've been invited to use the sickest platform to grace this planet! Check it out here: " + inviteURL
-    };
+        let transporter = nodemailer.createTransport({
+            host: "smtp.mailtrap.io",
+            port: 2525,
+            auth: {
+                user: "927580363f9fc5",
+                pass: "81ac04611559b3"
+            }
+        });
 
-    await transporter.sendMail(mailOptions);
-    res.status(200).send("Invite sent!");
+        let mailOptions = {
+            from: 'tag.it',
+            to: bodyParams["email"],
+            subject: "Invite link for new course " + courseObj.getName() + " on tag.it!",
+            text: "You've been invited to use the sickest platform to grace this planet! Check it out here: " + inviteURL
+        };
+
+        await transporter.sendMail(mailOptions);
+        res.status(200).send("Invite sent!");
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    }
 }
 
 

@@ -122,11 +122,18 @@ export default {
         return axios.delete(`${baseURL}/api/course/${courseUUID}/${userUUID}`, config);
     },
 
-    inviteUserToCourse: function (courseUUID, userUUID) {
+    inviteUserToCourse: function (courseUUID, userEmail) {
+        console.log(userEmail);
+        console.log(courseUUID);
         const config = {
-            headers: authHeaders()
+            method: 'post',
+            url: `${baseURL}/api/course/${courseUUID}/invite`,
+            headers: authHeaders(),
+            data: {
+                email: userEmail
+            }
         };
-        return axios.post(/**Yeet */)
+        return axios(config);
     }
 }
 
