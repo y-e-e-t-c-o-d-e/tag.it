@@ -47,9 +47,47 @@ exports.getTag = async (req, res) => {
 };
 
 exports.updateTag = async (req, res) => {
-    // Object of fields and values to update in the Tag object
-    const updateParams = req.body;
-    res.status(200).send("Updated Tag.");
+    // Object of fields and values to update in the tag object
+    const bodyParams = req.body;
+    const tagUUID = req.query.tagUUID;
+    if (!tagUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing paramater: tagUUID"
+        });
+        return;
+    };
+
+    try {
+        tagObj = getTagById(tagUUID);
+        if ("name" in bodyParams) {
+            tagObj.updateName(bodyParams["name"]);  // Change to setName in the future?
+        }
+        if ("parentTag" in bodyParams) {
+            tagObj.setParentTag(bodyParams["parentTag"]);
+        }
+        if ("rmParentTag" in bodyParams) {
+            tagObj.removeParentTag(bodyParams["rmParentTag"]);
+        }
+        if ("subTag" in bodyParams) {
+            tagObj.addSubTag(bodyParams["subTag"]);
+        }
+        if ("rmSubTag" in bodyParams) {
+            tagObj.removeSubTag(bodyParams["rmSubTag"]);
+        }
+        if ("post" in bodyParams) {
+            tagObj.addPost(bodyParams["post"]);
+        }
+        if ("rmPost" in bodyParams) {
+            tagObj.removePost(bodyParams["rmPost"]);
+        }
+        res.status(200).send("Updated tag");
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    };
 };
 
 // Deletes course
