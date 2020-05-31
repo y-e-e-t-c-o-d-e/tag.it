@@ -83,7 +83,9 @@ exports.updateCourse = async (req, res) => {
 exports.getCourseInfo = async (req, res) => {
     const courseUUID = req.params.courseId;
     const userObj = req.user;
-
+    debugger
+    console.log(`recieved request`)
+    
     if (!courseUUID || !userObj) {
         res.status(422).json({
             status: 422,
@@ -92,6 +94,7 @@ exports.getCourseInfo = async (req, res) => {
         return;
     };
 
+    console.log(`recieved request for ${courseUUID}`)
     try {
         const courseObj = await course.getCourseById(courseUUID);
         let type = "";
@@ -137,8 +140,8 @@ exports.getCourseInfo = async (req, res) => {
             const b = post2.time;
 
             // Date Object Format - Date(year, month, day, hour, minute, seconds)
-            const date1 = new Date(a.substr(4,4), parseInt(a.substr(0,2)) - 1, a.substr(2,2), a.substr(9,2), a.substr(12,2));
-            const date2 = new Date(b.substr(4,4), parseInt(b.substr(0,2)) - 1, b.substr(2,2), b.substr(9,2), b.substr(12,2));
+            const date1 = new Date(a);
+            const date2 = new Date(b);
             
             if (date1 < date2) {
                 return 1;
@@ -154,6 +157,8 @@ exports.getCourseInfo = async (req, res) => {
             type: type
         });
     } catch (e) {
+        console.log("no course fuond")
+        console.log(e)
         res.status(410).json({
             status: 410,
             error: e.message
@@ -216,8 +221,8 @@ exports.sendEmail = async (req, res) => {
             host: "smtp.mailtrap.io",
             port: 2525,
             auth: {
-                user: "cf3d98a2d7c95b",
-                pass: "3aa9caeb1f6943"
+                user: "927580363f9fc5",
+                pass: "81ac04611559b3"
             }
         });
 

@@ -1,5 +1,6 @@
 // TODO: uncomment when models are done
 const post = require("../models/Post");
+const Tag = require("../models/Tag");
 
 exports.addPost = async (req, res) => {
     // TODO: Handle later with models
@@ -13,8 +14,8 @@ exports.addPost = async (req, res) => {
         return
     }
     try {
-        await post.pushPostToFirebase(bodyParams);
-        res.status(200).send(`Added post ${bodyParams.uuid}`)
+        const key = await post.pushPostToFirebase(bodyParams);
+        res.status(200).send(`Added post ${key}`)
     } catch (e) {
         res.status(410).json({
             status: 410,
@@ -33,23 +34,12 @@ exports.getPost = async (req, res) => {
         return;
     };
 
-    // TODO: Delete mockData and replace with dynamic user model data.
-    const mockData = {
-        title: "Test Title",
-        content: "Hey this is a Body of the Post!",
-        author: "userUUID here",
-        tagList: ["some tag id", "some tag id"],
-        commentList: ["some comment id", "some comment id"],
-        followingList: ["some user id", "some user"],
-        isAnnouncement: false,
-        isPinned: false,
-        isResolved: false,
-        isPrivate: false,
-        isAnonymous: false,
-        score: 12,
-        isInstructor: false,
-    };
-    res.status(200).json(mockData);
+    const postObj = await post.getPostById(postUUID)
+    postObj.props.filledInTags = await Promise.all(postObj.getTagList().map(async tagUUID => {
+        return (await Tag.getTagById(tagUUID)).props
+    }))
+
+    res.status(200).json(postObj.props);
 };
 
 exports.updatePost = async (req, res) => {

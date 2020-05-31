@@ -57,14 +57,6 @@ class User {
     setName = async (name) => {
         this.props.name = name;
     }
-    
-    addStudentCourse = async (courseId) => {
-        await this.updateUser();
-        this.props.studentCourseList.push(courseId);
-        const currentCourse = course.getCourseById(courseId);
-        //await currentCourse.addStudent(this.props.uuid);
-        await this.push();
-    }
 
     setEmail = async (email) => {
         this.props.email = email;
@@ -80,28 +72,6 @@ class User {
         await this.push();
     }
 
-    addStudentCourse = async (courseId) => {
-        await this.updateUser();
-        // Avoid adding duplicates
-        if (this.props.studentCourseList.indexOf(courseId) < 0) {
-            this.props.studentCourseList.push(courseId);
-            const currentCourse = course.getCourseById(courseId);
-            //await currentCourse.addStudent(this.props.uuid);
-            await this.push();
-        } else {
-            throw new InternalServerError(`Student Course ${courseId} already exists.`);
-        }
-    }
-
-    removeStudentCourse = async (courseId) => {
-        await this.updateUser();
-        const index = this.props.studentCourseList.indexOf(courseId);
-        if (index != -1) {
-            // is this where i handle removing self from course's studentList?
-            this.props.studentCourseList.splice(index, 1);
-        }
-        await this.push();
-    }
 
     addInstructorCourse = async (courseId) => {
         await this.updateUser();
@@ -113,15 +83,6 @@ class User {
             await this.push();
         } else {
             throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
-        }
-    }
-    
-    removeInstructorCourse = async (courseId) => {
-        await this.updateUser();
-        const index = this.props.instructorCourseList.indexOf(courseId);
-        if (index != -1) {
-            // is this where i handle removing self from course's studentList?
-            this.props.instructorCourseList.splice(index, 1);
         }
     }
 
@@ -168,17 +129,6 @@ class User {
         while(!this.arraysEqual(this.props.instructorCourseList, user.props.instructorCourseList)) {
             this.props.instructorCourseList = tag.props.instructorCourseList;
             user = await getUserById(this.props.uuid);
-        }
-    }
-
-    addInstructorCourse = async (courseId) => {
-        await this.updateInstructorCourses();
-        // Avoid adding duplicates
-        if (this.props.instructorCourseList.indexOf(courseId) < 0) {
-            this.props.instructorCourseList.push(courseId);
-            await this.push();
-        } else {
-            throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
         }
     }
 
