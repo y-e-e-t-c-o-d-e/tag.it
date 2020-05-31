@@ -4,7 +4,8 @@ import './style.css';
 import db from "../../base";
 import Navigation from "../../components/Navbar";
 import TagList from "../../components/TagList/index.jsx";
-import PostCreator from "../../components/PostCreator/index.jsx"
+import PostCreator from "../../components/PostCreator/index.jsx";
+import QuestionList from "../../components/QuestionList/index";
 import { Row, Col, Nav } from 'react-bootstrap';
 
 const Home = ({currentUser, match}) => { 
@@ -25,8 +26,10 @@ const Home = ({currentUser, match}) => {
                 </Col>
             </Row>
             </div>
+            <QuestionList/>
         </div>
     )
+
 };
 
 export default Home;

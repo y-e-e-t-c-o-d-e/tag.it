@@ -5,6 +5,8 @@
     padding: 0 1em;
     text-align: center;
     overflow: hidden;
+    display: inline-block;
+    margin: 0 0.5em;
 }
 
 .post-grid:after{
