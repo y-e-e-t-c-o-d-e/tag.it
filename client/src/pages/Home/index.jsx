@@ -30,6 +30,7 @@ const Home = ({currentUser, match}) => {
             <PostViewer/>
         </div>
     )
+
 };
 
 export default Home;
