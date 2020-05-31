@@ -7,7 +7,15 @@ import TagList from "../../components/TagList/index.jsx";
 import { Row, Col, Nav } from 'react-bootstrap';
 import CoursesView from '../../components/CoursesView/index.jsx';
 
-const Home = ({currentUser}) => { 
+const Home = ({ currentUser, history, match }) => {
+    if (match) {
+        const courseId = match.params.courseId;
+    }
+
+    const redirectClassCreation = () => {
+        history.push("/createclass");
+    }
+
     const displayName = currentUser ? currentUser.name : "Loading"
     const { courseId } = useParams();
 
@@ -18,7 +26,7 @@ const Home = ({currentUser}) => {
                 <Row>
                     <Col xs={2}></Col>
                     <Col xs={8}>
-                        <CoursesView currentUser={currentUser} username={displayName}/>
+                        <CoursesView currentUser={currentUser} username={displayName} />
                     </Col>
                     <Col xs={2}></Col>
                 </Row>

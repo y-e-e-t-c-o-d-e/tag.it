@@ -2,6 +2,7 @@
 const post = require("../models/Post");
 const { db } = require("../shared/firebase")
 const { InternalServerError } = require("../shared/error");
+const User = require("./User");
 const { makeId } = require("../shared/util");
 
 class Course {
@@ -74,6 +75,10 @@ class Course {
         return this.props.postList.slice(1, this.props.postList.length);
     }
 
+    getDescription() {
+        return this.props.description;
+    }
+    
     getStudentInviteId() {
         return this.props.studentInviteId;
     }
@@ -93,6 +98,11 @@ class Course {
 
     setTerm = async (term) => {
         this.props.term = term;
+        await this.push();
+    }
+
+    setDescription = async (desc) => {
+        this.props.description = desc;
         await this.push();
     }
 
@@ -143,6 +153,27 @@ class Course {
         if (this.props.pendingInstructorList.indexOf(userEmail) >= 0) {
             this.props.pendingInstructorList.splice(this.props.instructorList.indexOf(userEmail), 1);
             await this.push();
+        }
+    }
+    removeInstructor = async (userId) => {
+        this.updateCourse();
+        if (this.props.instructorList.indexOf(userId) >= 0) {
+            this.props.instructorList.splice(this.props.instructorList.indexOf(userId), 1);
+            await this.push();
+
+            const userObj = await User.getUserById(userId);
+            await userObj.removeInstructorCourse(userId);
+        }
+    }
+
+    removeStudent = async (userId) => {
+        this.updateCourse();
+        if (this.props.studentList.indexOf(userId) >= 0) {
+            this.props.studentList.splice(this.props.studentList.indexOf(userId), 1);
+            await this.push();
+
+            const userObj = await User.getUserById(userId);
+            await userObj.removeStudentCourse(userId);
         }
     }
 
@@ -285,6 +316,7 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                     pendingInstructorList: ["dummy_val"],
                     tagList: ["dummy_val"],
                     postList: ["dummy_val"],
+                    description: updateParams['description']
                 });
                 await user.addInstructorCourse((await courseRef).key);
                 resolve((await courseRef).key);
@@ -335,7 +367,6 @@ deleteCourseById = async (uuid) => {
     }
 }
    
-module.exports.Course = Course
-module.exports.getCourseById = getCourseById
-module.exports.deleteCourseById = deleteCourseById
-
+module.exports.Course = Course;
+module.exports.getCourseById = getCourseById;
+module.exports.deleteCourseById = deleteCourseById;

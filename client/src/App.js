@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from './pages/Home/index';
 import Login from './pages/Login/index';
 import Signup from './pages/Signup/index';
+import ClassCreation from './pages/ClassCreation/index';
+import Staff from './pages/Staff/index';
 import ClassSettings from './pages/ClassSettings/index';
 import Invitation from './pages/Invitation/index';
 import PostView from './pages/PostView';
@@ -25,6 +27,8 @@ const App = () => {
             <PrivateRoute exact path="/courses/:courseId" component={CourseView} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
+            <PrivateRoute exact path="/createclass" component={ClassCreation} />
+            <PrivateRoute exact path="/course/:courseId/staff" component={Staff} />
             <PrivateRoute exact path="/course/:courseId/post/:postId" component={PostView} />
             <PrivateRoute exact path="/course/:courseId/settings" component={ClassSettings} />
             <PrivateRoute exact path="/course/:courseId/invite/:inviteId" component={Invitation} />
