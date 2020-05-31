@@ -81,8 +81,8 @@ export default {
         };
         return axios(config);
     },
+    getAllCourses: function() {
 
-    getAllCourses: function () {
         const config = {
             headers: authHeaders(),
             transformResponse: [function (data) {
