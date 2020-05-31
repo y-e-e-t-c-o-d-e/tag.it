@@ -1,0 +1,11 @@
+.courses-view {
+    text-align: center;
+}
+.jumbotron {
+    border: 15px solid #A6D1DF;
+    border-radius: 0;
+}
+.course-btn {
+    display: block;
+    width: 100%;
+}
