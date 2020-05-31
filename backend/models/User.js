@@ -134,7 +134,7 @@ class User {
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
     push = async () => {
-        await db.ref("rohithUsers").child(this.props.uuid).set({
+        await db.ref("Users").child(this.props.uuid).set({
             name: this.props.name, 
             email: this.props.email, 
             uuid: this.props.uuid, 
@@ -154,7 +154,7 @@ module.exports.pushUserToFirebase = (updateParams) => {
     const uuid = updateParams['uuid'];
     return new Promise(async (resolve, reject) => {
         try {
-            await db.ref("rohithUsers").child(uuid).set({
+            await db.ref("Users").child(uuid).set({
                 name: name, 
                 email: email, 
                 uuid: uuid, 
@@ -176,7 +176,7 @@ module.exports.pushUserToFirebase = (updateParams) => {
 
 
 getUserById = async (uuid) => {
-    const ref = db.ref('rohithUsers/' + uuid);
+    const ref = db.ref('Users/' + uuid);
 
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
@@ -189,7 +189,7 @@ getUserById = async (uuid) => {
 }
 
 deleteUserById = async (uuid) => {
-    const ref = db.ref('rohithUsers/'+uuid);
+    const ref = db.ref('Users/'+uuid);
     ref.remove().then(function() {
         console.log("Remove succeeded.");
     }).catch(function(error) {
