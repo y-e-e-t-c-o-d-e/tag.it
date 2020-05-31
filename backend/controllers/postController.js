@@ -1,5 +1,5 @@
 // TODO: uncomment when models are done
-const post = require("../models/post");
+const post = require("../models/Post");
 
 exports.addPost = async (req, res) => {
     // TODO: Handle later with models
