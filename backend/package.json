@@ -4,10 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "test": "mocha --exit",
-    "test-single": "mocha -R nyan --exit",
-    "clean" : "rm -rf node_modules/"
+    "test-single": "mocha --timeout 5000 -R nyan --exit",
+    "clean": "rm -rf node_modules/"
   },
   "author": "",
   "license": "ISC",
@@ -19,5 +19,8 @@
     "express": "^4.17.1",
     "firebase": "^7.14.3",
     "mocha": "^7.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }
