@@ -8,4 +8,7 @@ router.route("/")
     .get(postController.getPost) // Read
     .put(postController.updatePost) // Update
 
+// Matches with "/api/post/follow"
+router.route("/follow")
+    .post(postController.toggleFollow)
 module.exports = router;

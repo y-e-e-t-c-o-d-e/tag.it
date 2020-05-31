@@ -8,8 +8,12 @@ router.route("/")
     .get(courseController.getAllCourses) // Read
     .put(courseController.updateCourse) // Update
 
-// Matches with "/api/course/courseId"
+// Matches with "/api/course/:courseId"
 router.route("/:courseId")
     .get(courseController.getCourseInfo)
     .delete(courseController.deleteCourse)
+
+// Matches with "/api/course/:courseId/invite"
+router.route("/:courseId/invite")
+    .post(courseController.sendEmail)
 module.exports = router;
