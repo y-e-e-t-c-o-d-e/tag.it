@@ -339,16 +339,6 @@ getUserById = async (uuid) => {
 }
 
 
-deleteUserById = async (uuid) => {
-    const ref = db.ref('Comments/'+uuid);
-    try{
-        const result = await ref.remove();
-        return true;
-    } catch (e) {
-        console.log(e);
-        return false;
-    }
-}
    
 module.exports.User = User
 module.exports.getUserById = getUserById
