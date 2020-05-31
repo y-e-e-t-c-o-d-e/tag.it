@@ -32,6 +32,7 @@ const Home = ({ currentUser, history, match }) => {
             </div>
         </div>
     )
+
 };
 
 export default Home;
