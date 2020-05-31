@@ -36,6 +36,15 @@ class Course {
         return this.props.postList.slice(1, this.props.postList.length);
     }
 
+    setName = async (name) => {
+        this.props.name = name;
+        await this.push();
+    }
+
+    setTerm = async (term) => {
+        this.props.term = term;
+        await this.push();
+    }
 
     addTag = async (tagId) => {
         this.props.tagList.push(tagId);

@@ -15,9 +15,7 @@ describe('tag', () => {
         console.log("Setup for Tag Test Suite")
         const tagParams = {
             name: "pa1", 
-            numUsed: "3",
             parentTag: "dummy_parent", 
-            subTags: ["dummy_tag"],
             course: "course1",
             postList: ["post2"],
         }
@@ -55,7 +53,7 @@ describe('tag', () => {
 
     it('should increment testTag numUsed in firebase', async() => {
         await testTag.incrementNumUsed();
-        expect(await testTag.getNumUsed()).to.equal(4);
+        expect(await testTag.getNumUsed()).to.equal(2);
     })
 
     it('should update testTag name in firebase', async() => {

@@ -5,7 +5,6 @@ const post = require("../models/Post");
 const user = require("../models/User");
 const comment = require("../models/Comment");
 const tag = require("../models/Tag");
-const db = require("../models/firebase").db;
 
 // User test suite 
 describe('post', async () => {
@@ -53,20 +52,34 @@ describe('post', async () => {
     })
 
     it('should add and remove follower of post in firebase', async() => {
-        expect(testPost.getUsersFollowing().length).to.equal(0);
-        testPost.addFollower('user1');
         expect(testPost.getUsersFollowing().length).to.equal(1);
         testPost.addFollower('user2');
-        testPost.removeFollower('user2');
-        expect(testPost.getUsersFollowing().length).to.equal(1);
+        expect(testPost.getUsersFollowing().length).to.equal(2);
+        testPost.addFollower('user3');
+        testPost.removeFollower('user3');
+        expect(testPost.getUsersFollowing().length).to.equal(2);
     })
 
     it('should add and remove comment of post in firebase', async() => {
+        let commentKey;
+        const commentParams = {
+            content: "yo this makes no sense",
+            author: "user2", 
+            postId: key,
+            isAnonymous : true
+        }
+
+        try {
+            commentKey = await comment.pushCommentToFirebase(commentParams);
+        } catch(e) {
+            console.log(e);
+        }
+
         expect(testPost.getCommentList().length).to.equal(0);
         testPost.addComment('comment1');
         expect(testPost.getCommentList().length).to.equal(1);
-        testPost.addComment('comment2');
-        await testPost.removeComment('comment2');
+        testPost.addComment(commentKey);
+        await testPost.removeComment(commentKey);
         expect(testPost.getCommentList().length).to.equal(1);
     })
 

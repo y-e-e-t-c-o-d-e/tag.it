@@ -27,7 +27,7 @@ class Post {
     }
 
     getUsersFollowing() {
-        return this.props.followingList.slice(1, this.props.followingList.length);
+        return this.props.followingList;
     }
 
     getCommentList() {
@@ -52,6 +52,10 @@ class Post {
 
     getContent() {
         return this.props.content;
+    }
+
+    getTime() {
+        return this.props.time;
     }
 
     setTitle = async (newTitle) => {
@@ -207,6 +211,7 @@ class Post {
             content: this.props.content,
             author: this.props.author, 
             uuid: this.props.uuid,
+            time: this.props.time,
             tagList: this.props.tagList,
             commentList: this.props.commentList,
             followingList: this.props.followingList,
@@ -233,15 +238,16 @@ module.exports.pushPostToFirebase = (updateParams) => {
                 content: updateParams["content"],
                 author: updateParams["author"], 
                 uuid: (await postRef).key,
-                tagList: updateParams["tagList"],
+                time: Date.now(),
+                tagList: "tagList" in updateParams ? updateParams["tagList"] : ["dummy_tag"],
                 commentList: ['dummy_comment'],
-                followingList: ['dummy_user'],
-                isAnnouncement: updateParams["isAnnouncement"],
-                isPinned: updateParams["isPinned"],
-                isAnonymous: updateParams["isAnonymous"],
-                isPrivate: updateParams["isPrivate"],
+                followingList: [updateParams["author"]],
+                isAnnouncement: "isAnnouncement" in updateParams ? updateParams["isAnnouncement"] : false,
+                isPinned: "isPinned" in updateParams ? updateParams["isPinned"] : false,
+                isAnonymous: "isAnonymous" in updateParams ? updateParams["isAnonymous"] : false,
+                isPrivate: "isPrivate" in updateParams ? updateParams["isPrivate"] : false,
                 isResolved: false,
-                isInstructor: updateParams["isInstructor"],
+                isInstructor: "isInstructor" in updateParams ? updateParams["isInstructor"] : false,
                 score: 0,
                 course: updateParams["course"]
             });

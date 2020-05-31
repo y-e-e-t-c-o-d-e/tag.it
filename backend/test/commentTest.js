@@ -15,24 +15,7 @@ describe('comment', () => {
             content: "yo this makes no sense",
             author: "user2", 
             postId: "post1",
-            parentComment: "",
-            isEndorsed: false,
-            isAnonymous: true,
-            isResolved: false
-        }
-
-        const replyComment = {
-            content: "agreed",
-            author: "user3", 
-            uuid: "comment283",
-            time: "05122020 15:55",
-            postId: "post1",
-            parentComment: "",
-            score: 6,
-            childList: [""],
-            isEndorsed: false,
-            isAnonymous: false,
-            isResolved: false
+            isAnonymous : true
         }
 
         try {
@@ -78,10 +61,6 @@ describe('comment', () => {
             content: "agreed",
             author: "user3", 
             postId: "post1",
-            parentComment: "",
-            isEndorsed: false,
-            isAnonymous: false,
-            isResolved: false
         }
         try {
             replyKey = await comment.pushCommentToFirebase(replyCommentParams);
@@ -96,28 +75,4 @@ describe('comment', () => {
         expect(testComment.getChildList().length).to.equal(0);
         comment.deleteCommentById(replyKey);
     })
-
-
-
-
-    /*
-    it('should add comment to comments commentList', async () => {
-        const uuid = 'comment1';
-        const commentId = 'comment283';
-        const testComment = await comment.getCommentById(uuid);
-
-        await testComment.removeChild(commentId);
-        //expect(testComment.props.content).to.equal("yo this makes no sense");
-
-        //const replyTest = await comment.getCommentById(commentId);
-        //expect(replyTest.props.parentComment).to.equal("comment1");
-    })*/
-
-    /*it('should modify comments content', async () => {
-        const uuid = 'comment283';
-        const testComment = await comment.getCommentById(uuid);
-        await testComment.setContent("wait nvm this makes hella sense");
-        expect(testComment.props.content).to.equal("wait nvm this makes hella sense");
-    })*/
-
 });

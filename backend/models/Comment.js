@@ -174,12 +174,13 @@ module.exports.pushCommentToFirebase = (updateParams) => {
                 uuid: (await commentRef).key,
                 time: Date.now(),
                 postId: updateParams["postId"],
-                parentComment: updateParams["parentComment"],
+                parentComment: "parentComment" in updateParams ? updateParams["parentComment"] : "dummy_parent",
                 score: 0,
                 childList: ["dummy_child"],
-                isEndorsed: updateParams["isEndorsed"],
-                isAnonymous: updateParams["isAnonymous"],
-                isResolved: updateParams["isResolved"],
+                isEndorsed: "isEndorsed" in updateParams ? updateParams["isEndorsed"] : false,
+                isAnonymous: "isAnonymous" in updateParams ? updateParams["isAnonymous"] : false,
+                isResolved: false,
+                
             });
             resolve((await commentRef).key);
         } catch(e) {

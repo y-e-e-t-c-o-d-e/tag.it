@@ -136,12 +136,12 @@ module.exports.pushTagToFirebase = (updateParams) => {
             const tagRef = db.ref("Tags").push();
             await tagRef.set({
                 name: updateParams["name"], 
-                numUsed: updateParams["numUsed"],
-                parentTag: updateParams["parentTag"], 
+                numUsed: "postList" in updateParams ? updateParams["postList"].length : 0,
+                parentTag: "parentTag" in updateParams ? updateParams["parentTag"] : "dummy_parent", 
                 uuid: (await tagRef).key,
-                subTags: updateParams["subTags"],
+                subTags: "subTags" in updateParams ? updateParams["subTags"] : ["dummy_tag"],
                 course: updateParams["course"],
-                postList: updateParams["postList"]
+                postList: "postList" in updateParams ? updateParams["postList"] : ["dummy_post"],
             });
             resolve((await tagRef).key);
         } catch(e) {
