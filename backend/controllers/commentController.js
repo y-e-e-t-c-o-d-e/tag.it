@@ -56,10 +56,8 @@ exports.getComment = async (req, res) => {
 
     try {
         const postObj = await post.getPostById(postUUID);
-
         // Gets all the high level comments
         const commentsList = postObj.getCommentList();
-        debugger;
 
         const allComments = await commentsList.reduce(async (acc, val) => {
             let commentObj = await comment.getCommentById(val);
@@ -67,7 +65,7 @@ exports.getComment = async (req, res) => {
             // Comment does exist
             if (commentObj) {
                 commentObj = await getSubComments(commentObj);
-                acc.push(commentObj);
+                (await acc).push(commentObj);
             }
             return acc;
         }, []);
@@ -77,7 +75,7 @@ exports.getComment = async (req, res) => {
     } catch (e) {
         res.status(410).json({
             status: 410,
-            error: "Yikes"
+            error: e
         })
     }
 };
