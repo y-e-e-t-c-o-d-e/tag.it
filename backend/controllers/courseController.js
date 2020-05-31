@@ -204,7 +204,6 @@ exports.getCourseUsers = async (req, res) => {
     try {
         const courseObj = await course.getCourseById(courseUUID);
         
-        // TODO: Filter the data to not send unnecessary stuff
         const filledInInstructors = await Promise.all(courseObj.getInstructorList().map(
             async (instructorId) => (await user.getUserById(instructorId)).props));
         const filledInStudents = await Promise.all(courseObj.getStudentList().map(
