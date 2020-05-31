@@ -3,13 +3,15 @@ import logo from "../../assets/logo.png";
 import './style.css';
 import API from "../../utils/API";
 import AutocompleteTags from '../../components/AutocompleteTags';
+import Navigation from "../../components/Navbar/index.jsx";
+import { Button } from "react-bootstrap";
 
 const bgColors = {
     "default": "white",
     "error": "#ffcccc",
 };
 
-const ClassCreation = ({ history }) => {
+const ClassCreation = ({ currentUser, history }) => {
     /* Function to move forward to Add Staff page */
     const redirectAddStaff = (id) => {
         history.push("/course/" + id + "/staff");
@@ -112,9 +114,7 @@ const ClassCreation = ({ history }) => {
 
     return (
         <div>
-            <div className="header">
-                <img src={logo} alt="Tag.it" height="50" />
-            </div>
+            <Navigation currentUser={currentUser} />
             <div className="container">
                 <div className="container-title">
                     <h1>Create a Class</h1>
@@ -142,12 +142,12 @@ const ClassCreation = ({ history }) => {
                             <p>Initial Tags (Optional):</p>
                             <AutocompleteTags onChange={onChangeSetTags} />
                         </div>
-                        <button type="submit">Next Step: Adding Instructors</button>
+                        <Button id="next-button" type="submit">Next Step: Adding Instructors</Button>
                     </form>
                 </div>
                 {/* Cancel creating a class */}
                 <div className="input">
-                    <button onClick={redirectHome}>Cancel</button>
+                    <Button id="cancel-button" onClick={redirectHome}>Cancel</Button>
                 </div>
             </div>
 

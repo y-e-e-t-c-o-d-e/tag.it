@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import logo from "../../assets/logo.png";
 import './style.css';
 import API from "../../utils/API";
+import Navigation from "../../components/Navbar/index.jsx";
+import { Button } from "react-bootstrap";
 
 const Staff = ({ history, match, currentUser }) => {
 
@@ -68,9 +70,7 @@ const Staff = ({ history, match, currentUser }) => {
 
     return (
         <>
-            <div className="header">
-                <img src={logo} alt="Tag.it" height="50" />
-            </div>
+            <Navigation currentUser={currentUser} />
             <div className="flex-instructors">
                 <div className="invite-box">
                     <div className="invite-content">
@@ -79,14 +79,14 @@ const Staff = ({ history, match, currentUser }) => {
                         <h2>Enter Instructor Email (e.g. username@ucsd.edu)</h2>
                         <form onSubmit={handleStaffInvite}>
                             <input name="email" type="email" placeholder="Add new instructor email" required="required" pattern=".+@ucsd\.edu" style={{ backgroundColor: "#e6e5e5" }} />
-                            <div className="input invite-button">
-                                <button type="submit">Invite</button>
+                            <div className="input">
+                                <Button id="invite-button" type="submit">Invite</Button>
                             </div>
                         </form>
                         <p>*Instructors will have access to the class setting page, and will be able to manage tags, pin posts, make announcements, etc.</p>
                     </div>
-                    <div className="input return-button">
-                        <button onClick={redirectHome}>Return to Course</button>
+                    <div className="input">
+                        <Button id="return-button" onClick={redirectHome}>Return to Course</Button>
                     </div>
                 </div>
                 <div className="curr-instructors">

@@ -2,7 +2,12 @@
     border: 30px solid #A6D1DF;
     color: #9E7772;
     font-size: 1.2em;
-    margin: 2.5% 25% 2.5% 25%;
+    margin: 2.5% auto 2.5% auto;
+    width: 70%;
+}
+
+.container h1 {
+    margin: 2.5% 2.5% 2.5% 2.5%;
 }
 
 .container-title {
@@ -15,11 +20,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 15px 0 15px 0;
     width: 100%;
 }
 
 .flex-row p {
-    margin-right: 10px;
+    margin: 0 10px 0 0;
 }
 
 .flex-row input {
@@ -45,4 +51,10 @@
 
 .input {
     width: 100%;
+    margin-bottom: 15px;
+}
+
+#next-button {
+    background: #F9D127;
+    color: #005D83;
 }
