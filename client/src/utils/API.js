@@ -96,14 +96,16 @@ export default {
     },
 
     /** COMMENTS */
-    createComment: function (content, visibility) {
+    createComment: function (content, visibility, parentComment, postId) {
         const config = {
             method: 'post',
             url: `${baseURL}/api/comment`,
             headers: authHeaders(),
             data: {
                 content: content,
-                visibility: visibility
+                visibility: visibility,
+                parentComment: parentComment,
+                postId: postId
             }
         };
         return axios(config);
