@@ -42,6 +42,7 @@ const regularRender = (studentCourses, instructorCourses) => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="">
                 <Nav className="ml-auto" >
+                    <Nav.Link href="/">home</Nav.Link>
                     <NavDropdown title="courses" id="basic-nav-dropdown">
                         { studentCourses.length > 0 && 
                             studentCourses.map((course, key) => {

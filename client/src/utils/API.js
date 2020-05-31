@@ -44,6 +44,20 @@ export default {
         return axios.get(`${baseURL}/api/post`, config);
     },
 
+    createPost: function (title, content, course) {
+        const config = {
+            method: 'post', 
+            url: `${baseURL}/api/post`,
+            data: {
+                title: title,
+                content: content,
+                author: db.auth().currentUser.uid,
+                course: course
+            },
+            headers: authHeaders()
+        };
+        return axios(config);
+    },
     /** COURSES */
     // courses is an array of course objects
     addToCourses: function(courses) {

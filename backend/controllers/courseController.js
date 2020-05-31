@@ -83,7 +83,7 @@ exports.updateCourse = async (req, res) => {
 exports.getCourseInfo = async (req, res) => {
     const courseUUID = req.params.courseId;
     const userObj = req.user;
-
+    
     if (!courseUUID || !userObj) {
         res.status(422).json({
             status: 422,
