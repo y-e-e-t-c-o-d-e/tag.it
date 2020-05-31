@@ -3,10 +3,6 @@ import './style.css';
 import PostGrid from '../PostGrid/index';
 
 const QuestionList = ({ questions, courseId}) =>{
-    console.log("in q list")
-    console.log(questions)
-
-    // let sortedPosts = questions;
 
     // Sorts the posts by pinned first then reverse chronological order
     const orderedPosts = questions.sort((post1, post2) =>{
@@ -18,7 +14,6 @@ const QuestionList = ({ questions, courseId}) =>{
     });
 
 
-    // console.log(questions)
     // Displays all posts that are not private
     const listBody = orderedPosts.map((post) =>{
         let link = "/course/"+ courseId+ "/post/"+post.uuid;

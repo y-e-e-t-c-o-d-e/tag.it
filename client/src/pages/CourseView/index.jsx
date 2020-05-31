@@ -16,17 +16,14 @@ const states = {
 }
 
 const CourseView = ({currentUser, match}) => { 
-    console.log(useParams())
-
     const { courseId } = useParams();
     const [course, setCourse] = useState({name: "Loading", postList: [], uuid: "Loading"});
     
     useEffect(() => {
         API.getCourse(courseId).then(response => {
             setCourse(response.data)
-            console.log(response)
         }).catch(err => {
-            console.log(err)
+            setCourse({name: "Error", postList: [], uuid: err})
         })
     }, [])
 
