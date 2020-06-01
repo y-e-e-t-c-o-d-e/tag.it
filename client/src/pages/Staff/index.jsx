@@ -4,6 +4,7 @@ import './style.css';
 import API from "../../utils/API";
 import Navigation from "../../components/Navbar/index.jsx";
 import { Button } from "react-bootstrap";
+import { createToast } from '../../utils';
 
 const Staff = ({ history, match, currentUser }) => {
 
@@ -21,7 +22,7 @@ const Staff = ({ history, match, currentUser }) => {
                 return acc;
             }, {}))
         }).catch((e) => {
-            alert(e);
+            createToast(e);
         });
     }, []);    
 
@@ -40,7 +41,7 @@ const Staff = ({ history, match, currentUser }) => {
             await API.inviteUserToCourse(courseId, email);
             setCurrCourses(currCourses.concat(email));
         } catch (error) {
-            alert(error);
+            createToast(error);
         }
     }
 
@@ -60,7 +61,7 @@ const Staff = ({ history, match, currentUser }) => {
             }
             setCurrCourses(currCourses.filter((val) => val !== instructor));
         } catch (error) {
-            alert("An error occurred when removing this instructor.");
+            createToast("An error occurred when removing this instructor.");
         }
     }
 

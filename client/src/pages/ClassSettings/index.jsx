@@ -61,7 +61,7 @@ const ClassSettings = ({ currentUser, match}) => {
 
         // set tags
         
-        else{alert("Course name can not be empty");}
+        else{createToast("Course name can not be empty");}
     };
 
     /* Copies invitation link to clipboard */
@@ -69,7 +69,7 @@ const ClassSettings = ({ currentUser, match}) => {
         invitationRef.current.select();
         document.execCommand('copy');
         event.target.focus();
-        alert("Copied to clipboard!");
+        createToast("Copied to clipboard!");
     };
 
     /* Makes possible email input background color change  */
