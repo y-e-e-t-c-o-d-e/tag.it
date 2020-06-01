@@ -20,6 +20,8 @@ const Staff = ({ history, match, currentUser }) => {
                 acc[instructorObj.email] = instructorObj.uuid;
                 return acc;
             }, {}))
+        }).catch((e) => {
+            alert(e);
         });
     }, []);    
 
@@ -50,6 +52,10 @@ const Staff = ({ history, match, currentUser }) => {
                 // Map only contains confirmed users
                 if (emailToIdMap[instructor]) {
                     await API.removeUserFromCourse(courseId, emailToIdMap[instructor]);
+                    pendingRequest = false;
+                } else {
+                    console.log("penidng")
+                    await API.removePendingUserFromCourse(courseId, instructor);
                     pendingRequest = false;
                 }
             }

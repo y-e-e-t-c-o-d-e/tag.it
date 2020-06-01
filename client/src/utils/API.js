@@ -116,7 +116,7 @@ export default {
         };
         console.log(courseId);
         console.log(inviteId);
-        return axios.get(`${baseURL}/api/course/${courseId}/${inviteId}`, config);
+        return axios.get(`${baseURL}/api/course/${courseId}/invite/${inviteId}`, config);
     },
 
     createCourse: function (name, term, description) {
@@ -157,7 +157,7 @@ export default {
         return axios.get(`${baseURL}/api/course/${courseUUID}/users`, config);
     },
 
-    removeUserFromCourse: function (courseUUID, userUUID) {
+    removeUserFromCourse: function (courseUUID, userUUID = null, userEmail = null) {
         const config = {
             headers: authHeaders()
         };
@@ -192,6 +192,13 @@ export default {
             }]
         };
         return axios.get(`${baseURL}/api/comment`, config);
+    },
+
+    removePendingUserFromCourse: function (courseUUID, email) {
+        const config = {
+            headers: authHeaders()
+        };
+        return axios.delete(`${baseURL}/api/course/${courseUUID}/pending/${email}`, config)
     }
 }
 

@@ -8,9 +8,6 @@ router.route("/")
     .get(courseController.getAllCourses) // Read
     .put(courseController.updateCourse) // Update
 
-// Matches with "/api/course/:courseid/:inviteid"
-router.route("/:courseid/:inviteid")
-    .get(courseController.verifyCourse)
 
 // Matches with "/api/course/:courseId"
 router.route("/:courseId")
@@ -23,7 +20,15 @@ router.route("/:courseId/:userId")
 router.route("/:courseId/users")
     .get(courseController.getCourseUsers)
 
+router.route("/:courseId/pending/:email")
+    .delete(courseController.deletePendingUser)
+
 // Matches with "/api/course/:courseId/invite"
 router.route("/:courseId/invite")
     .post(courseController.sendEmail)
+
+// Matches with "/api/course/:courseid/:inviteid"
+router.route("/:courseid/invite/:inviteid")
+    .get(courseController.verifyCourse)
+
 module.exports = router;

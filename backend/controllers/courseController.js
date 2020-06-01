@@ -107,6 +107,7 @@ exports.verifyCourse = async (req, res) => {
 
     try {
         const courseObj = await course.getCourseById(courseid);
+        console.log("fck");
 
         // Verify that invite code is equal
         if (courseObj.getStudentInviteId() === inviteId) {
@@ -338,6 +339,8 @@ exports.sendEmail = async (req, res) => {
 
 
 exports.removeUser = async (req, res) => {
+
+    console.log('remove user');
     const courseUUID = req.params.courseId;
     const userUUID = req.params.userId;
     
@@ -358,6 +361,10 @@ exports.removeUser = async (req, res) => {
         } else if (userType === "instructor") {
             await courseObj.removeInstructor(userUUID);
         } else {
+            // Remove user from pending instructor
+            const userObj = await user.getUserById(userUUID);
+            await courseObj.removePendingInstructor(userObj.getEmail());
+
             res.status(410).send({
                 error: "User is not in the course"
             })
@@ -365,6 +372,30 @@ exports.removeUser = async (req, res) => {
         }
 
         res.status(200).send(`User removed as a ${userType}`);
+
+    } catch (e) {
+        res.status(410).json({
+            error: e.message
+        })
+    }
+}
+
+exports.deletePendingUser = async (req, res) => {
+    const courseUUID = req.params.courseId;
+    const email = req.params.email;
+    
+    if (!courseUUID || !email) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing parameter: courseUUID or email"
+        });
+        return;
+    }
+
+    try {
+        const courseObj = await course.getCourseById(courseUUID);
+        courseObj.removePendingInstructor(email);
+        res.status(200).send(`User removed as a pending instructor`);
 
     } catch (e) {
         res.status(410).json({

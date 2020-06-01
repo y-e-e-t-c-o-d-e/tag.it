@@ -151,18 +151,24 @@ class Course {
     removePendingInstructor = async (userEmail) => {
         this.updateCourse();
         if (this.props.pendingInstructorList.indexOf(userEmail) >= 0) {
-            this.props.pendingInstructorList.splice(this.props.instructorList.indexOf(userEmail), 1);
+            this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
             await this.push();
         }
     }
+    
     removeInstructor = async (userId) => {
         this.updateCourse();
         if (this.props.instructorList.indexOf(userId) >= 0) {
             this.props.instructorList.splice(this.props.instructorList.indexOf(userId), 1);
-            await this.push();
 
             const userObj = await User.getUserById(userId);
             await userObj.removeInstructorCourse(userId);
+
+            while (this.props.pendingInstructorList.indexOf(userObj.getEmail()) >= 0) {
+                this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
+            }
+
+            await this.push();
         }
     }
 
@@ -333,7 +339,10 @@ getCourseById = async (uuid) => {
 
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
-            const r = new Course(snapshot.val());
+            let r = new Course(snapshot.val());
+            if (!r.props.pendingInstructorList) {
+                r.props.pendingInstructorList = [];
+            }
             resolve(r);
         }, function (errorObject) {
             reject(errorObject);
