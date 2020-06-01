@@ -62,7 +62,6 @@ describe('tag', () => {
         await testTag.addPost('post5');
         let list = await testTag.getPostList();
         expect(list.length).to.equal(4);
-        //console.log("lkasdjfkjlasdflkaskldfkla;s" + list);
     })
  
    it('should remove a post from testTag in firebase', async() => {
@@ -141,3 +140,8 @@ describe('tag', () => {
        tag.deleteTagById(key3);
    })
 });
+
+// updates to Tag Test: gotta make sure all the courses actually exist when we create a tag. For this case
+// its simple we only really need one course 
+// We don't have to create post objects to test post because the addPost method is linked post first
+// however, the post we use to create the tag must be a real post

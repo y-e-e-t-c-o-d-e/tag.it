@@ -96,8 +96,11 @@ class Tag {
     }
 
     addPost = async(postId) => {
-        await this.updatePostList();
-        this.props.postList.push(postId);
+        const index = this.props.postList.indexOf(postId);
+        if (index != -1) {
+            await this.updatePostList();
+            this.props.postList.push(postId);
+        }
         await this.push();
     }
 
@@ -187,6 +190,13 @@ module.exports.pushTagToFirebase = (updateParams) => {
             });
             const courseObj = await course.getCourseById(updateParams["course"]);
             await courseObj.addTag((await tagRef).key);
+
+            postList = updateParams["postList"] ? updateParams["postList"] : [];
+            for (let postId of postList) {
+                const currentPost = await post.getPostById(postId);
+                await currentPost.addTag((await tagRef).key)
+            }
+
             resolve((await tagRef).key);
         } catch(e) {
             console.log("There was an error: " + e);

@@ -3,7 +3,7 @@ const user = require("./User");
 const tag = require("./Tag");
 const comment = require("./Comment")
 const { db } = require("../shared/firebase")
-const Course = require("./Course")
+const course = require("./Course")
 
 class Post {
     constructor(props) {
@@ -84,8 +84,6 @@ class Post {
     removeComment = async (commentId) => {
         const index = this.props.commentList.indexOf(commentId);
         if (index != -1) {
-            // may or may not be necessary depending on how front end implements deleteComment
-            await comment.deleteCommentById(commentId);
             this.props.commentList.splice(index, 1);
         }
         await this.push();
@@ -261,12 +259,21 @@ module.exports.pushPostToFirebase = (updateParams) => {
                 score: 0,
                 course: updateParams["course"]
             });
+<<<<<<< HEAD
 
             const currentPost = await getPostById((await postRef).key);
             await ((await (Course.getCourseById(updateParams["course"]))).addPost(post.key));
 
             // Iterates through all tags in tagList and add this post to those tags
             const tagList = updateParams["tagList"] ? updateParams["tagList"] : [];
+=======
+            const currentPost = await getPostById((await postRef).key);
+            await ((await (Course.getCourseById(updateParams["course"]))).addPost(post.key))
+            await ((await (User.getUserById(updateParams["author"]))).addPost(post.key))
+            
+            // Iterates through all tags in tagList and add this post to those tags
+            tagList = updateParams["tagList"] ? updateParams["tagList"] : [];
+>>>>>>> Cross Model functionality exists but it is not tested
             for (let tagId of tagList) {
                 await currentPost.addTag(tagId);
             }
@@ -297,6 +304,15 @@ getPostById = async (uuid) => {
 
 deletePostById = async (uuid) => {
     const ref = db.ref('Posts/'+uuid);
+    const currentPost = await this.getPostById(uuid);
+    const currentUser = await user.getUserById(currentPost.getAuthor());
+    const currentCourse = await course.getCourseById(currentPost.getCourse());
+    currentPost.getCommentList().forEach(commentUUID => {
+        await comment.deleteCommentById(commentUUID);
+    });
+    await currentUser.removePost(uuid);
+    await currentCourse.removePost(uuid);
+
     try{
         const result = await ref.remove();
         return true;

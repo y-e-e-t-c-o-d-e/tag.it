@@ -54,47 +54,41 @@ class User {
      * 
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
-    setName = async (name) => {
-        this.props.name = name;
-    }
-
-    setEmail = async (email) => {
-        this.props.email = email;
-    }
+    // setName = async (name) => {
+    //     this.props.name = name;
+    // }
     
-    removeStudentCourse = async (courseId) => {
-        await this.updateUser();
-        const index = this.props.studentCourseList.indexOf(courseId);
-        if (index != -1) {
-            // is this where i handle removing self from course's studentList?
-            this.props.studentCourseList.splice(index, 1);
-        }
-        await this.push();
-    }
+    // removeStudentCourse = async (courseId) => {
+    //     await this.updateUser();
+    //     const index = this.props.studentCourseList.indexOf(courseId);
+    //     if (index != -1) {
+    //         this.props.studentCourseList.splice(index, 1);
+    //     }
+    //     await this.push();
+    // }
 
 
-    addInstructorCourse = async (courseId) => {
-        await this.updateUser();
-        // Avoid adding duplicates
-        if (this.props.instructorCourseList.indexOf(courseId) < 0) {
-            this.props.instructorCourseList.push(courseId);
-            const currentCourse = await course.getCourseById(courseId);
-            await currentCourse.addInstructor(this.props.uuid, this.props.email);
-            await this.push();
-        } else {
-            throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
-        }
-    }
+    // addInstructorCourse = async (courseId) => {
+    //     await this.updateUser();
+    //     // Avoid adding duplicates
+    //     if (this.props.instructorCourseList.indexOf(courseId) < 0) {
+    //         this.props.instructorCourseList.push(courseId);
+    //         const currentCourse = await course.getCourseById(courseId);
+    //         await currentCourse.addInstructor(this.props.uuid, this.props.email);
+    //         await this.push();
+    //     } else {
+    //         throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
+    //     }
+    // }
 
-    removeInstructorCourse = async (courseId) => {
-        await this.updateUser();
-        const index = this.props.instructorCourseList.indexOf(courseId);
-        if (index != -1) {
-            // is this where i handle removing self from course's studentList?
-            this.props.instructorCourseList.splice(index, 1);
-        }
-        await this.push();
-    }
+    // removeInstructorCourse = async (courseId) => {
+    //     await this.updateUser();
+    //     const index = this.props.instructorCourseList.indexOf(courseId);
+    //     if (index != -1) {
+    //         this.props.instructorCourseList.splice(index, 1);
+    //     }
+    //     await this.push();
+    // }
 
     setEmail = async (email) => {
         this.props.email = email;
@@ -115,6 +109,8 @@ class User {
         // Avoid adding duplicates
         if (this.props.studentCourseList.indexOf(courseId) < 0) {
             this.props.studentCourseList.push(courseId);
+            const currentCourse = await course.getCourseById(courseId);
+            await currentCourse.addStudent(this.props.uuid);
             await this.push();
         } else {
             // I don't know if this should throw an error, unless we want frontend to catch it.
@@ -179,7 +175,7 @@ class User {
         await this.updateUser();
         const index = this.props.postList.indexOf(postId);
         if (index != -1) {
-            await post.deletePostById(postId);
+            // await post.deletePostById(postId);
             this.props.postList.splice(index, 1);
         }
         await this.push();
@@ -195,6 +191,7 @@ class User {
         await this.updateUser();
         const index = this.props.commentList.indexOf(commentId);
         if (index != -1) {
+            // await comment.deleteCommentById(commentId);
             this.props.commentList.splice(index, 1);
         }
         await this.push();
@@ -202,10 +199,13 @@ class User {
 
     addFollowedPost = async (postId) => {
         await this.updateUser();
-        this.props.followingList.push(postId);
-        const currentPost = await post.getPostById(postId);
-        await currentPost.addFollower(this.props.uuid);
-        await this.push();
+        const index = this.props.followingList.indexOf(postId);
+        if (index != -1) {
+            this.props.followingList.push(postId);
+            const currentPost = await post.getPostById(postId);
+            await currentPost.addFollower(this.props.uuid);
+            await this.push();
+        }
     }
 
     removeFollowedPost = async (postId) => {
@@ -221,34 +221,44 @@ class User {
         
     addLikedPost = async (postId) => {
         await this.updateUser();
-        this.props.likedPostList.push(postId);
-        let postObj = await post.getPostById(postId);
-        postObj.incrementScore();
-        await this.push();
+        const index = this.props.likedPostList.indexOf(postId);
+        if (index == -1) {
+            this.props.likedPostList.push(postId);
+            let postObj = await post.getPostById(postId);
+            await postObj.incrementScore();
+            await this.push();
+        }
     }
 
     removeLikedPost = async (postId) => {
         await this.updateUser();
+        const index = this.props.likedPostList.indexOf(postId);
         this.props.likedPostList.splice(this.props.likedPostList.indexOf(postId), 1);
         let postObj = await post.getPostById(postId);
-        postObj.decrementScore();
+        await postObj.decrementScore();
         await this.push();
     }
 
     addLikedComment = async (commentId) => {
         await this.updateUser();
-        this.props.likedCommentList.push(commentId);
-        let commentObj = await comment.getCommentById(commentId);
-        commentObj.incrementScore();
-        await this.push();
+        const index = this.props.likedCommentList.indexOf(commentId);
+        if (index == -1) {
+            this.props.likedCommentList.push(commentId);
+            let commentObj = await comment.getCommentById(commentId);
+            await commentObj.incrementScore();
+            await this.push();
+        }
     }
 
     removeLikedComment = async (commentId) => {
         await this.updateUser();
-        this.props.likedCommentList.splice(this.props.likedCommentList.indexOf(commentId), 1);
-        let commentObj = await comment.getCommentById(commentId);
-        commentObj.decrementScore();
-        await this.push();
+        const index = this.props.likedCommentList.indexOf(commentId);
+        if (index == -1) {
+            this.props.likedCommentList.splice(this.props.likedCommentList.indexOf(commentId), 1);
+            let commentObj = await comment.getCommentById(commentId);
+            await commentObj.decrementScore();
+            await this.push();
+        }
     }
     
     setIcon = async (icon) => {

@@ -1,5 +1,6 @@
 const { db } = require("../shared/firebase")
 const User = require("./User")
+const Post = require("./Post")
 
 class Comment {
     constructor(props) {
@@ -186,6 +187,10 @@ module.exports.pushCommentToFirebase = (updateParams) => {
                 isResolved: false,
                 
             });
+            await ((await (User.getUserById(updateParams["author"]))).addComment((await commentRef).key));
+            if (!updateParams["parentComment"]) {
+                await ((await (Post.getPostById(updateParams["postId"]))).addComment((await commentRef).key));
+            }
             resolve((await commentRef).key);
         } catch(e) {
             console.log("There was an error: " + e);
@@ -215,6 +220,20 @@ getCommentById = async (uuid) => {
 
 deleteCommentById = async (uuid) => {
     const ref = db.ref('Comments/'+uuid);
+    // if comment has children
+    const currentComment = await this.getCommentById(uuid);
+
+    currentComment.getChildList().forEach(subUUID => {
+        await this.deleteCommentById(subUUID);
+    })
+
+    // find the user who created me
+    const currentUser = await User.getUserById(currentComment.getAuthor());
+    await currentUser.removeComment(uuid);
+    // find the post on which I am placed
+    const currentPost = post.getPostById(currentComment.getPostId());
+    await currentPost.removeComment(uuid);
+
     try{
         const result = await ref.remove();
         return true;
@@ -222,6 +241,7 @@ deleteCommentById = async (uuid) => {
         console.log(e);
         return false;
     }
+    
 }
 
    

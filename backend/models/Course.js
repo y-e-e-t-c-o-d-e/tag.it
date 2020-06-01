@@ -148,6 +148,16 @@ class Course {
         }
     }
 
+    removePost = async (postId) => {
+        await this.updateCourse();
+        const index = this.props.postList.indexOf(postId);
+        if (index != -1) {
+            // await post.deletePostById(postId);
+            this.props.postList.splice(index, 1);
+        }
+        await this.push();
+    }
+
     removePendingInstructor = async (userEmail) => {
         this.updateCourse();
         if (this.props.pendingInstructorList.indexOf(userEmail) >= 0) {
@@ -164,9 +174,9 @@ class Course {
             const userObj = await User.getUserById(userId);
             await userObj.removeInstructorCourse(userId);
 
-            while (this.props.pendingInstructorList.indexOf(userObj.getEmail()) >= 0) {
-                this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
-            }
+            // while (this.props.pendingInstructorList.indexOf(userObj.getEmail()) >= 0) {
+            //     this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
+            // }
 
             await this.push();
         }
