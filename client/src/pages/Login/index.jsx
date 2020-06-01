@@ -80,7 +80,7 @@ const Login = ({ history }) => {
 
     return (
         <div>
-            <NavBar />
+            <NavBar history={history}  />
             <div className="container">
                 <div id="center-logo">
                     <img src={logo} alt="Tag.it" height="125" />

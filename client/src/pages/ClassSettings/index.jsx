@@ -119,7 +119,7 @@ const ClassSettings = ({ currentUser, history }) => {
 
     return(
         <div>
-            <Navigation currentUser={currentUser} />
+            <Navigation  history={history} currentUser={currentUser} />
             <div className="content">
                 <div className="box">
 
