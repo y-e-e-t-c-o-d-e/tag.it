@@ -19,7 +19,7 @@ const QuestionList = ({ questions, courseId, history, filters }) =>{
         if (filters.tags.size > 0) {
 
         }
-        return post.title.includes(filters.search) && (filterTags.length === 0 || filterTags.some(item => post.tagList.includes(item)))
+        return post.title.toLowerCase().includes(filters.search.toLowerCase()) && (filterTags.length === 0 || filterTags.some(item => post.tagList.includes(item)))
     })
 
 

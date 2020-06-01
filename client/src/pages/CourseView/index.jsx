@@ -40,7 +40,7 @@ const CourseView = ({currentUser, history }) => {
         })
     }, [view])
 
-
+    
     let action;
 
     switch (view) {

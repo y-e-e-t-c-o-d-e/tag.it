@@ -43,9 +43,9 @@ const ClassCreation = ({ currentUser, history }) => {
 
             /* try to create a course in database */
             try {
-                // TODO: use API to create course
-                const courseId = (await API.createCourse(title.value, term.value, description.value)).data;
-                redirectAddStaff(courseId); // might need to change depending on how backend implements the return value
+                console.log(selectedTags)
+                // const courseId = (await API.createCourse(title.value, term.value, description.value)).data;
+                // redirectAddStaff(courseId); // might need to change depending on how backend implements the return value
             } catch (error) {
                 createToast(error);
                 console.error(error);
@@ -141,7 +141,8 @@ const ClassCreation = ({ currentUser, history }) => {
                         </div>
                         <div className="flex-row">
                             <p>Initial Tags (Optional):</p>
-                            <AutocompleteTags onChange={onChangeSetTags} />
+
+                            <AutocompleteTags initialTags={[]} setAddedTags={()=>{}} setDeletedTags={()=>{}} onChange={onChangeSetTags} />
                         </div>
                         <Button id="next-button" type="submit">Next Step: Adding Instructors</Button>
                     </form>
