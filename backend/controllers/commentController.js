@@ -124,13 +124,12 @@ exports.toggleLike = async (req, res) => {
     };
     
     try {
-        let commentObj = await comment.getCommentById(commentUUID);
         if (userObj.getLikedCommentList().indexOf(commentUUID) == -1) {
             await userObj.addLikedComment(commentUUID);
-            res.status(200).json(commentObj);
+            res.status(200).json(await comment.getCommentById(commentUUID));
         } else {
-            await userObj.removedLikedComment(commentUUID);
-            res.status(200).json(commentObj);
+            await userObj.removeLikedComment(commentUUID);
+            res.status(200).json(await comment.getCommentById(commentUUID));
         }
     } catch (e) {
         res.status(410).json({
