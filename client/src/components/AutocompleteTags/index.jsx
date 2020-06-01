@@ -2,12 +2,18 @@ import React, { useState, useEffect } from 'react';
 import ReactTags from 'react-tag-autocomplete';
 import './style.css';
 
-const AutocompleteTags = ({initialTags, onChange, setAddedTags, setDeletedTags}) => {
+const AutocompleteTags = ({initialTags, onChange, setAddedTags, setDeletedTags, givenSuggestions}) => {
     // see package docs for additional options
     const [tags, setTags] = useState([])
     
     const [deleted, setDeleted] = useState([])
     const [added, setAdded] = useState([])
+    const [suggestions, setSuggestions] = useState([
+        { id: 0, name: "midterms" },
+        { id: 1, name: "final exam" },
+        { id: 2, name: "logistics" },
+        { id: 3, name: "quizzes" }
+    ])
 
     useEffect(() => {
         if (initialTags.length > 0) {
@@ -15,12 +21,20 @@ const AutocompleteTags = ({initialTags, onChange, setAddedTags, setDeletedTags})
         }
     }, [initialTags])
     
-    const [suggestions, setSuggestions] = useState([
-        { id: 0, name: "midterms" },
-        { id: 1, name: "final exam" },
-        { id: 2, name: "logistics" },
-        { id: 3, name: "quizzes" }
-    ])
+    useEffect(() => {
+        if (givenSuggestions && givenSuggestions.length > 0) {
+            setSuggestions(givenSuggestions);
+        } else {
+            setSuggestions([
+                { id: 0, name: "midterms" },
+                { id: 1, name: "final exam" },
+                { id: 2, name: "logistics" },
+                { id: 3, name: "quizzes" }
+            ])
+        }
+    }, [givenSuggestions])
+
+   
 
     const [delimiters, setDelimeters] = useState([9, 13, 32])
 
