@@ -338,8 +338,6 @@ exports.sendEmail = async (req, res) => {
 
 
 exports.removeUser = async (req, res) => {
-
-    console.log('remove user');
     const courseUUID = req.params.courseId;
     const userUUID = req.params.userId;
     

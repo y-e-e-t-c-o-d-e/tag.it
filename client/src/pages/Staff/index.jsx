@@ -54,7 +54,6 @@ const Staff = ({ history, match, currentUser }) => {
                     await API.removeUserFromCourse(courseId, emailToIdMap[instructor]);
                     pendingRequest = false;
                 } else {
-                    console.log("penidng")
                     await API.removePendingUserFromCourse(courseId, instructor);
                     pendingRequest = false;
                 }

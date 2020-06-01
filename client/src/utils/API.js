@@ -85,7 +85,6 @@ export default {
     },
 
     addToCourse: function(courseId, accountType=null) {
-        
         const config = {
             method: 'post',
             url: `${baseURL}/api/user/${courseId}`,
@@ -96,8 +95,8 @@ export default {
         };
         return axios(config);
     },
-    getAllCourses: function() {
 
+    getAllCourses: function() {
         const config = {
             headers: authHeaders(),
             transformResponse: [function (data) {
@@ -114,8 +113,6 @@ export default {
         const config = {
             headers: authHeaders()
         };
-        console.log(courseId);
-        console.log(inviteId);
         return axios.get(`${baseURL}/api/course/${courseId}/invite/${inviteId}`, config);
     },
 
@@ -157,7 +154,7 @@ export default {
         return axios.get(`${baseURL}/api/course/${courseUUID}/users`, config);
     },
 
-    removeUserFromCourse: function (courseUUID, userUUID = null, userEmail = null) {
+    removeUserFromCourse: function (courseUUID, userUUID) {
         const config = {
             headers: authHeaders()
         };
