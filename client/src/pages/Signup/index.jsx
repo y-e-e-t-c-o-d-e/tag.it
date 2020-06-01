@@ -76,7 +76,6 @@ const SignUp = ({ history }) => {
 
     /* When input for email address changes, try to validate the email address */
     const handleEmailChange = (email) => {
-        console.log(email);
         const emailInput = email;
         let lastAtPos = emailInput.lastIndexOf('@');
         let lastDotPos = emailInput.lastIndexOf('.');
