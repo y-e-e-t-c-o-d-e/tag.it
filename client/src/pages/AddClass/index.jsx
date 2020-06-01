@@ -3,7 +3,7 @@ import './style.css';
 import Label from '../../components/Label';
 import SuggestionTextField from '../../components/SuggestionTextField';
 import Button from '../../components/Button';
-import API from '../../utils/API';
+import {API, createToast} from '../../utils';
 import { AuthContext } from '../../auth/Auth';
 import { useContext } from 'react';
 import NavBar from "../../components/Navbar"
@@ -54,7 +54,7 @@ const AddClass = ({history, currentUser}) => {
 
         // Accounts for case when no field has been filled
         if (filteredArr.length === 0) {
-            window.alert("No classes to add are found. Please select a course to add by typing into the text field.");
+            createToast("No classes to add are found. Please select a course to add by typing into the text field.");
             return;
         }
 
@@ -63,14 +63,14 @@ const AddClass = ({history, currentUser}) => {
             await previousPromise;
             return API.addToCourse(nextID);
         }, Promise.resolve().catch(err => {
-            window.alert("Some Course ID is not valid. Refresh the page.");
+            createToast("Some Course ID is not valid. Refresh the page.");
         }));
 
         // An error will only appear when all promises reject.
         addedClassesResult.then(e => {
             history.push("/");
         }).catch(e => {
-            window.alert(`${e}. Check whether you are already added to these classes.`);
+            createToast(`${e}. Check whether you are already added to these classes.`);
         });
     };
 

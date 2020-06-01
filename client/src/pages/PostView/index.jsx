@@ -8,9 +8,8 @@ import { Container, Row, Col, Nav, Button, Dropdown, DropdownButton } from 'reac
 import CoursesView from '../../components/CoursesView/index.jsx';
 import CommentSection from "../../components/CommentSection"
 import PostCreator from "../../components/PostCreator"
-import { API, createToast } from '../../utils';
+import { API, createToast, MarkdownEditor } from '../../utils';
 import PostEditor from '../../components/PostEditor';
-import ReactMarkdown from 'react-markdown';
 
 const PostView = ({ currentUser, match }) => {
     const { postId, courseId } = useParams();
@@ -74,7 +73,7 @@ const PostView = ({ currentUser, match }) => {
     const copyLink = () =>{
         let link = `tagdotit.netlify.com/course/${courseId}/post/${postId}`;
         navigator.clipboard.writeText(link);
-        alert("Link successfully copied!");
+        createToast("Link successfully copied!");
     }
 
     // Render resolve button depending on the current resolved state;
@@ -101,6 +100,8 @@ const PostView = ({ currentUser, match }) => {
         setDiscussing(!discussing);
     }
     let discussText = (discussing? "cancel":"discuss.it");
+
+    
 
     // Returns the content of the page
     return (
@@ -137,7 +138,7 @@ const PostView = ({ currentUser, match }) => {
 
                             {/* Post content with footer saying posted by */}
                             <div className="post-content-section">
-                                <ReactMarkdown className="post-content-view" source={post.content} />
+                                <MarkdownEditor className="post-content-view" source={post.content} />
                                 <div className="posted-by">Posted by: {post.author}</div>
                             </div>
 

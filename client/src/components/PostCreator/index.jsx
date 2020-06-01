@@ -14,6 +14,14 @@ const PostCreator = ({courseId, setView, views}) => {
     const [questionContent, setQuestionContent] = useState("**b**");
     
     const createPost = () => {
+        if (questionTitle.length <=5) {
+            createToast("make a longer title!")
+            return;
+        }
+        if (questionContent.length <= 5) {
+            createToast("make a longer post!")
+            return;
+        }
         API.createPost(questionTitle, questionContent, courseId).then((response) => {
             createToast(response.data)
             setView(views.questions)
