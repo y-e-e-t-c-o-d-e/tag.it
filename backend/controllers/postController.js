@@ -120,10 +120,10 @@ exports.toggleLike = async (req, res) => {
     try {
         if (userObj.getLikedPostList().indexOf(postUUID) == -1) {
             await userObj.addLikedPost(postUUID);
-            res.status(200).json(await post.getPostById(postUUID));
+            res.status(200).json((await post.getPostById(postUUID)).props);
         } else {
             await userObj.removeLikedPost(postUUID);
-            res.status(200).json(await post.getPostById(postUUID));
+            res.status(200).json((await post.getPostById(postUUID)).props);
         }
     } catch (e) {
         res.status(410).json({

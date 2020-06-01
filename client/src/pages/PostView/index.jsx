@@ -100,9 +100,11 @@ const PostView = ({ currentUser, history }) => {
     // Render like button depending on the current liked state
     const renderPostLiked = () => {
         if (postLiked) {
-            return "unlike.it";
+            return <Button className="blue-button" onClick={handlePostLike}>unlike.it</Button>
+
         }
-        return "like.it";
+        return <Button className="yellow-button" onClick={handlePostLike}>like.it</Button>
+
     };
 
     // discuss.it functionalities
@@ -162,7 +164,7 @@ const PostView = ({ currentUser, history }) => {
                                 <div className="like-discuss">
 
                                     <div className="likes"> {post.score} </div>
-                                    <Button className="yellow-button" onClick={handlePostLike}>{renderPostLiked()}</Button>
+                                    {renderPostLiked()}
                                     <br />
                                 </div>
                             </div>
