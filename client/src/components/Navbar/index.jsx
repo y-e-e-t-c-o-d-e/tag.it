@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { useParams } from "react-router-dom"
 import { AuthContext } from "../../auth/Auth";
 import './style.css';
-import logo from '../../assets/tagit-darkercoral\ 1.svg'
-import tagit from '../../assets/logo.png'
+import logo from '../../assets/logo.png'
 import db from "../../base"
 import API from "../../utils/API"
 import { courseToLink } from '../../utils';
@@ -12,7 +12,7 @@ const loginRender = () => (
     <Navbar expand="lg" inverse fluid>
         <Navbar.Brand href="#home"><img
             alt=""
-            src={tagit}
+            src={logo}
             width="130"
             height="50"
             className="d-inline-block align-top"
@@ -28,12 +28,12 @@ const loginRender = () => (
     </Navbar>
 )
 
-const regularRender = (studentCourses, instructorCourses) => {
+const regularRender = (studentCourses, instructorCourses, courseId) => {
     return (
         <Navbar expand="lg" inverse fluid>
             <Navbar.Brand href="#home"><img
                 alt=""
-                src={tagit}
+                src={logo}
                 width="130"
                 height="50"
                 className="d-inline-block align-top"
@@ -42,6 +42,7 @@ const regularRender = (studentCourses, instructorCourses) => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="">
                 <Nav className="ml-auto" >
+                    <Nav.Link href="/">home</Nav.Link>
                     <NavDropdown title="courses" id="basic-nav-dropdown">
                         { studentCourses.length > 0 && 
                             studentCourses.map((course, key) => {
@@ -57,7 +58,11 @@ const regularRender = (studentCourses, instructorCourses) => {
                         <NavDropdown.Divider />
                         <NavDropdown.Item href={`/add`}>Add a Course</NavDropdown.Item>
                     </NavDropdown>
-                    <Nav.Link href="/settings">settings</Nav.Link>
+
+                    { courseId && 
+                        <Nav.Link href={`/courses/${courseId}/settings`}>settings</Nav.Link>
+                    }
+                    <Nav.Link href="/create-course">create course</Nav.Link>
                     <Nav.Link href="/" onClick={ () => { db.auth().signOut() } }>logout</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
@@ -69,6 +74,8 @@ const Navigation = ({currentUser}) => {
     const [studentCourses, setStudentCourses] = useState([])
     const [instructorCourses, setInstructorCourses] = useState([])
 
+    const { courseId } = useParams()
+    
     if (currentUser && studentCourses.length !== currentUser.filledInStudentCourseList.length) {
         setStudentCourses(currentUser.filledInStudentCourseList)
     }
@@ -78,7 +85,7 @@ const Navigation = ({currentUser}) => {
     }
     
     if (currentUser) {
-        return regularRender(studentCourses, instructorCourses);
+        return regularRender(studentCourses, instructorCourses, courseId);
     } else {
         return loginRender();
     }

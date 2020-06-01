@@ -2,13 +2,13 @@
 const post = require("../models/Post");
 const { db } = require("../shared/firebase")
 const { InternalServerError } = require("../shared/error");
+const User = require("./User");
 const { makeId } = require("../shared/util");
 
 class Course {
     constructor(props) {
         this.props = props;
     }
-
     
     equalTo = (other) => {
         return (
@@ -47,7 +47,6 @@ class Course {
         }
     }
 
-
     getName() {
         return this.props.name;
     }
@@ -76,12 +75,20 @@ class Course {
         return this.props.postList.slice(1, this.props.postList.length);
     }
 
+    getDescription() {
+        return this.props.description;
+    }
+    
     getStudentInviteId() {
         return this.props.studentInviteId;
     }
 
     getInstructorInviteId() {
         return this.props.instructorInviteId;
+    }
+
+    getPendingInstructorList() {
+        return this.props.pendingInstructorList.slice(1, this.props.pendingInstructorList.length);
     }
 
     setName = async (name) => {
@@ -91,6 +98,11 @@ class Course {
 
     setTerm = async (term) => {
         this.props.term = term;
+        await this.push();
+    }
+
+    setDescription = async (desc) => {
+        this.props.description = desc;
         await this.push();
     }
 
@@ -110,9 +122,15 @@ class Course {
         }
     }
 
-    addInstructor = async (userId) => {
+    addInstructor = async (userId, userEmail = null) => {
         this.updateCourse();
         this.props.instructorList.push(userId);
+
+        // Checks if instructor is in pendingInstructorList and removes if so
+        while (this.props.pendingInstructorList.indexOf(userEmail) >= 0) {
+            this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
+        }
+
         await this.push();
     }
 
@@ -122,6 +140,48 @@ class Course {
         await this.push();
     }
 
+    addPendingInstructor = async (userEmail) => {
+        this.updateCourse();
+        if (this.props.pendingInstructorList.indexOf(userEmail) < 0) {
+            this.props.pendingInstructorList.push(userEmail);
+            await this.push();
+        }
+    }
+
+    removePendingInstructor = async (userEmail) => {
+        this.updateCourse();
+        if (this.props.pendingInstructorList.indexOf(userEmail) >= 0) {
+            this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
+            await this.push();
+        }
+    }
+    
+    removeInstructor = async (userId) => {
+        this.updateCourse();
+        if (this.props.instructorList.indexOf(userId) >= 0) {
+            this.props.instructorList.splice(this.props.instructorList.indexOf(userId), 1);
+
+            const userObj = await User.getUserById(userId);
+            await userObj.removeInstructorCourse(userId);
+
+            while (this.props.pendingInstructorList.indexOf(userObj.getEmail()) >= 0) {
+                this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
+            }
+
+            await this.push();
+        }
+    }
+
+    removeStudent = async (userId) => {
+        this.updateCourse();
+        if (this.props.studentList.indexOf(userId) >= 0) {
+            this.props.studentList.splice(this.props.studentList.indexOf(userId), 1);
+            await this.push();
+
+            const userObj = await User.getUserById(userId);
+            await userObj.removeStudentCourse(userId);
+        }
+    }
 
     getPostsWithTag = async (tagId) => {
         let list = this.getPostList();
@@ -152,7 +212,7 @@ class Course {
                 return "student";
             }
         }
-        return "null";
+        return null;
     }
 
     getPrivatePosts = async () => {
@@ -210,6 +270,7 @@ class Course {
             resolve(posts);
         })  
     }
+
     getPostsWithMultipleTags = async (tagList) => {
         let posts = {};
         for(let i = 0; i < tagList.length; i++) {
@@ -236,7 +297,8 @@ class Course {
             tagList: this.props.tagList,
             postList: this.props.postList,
             studentInviteId: this.props.studentInviteId ? this.props.studentInviteId : makeId(10),
-            instructorInviteId: this.props.instructorInviteId ? this.props.instructorInviteId : makeId(10)
+            instructorInviteId: this.props.instructorInviteId ? this.props.instructorInviteId : makeId(10),
+            pendingInstructorList: this.props.pendingInstructorList ? this.props.pendingInstructorList : ["dummy_val"]
         });
     } 
 }
@@ -248,7 +310,6 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                 await db.ref("Courses").child(courseUUID).set(updateParams);
                 resolve(courseUUID);
             } else {
-                // TODO: Implement logic for these lists later.
                 const courseRef = db.ref("Courses").push();
                 await courseRef.set({
                     name: updateParams['name'],
@@ -258,8 +319,10 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                     instructorInviteId: makeId(10),
                     studentList: ["dummy_val"],         // Firebase doesn't initialize a list if its empty
                     instructorList: ["dummy_val", user.getUUID()],
+                    pendingInstructorList: ["dummy_val"],
                     tagList: ["dummy_val"],
                     postList: ["dummy_val"],
+                    description: updateParams['description']
                 });
                 await user.addInstructorCourse((await courseRef).key);
                 resolve((await courseRef).key);
@@ -276,7 +339,10 @@ getCourseById = async (uuid) => {
 
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
-            const r = new Course(snapshot.val());
+            let r = new Course(snapshot.val());
+            if (!r.props.pendingInstructorList) {
+                r.props.pendingInstructorList = [];
+            }
             resolve(r);
         }, function (errorObject) {
             reject(errorObject);
@@ -310,7 +376,6 @@ deleteCourseById = async (uuid) => {
     }
 }
    
-module.exports.Course = Course
-module.exports.getCourseById = getCourseById
-module.exports.deleteCourseById = deleteCourseById
-
+module.exports.Course = Course;
+module.exports.getCourseById = getCourseById;
+module.exports.deleteCourseById = deleteCourseById;

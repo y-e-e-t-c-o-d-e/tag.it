@@ -1,0 +1,43 @@
+.post-grid {
+    background-color: #1D7B99;
+    width: 200px;
+    height: 80px;
+    padding: 0 1em;
+    text-align: center;
+    overflow: hidden;
+    display: inline-block;
+    margin: 0 0.5em;
+}
+
+.post-grid:after{
+    content: "";
+    display: block;
+    height: 1em;
+    position: sticky;
+    bottom: 0;
+    background: inherit;
+}
+
+.postview-center {
+    display: inline-block;
+    overflow: hidden;
+    margin-top: 1em;
+}
+
+.postview-center a {
+    color: white;
+    text-decoration: none;
+}
+
+.postview-center a:hover {
+    text-decoration: underline;
+}
+
+.postview-center a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+.postview-center a:visited:hover {
+    text-decoration: underline;
+}
