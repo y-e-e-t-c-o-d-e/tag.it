@@ -24,8 +24,9 @@ const PostCreator = ({tags, courseId, setView, views}) => {
             return;
         }
         const tagsToAdd = Array.from(addedTags).map(tag => tag.uuid)
-        console.log(tagsToAdd)
-        API.createPost(questionTitle, questionContent, courseId, tagsToAdd).then((response) => {
+        console.log(tagsToAdd);
+        console.log(visibility.indexOf("anonymous") >= 0);
+        API.createPost(questionTitle, questionContent, courseId, tagsToAdd, visibility.indexOf("anonymous") >= 0).then((response) => {
             createToast(response.data)
             setView(views.questions)
         })

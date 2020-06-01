@@ -99,7 +99,7 @@ const Comment = ({ comment, postId, refresh, isTopLevel }) => {
 
     return (
         <div className={commentType}>
-            <span id="username">{comment.authorName}</span>
+            <span id="username">{comment.isAnonymous ? "anonymous" : comment.authorName}</span>
             <span id="date">{formatDate(comment.time)}</span>
             <div>{comment.content}</div>
             <div className="comment-options">

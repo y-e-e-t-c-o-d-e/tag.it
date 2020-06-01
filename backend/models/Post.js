@@ -333,7 +333,7 @@ module.exports.pushPostToFirebase = (updateParams) => {
 
 
 
-getPostById = async (uuid) => {
+getPostById = async (uuid, userObj) => {
     const ref = db.ref('Posts/' + uuid);
 
     return new Promise((resolve, reject) => {
@@ -341,7 +341,16 @@ getPostById = async (uuid) => {
             let r = new Post(snapshot.val());
             if (!r) reject('No post by that id');
             if (!r.props.followingList) r.props.followingList = [];
-            resolve(r);
+
+            if (userObj) {
+                userObj.getLikedPostStatus().then((result) => {
+                    r.props.likedStatus = result;
+                    resolve(r);
+                });
+            } else {
+                resolve(r);
+            }
+            
         }, function (errorObject) {
             reject(errorObject);
         })
