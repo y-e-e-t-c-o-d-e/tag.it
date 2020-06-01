@@ -10,6 +10,7 @@ import CommentSection from "../../components/CommentSection"
 import PostCreator from "../../components/PostCreator"
 import { API, createToast, MarkdownEditor } from '../../utils';
 import PostEditor from '../../components/PostEditor/index';
+import EditPost from '../../components/EditPost/index';
 
 const PostView = ({currentUser, history}) => { 
     const { postId, courseId } = useParams();
@@ -94,7 +95,20 @@ const PostView = ({currentUser, history}) => {
         likeUnlikePostButton=likeUnlike;
     }
 
-    // The normal view to be rendered
+
+    // State to show if we are editing
+    const [editing, setEditing] = useState(false);
+
+    // Attempt to edit the post
+    const attemptEdit = () =>{
+        if(post.author !== currentUser.uuid){
+            alert("Only the post maker can edit the post");
+            return -1;
+        }
+        setEditing(true);
+    }
+
+    /* The normal view to be rendered */
     let postViewer = (
         <div className="post-viewer">
             {/* Section with post title and change / actions */}
@@ -107,7 +121,7 @@ const PostView = ({currentUser, history}) => {
                     </Col>
                 </Row>
                 <div className="title-button-section">
-                    <Button className="yellow-button">change.it</Button>
+                    <Button className="yellow-button" onClick={attemptEdit}>change.it</Button>
                     <DropdownButton className="yellow-button" title="actions">
                         {followUnfollowButton}
                         <Dropdown.Item key="copy-link" as="button" onClick={copyLink}>Copy Link</Dropdown.Item>
@@ -141,7 +155,12 @@ const PostView = ({currentUser, history}) => {
     );
 
     // The edit view that will show up if we are currently editing
-    const editor = <PostEditor postText={post.content} />
+    const postContent = post.content;
+    console.log(postContent);
+    const editor = <EditPost postText={postContent} />
+
+    // The content to be shown depending on if we are editing
+    let content = editing? editor:postViewer;
 
     // Returns the content of the page
     return (
@@ -155,7 +174,7 @@ const PostView = ({currentUser, history}) => {
                         <TagList tags={tags} />
                     </Col>
                     <Col>
-                        {editor}
+                        {content}
                     </Col>
                 </Row>
             </div>
