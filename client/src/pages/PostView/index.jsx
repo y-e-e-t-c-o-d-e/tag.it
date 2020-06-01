@@ -39,7 +39,6 @@ const PostView = ({ currentUser, history }) => {
 
     useEffect(() => {
         API.getPost(postId).then((response) => {
-            console.log(response.data)
             setPost(response.data)
         }).catch(err => {
             createToast("an error occurred")
@@ -171,7 +170,6 @@ const PostView = ({ currentUser, history }) => {
 
     // The edit view that will show up if we are currently editing
     const postContent = post.content;
-    console.log(postContent);
     const editor = <EditPost postUUID={postId} postText={postContent} 
                     isResolved={post.isResolved} isPinned={post.isPinned}
                     setEditing={setEditing} />
