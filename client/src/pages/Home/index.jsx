@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useParams } from "react-router-dom"
 import Button from "../../components/Button/index.jsx";
 import './style.css';
-import db from "../../base";
 import Navigation from "../../components/Navbar";
 import TagList from "../../components/TagList/index.jsx";
 import { Row, Col, Nav } from 'react-bootstrap';
@@ -18,10 +18,11 @@ const Home = ({ currentUser, history, match }) => {
     }
 
     const displayName = currentUser ? currentUser.name : "Loading"
+    const { courseId } = useParams();
 
     return (
         <div className="home">
-            <Navigation currentUser={currentUser} />
+            <Navigation currentUser={currentUser} courseId={courseId} />
             <div className="cont">
                 <Row>
                     <Col xs={2}></Col>

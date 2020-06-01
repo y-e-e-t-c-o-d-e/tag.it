@@ -98,16 +98,19 @@ export default {
         return axios(config);
     },
 
-    addToCourse: function (courseId) {
+    addToCourse: function(courseId, accountType=null) {
         const config = {
             method: 'post',
             url: `${baseURL}/api/user/${courseId}`,
-            headers: authHeaders()
+            headers: authHeaders(),
+            data: accountType ? {
+                type: accountType
+            } : {}
         };
         return axios(config);
     },
-    getAllCourses: function() {
 
+    getAllCourses: function() {
         const config = {
             headers: authHeaders(),
             transformResponse: [function (data) {
@@ -118,6 +121,13 @@ export default {
             }]
         };
         return axios.get(`${baseURL}/api/course`, config);
+    },
+
+    confirmVerificationLink: function(courseId, inviteId) {
+        const config = {
+            headers: authHeaders()
+        };
+        return axios.get(`${baseURL}/api/course/${courseId}/invite/${inviteId}`, config);
     },
 
     createCourse: function (name, term, description) {
@@ -193,6 +203,13 @@ export default {
             }]
         };
         return axios.get(`${baseURL}/api/comment`, config);
+    },
+
+    removePendingUserFromCourse: function (courseUUID, email) {
+        const config = {
+            headers: authHeaders()
+        };
+        return axios.delete(`${baseURL}/api/course/${courseUUID}/pending/${email}`, config)
     }
 }
 

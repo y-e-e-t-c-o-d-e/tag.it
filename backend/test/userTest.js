@@ -10,7 +10,7 @@ const { db } = require("../shared/firebase")
 
 // User test suite 
 describe('user', () => {
-    let key = db.ref("rohithUsers").push().key;
+    let key = db.ref("Users").push().key;
     let testUser;
 
     // Setup function before test is run 
