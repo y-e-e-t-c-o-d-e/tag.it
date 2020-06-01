@@ -129,6 +129,5 @@ describe('course', () => {
         await testCourse.removePendingInstructor("d1truong@ucsd.edu");
         const pendingInstructorList = await testCourse.getPendingInstructorList();
         expect(pendingInstructorList.length).to.equal(0);
-    })
-    */
+    })*/
 });
