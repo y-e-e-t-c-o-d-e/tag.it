@@ -1,4 +1,4 @@
-/*.postEditor {
+.edit-post {
     border: 15px solid #A6D1DF;
     width: 750px;
     position: relative;
@@ -8,8 +8,24 @@
     padding: 2.5%;
 }
 
-.save-changes {
-    margin: 5px 0;
+.edit-post h1{
+    color: #1D7B99;
+    font-size: 2.5em;
+}
+
+.edit-subtitle {
+    color: #1D7B99;
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+#edit-save {
+    margin: 5px 0.5em 0 0;
+}
+
+#cancel-edit {
+    margin: 5px 0.5em 0 0 ;
 }
 
 .editor {
@@ -29,5 +45,4 @@ textarea {
     width: 100%;
     height: 90%;
     font-size: medium;
-} */
-
+} 

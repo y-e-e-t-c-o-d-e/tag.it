@@ -8,7 +8,7 @@ import { createToast } from '../../../utils';
 /* recursive functional component for comments */
 const Comment = ({ comment, postId, refresh, isTopLevel }) => {
 
-    const [liked, setLike] = useState(false);
+    const [liked, setLike] = useState(comment.likedStatus);
     const [newReply, setNewReply] = useState(false);
     const [visibility, setVisiblity] = useState("public, visible");
 
@@ -74,18 +74,37 @@ const Comment = ({ comment, postId, refresh, isTopLevel }) => {
         });
     };
 
-    const commentType = isTopLevel?"comment":"child-comment";
+    // update like score
+    const handleLike = (event) => {
+        event.preventDefault();
+        try {
+            API.toggleLike(comment.uuid).then((response) => {
+                comment.score = response.data.score;
+                refresh(true);
+                setLike(!liked);
+            });
+        } catch (error) {
+            createToast(error);
+        }
+    }
+
+    const renderLiked = () => {
+        if (liked) {
+            return <a href="#" onClick={handleLike} style={{fontWeight: "bold"}}>{"unlike.it"}</a>
+        }
+        return <a href="#" onClick={handleLike}>{"like.it"}</a>;
+    };
+
+    const commentType = isTopLevel ? "comment" : "child-comment";
 
     return (
         <div className={commentType}>
-            <span id="username">{comment.authorName}</span>
+            <span id="username">{comment.isAnonymous ? "anonymous" : comment.authorName}</span>
             <span id="date">{formatDate(comment.time)}</span>
             <div>{comment.content}</div>
             <div className="comment-options">
-                <a href="#" onClick={(e) => {
-                    e.preventDefault();
-                    setLike(true);
-                }}>like.it</a>
+                <span id="comment-score">({comment.score})</span>
+                {renderLiked()}
                 <a href="#" onClick={(e) => {
                     e.preventDefault();
                     setNewReply(true);
