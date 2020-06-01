@@ -304,9 +304,9 @@ exports.sendEmail = async (req, res) => {
 
         let inviteURL;
         if ("type" in bodyParams && bodyParams["type"] == "instructor") {
-            inviteURL = "https://tagdotit.netlify.app/course/"+courseUUID+"/invite/"+courseObj.getInstructorInviteId();
+            inviteURL = "https://tagdotit.netlify.app/courses/"+courseUUID+"/invite/"+courseObj.getInstructorInviteId();
         } else {
-            inviteURL = "https://tagdotit.netlify.app/course/"+courseUUID+"/invite/"+courseObj.getStudentInviteId();
+            inviteURL = "https://tagdotit.netlify.app/courses/"+courseUUID+"/invite/"+courseObj.getStudentInviteId();
         }
 
         let transporter = nodemailer.createTransport({

@@ -43,7 +43,6 @@ const regularRender = (studentCourses, instructorCourses, courseId) => {
             <Navbar.Collapse className="">
                 <Nav className="ml-auto" >
                     <Nav.Link href="/">home</Nav.Link>
-                    <Nav.Link href="/create-course">create course</Nav.Link>
                     <NavDropdown title="courses" id="basic-nav-dropdown">
                         { studentCourses.length > 0 && 
                             studentCourses.map((course, key) => {
@@ -63,7 +62,11 @@ const regularRender = (studentCourses, instructorCourses, courseId) => {
                     { courseId && 
                         <Nav.Link href={`/courses/${courseId}/settings`}>settings</Nav.Link>
                     }
+<<<<<<< HEAD
+                    <Nav.Link href="/create-course">create course</Nav.Link>
+=======
                   
+>>>>>>> origin/master
                     <Nav.Link href="/" onClick={ () => { db.auth().signOut() } }>logout</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
