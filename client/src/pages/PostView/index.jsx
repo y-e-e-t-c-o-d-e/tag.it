@@ -11,8 +11,10 @@ import PostCreator from "../../components/PostCreator"
 import { API, createToast, MarkdownEditor } from '../../utils';
 import PostEditor from '../../components/PostEditor';
 
-const PostView = ({currentUser, history}) => { 
+const PostView = ({ currentUser, refresh, history }) => {
     const { postId, courseId } = useParams();
+
+    const [postLiked, setPostLike] = useState(false);
 
     const [post, setPost] = useState({
         title: "Test Title",
@@ -47,30 +49,30 @@ const PostView = ({currentUser, history}) => {
     }, [])
 
     // A list of all the tags to be rendered
-    const tagButtons = post.tagList.map((tag)=>{
-        return(<Button variant="primary" block key={tag.uuid} className="tagListItem"><b>{tag}</b></Button>);
+    const tagButtons = post.tagList.map((tag) => {
+        return (<Button variant="primary" block key={tag.uuid} className="tagListItem"><b>{tag}</b></Button>);
     });
 
     // Toggles the following status of the post
-    const toggleFollow = () =>{
+    const toggleFollow = () => {
         API.toggleFollow(currentUser, postId);
     }
 
     // Render corresponding button depending on the current following state;
     let followUnfollowButton;
-    if(currentUser){
+    if (currentUser) {
         let followUnfollow = (
-                currentUser.followingList.includes(postId)?
-                <Dropdown.Item key="unfollow" as="button" onClick={toggleFollow}>Unfollow</Dropdown.Item>:
+            currentUser.followingList.includes(postId) ?
+                <Dropdown.Item key="unfollow" as="button" onClick={toggleFollow}>Unfollow</Dropdown.Item> :
                 <Dropdown.Item key="follow" as="button" onClick={toggleFollow}>Follow Post</Dropdown.Item>
         );
         followUnfollowButton = followUnfollow;
-    }else{
+    } else {
         followUnfollowButton = (<Dropdown.Item key="follow" as="button">Loading </Dropdown.Item>);
     }
-    
+
     // Copy link on click of the copy button
-    const copyLink = () =>{
+    const copyLink = () => {
         let link = `tagdotit.netlify.com/course/${courseId}/post/${postId}`;
         navigator.clipboard.writeText(link);
         createToast("Link successfully copied!");
@@ -78,30 +80,40 @@ const PostView = ({currentUser, history}) => {
 
     // Render resolve button depending on the current resolved state;
     let resolveUnresolveButton;
-    resolveUnresolveButton = ( post.isResolved?
-        <Dropdown.Item key="resolve" as="button">Resolve</Dropdown.Item>:
+    resolveUnresolveButton = (post.isResolved ?
+        <Dropdown.Item key="resolve" as="button">Resolve</Dropdown.Item> :
         <Dropdown.Item key="resolve" as="button">Resolve</Dropdown.Item>
     );
 
+    const handlePostLike = (event) => {
+        event.preventDefault();
+        try {
+            API.togglePostLike(postId).then((response) => {
+                post.score = response.data.score;
+                refresh(true);
+            });
+            setPostLike(!postLiked);
+        } catch (error) {
+            createToast(error);
+        }
+    };
+
     // Render like button depending on the current liked state
-    let likeUnlikePostButton;
-    if(currentUser){
-        let likeUnlike = (
-            currentUser.likedPostList.includes(postId)?
-            <Button className="yellow-button">unlike</Button>:
-            <Button className="yellow-button">like.it</Button>
-        );
-        likeUnlikePostButton=likeUnlike;
-    }
+    const renderPostLiked = () => {
+        if (postLiked) {
+            return "unlike.it";
+        }
+        return "like.it";
+    };
 
     // discuss.it functionalities
-    const[discussing, setDiscussing] = useState(false);
-    const toggleDiscussing = () =>{
+    const [discussing, setDiscussing] = useState(false);
+    const toggleDiscussing = () => {
         setDiscussing(!discussing);
     }
-    let discussText = (discussing? "cancel":"discuss.it");
+    let discussText = (discussing ? "cancel" : "discuss.it");
 
-    
+
 
     // Returns the content of the page
     return (
@@ -109,7 +121,7 @@ const PostView = ({currentUser, history}) => {
         <div className="home">
             <Navigation currentUser={currentUser} />
             <div className="cont">
-                <Button onClick={() => { history.push(`/courses/${courseId}`)}}>Course Home</Button>
+                <Button onClick={() => { history.push(`/courses/${courseId}`) }}>Course Home</Button>
                 <Row>
                     <Col xs={4}>
                         <TagList tags={tags} />
@@ -148,14 +160,14 @@ const PostView = ({currentUser, history}) => {
                                 {tagButtons}
                             </div>
                             <div className="post-view-buttons">
-                                    <div className="like-discuss">
-                                        
-                                        <div className="likes"> {post.score} </div>
-                                        {likeUnlikePostButton}
-                                        <br/>
-                                    </div>
+                                <div className="like-discuss">
+
+                                    <div className="likes"> {post.score} </div>
+                                    <Button className="yellow-button" onClick={handlePostLike}>{renderPostLiked()}</Button>
+                                    <br />
+                                </div>
                             </div>
-                            <CommentSection commentList={post.commentList} postId={postId}/>
+                            <CommentSection commentList={post.commentList} postId={postId} />
 
                         </div>
                     </Col>

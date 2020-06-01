@@ -72,6 +72,15 @@ export default {
         return axios(config);
     },
 
+    togglePostLike: function (postUUID) {
+        const config = {
+            method: 'post',
+            url: `${baseURL}/api/post/like?postUUID=${postUUID}`,
+            headers: authHeaders(),
+        };
+        return axios(config);
+    },
+
     /** COURSES */
     // courses is an array of course objects
     addToCourses: function (courses) {
