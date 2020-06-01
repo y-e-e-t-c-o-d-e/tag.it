@@ -260,18 +260,18 @@ module.exports.pushPostToFirebase = (updateParams) => {
                 course: updateParams["course"]
             });
             const currentPost = await getPostById((await postRef).key);
-            await ((await (Course.getCourseById(updateParams["course"]))).addPost(post.key))
-            await ((await (User.getUserById(updateParams["author"]))).addPost(post.key))
-            
+            const course = await (Course.getCourseById(updateParams["course"]));
+            await (course.addPost(currentPost.props.uuid));
+
             // Iterates through all tags in tagList and add this post to those tags
-            tagList = updateParams["tagList"] ? updateParams["tagList"] : [];
-            for (let tagId of tagList) {
-                await currentPost.addTag(tagId);
+            const tagList = updateParams["tagList"] ? updateParams["tagList"] : [];
+            for (let tag of tagList) {
+                await currentPost.addTag(tag.uuid);
             }
             resolve((await postRef).key);
         } catch(e) {
             console.log("There was an error: " + e);
-            reject("Something went wrong");
+            reject(e);
         }
         
     })
