@@ -15,10 +15,13 @@ const states = {
     createPost: "make.it"
 }
 
-const CourseView = ({currentUser, match}) => { 
+const CourseView = ({currentUser}) => { 
     const { courseId } = useParams();
+
     const [course, setCourse] = useState({name: "Loading", postList: [], uuid: "Loading"});
     const [tags, setTags] = useState([])
+
+    const [view, setView] = useState(states.questions);
 
     useEffect(() => {
         API.getCourse(courseId).then(response => {
@@ -27,9 +30,8 @@ const CourseView = ({currentUser, match}) => {
         }).catch(err => {
             setCourse({name: "Error", postList: [], uuid: err})
         })
-    }, [])
+    }, [view])
 
-    const [view, setView] = useState(states.questions);
 
     let action;
 

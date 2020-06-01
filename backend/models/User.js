@@ -78,8 +78,8 @@ class User {
         // Avoid adding duplicates
         if (this.props.instructorCourseList.indexOf(courseId) < 0) {
             this.props.instructorCourseList.push(courseId);
-            const currentCourse = course.getCourseById(courseId);
-            //await currentCourse.addInstructor(this.props.uuid);
+            const currentCourse = await course.getCourseById(courseId);
+            await currentCourse.addInstructor(this.props.uuid, this.props.email);
             await this.push();
         } else {
             throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
@@ -129,6 +129,35 @@ class User {
         while(!this.arraysEqual(this.props.instructorCourseList, user.props.instructorCourseList)) {
             this.props.instructorCourseList = tag.props.instructorCourseList;
             user = await getUserById(this.props.uuid);
+        }
+    }
+
+    addInstructorCourse = async (courseId) => {
+        await this.updateInstructorCourses();
+        // Avoid adding duplicates
+        if (this.props.instructorCourseList.indexOf(courseId) < 0) {
+            this.props.instructorCourseList.push(courseId);
+            await this.push();
+        } else {
+            throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
+        }
+    }
+
+    removeInstructorCourse = async (courseId) => {
+        await this.updateInstructorCourses();
+        
+        if (this.props.instructorCourseList.indexOf(courseId) >= 0) {
+            this.props.instructorCourseList.splice(this.props.instructorCourseList.indexOf(courseId), 1);
+            await this.push();
+        }
+    }
+
+    removeStudentCourse = async (courseId) => {
+        await this.updateStudentCourses();
+        
+        if (this.props.studentCourseList.indexOf(courseId) >= 0) {
+            this.props.studentCourseList.splice(this.props.studentCourseList.indexOf(courseId), 1);
+            await this.push();
         }
     }
 
@@ -340,7 +369,7 @@ getUserById = async (uuid) => {
 
 
 deleteUserById = async (uuid) => {
-    const ref = db.ref('Comments/'+uuid);
+    const ref = db.ref('Users/'+uuid);
     try{
         const result = await ref.remove();
         return true;
