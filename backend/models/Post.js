@@ -339,6 +339,7 @@ getPostById = async (uuid, userObj) => {
             let r = new Post(snapshot.val());
             if (!r) reject('No post by that id');
             if (!r.props.followingList) r.props.followingList = [];
+            if (!r.props.tagList) r.props.tagList = ["dummy_tag"];
 
             if (userObj) {
                 userObj.getLikedPostStatus().then((result) => {
