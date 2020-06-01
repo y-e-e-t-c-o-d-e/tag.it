@@ -72,13 +72,21 @@ const ClassSettings = ({ currentUser, history }) => {
         const addedSet = new Set(addedTags.map(tag => tag.name))
         const deletedSet = new Set(deletedTags.map(tag => tag.name))
         
-        const added = addedTags.filter(tag => !deletedSet.has(tag.name))
-        const deleted = deletedTags.filter(tag => !addedSet.has(tag.name))
+        const added = addedTags.filter(tag => !deletedSet.has(tag.name)).map(tag => tag.name)
+        const deleted = deletedTags.filter(tag => {
+            return !addedSet.has(tag.name) && tag.uuid
+        }).map(tag => tag.uuid)
 
         console.log("added tags")
         console.log(added)
         console.log("deleted tags")
         console.log(deleted)
+
+        API.addRemoveTags(added, deleted, courseId).then(() => {
+            createToast("success!")
+        }).catch(err => {
+            createToast(err)
+        })
 
     };
 
