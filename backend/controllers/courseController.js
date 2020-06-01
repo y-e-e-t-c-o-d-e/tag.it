@@ -107,7 +107,6 @@ exports.verifyCourse = async (req, res) => {
 
     try {
         const courseObj = await course.getCourseById(courseid);
-        console.log("fck");
 
         // Verify that invite code is equal
         if (courseObj.getStudentInviteId() === inviteId) {
