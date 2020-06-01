@@ -68,7 +68,7 @@ const Staff = ({ history, match, currentUser }) => {
 
     return (
         <>
-            <Navigation currentUser={currentUser} />
+            <Navigation history={history}  currentUser={currentUser} />
             <div className="flex-instructors">
                 <div className="invite-box">
                     <div className="invite-content">

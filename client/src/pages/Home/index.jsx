@@ -15,7 +15,7 @@ const Home = ({ currentUser, history, match }) => {
 
     return (
         <div className="home">
-            <Navigation currentUser={currentUser} courseId={courseId} />
+            <Navigation history={history} currentUser={currentUser} courseId={courseId} />
             <div className="cont">
                 <Row>
                     <Col xs={2}></Col>
