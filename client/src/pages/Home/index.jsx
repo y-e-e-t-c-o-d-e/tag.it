@@ -7,6 +7,7 @@ import TagList from "../../components/TagList/index.jsx";
 import { Row, Col, Nav } from 'react-bootstrap';
 import CoursesView from '../../components/CoursesView/index.jsx';
 import PostViewer from '../../components/PostViewer/index';
+import CommentSection from '../../components/CommentSection/index.jsx';
 
 const Home = ({ currentUser, history, match }) => {
     const displayName = currentUser ? currentUser.name : "Loading"

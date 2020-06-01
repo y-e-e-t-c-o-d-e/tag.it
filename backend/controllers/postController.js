@@ -61,10 +61,13 @@ exports.updatePost = async (req, res) => {
 
     try {
         const postObj = await getPostById(postUUID);
-        if ("isPinned" in bodyParams) {
+        if (bodyParams["content"]) {
+            postObj.setContent(bodyParams["content"])
+        }
+        if (bodyParams["isPinned"]) {
             postObj.setPinned(bodyParams["isPinned"]);
         }
-        if ("isResolved" in bodyParams) {
+        if (bodyParams["isResolved"]) {
             postObj.setResolved(bodyParams["isResolved"]);
         }
         res.status(200).json(postObj);
@@ -121,10 +124,10 @@ exports.toggleLike = async (req, res) => {
     try {
         if (userObj.getLikedPostList().indexOf(postUUID) == -1) {
             await userObj.addLikedPost(postUUID);
-            res.status(200).json(await post.getPostById(postUUID));
+            res.status(200).json((await post.getPostById(postUUID)).props);
         } else {
             await userObj.removeLikedPost(postUUID);
-            res.status(200).json(await post.getPostById(postUUID));
+            res.status(200).json((await post.getPostById(postUUID)).props);
         }
     } catch (e) {
         res.status(410).json({
