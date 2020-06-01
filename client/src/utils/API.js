@@ -44,7 +44,7 @@ export default {
         return axios.get(`${baseURL}/api/post`, config);
     },
 
-    createPost: function (title, content, course) {
+    createPost: function (title, content, course, tags) {
         const config = {
             method: 'post',
             url: `${baseURL}/api/post`,
@@ -52,7 +52,8 @@ export default {
                 title: title,
                 content: content,
                 author: db.auth().currentUser.uid,
-                course: course
+                course: course,
+                tagList: tags
             },
             headers: authHeaders()
         };
@@ -185,8 +186,6 @@ export default {
     },
 
     inviteUserToCourse: function (courseUUID, userEmail) {
-        console.log(userEmail);
-        console.log(courseUUID);
         const config = {
             method: 'post',
             url: `${baseURL}/api/course/${courseUUID}/invite`,
@@ -219,6 +218,22 @@ export default {
             headers: authHeaders()
         };
         return axios.delete(`${baseURL}/api/course/${courseUUID}/pending/${email}`, config)
+    },
+
+    /** TAGS */
+
+    addRemoveTags: function (addedTags, removeTags, courseId) {
+        const config = {
+            method: 'post',
+            url: `${baseURL}/api/tag`,
+            headers: authHeaders(),
+            data: {
+                courseId: courseId,
+                newTags: addedTags,
+                removedTags: removeTags
+            }
+        };
+        return axios(config);
     }
 }
 

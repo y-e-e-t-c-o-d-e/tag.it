@@ -180,9 +180,9 @@ exports.getCourseInfo = async (req, res) => {
         }, Promise.resolve([]));
 
         // Gets all the Tag Objects
-        const tagContentList = await courseObj.getPostList().reduce(async (acc, postId) => {
+        const tagContentList = await courseObj.getTagList().reduce(async (acc, tagId) => {
             try {
-                const tagObj = await post.getPostById(postId);
+                const tagObj = await tag.getTagById(tagId);
                 (await acc).push(tagObj.props);
                 return acc;
             } catch (e) {
