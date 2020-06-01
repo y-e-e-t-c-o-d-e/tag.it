@@ -99,7 +99,17 @@ class Post {
         await this.push();
     }
 
+    // only removes the tag from the post list
     removeTag = async (tagId) => {
+        const index = this.props.tagList.indexOf(tagId);
+        if (index != -1) {
+            this.props.tagList.splice(index, 1);
+        }
+        await this.push();
+    }
+
+    // deletes the tag itself
+    deleteTag = async (tagId) => {
         const index = this.props.tagList.indexOf(tagId);
         if (index != -1) {
             this.props.tagList.splice(index, 1);
@@ -251,9 +261,16 @@ module.exports.pushPostToFirebase = (updateParams) => {
                 score: 0,
                 course: updateParams["course"]
             });
-            const post = (await postRef)
-            await ((await (Course.getCourseById(updateParams["course"]))).addPost(post.key))
-            resolve(post.key);
+
+            const currentPost = await getPostById((await postRef).key);
+            await ((await (Course.getCourseById(updateParams["course"]))).addPost(post.key));
+
+            // Iterates through all tags in tagList and add this post to those tags
+            const tagList = updateParams["tagList"] ? updateParams["tagList"] : [];
+            for (let tagId of tagList) {
+                await currentPost.addTag(tagId);
+            }
+            resolve((await postRef).key);
         } catch(e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");
