@@ -46,7 +46,7 @@ export default {
 
     createPost: function (title, content, course) {
         const config = {
-            method: 'post', 
+            method: 'post',
             url: `${baseURL}/api/post`,
             data: {
                 title: title,
@@ -59,7 +59,7 @@ export default {
         return axios(config);
     },
 
-    toggleFollow: function(user, postUUID) {
+    toggleFollow: function (user, postUUID) {
         const config = {
             method: 'post',
             url: `${baseURL}/api/post/follow?postUUID=${postUUID}`,
@@ -98,7 +98,7 @@ export default {
         return axios(config);
     },
 
-    addToCourse: function(courseId, accountType=null) {
+    addToCourse: function (courseId, accountType = null) {
         const config = {
             method: 'post',
             url: `${baseURL}/api/user/${courseId}`,
@@ -110,7 +110,7 @@ export default {
         return axios(config);
     },
 
-    getAllCourses: function() {
+    getAllCourses: function () {
         const config = {
             headers: authHeaders(),
             transformResponse: [function (data) {
@@ -123,7 +123,7 @@ export default {
         return axios.get(`${baseURL}/api/course`, config);
     },
 
-    confirmVerificationLink: function(courseId, inviteId) {
+    confirmVerificationLink: function (courseId, inviteId) {
         const config = {
             headers: authHeaders()
         };
@@ -142,7 +142,7 @@ export default {
             }
         };
         return axios(config);
-    }, 
+    },
 
     /** COMMENTS */
     createComment: function (content, visibility, parentComment, postId) {
@@ -157,6 +157,15 @@ export default {
                 parentComment: parentComment,
                 postId: postId
             }
+        };
+        return axios(config);
+    },
+
+    toggleLike: function (commentUUID) {
+        const config = {
+            method: 'post',
+            url: `${baseURL}/api/comment/like?commentUUID=${commentUUID}`,
+            headers: authHeaders(),
         };
         return axios(config);
     },

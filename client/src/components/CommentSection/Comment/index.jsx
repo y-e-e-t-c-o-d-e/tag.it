@@ -74,16 +74,34 @@ const Comment = ({ comment, postId, refresh }) => {
         });
     };
 
+    const handleLike = (event) => {
+        event.preventDefault();
+        setLike(!liked);
+        try {
+            API.toggleLike(comment.uuid).then((response) => {
+                comment.score = response.data.score;
+                refresh(true);
+            });
+        } catch (error) {
+            createToast(error);
+        }
+    }
+
+    const renderLiked = () => {
+        if (liked) {
+            return "unlike.it";
+        }
+        return "like.it";
+    };
+
     return (
         <div className="comment">
-            <span id="username">{comment.authorName}</span>
+            <span id="username">{comment.author}</span>
             <span id="date">{formatDate(comment.time)}</span>
             <div>{comment.content}</div>
             <div className="comment-options">
-                <a href="#" onClick={(e) => {
-                    e.preventDefault();
-                    setLike(true);
-                }}>like.it</a>
+                <span id="comment-score">({comment.score})</span>
+                <a href="#" onClick={handleLike}>{renderLiked()}</a>
                 <a href="#" onClick={(e) => {
                     e.preventDefault();
                     setNewReply(true);

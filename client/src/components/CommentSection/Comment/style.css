@@ -17,12 +17,17 @@
 
 .comment-options a {
     color: #3E697A;
+    margin-right: 5px;
     text-decoration: none;
-    margin-right: 10px;
     transition: color 0.1s linear;
 }
 
 .comment-options a:hover {
     color: #F9D127;
     transition: color 0.1s linear;
+}
+
+#comment-score {
+    color: #3E697A;
+    margin-right: 5px;
 }
