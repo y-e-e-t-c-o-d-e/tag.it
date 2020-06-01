@@ -8,6 +8,7 @@ import Signup from './pages/Signup/index';
 import ClassCreation from './pages/ClassCreation/index';
 import Staff from './pages/Staff/index';
 import ClassSettings from './pages/ClassSettings/index';
+import Invitation from './pages/Invitation/index';
 import PostView from './pages/PostView';
 
 // Importing Authentication
@@ -28,6 +29,11 @@ const App = () => {
             <PrivateRoute exact path="/courses/:courseId/post/:postId" component={PostView} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
+            <PrivateRoute exact path="/createclass" component={ClassCreation} />
+            <PrivateRoute exact path="/course/:courseId/staff" component={Staff} />
+            <PrivateRoute exact path="/course/:courseId/post/:postId" component={PostView} />
+            <PrivateRoute exact path="/course/:courseId/settings" component={ClassSettings} />
+            <PrivateRoute exact path="/course/:courseId/invite/:inviteId" component={Invitation} />
             <PrivateRoute exact path="/create-course" component={ClassCreation} />
             <PrivateRoute exact path="/add" component={AddClass} />
             <PrivateRoute exact path="/" component={Home} />

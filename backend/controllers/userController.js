@@ -112,6 +112,9 @@ exports.updateUser = async (req, res) => {
 exports.addUserToCourse = async (req, res) => {
     const courseUUID = req.params.courseId;
     const bodyParams = req.body;
+
+    // If user id is given, add that user to the course. Otherwise, add authenticated user.
+    let userToAdd = bodyParams["userId"];
     let userObj = req.user;
 
     if (!courseUUID || !userObj) {
@@ -122,11 +125,14 @@ exports.addUserToCourse = async (req, res) => {
         return;
     };
 
+    if (userToAdd) {
+        userObj = await user.getUserById(userToAdd);
+    }
+
     try {
         let courseObj = await course.getCourseById(courseUUID);
 
         if ("type" in bodyParams && bodyParams["type"] == "instructor") {
-            await courseObj.addInstructor(userObj.getUUID());
             await userObj.addInstructorCourse(courseObj.getUUID());
             res.status(200).send("Added user as instructor to course " + courseObj.getUUID());
         } else {

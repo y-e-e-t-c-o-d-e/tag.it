@@ -59,9 +59,11 @@ const regularRender = (studentCourses, instructorCourses, courseId) => {
                         <NavDropdown.Divider />
                         <NavDropdown.Item href={`/add`}>Add a Course</NavDropdown.Item>
                     </NavDropdown>
+
                     { courseId && 
                         <Nav.Link href={`/courses/${courseId}/settings`}>settings</Nav.Link>
                     }
+                  
                     <Nav.Link href="/" onClick={ () => { db.auth().signOut() } }>logout</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
@@ -72,6 +74,7 @@ const regularRender = (studentCourses, instructorCourses, courseId) => {
 const Navigation = ({currentUser}) => {    
     const [studentCourses, setStudentCourses] = useState([])
     const [instructorCourses, setInstructorCourses] = useState([])
+
     const { courseId } = useParams()
     
     if (currentUser && studentCourses.length !== currentUser.filledInStudentCourseList.length) {
