@@ -36,6 +36,7 @@ class Post {
     }
 
     getTagList() {
+        console.log(this.props)
         if (this.props.tagList[0] == "dummy_tag") {
             return this.props.tagList.slice(1, this.props.tagList.length);
         }

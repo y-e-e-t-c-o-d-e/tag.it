@@ -8,7 +8,7 @@ import { createToast } from '../../../utils';
 /* recursive functional component for comments */
 const Comment = ({ comment, postId, refresh, isTopLevel }) => {
 
-    const [liked, setLike] = useState(false);
+    const [liked, setLike] = useState(comment.likedStatus);
     const [newReply, setNewReply] = useState(false);
     const [visibility, setVisiblity] = useState("public, visible");
 
@@ -77,12 +77,11 @@ const Comment = ({ comment, postId, refresh, isTopLevel }) => {
     // update like score
     const handleLike = (event) => {
         event.preventDefault();
-        setLike(!liked);
-        console.log(comment);
         try {
             API.toggleLike(comment.uuid).then((response) => {
                 comment.score = response.data.score;
                 refresh(true);
+                setLike(!liked);
             });
         } catch (error) {
             createToast(error);
@@ -91,9 +90,9 @@ const Comment = ({ comment, postId, refresh, isTopLevel }) => {
 
     const renderLiked = () => {
         if (liked) {
-            return "unlike.it";
+            return <a href="#" onClick={handleLike} style={{fontWeight: "bold"}}>{"unlike.it"}</a>
         }
-        return "like.it";
+        return <a href="#" onClick={handleLike}>{"like.it"}</a>;
     };
 
     const commentType = isTopLevel ? "comment" : "child-comment";
@@ -105,7 +104,7 @@ const Comment = ({ comment, postId, refresh, isTopLevel }) => {
             <div>{comment.content}</div>
             <div className="comment-options">
                 <span id="comment-score">({comment.score})</span>
-                <a href="#" onClick={handleLike}>{renderLiked()}</a>
+                {renderLiked()}
                 <a href="#" onClick={(e) => {
                     e.preventDefault();
                     setNewReply(true);
