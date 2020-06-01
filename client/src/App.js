@@ -22,15 +22,15 @@ const App = () => {
       <Router>
         <div>
           <Switch>
-            <PrivateRoute exact path="/courses/:courseId/settings" component={ClassSettings} />
+            <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/courses/:courseId" component={CourseView} />
-            <PrivateRoute exact path="/courses/:courseId/staff" component={Staff} />
             <PrivateRoute exact path="/courses/:courseId/post/:postId" component={PostView} />
+            <PrivateRoute exact path="/courses/:courseId/settings" component={ClassSettings} />
+            <PrivateRoute exact path="/courses/:courseId/staff" component={Staff} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
-            <PrivateRoute exact path="/create-course" component={ClassCreation} />
             <PrivateRoute exact path="/add" component={AddClass} />
-            <PrivateRoute exact path="/" component={Home} />
+            <PrivateRoute exact path="/create-course" component={ClassCreation} />
             <Route exact path="/*" component={() => {
               window.location.href = "/";
             }} />
