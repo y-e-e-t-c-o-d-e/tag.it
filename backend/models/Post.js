@@ -268,7 +268,7 @@ module.exports.pushPostToFirebase = (updateParams) => {
             // Iterates through all tags in tagList and add this post to those tags
             const tagList = updateParams["tagList"] ? updateParams["tagList"] : [];
             for (let tagId of tagList) {
-                currentPost.addTag(tagId);
+                await currentPost.addTag(tagId);
             }
             resolve((await postRef).key);
         } catch(e) {
