@@ -58,6 +58,7 @@ export default {
         };
         return axios(config);
     },
+
     /** COURSES */
     // courses is an array of course objects
     addToCourses: function (courses) {

@@ -43,6 +43,7 @@ const regularRender = (studentCourses, instructorCourses, courseId) => {
             <Navbar.Collapse className="">
                 <Nav className="ml-auto" >
                     <Nav.Link href="/">home</Nav.Link>
+                    <Nav.Link href="/create-course">create course</Nav.Link>
                     <NavDropdown title="courses" id="basic-nav-dropdown">
                         { studentCourses.length > 0 && 
                             studentCourses.map((course, key) => {
@@ -58,7 +59,11 @@ const regularRender = (studentCourses, instructorCourses, courseId) => {
                         <NavDropdown.Divider />
                         <NavDropdown.Item href={`/add`}>Add a Course</NavDropdown.Item>
                     </NavDropdown>
-                    <Nav.Link href={`/course/${courseId}/settings`}>settings</Nav.Link>
+
+                    { courseId && 
+                        <Nav.Link href={`/courses/${courseId}/settings`}>settings</Nav.Link>
+                    }
+                  
                     <Nav.Link href="/" onClick={ () => { db.auth().signOut() } }>logout</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
@@ -70,8 +75,8 @@ const Navigation = ({currentUser}) => {
     const [studentCourses, setStudentCourses] = useState([])
     const [instructorCourses, setInstructorCourses] = useState([])
 
-    const { courseId } = useParams();
-
+    const { courseId } = useParams()
+    
     if (currentUser && studentCourses.length !== currentUser.filledInStudentCourseList.length) {
         setStudentCourses(currentUser.filledInStudentCourseList)
     }
