@@ -76,7 +76,7 @@ const AddClass = ({history, currentUser}) => {
 
     return (
         <>
-            <NavBar currentUser={currentUser}/>
+            <NavBar history={history} currentUser={currentUser}/>
             <div className="addClassPage">
                 <div className="left-section"> 
                     <h1>Add a Class</h1>

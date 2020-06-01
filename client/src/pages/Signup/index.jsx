@@ -112,7 +112,7 @@ const SignUp = ({ history }) => {
 
     return (
         <div>
-            <NavBar />
+            <NavBar  history={history} />
             <div className="centered">
                 <div className="contents">
                     {/* The tag.it logo*/}

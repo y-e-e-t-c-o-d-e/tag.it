@@ -7,7 +7,7 @@ exports.addPost = async (req, res) => {
     // TODO: Handle later with models
     const bodyParams = req.body;
     // Checking if all values are present, and defaulting if not present
-    if (!("title" in bodyParams && "content" in bodyParams && "author" in bodyParams && "course" in bodyParams) ) {
+    if (!(bodyParams["title"] &&  bodyParams["content"] && bodyParams["author"] && bodyParams["course"]) ) {
         res.status(422).json({
             status: 422,
             error: "Missing one of the following: title, content, author, or course"
@@ -20,7 +20,7 @@ exports.addPost = async (req, res) => {
     } catch (e) {
         res.status(410).json({
             status: 410,
-            error: "server could not push to firebase"
+            error: e
         })
     }
 };
@@ -35,6 +35,7 @@ exports.getPost = async (req, res) => {
         return;
     };
 
+    console.log('time to shine')
     const postObj = await post.getPostById(postUUID)
     postObj.props.filledInTags = await Promise.all(postObj.getTagList().map(async tagUUID => {
         return (await Tag.getTagById(tagUUID)).props

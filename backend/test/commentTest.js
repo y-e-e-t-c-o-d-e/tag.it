@@ -79,17 +79,24 @@ describe('comment', () => {
     })
 
     it('should increment testComment score', async () => {
-        testComment.incrementScore();
-        expect(testComment.getScore()).to.equal(1);
+        //console.log(testComment.props.name);
+        await testComment.incrementScore();
+        const t1 = await getCommentById(testComment.getUUID());
+        expect(t1.getScore()).to.equal(1);
+    })
+
+    it('should find two equal comment models equal to eachother', async () => {
+        const t2 = await comment.getCommentById(testComment.getUUID());
+        expect(t2.equalTo(testComment)).to.equal(true);
     })
 
     it('should decrement testComment score', async () => {
-        testComment.decrementScore();
+        await testComment.decrementScore();
         expect(testComment.getScore()).to.equal(0);
     })
 
     it('should resolve testComment', async () => {
-        testComment.setResolved(true);
+        await testComment.setResolved(true);
         expect(testComment.getResolved()).to.equal(true);
     })
 
@@ -110,6 +117,7 @@ describe('comment', () => {
         } catch(e) {
             console.log(e);
         }
+
         
         await testComment.addChild(replyKey);
         expect(testComment.getChildList().length).to.equal(1);
