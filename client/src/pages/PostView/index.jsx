@@ -71,6 +71,13 @@ const PostView = ({ currentUser, match }) => {
         followUnfollowButton = (<Dropdown.Item key="follow" as="button">Loading </Dropdown.Item>);
     }
     
+    // Copy link on click of the copy button
+    const copyLink = () =>{
+        let link = `tagdotit.netlify.com/course/${courseId}/post/${postId}`;
+        navigator.clipboard.writeText(link);
+        alert("Link successfully copied!");
+    }
+
     // Render corresponding button depending on the current resolved state;
     let resolveUnresolveButton;
     resolveUnresolveButton = ( post.isResolved?
@@ -79,6 +86,16 @@ const PostView = ({ currentUser, match }) => {
     );
 
     console.log(currentUser);
+
+    // discuss.it functionalities
+    const[discussing, setDiscussing] = useState(false);
+    const toggleDiscussing = () =>{
+        setDiscussing(!discussing);
+    }
+    let discussText = (discussing? "cancel":"discuss.it");
+
+    // Comment section shows up only when discussing
+
     // Returns the content of the page
     return (
 
@@ -106,7 +123,7 @@ const PostView = ({ currentUser, match }) => {
                                     <Button className="yellow-button">change.it</Button>
                                     <DropdownButton className="yellow-button" title="actions">
                                         {followUnfollowButton}
-                                        <Dropdown.Item key="copy-link" as="button">Copy Link</Dropdown.Item>
+                                        <Dropdown.Item key="copy-link" as="button" onClick={copyLink}>Copy Link</Dropdown.Item>
                                         {resolveUnresolveButton}
                                     </DropdownButton>
                                 </div>
@@ -119,7 +136,7 @@ const PostView = ({ currentUser, match }) => {
                             </div>
 
                             {/* Like / discuss/ tags */}
-                            <Container className="post-view-buttons">
+                            <div className="post-view-buttons">
                                     <Col className="like-discuss" xs={6} md={4}>
                                         <Row>
                                             <div className="likes">{post.score}</div>
@@ -127,14 +144,15 @@ const PostView = ({ currentUser, match }) => {
                                         </Row>
 
                                         <Row>
-                                            <Button className="yellow-button">discuss.it</Button>
+                                            <Button className="yellow-button" onClick={toggleDiscussing}>{discussText}</Button>
                                         </Row>
 
                                     </Col>
                                     <Col className="tagButtons">
                                         {tagButtons}
                                     </Col>
-                            </Container>
+                            </div>
+                            <CommentSection/>
 
                         </div>
                     </Col>
