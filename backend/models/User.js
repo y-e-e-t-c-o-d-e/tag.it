@@ -223,7 +223,7 @@ class User {
         await this.updateUser();
         this.props.likedPostList.push(postId);
         let postObj = await post.getPostById(postId);
-        postObj.incrementScore();
+        await postObj.incrementScore();
         await this.push();
     }
 
@@ -231,7 +231,7 @@ class User {
         await this.updateUser();
         this.props.likedPostList.splice(this.props.likedPostList.indexOf(postId), 1);
         let postObj = await post.getPostById(postId);
-        postObj.decrementScore();
+        await postObj.decrementScore();
         await this.push();
     }
 
