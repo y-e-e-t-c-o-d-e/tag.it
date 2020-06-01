@@ -48,7 +48,7 @@ const CourseView = ({currentUser, history }) => {
             action = <QuestionList courseId={courseId} questions={course.postList} history={history} filters={filters} />
             break;
         case states.createPost:
-            action = <PostCreator setView={setView} views={states} courseId={courseId} />
+            action = <PostCreator tags={tags} setView={setView} views={states} courseId={courseId} />
     }
 
     return (

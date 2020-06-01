@@ -143,7 +143,7 @@ class Course {
     }
 
     addPost = async (postId) => {
-        this.updateCourse();
+        await this.updateCourse();
         this.props.postList.push(postId);
         await this.push();
     }
