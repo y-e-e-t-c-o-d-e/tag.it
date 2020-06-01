@@ -4,8 +4,8 @@ import { Dropdown, DropdownButton, Button, Form, Row, Col } from 'react-bootstra
 import PostEditor from "../PostEditor";
 import { API, createToast} from '../../utils';
 
-const PostCreator = ({courseId, setView, views}) => {
-    const [tags, setTags] = useState([{name: "sample tag", uuid: "jlkd8f2348"}]); // all possible tags
+const PostCreator = ({tags, courseId, setView, views}) => {
+    // const [tags, setTags] = useState([{name: "sample tag", uuid: "jlkd8f2348"}]); // all possible tags
     const [addedTags, setAddedTags] = useState(new Set()); // tags that have been added to this post
     const [visibility, setVisiblity] = useState("public, visible");
 
@@ -13,6 +13,7 @@ const PostCreator = ({courseId, setView, views}) => {
     const [questionTitle, setQuestionTitle] = useState("");
     const [questionContent, setQuestionContent] = useState("**b**");
     
+   
     const createPost = () => {
         if (questionTitle.length <=5) {
             createToast("make a longer title!")
@@ -22,7 +23,8 @@ const PostCreator = ({courseId, setView, views}) => {
             createToast("make a longer post!")
             return;
         }
-        API.createPost(questionTitle, questionContent, courseId).then((response) => {
+        console.log(addedTags)
+        API.createPost(questionTitle, questionContent, courseId, Array.from(addedTags)).then((response) => {
             createToast(response.data)
             setView(views.questions)
         })

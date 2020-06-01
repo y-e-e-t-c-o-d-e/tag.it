@@ -20,13 +20,21 @@ const CourseView = ({currentUser, history }) => {
 
     const [course, setCourse] = useState({name: "Loading", postList: [], uuid: "Loading"});
     const [tags, setTags] = useState([])
-
+    const [filters, setFilters] = useState({
+        search: "",
+        tags: []
+    })
     const [view, setView] = useState(states.questions);
 
     useEffect(() => {
         API.getCourse(courseId).then(response => {
+            console.log(response.data)
             setCourse(response.data)
-            setTags(response.data.tagList)
+
+            setTags(response.data.tagList.map(tag => {
+                tag.toString = JSON.stringify(tag)
+                return tag
+            }))
         }).catch(err => {
             setCourse({name: "Error", postList: [], uuid: err})
         })
@@ -37,10 +45,10 @@ const CourseView = ({currentUser, history }) => {
 
     switch (view) {
         case states.questions:
-            action = <QuestionList courseId={courseId} questions={course.postList} history={history} />
+            action = <QuestionList courseId={courseId} questions={course.postList} history={history} filters={filters} />
             break;
         case states.createPost:
-            action = <PostCreator setView={setView} views={states} courseId={courseId} />
+            action = <PostCreator tags={tags} setView={setView} views={states} courseId={courseId} />
     }
 
     return (
@@ -50,7 +58,7 @@ const CourseView = ({currentUser, history }) => {
                 <h1>{course.name}</h1>
             <Row>
                 <Col xs={4}>
-                    <TagList tags={tags} />
+                    <TagList tags={tags} filters={filters} setFilters={setFilters} />
                 </Col>
                 <Col>
                     <Row>
