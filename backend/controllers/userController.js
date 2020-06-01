@@ -4,7 +4,7 @@ const course = require("../models/Course");
 exports.addUser = async (req, res) => {
     // Check that required data is given
     const bodyParams = req.body;
-    if (!("name" in bodyParams || "email" in bodyParams || "uuid" in bodyParams)) {
+    if (!("name" in bodyParams && "email" in bodyParams && "uuid" in bodyParams)) {
         res.status(422).json({
             status: 422,
             error: "Missing one of the following parameters: name, email, or uuid"
@@ -32,6 +32,17 @@ exports.getUser = async (req, res) => {
     // Grabs the user based on the userUUID. If fails, responds with an error.
     try {
         const userObj = await user.getUserById(userUUID);
+        // get all the courses
+        userObj.props.filledInStudentCourseList = await Promise.all(userObj.getStudentCourseList().map(async uuid => {
+            const toReturn =  (await course.getCourseById(uuid)).props;
+            return toReturn
+        }))
+
+        userObj.props.filledInInstructorCourseList = await Promise.all(userObj.getInstructorCourseList().map(async uuid => {
+            const toReturn =  (await course.getCourseById(uuid)).props;
+            return toReturn
+        }))
+
         res.status(200).json(userObj.props);
     } catch (e) {
         res.status(410).json({
@@ -97,6 +108,9 @@ exports.updateUser = async (req, res) => {
 exports.addUserToCourse = async (req, res) => {
     const courseUUID = req.params.courseId;
     const bodyParams = req.body;
+
+    // If user id is given, add that user to the course. Otherwise, add authenticated user.
+    let userToAdd = bodyParams["userId"];
     let userObj = req.user;
 
     if (!courseUUID || !userObj) {
@@ -107,11 +121,14 @@ exports.addUserToCourse = async (req, res) => {
         return;
     };
 
+    if (userToAdd) {
+        userObj = await user.getUserById(userToAdd);
+    }
+
     try {
         let courseObj = await course.getCourseById(courseUUID);
 
         if ("type" in bodyParams && bodyParams["type"] == "instructor") {
-            await courseObj.addInstructor(userObj.getUUID());
             await userObj.addInstructorCourse(courseObj.getUUID());
             res.status(200).send("Added user as instructor to course " + courseObj.getUUID());
         } else {

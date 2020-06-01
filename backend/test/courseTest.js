@@ -80,4 +80,52 @@ describe('course', () => {
         expect(posts.length).to.equal(2);
     })
 
+    it('should classify the user according to their status', async () => {
+        const testCourse = await course.getCourseById('course1');
+        expect(testCourse.classifyUser('user2')).to.equal('instructor');
+        expect(testCourse.classifyUser('user1')).to.equal('student');
+        expect(testCourse.classifyUser('Rohith')).to.equal(null);
+    })
+
+    it('should return all the private posts for course1', async () => {
+        const testCourse = await course.getCourseById('course1');
+        const privatePost = await testCourse.getPrivatePosts();
+        expect(privatePost[0]).to.equal('post2');
+    })
+
+    
+    it('should return all the public posts for course1', async () => {
+        const testCourse = await course.getCourseById('course1');
+        const publicPost = await testCourse.getPublicPosts();
+        expect(publicPost[0]).to.equal('post1');
+    })
+
+    
+    it('should return all the pinned posts for course1', async () => {
+        const testCourse = await course.getCourseById('course1');
+        const pinnedPost = await testCourse.getPinnedPosts();
+        expect(pinnedPost[0]).to.equal('post1');
+    })
+
+    
+    it('should return all the announcements for course1', async () => {
+        const testCourse = await course.getCourseById('course1');
+        const announcements = await testCourse.getAnnouncements();
+        expect(announcements[0]).to.equal('post1');
+    })
+
+    it('should add instructor to pending list', async () => {
+        const testCourse = await course.getCourseById('course1');
+        await testCourse.addPendingInstructor("d1truong@ucsd.edu");
+        console.log(testCourse.getPendingInstructorList())
+        const pendingInstructorList = await testCourse.getPendingInstructorList();
+        expect(pendingInstructorList.length).to.equal(1);
+    })
+
+    it('should remove instructor off pending list', async () => {
+        const testCourse = await course.getCourseById('course1');
+        await testCourse.removePendingInstructor("d1truong@ucsd.edu");
+        const pendingInstructorList = await testCourse.getPendingInstructorList();
+        expect(pendingInstructorList.length).to.equal(0);
+    })
 });
