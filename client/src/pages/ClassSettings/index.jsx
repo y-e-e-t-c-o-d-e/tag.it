@@ -58,9 +58,9 @@ const ClassSettings = ({ currentUser, history }) => {
         if(courseNameValid) {
             event.preventDefault();
 
-            // API.updateCourse(courseId, courseName).then(() => {
-            //     createToast("Changed Course Name!")
-            // })
+            API.updateCourse(courseId, courseName).then(() => {
+                createToast("Changed Course Name!")
+            })
         }
         else{
             createToast("Course name can not be empty");
