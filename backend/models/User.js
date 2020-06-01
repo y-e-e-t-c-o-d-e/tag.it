@@ -78,8 +78,8 @@ class User {
         // Avoid adding duplicates
         if (this.props.instructorCourseList.indexOf(courseId) < 0) {
             this.props.instructorCourseList.push(courseId);
-            const currentCourse = course.getCourseById(courseId);
-            //await currentCourse.addInstructor(this.props.uuid);
+            const currentCourse = await course.getCourseById(courseId);
+            await currentCourse.addInstructor(this.props.uuid, this.props.email);
             await this.push();
         } else {
             throw new InternalServerError(`Instructor Course ${courseId} already exists.`);

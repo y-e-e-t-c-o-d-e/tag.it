@@ -82,6 +82,7 @@ describe('post', async () => {
         testPost.addComment(commentKey);
         await testPost.removeComment(commentKey);
         expect(testPost.getCommentList().length).to.equal(1);
+        await comment.deleteCommentById(commentKey);
     })
 
     it('should add and remove tag of post in firebase', async() => {

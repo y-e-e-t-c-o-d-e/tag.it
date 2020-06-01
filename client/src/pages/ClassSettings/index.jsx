@@ -31,6 +31,7 @@ const ClassSettings = ({ currentUser, match}) => {
     const [tags, onChangeSetTags] = useState([]);
     const [courseNameValid, setCourseNameValid] = useState(true); // Invalid if empty
     const [courseName, setCourseName] = useState("Default Class Name");
+    const [courseInviteLink, setCourseInviteLink] = useState("");
     const invitationRef = useRef(null);
 
     let link = "https://tagdotit.netlify.app/course/" + courseId;
@@ -40,6 +41,7 @@ const ClassSettings = ({ currentUser, match}) => {
             console.log(response.data)
             setCourse(response.data)
             setCourseName(response.data.name)
+            setCourseInviteLink(`https://tagdotit.netlify.app/course/${courseId}/invite/${course.studentInviteId}`)
         }).catch(() => {
             setCourseName('Default Class Name')
         })
@@ -123,7 +125,7 @@ const ClassSettings = ({ currentUser, match}) => {
                             <div className="invitation-section">
                                 <span>Invitation:{'\u00A0'} {'\u00A0'}</span>
                                 <textarea readOnly ref={invitationRef}
-                                    className="invitation-link" type="text" value={link}>
+                                    className="invitation-link" type="text" value={courseInviteLink}>
                                 </textarea> 
                                 <Button onClick={copyLinkToClipboard}>Copy</Button>
                             </div>

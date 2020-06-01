@@ -8,6 +8,7 @@ import Signup from './pages/Signup/index';
 import ClassCreation from './pages/ClassCreation/index';
 import Staff from './pages/Staff/index';
 import ClassSettings from './pages/ClassSettings/index';
+import Invitation from './pages/Invitation/index';
 import PostView from './pages/PostView';
 
 // Importing Authentication
@@ -22,15 +23,16 @@ const App = () => {
       <Router>
         <div>
           <Switch>
-            <PrivateRoute exact path="/courses/:courseId/settings" component={ClassSettings} />
+            <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/courses/:courseId" component={CourseView} />
-            <PrivateRoute exact path="/courses/:courseId/staff" component={Staff} />
             <PrivateRoute exact path="/courses/:courseId/post/:postId" component={PostView} />
+            <PrivateRoute exact path="/courses/:courseId/settings" component={ClassSettings} />
+            <PrivateRoute exact path="/courses/:courseId/staff" component={Staff} />
+            <PrivateRoute exact path="/courses/:courseId/invite/:inviteId" component={Invitation} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
-            <PrivateRoute exact path="/create-course" component={ClassCreation} />
             <PrivateRoute exact path="/add" component={AddClass} />
-            <PrivateRoute exact path="/" component={Home} />
+            <PrivateRoute exact path="/create-course" component={ClassCreation} />
             <Route exact path="/*" component={() => {
               window.location.href = "/";
             }} />
