@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './style.css';
 import Label from '../../components/Label';
 import SuggestionTextField from '../../components/SuggestionTextField';
-import Button from '../../components/Button';
-import { API, createToast } from '../../utils/';
+import {Button} from 'react-bootstrap';
+import {API, createToast} from '../../utils/';
 import { AuthContext } from '../../auth/Auth';
 import { useContext } from 'react';
 import NavBar from "../../components/Navbar"
@@ -82,8 +82,8 @@ const AddClass = ({history, currentUser}) => {
                     <h1>Add a Class</h1>
                     {renderFields()}
                     <div className="buttons">
-                        <Button text="Cancel" onSubmit={() => history.push("/")}/>
-                        <Button text="Add Classes" onSubmit={onSubmit}/>
+                        <Button variant="primary" onClick={() => history.push("/")}>Cancel</Button>
+                        <Button variant="primary" onClick={onSubmit}>Add Classes</Button>
                     </div>
                 </div>
                 <div className="right-section">
