@@ -77,3 +77,32 @@ exports.toggleFollow = async (req, res) => {
         });
     };
 }
+
+// Adds post to user's likedPostList if not there already, removes post otherwise
+exports.toggleLike = async (req, res) => {
+    const userObj = req.user;
+    const postUUID = req.query.postUUID;
+    if (!postUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing parameter: postUUID"
+        });
+        return;
+    };
+    
+    try {
+        let postObj = await post.getPostById(postUUID);
+        if (userObj.getLikedPostList().indexOf(userUUID) == -1) {
+            await userObj.addLikedPost(postUUID);
+            res.status(200).json(postObj);
+        } else {
+            await userObj.removeLikedPost(postUUID);
+            res.status(200).json(postObj);
+        }
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e.message
+        });
+    };
+}
