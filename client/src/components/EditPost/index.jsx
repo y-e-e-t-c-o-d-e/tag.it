@@ -10,7 +10,7 @@ const EditPost = ({postText}) => {
     useEffect(()=>{setPostContent(postText)},[]);
 
     return (
-        <div className="postEditor">
+        <div className="edit-post">
             <h1>Edit Post</h1>
             <Form.Group controlId="exampleForm.ControlTextarea1">
                 <Form.Label>Description</Form.Label>

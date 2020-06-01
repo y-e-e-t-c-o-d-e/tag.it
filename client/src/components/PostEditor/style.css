@@ -1,9 +1,15 @@
-/* .postEditor {
-    width: 95%;
-    height: 90%;
-    
-    padding-left: 10px;
+/*.postEditor {
+    border: 15px solid #A6D1DF;
+    width: 750px;
+    position: relative;
     margin: 5px;
+    flex: .8;
+    background: #E4ECEE;
+    padding: 2.5%;
+}
+
+.save-changes {
+    margin: 5px 0;
 }
 
 .editor {
@@ -11,11 +17,12 @@
     margin-left: auto;
     margin-right: auto;
 }
+
 .liveView {
-    width: 60%;
+    width: 100%;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
+    margin:0;
+    background-color: rgba(255,255, 255, 0.5);
 }
 
 textarea {
