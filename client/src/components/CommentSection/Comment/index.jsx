@@ -74,9 +74,11 @@ const Comment = ({ comment, postId, refresh, isTopLevel }) => {
         });
     };
 
+    // update like score
     const handleLike = (event) => {
         event.preventDefault();
         setLike(!liked);
+        console.log(comment);
         try {
             API.toggleLike(comment.uuid).then((response) => {
                 comment.score = response.data.score;
