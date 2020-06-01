@@ -115,7 +115,7 @@ const ClassCreation = ({ currentUser, history }) => {
 
     return (
         <div>
-            <Navigation currentUser={currentUser} />
+            <Navigation history={history} currentUser={currentUser} />
             <div className="container">
                 <div className="container-title">
                     <h1>Create a Class</h1>

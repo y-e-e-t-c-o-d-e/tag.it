@@ -109,7 +109,7 @@ const PostView = ({currentUser, history}) => {
     return (
 
         <div className="home">
-            <Navigation currentUser={currentUser} />
+            <Navigation  history={history} currentUser={currentUser} />
             <div className="cont">
                 <Button onClick={() => { history.push(`/courses/${courseId}`)}}>Course Home</Button>
                 <Row>

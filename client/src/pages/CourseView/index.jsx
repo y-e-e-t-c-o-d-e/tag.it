@@ -53,7 +53,7 @@ const CourseView = ({currentUser, history }) => {
 
     return (
         <div className="home">
-            <Navigation currentUser={currentUser} />
+            <Navigation  history={history} currentUser={currentUser} />
             <div className="cont">
                 <h1>{course.name}</h1>
             <Row>
