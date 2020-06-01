@@ -213,10 +213,14 @@ getTagById = async (uuid) => {
 }
 
 deleteTagById = async (uuid) => {
-    
     const ref = db.ref('Tags/' + uuid);
     try{
-        const result = await ref.remove();
+        const tag = await this.getTagById(uuid);
+        for (let postId of tag.getPostList()) {
+            await (await post.getPostById(postId)).removeTag(uuid);
+        }
+
+        await ref.remove();
         return true;
     } catch (e) {
         console.log(e);

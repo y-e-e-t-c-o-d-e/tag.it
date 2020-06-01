@@ -6,7 +6,7 @@ exports.addPost = async (req, res) => {
     // TODO: Handle later with models
     const bodyParams = req.body;
     // Checking if all values are present, and defaulting if not present
-    if (!("title" in bodyParams && "content" in bodyParams && "author" in bodyParams && "course" in bodyParams) ) {
+    if (!(bodyParams["title"] &&  bodyParams["content"] && bodyParams["author"] && bodyParams["course"]) ) {
         res.status(422).json({
             status: 422,
             error: "Missing one of the following: title, content, author, or course"
