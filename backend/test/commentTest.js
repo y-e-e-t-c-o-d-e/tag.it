@@ -58,9 +58,6 @@ describe('comment', () => {
             isAnonymous : true
         }
 
-        console.log(postKey);
-        //testPost.addComment(commentKey);
-
         try {
             commentKey = await comment.pushCommentToFirebase(commentParams);
             testComment = await comment.getCommentById(commentKey);
