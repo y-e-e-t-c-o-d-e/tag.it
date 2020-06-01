@@ -25,7 +25,7 @@ const QuestionList = ({ questions, courseId, history, filters }) =>{
 
     // Displays all posts that are not private
     const listBody = orderedPosts.map((post) =>{
-        let link = "/courses/"+ courseId+ "/post/"+post.uuid;
+        let link = "/courses/"+ courseId+ "/posts/"+post.uuid;
         
         return (
             !post.isPrivate &&
