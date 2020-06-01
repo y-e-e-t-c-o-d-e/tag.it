@@ -40,7 +40,6 @@ const PostView = ({ currentUser, match }) => {
     }, [])
 
     const [tags, setTags] = useState([])
-    console.log(courseId);
     useEffect(() => {
         API.getCourse(courseId).then(response => {
             setTags(response.data.tagList)
@@ -95,7 +94,6 @@ const PostView = ({ currentUser, match }) => {
         );
         likeUnlikePostButton=likeUnlike;
     }
-    console.log(currentUser);
 
     // discuss.it functionalities
     const[discussing, setDiscussing] = useState(false);
