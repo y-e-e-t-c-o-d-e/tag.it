@@ -7,6 +7,47 @@ class Comment {
         this.props = props;
     }
 
+    equalTo(other) {
+        return (
+            this.props.author === other.props.author &&
+            this.arraysEqual(this.props.childList, other.props.childList) &&
+            this.props.content === other.props.content &&
+            this.props.isAnonymous === other.props.isAnonymous &&
+            this.props.isEndorsed === other.props.isEndorsed &&
+            this.props.isResolved === other.props.isResolved &&
+            this.props.parentComment === other.props.parentComment &&
+            this.props.postId === other.props.postId &&
+            this.props.score === other.props.score &&
+            //this.props.time === other.props.time && I feel like its a bad idea to put time as a thing, that's always going to be different realistically.
+            this.props.uuid === other.props.uuid
+        )
+    }
+
+    arraysEqual(a, b) {
+        if (a === b) return true;
+        if (a == null || b == null) return false;
+        if (a.length != b.length) return false;
+      
+        // If you don't care about the order of the elements inside
+        // the array, you should sort both arrays here.
+        // Please note that calling sort on an array will modify that array.
+        // you might want to clone your array first.
+      
+        for (var i = 0; i < a.length; ++i) {
+          if (a[i] !== b[i]) return false;
+        }
+        return true;
+    }
+
+    
+    updateComment = async () => {
+        let comment = await getCommentById(this.getUUID());
+        while(!this.equalTo(comment)) {
+            this.props = comment.props;
+            comment = await getCommentById(this.getUUID());
+        }
+    }
+
     /**
      * Update a given user's data fields.
      * 
@@ -65,6 +106,7 @@ class Comment {
     }
 
     addChild = async (commentId) => {
+        await this.updateComment();
         this.props.childList.push(commentId);
         let child = await getCommentById(commentId);
         child.setParentComment(this.props.uuid);
@@ -72,6 +114,7 @@ class Comment {
     }
 
     removeChild = async(commentId) => {
+        await this.updateComment();
         const index = this.props.childList.indexOf(commentId);
         if (index != -1) {
             let child = await getCommentById(commentId);
@@ -82,12 +125,14 @@ class Comment {
     }
 
     incrementScore = async () => {
-        this.props.score++;
+        await this.updateComment();
+        this.props.score = this.props.score + 1;
         await this.push();
     }
 
     decrementScore = async () => {
-        this.props.score--;
+        await this.updateComment();
+        this.props.score = this.props.score - 1;
         await this.push();
     }
 
@@ -206,8 +251,10 @@ getCommentById = async (uuid) => {
     const ref = db.ref('Comments/' + uuid);
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
+            //console.log(snapshot.val());
             const r = new Comment(snapshot.val());
             // now get the user's name
+            //console.log(r);
             User.getUserById(r.getAuthor()).then(user => {
                 r.props.authorName = user.getName();
                 resolve(r);
