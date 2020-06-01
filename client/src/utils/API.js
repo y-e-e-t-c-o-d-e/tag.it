@@ -217,13 +217,14 @@ export default {
         const config = {
             method: 'put',
             headers: authHeaders(),
+            url: `${baseURL}/api/post?postUUID=${postUUID}`,
             data: {
                 content: content,
                 isResolved: isResolved,
                 isPinned: isPinned
             }
         };
-        return axios.put(`${baseURL}/api/post?postUUID=${postUUID}`, config)
+        return axios(config);
     }
 }
 
