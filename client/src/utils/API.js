@@ -225,6 +225,20 @@ export default {
             }
         };
         return axios(config);
+    },
+    // Use for changing post contents, resolving post, and pinning post
+    editPost: function(postUUID, content, isResolved, isPinned) {
+        const config = {
+            method: 'put',
+            headers: authHeaders(),
+            data: {
+                postUUID: postUUID,
+                content: content,
+                isResolved: isResolved,
+                isPinned: isPinned
+            }
+        };
+        return axios.put(`${baseURL}/api/post/${courseUUID}/pending/${email}`, config)
     }
 }
 
