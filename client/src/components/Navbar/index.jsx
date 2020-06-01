@@ -59,7 +59,7 @@ const regularRender = (studentCourses, instructorCourses, courseId) => {
                         <NavDropdown.Item href={`/add`}>Add a Course</NavDropdown.Item>
                     </NavDropdown>
 
-                    { courseId && 
+                    { courseId && instructorCourses.map(course => course.uuid).includes(courseId) &&
                         <Nav.Link href={`/courses/${courseId}/settings`}>settings</Nav.Link>
                     }
                     <Nav.Link href="/create-course">create course</Nav.Link>
