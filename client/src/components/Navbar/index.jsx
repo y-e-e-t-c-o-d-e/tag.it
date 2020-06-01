@@ -10,7 +10,7 @@ import { courseToLink } from '../../utils';
 
 const loginRender = () => (
     <Navbar expand="lg" inverse fluid>
-        <Navbar.Brand href="#home"><img
+        <Navbar.Brand onClick={() => {window.location.href="/"}}><img
             alt=""
             src={logo}
             width="130"
@@ -31,7 +31,7 @@ const loginRender = () => (
 const regularRender = (studentCourses, instructorCourses, courseId) => {
     return (
         <Navbar expand="lg" inverse fluid>
-            <Navbar.Brand href="#home"><img
+            <Navbar.Brand onClick={() => {window.location.href="/"}}><img
                 alt=""
                 src={logo}
                 width="130"

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import db from "../base";
-import { createToast } from "../utils";
+import { createToast } from "../utils"
 
 export const AuthContext = React.createContext();
 

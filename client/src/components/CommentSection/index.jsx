@@ -29,7 +29,7 @@ const CommentSection = ({ commentList, postId }) => {
         // const comments = commentList.slice().sort((a, b) => b.time - a.time);
         return comments.map((comment) => {
             return (
-                <Comment key={comment.uuid} comment={comment} refresh={setRefreshComments} postId={postId} />
+                <Comment key={comment.uuid} comment={comment} refresh={setRefreshComments} isTopLevel={true} postId={postId} />
             );
         });
     };

@@ -3,7 +3,7 @@ import { Button, Jumbotron, Row, Col } from "react-bootstrap";
 import { API, courseToLink } from "../../utils"
 import './style.css';
 
-const CoursesView = ({currentUser, username}) => {
+const CoursesView = ({currentUser, username, history }) => {
     const [studentCourses, setStudentCourses] = useState([])
     const [instructorCourses, setInstructorCourses] = useState([])
 
@@ -27,7 +27,7 @@ const CoursesView = ({currentUser, username}) => {
                     { studentCourses.length > 0 &&
                         studentCourses.map((course, key) => {
                             return (<div>
-                                <Button className="course-btn" key={key} variant="primary" href={courseToLink(course.uuid)}>{course.name}</Button>
+                                <Button className="course-btn" key={key} variant="primary" onClick={() => { history.push(courseToLink(course.uuid)) }}>{course.name}</Button>
                                 <br/>
                                 </div>
                             )
@@ -37,7 +37,7 @@ const CoursesView = ({currentUser, username}) => {
                     { instructorCourses.length > 0 &&
                         instructorCourses.map((course, key) => {
                             return (<div>
-                                <Button className="course-btn" key={key} variant="success" href={courseToLink(course.uuid)}>{course.name}</Button>
+                                <Button className="course-btn" key={key} variant="success" onClick={() => { history.push(courseToLink(course.uuid)) }}>{course.name}</Button>
                                 <br/>
                                 </div>
                             )

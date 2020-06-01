@@ -6,7 +6,7 @@ import { Dropdown, DropdownButton, Button } from "react-bootstrap";
 import { createToast } from '../../../utils';
 
 /* recursive functional component for comments */
-const Comment = ({ comment, postId, refresh }) => {
+const Comment = ({ comment, postId, refresh, isTopLevel }) => {
 
     const [liked, setLike] = useState(false);
     const [newReply, setNewReply] = useState(false);
@@ -66,11 +66,11 @@ const Comment = ({ comment, postId, refresh }) => {
     };
 
     const renderNestedComments = () => {
-        const nestedComments = comment.childList.slice().sort((a, b) => b.time - a.time);
+        const nestedComments = comment.childList.slice().sort((a, b) => a.time - b.time);
 
         return nestedComments.map(childComment => {
             if (childComment === "dummy_child") { return <></> }
-            return <Comment key={childComment.uuid} refresh={refresh} comment={childComment} postId={postId} type="child" />
+            return <Comment key={childComment.uuid} refresh={refresh} comment={childComment} postId={postId} isTopLevel={false} type="child" />
         });
     };
 
@@ -94,9 +94,11 @@ const Comment = ({ comment, postId, refresh }) => {
         return "like.it";
     };
 
+    const commentType = isTopLevel ? "comment" : "child-comment";
+
     return (
-        <div className="comment">
-            <span id="username">{comment.author}</span>
+        <div className={commentType}>
+            <span id="username">{comment.authorName}</span>
             <span id="date">{formatDate(comment.time)}</span>
             <div>{comment.content}</div>
             <div className="comment-options">

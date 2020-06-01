@@ -5,7 +5,7 @@ const PostGrid = (props) =>{
     return(
         <div className="post-grid">
             <div className="postview-center">
-                <a href={props.link}> {props.title} </a>
+                <a href="#" onClick={() => {props.history.push(props.link)}}> {props.title} </a>
             </div>
         </div>
     );

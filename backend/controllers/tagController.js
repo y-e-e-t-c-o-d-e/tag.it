@@ -2,23 +2,41 @@
 const tag = require("../models/Tag");
 const course = require("../models/Course");
 
-exports.addTag = async (req, res) => {
+exports.addAndRemoveTags = async (req, res) => {
     const bodyParams = req.body;
-    if (!("name" in bodyParams && "course" in bodyParams)) {
+    if (!(bodyParams["removedTags"] && bodyParams["newTags"] && bodyParams["courseId"])) {
         res.status(422).json({
             status: 422,
-            error: "Missing one of the following parameters: name or course"
+            error: "Missing one of the following parameters: removedTags or newTags"
         });
         return;
     };
 
+    // List of removedTags as emails 
+    const removedTags = bodyParams["removedTags"];
+    const newTags = bodyParams["newTags"];
+    const courseId = bodyParams["courseId"];
+
     try {
-        await tag.pushTagToFirebase(bodyParams);
-        res.status(200).send(`Added tag ${bodyParams.name}`)
+        // Iterates through all the removedTags
+        for (let tagId of removedTags) {
+            // Model should handle logic to delete the tags from the posts
+            await tag.deleteTagById(tagId);
+        }
+
+        // Iterates through all the new tags to create
+        for (let tagName of newTags) {
+            await tag.pushTagToFirebase({
+                "name": tagName,
+                "course": courseId
+            });
+        }
+
+        res.status(200).send(`Added & removed tags successfully`)
     } catch (e) {
         res.status(410).json({
             status: 410,
-            error: "Server could not push to firebase"
+            error: e.message
         })
     }
 };
@@ -110,3 +128,4 @@ exports.deleteTag = async (req, res) => {
         });
     };
 };
+

@@ -11,7 +11,7 @@ import PostCreator from "../../components/PostCreator"
 import { API, createToast, MarkdownEditor } from '../../utils';
 import PostEditor from '../../components/PostEditor';
 
-const PostView = ({ currentUser, match }) => {
+const PostView = ({currentUser, history}) => { 
     const { postId, courseId } = useParams();
 
     const [post, setPost] = useState({
@@ -109,7 +109,7 @@ const PostView = ({ currentUser, match }) => {
         <div className="home">
             <Navigation currentUser={currentUser} />
             <div className="cont">
-                <Button href={`/courses/${courseId}`}>Course Home</Button>
+                <Button onClick={() => { history.push(`/courses/${courseId}`)}}>Course Home</Button>
                 <Row>
                     <Col xs={4}>
                         <TagList tags={tags} />
@@ -139,7 +139,7 @@ const PostView = ({ currentUser, match }) => {
                             {/* Post content with footer saying posted by */}
                             <div className="post-content-section">
                                 <MarkdownEditor className="post-content-view" source={post.content} />
-                                <div className="posted-by">Posted by: {post.author}</div>
+                                <div className="posted-by">Posted by: {post.authorName}</div>
                             </div>
 
                             {/* Like / discuss/ tags */}

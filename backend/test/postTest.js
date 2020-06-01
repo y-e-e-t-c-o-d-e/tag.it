@@ -106,7 +106,7 @@ describe('post', async () => {
         }
         await testPost.addTag(tagKey);
         expect(testPost.getTagList().length).to.equal(3);
-        await testPost.removeTag(tagKey);
+        await testPost.deleteTag(tagKey);
         expect(testPost.getTagList().length).to.equal(2);
         tag.deleteTagById(tagKey);
     })
