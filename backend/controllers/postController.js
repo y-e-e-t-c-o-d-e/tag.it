@@ -20,7 +20,7 @@ exports.addPost = async (req, res) => {
     } catch (e) {
         res.status(410).json({
             status: 410,
-            error: "server could not push to firebase"
+            error: e
         })
     }
 };

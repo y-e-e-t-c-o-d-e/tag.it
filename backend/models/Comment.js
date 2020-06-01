@@ -203,8 +203,10 @@ getCommentById = async (uuid) => {
         ref.once("value", function(snapshot) {
             const r = new Comment(snapshot.val());
             // now get the user's name
-            User.getUserById(r.getAuthor()).then(user => {
+            User.getUserById(r.getAuthor()).then(async user => {
                 r.props.authorName = user.getName();
+                r.props.likedStatus = await user.getLikedCommentStatus(uuid);
+
                 resolve(r);
             }).catch(reject)
         }, function (errorObject) {

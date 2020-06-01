@@ -250,6 +250,13 @@ class User {
         commentObj.decrementScore();
         await this.push();
     }
+
+    getLikedCommentStatus = async (commentId) => {
+        await this.updateUser();
+        console.log(commentId);
+        console.log(this.getLikedCommentList())
+        return this.getLikedCommentList().indexOf(commentId) >= 0;
+    }
     
     setIcon = async (icon) => {
         this.props.icon = icon;

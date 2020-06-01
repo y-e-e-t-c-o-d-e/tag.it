@@ -1,56 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactTags from 'react-tag-autocomplete';
 import './style.css';
 
-class AutocompleteTags extends React.Component {
-    // constructor for component
-    constructor(props) {
-        super(props);
+const AutocompleteTags = ({initialTags, onChange, setAddedTags, setDeletedTags}) => {
+    // see package docs for additional options
+    const [tags, setTags] = useState([])
+    
+    const [deleted, setDeleted] = useState([])
+    const [added, setAdded] = useState([])
 
-        // see package docs for additional options
-        this.state = {
-            tags: [],
-            suggestions: [
-                { id: 0, name: "midterms" },
-                { id: 1, name: "final exam" },
-                { id: 2, name: "logistics" },
-                { id: 3, name: "quizzes" }
-            ],
-            delimiters: [9, 13, 32]
-        };
-    }
+    useEffect(() => {
+        if (initialTags.length > 0) {
+            setTags(initialTags);
+        }
+    }, [initialTags])
+    
+    const [suggestions, setSuggestions] = useState([
+        { id: 0, name: "midterms" },
+        { id: 1, name: "final exam" },
+        { id: 2, name: "logistics" },
+        { id: 3, name: "quizzes" }
+    ])
 
-    handleDelete(i) {
+    const [delimiters, setDelimeters] = useState([9, 13, 32])
+
+    const handleDelete = (index) => {
         // extract into classtagutil? pass in (i, this.state)?
-        const tags = this.state.tags.slice(0);
-        tags.splice(i, 1);
-        this.setState({ tags }, () => {
-            if (this.props.onChange) {
-                this.props.onChange(this.state);
-            }
-        });
+        const tag = tags[index]
+        const newTags = tags.slice(0);
+        newTags.splice(index, 1);
+        setTags(newTags);
+        setDeleted(deleted.concat(tag))
+        setDeletedTags(deleted.concat(tag))
     }
 
-    handleAddition(tag) {
-        const tags = [].concat(this.state.tags, tag);
-        this.setState({ tags }, () => {
-            if (this.props.onChange) {
-                this.props.onChange(this.state);
-            }
-        });
+    const handleAddition = (tag) => {
+        const newTags = [].concat(tags, tag);
+        setTags(newTags);
+        setAdded(added.concat(tag))
+        setAddedTags(added.concat(tag))
     }
 
-    render() {
-        return (
-            <ReactTags
-                tags={this.state.tags}
-                suggestions={this.state.suggestions}
-                handleDelete={this.handleDelete.bind(this)}
-                handleAddition={this.handleAddition.bind(this)}
-                allowNew={true}
-                delimiters={this.state.delimiters} />
-        );
-    }
+    return (
+        <ReactTags
+            tags={tags}
+            suggestions={suggestions}
+            handleDelete={handleDelete}
+            handleAddition={handleAddition}
+            allowNew={true}
+            delimiters={delimiters} 
+        />
+    );
 }
 
 export default AutocompleteTags;
