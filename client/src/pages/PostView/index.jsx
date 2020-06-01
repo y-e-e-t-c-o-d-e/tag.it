@@ -40,7 +40,7 @@ const PostView = ({ currentUser, match }) => {
     }, [])
 
     const [tags, setTags] = useState([])
-
+    console.log(courseId);
     useEffect(() => {
         API.getCourse(courseId).then(response => {
             setTags(response.data.tagList)
@@ -50,7 +50,7 @@ const PostView = ({ currentUser, match }) => {
 
     // A list of all the tags to be rendered
     const tagButtons = post.tagList.map((tag)=>{
-        return(<Button variant="primary" block key={tag.uuid} className="tagItem"><b>{tag.title}</b></Button>);
+        return(<Button variant="primary" block key={tag.uuid} className="tagListItem"><b>{tag}</b></Button>);
     });
 
     // Toggles the following status of the post
@@ -78,13 +78,23 @@ const PostView = ({ currentUser, match }) => {
         alert("Link successfully copied!");
     }
 
-    // Render corresponding button depending on the current resolved state;
+    // Render resolve button depending on the current resolved state;
     let resolveUnresolveButton;
     resolveUnresolveButton = ( post.isResolved?
         <Dropdown.Item key="resolve" as="button">Resolve</Dropdown.Item>:
         <Dropdown.Item key="resolve" as="button">Resolve</Dropdown.Item>
     );
 
+    // Render like button depending on the current liked state
+    let likeUnlikePostButton;
+    if(currentUser){
+        let likeUnlike = (
+            currentUser.likedPostList.includes(postId)?
+            <Button className="yellow-button">unlike</Button>:
+            <Button className="yellow-button">like.it</Button>
+        );
+        likeUnlikePostButton=likeUnlike;
+    }
     console.log(currentUser);
 
     // discuss.it functionalities
@@ -93,8 +103,6 @@ const PostView = ({ currentUser, match }) => {
         setDiscussing(!discussing);
     }
     let discussText = (discussing? "cancel":"discuss.it");
-
-    // Comment section shows up only when discussing
 
     // Returns the content of the page
     return (
@@ -144,7 +152,7 @@ const PostView = ({ currentUser, match }) => {
                                     <div className="like-discuss">
                                         
                                         <div className="likes"> {post.score} </div>
-                                        <Button className="yellow-button">like.it</Button>
+                                        {likeUnlikePostButton}
                                         <br/>
                                     </div>
                             </div>

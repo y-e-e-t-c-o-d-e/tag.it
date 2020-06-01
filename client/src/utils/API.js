@@ -62,10 +62,10 @@ export default {
     toggleFollow: function(user, postUUID) {
         const config = {
             method: 'post',
-            url: `${baseURL}/api/course/follow`,
-            data: {
+            url: `${baseURL}/api/post/follow?postUUID=${postUUID}`,
+            query: {
                 userObj: user,
-                postUUID: postUUID
+                // postUUID: postUUID
             },
             headers: authHeaders()
         };
