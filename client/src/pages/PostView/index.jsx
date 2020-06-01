@@ -11,7 +11,7 @@ import PostCreator from "../../components/PostCreator"
 import { API, createToast, MarkdownEditor } from '../../utils';
 import PostEditor from '../../components/PostEditor';
 
-const PostView = ({ currentUser, refresh, history }) => {
+const PostView = ({ currentUser, history }) => {
     const { postId, courseId } = useParams();
 
     const [postLiked, setPostLike] = useState(false);
@@ -90,9 +90,8 @@ const PostView = ({ currentUser, refresh, history }) => {
         try {
             API.togglePostLike(postId).then((response) => {
                 post.score = response.data.score;
-                refresh(true);
+                setPostLike(!postLiked);
             });
-            setPostLike(!postLiked);
         } catch (error) {
             createToast(error);
         }
