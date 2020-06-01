@@ -77,7 +77,10 @@
 }
 
 .post-view-buttons {
+    min-width: 650px;
+    border: 0;
     display: flex;
+    margin: 0;
 }
 
 .like-discuss {

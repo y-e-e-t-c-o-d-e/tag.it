@@ -6,7 +6,7 @@ import Navigation from "../../components/Navbar";
 import TagList from "../../components/TagList/index.jsx";
 import { Container, Row, Col, Nav, Button, Dropdown, DropdownButton } from 'react-bootstrap';
 import CoursesView from '../../components/CoursesView/index.jsx';
-import QuestionList from "../../components/QuestionList"
+import CommentSection from "../../components/CommentSection"
 import PostCreator from "../../components/PostCreator"
 import { API, createToast } from '../../utils';
 import PostEditor from '../../components/PostEditor';
