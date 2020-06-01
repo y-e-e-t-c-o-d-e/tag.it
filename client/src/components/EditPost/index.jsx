@@ -17,14 +17,13 @@ const EditPost = ({postUUID, postText, isResolved, isPinned, setEditing}) => {
 
     return (
         <div className="edit-post">
-            <h1>Edit Post</h1>
-            <p>Preview</p>
+            <p className="edit-subtitle">Preview</p>
             <MarkdownEditor className="liveView" source={postContent} />
             <Form onSubmit={updatePost}>
                 <Form.Group controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Description</Form.Label>
+                    <Form.Label className="edit-subtitle">Description</Form.Label>
                     <Form.Control defaultValue={postContent} as="textarea" rows="5" onChange={(e) => setPostContent(e.target.value)}/>
-                    <Button className = "save-changes" type="submit" >Save</Button>
+                    <Button className = "yellow-button" id="edit-save" type="submit" >Save</Button>
                 </Form.Group> 
                 </Form>
         </div>
