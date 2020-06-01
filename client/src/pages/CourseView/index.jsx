@@ -15,7 +15,7 @@ const states = {
     createPost: "make.it"
 }
 
-const CourseView = ({currentUser}) => { 
+const CourseView = ({currentUser, history }) => { 
     const { courseId } = useParams();
 
     const [course, setCourse] = useState({name: "Loading", postList: [], uuid: "Loading"});
@@ -37,7 +37,7 @@ const CourseView = ({currentUser}) => {
 
     switch (view) {
         case states.questions:
-            action = <QuestionList courseId={courseId} questions={course.postList} />
+            action = <QuestionList courseId={courseId} questions={course.postList} history={history} />
             break;
         case states.createPost:
             action = <PostCreator setView={setView} views={states} courseId={courseId} />

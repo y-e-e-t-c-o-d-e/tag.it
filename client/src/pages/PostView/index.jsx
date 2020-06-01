@@ -12,7 +12,7 @@ import { API, createToast } from '../../utils';
 import PostEditor from '../../components/PostEditor';
 import ReactMarkdown from 'react-markdown';
 
-const PostView = ({currentUser, match}) => { 
+const PostView = ({currentUser, history}) => { 
     const { postId, courseId } = useParams();
 
     const [post, setPost] = useState({
@@ -52,7 +52,7 @@ const PostView = ({currentUser, match}) => {
         <div className="home">
             <Navigation currentUser={currentUser} />
             <div className="cont">
-                <Button href={`/courses/${courseId}`}>Course Home</Button>
+                <Button onClick={ () => {history.push(`/courses/${courseId}`)}}>Course Home</Button>
             <Row>
                 <Col xs={4}>
                     <TagList tags={tags} />

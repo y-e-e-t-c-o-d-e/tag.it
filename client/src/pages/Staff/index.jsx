@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from "../../assets/logo.png";
 import './style.css';
-import API from "../../utils/API";
+import {API, createToast} from "../../utils";
 import Navigation from "../../components/Navbar/index.jsx";
 import { Button } from "react-bootstrap";
 
@@ -21,14 +21,9 @@ const Staff = ({ history, match, currentUser }) => {
                 return acc;
             }, {}))
         }).catch((e) => {
-            alert(e);
+            createToast(e);
         });
     }, []);    
-
-    /* Function to redirect to Home */
-    const redirectHome = () => {
-        history.push("/")
-    }
 
     /* Function for handling inviting staff */
     const handleStaffInvite = async (event) => {
@@ -40,7 +35,7 @@ const Staff = ({ history, match, currentUser }) => {
             await API.inviteUserToCourse(courseId, email);
             setCurrCourses(currCourses.concat(email));
         } catch (error) {
-            alert(error);
+            createToast(error);
         }
     }
 
@@ -60,7 +55,7 @@ const Staff = ({ history, match, currentUser }) => {
             }
             setCurrCourses(currCourses.filter((val) => val !== instructor));
         } catch (error) {
-            alert("An error occurred when removing this instructor.");
+            createToast("An error occurred when removing this instructor.");
         }
     }
 
@@ -89,7 +84,7 @@ const Staff = ({ history, match, currentUser }) => {
                         <p>*Instructors will have access to the class setting page, and will be able to manage tags, pin posts, make announcements, etc.</p>
                     </div>
                     <div className="input">
-                        <Button id="return-button" onClick={redirectHome}>Return to Course</Button>
+                        <Button id="return-button" href={`/courses/${courseId}/settings`}>Return to Course Settings</Button>
                     </div>
                 </div>
                 <div className="curr-instructors">

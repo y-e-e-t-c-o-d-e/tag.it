@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import db from "../base";
+import { createToast } from "../utils"
 
 export const AuthContext = React.createContext();
 
@@ -21,7 +22,7 @@ export const AuthProvider = ({ children }) => {
                     console.log(user);
                 } else {
                     // Handles when user is signed in BUT email is not verified
-                    window.alert(`Email ${user.email} needs to be verified.`);
+                    createToast(`Email ${user.email} needs to be verified.`);
                     db.auth().signOut();
                 }
             } else {

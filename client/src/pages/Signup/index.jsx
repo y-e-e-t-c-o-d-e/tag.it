@@ -4,7 +4,7 @@ import db from "../../base";
 import './style.css';
 import logo from '../../assets/logo.png';
 import NavBar from "../../components/Navbar";
-import API from "../../utils/API";
+import { API, createToast } from "../../utils"
 
 var bgColors = {
     "default": "white",
@@ -40,16 +40,16 @@ const SignUp = ({ history }) => {
                 API.createUser(name.value, email.value, user.uid);
                 history.push("/login");
                 user.sendEmailVerification().then(
-                    window.alert("Email Verification Sent!")
+                    createToast("Email Verification Sent!")
                 );
             } catch (error) {
-                alert(error);
+                createToast(error);
             }
         }
         else{
-            if(!nameValid){alert("Please enter your first and last name");}
-            else if(!emailValid){alert("Invalid email address");}
-            else if(!passwordValid){alert("Passwords do not match");}
+            if(!nameValid){createToast("Please enter your first and last name");}
+            else if(!emailValid){createToast("Invalid email address");}
+            else if(!passwordValid){createToast("Passwords do not match");}
         }
     }
 

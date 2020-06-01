@@ -12,7 +12,7 @@ const bgColors = {
     "error": "#ffcccc",
 };
 
-const ClassSettings = ({ currentUser, match}) => { 
+const ClassSettings = ({ currentUser, history }) => { 
     const { courseId } = useParams();
 
     const [course, setCourse] = useState({instructorInviteId: "2yiYLXnrgl",
@@ -61,7 +61,7 @@ const ClassSettings = ({ currentUser, match}) => {
 
         // set tags
         
-        else{alert("Course name can not be empty");}
+        else{createToast("Course name can not be empty");}
     };
 
     /* Copies invitation link to clipboard */
@@ -69,7 +69,7 @@ const ClassSettings = ({ currentUser, match}) => {
         invitationRef.current.select();
         document.execCommand('copy');
         event.target.focus();
-        alert("Copied to clipboard!");
+        createToast("Copied to clipboard!");
     };
 
     /* Makes possible email input background color change  */
@@ -133,11 +133,11 @@ const ClassSettings = ({ currentUser, match}) => {
                         <div className="center-button">
                         </div>
                         <div className="buttons">
-                            <Button>Instructors</Button>
-                            <Button>Tags</Button>
-                            <Button>Archive</Button>
-                            <Button>Disable</Button>
-                            <Button type="submit">Save Changes</Button>
+                            <Button variant="warning" onClick={ () => { history.push(`/courses/${courseId}/staff`); }}>Instructors</Button>
+                            <Button variant="warning">Tags</Button>
+                            <Button variant="warning">Archive</Button>
+                            <Button variant="warning">Disable</Button>
+                            <Button variant="warning" type="submit">Save Changes</Button>
                         </div>
                         <AutocompleteTags onChange={onChangeSetTags} />
                     </form>
