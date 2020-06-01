@@ -10,6 +10,54 @@ class Post {
         this.props = props;
     }
 
+        
+    equalTo = (other) => {
+        return (
+            this.props.author === other.props.author &&
+            this.props.title === other.props.title &&
+            this.arraysEqual(this.props.commentList, other.props.commentList) &&
+            this.arraysEqual(this.props.tagList, other.props.tagList) &&
+            this.arraysEqual(this.props.followingList, other.props.followingList) &&
+            this.props.content === other.props.content &&
+            this.props.course === other.props.course&&
+            this.props.isAnnouncement === other.props.isAnnouncement &&
+            this.props.isAnonymous === other.props.isAnonymous &&
+            this.props.isInstructor === other.props.isInstructor &&
+            this.props.isPinned === other.props.isPinned &&
+            this.props.isPrivate === other.props.isPrivate &&
+            this.props.isResolved === other.props.isResolved &&
+            this.props.score === other.props.score &&
+            //this.props.time === other.props.time && I feel like its a bad idea to put time as a thing, that's always going to be different realistically.
+            this.props.uuid === other.props.uuid
+        )
+    }
+
+    
+    arraysEqual = (a, b) => {
+        if (a === b) return true;
+        if (a == null || b == null) return false;
+        if (a.length != b.length) return false;
+      
+        // If you don't care about the order of the elements inside
+        // the array, you should sort both arrays here.
+        // Please note that calling sort on an array will modify that array.
+        // you might want to clone your array first.
+      
+        for (var i = 0; i < a.length; ++i) {
+          if (a[i] !== b[i]) return false;
+        }
+        return true;
+    }
+
+    updatePost = async () => {
+        let other = await getPostById(this.props.uuid);
+        while(!this.equalTo(other)) {
+            this.props = other.props;
+            other = await getPostById(this.props.uuid);
+            console.log('inf');
+        }
+    }
+
     /**
      * Update a given user's data fields.
      * 
@@ -66,10 +114,12 @@ class Post {
     }
 
     addFollower = async (userId) => {
+        await this.updatePost();
         this.props.followingList.push(userId);
         await this.push();
     }
     removeFollower = async (userId) => {
+        await this.updatePost();
         const index = this.props.followingList.indexOf(userId);
         if (index != -1) {
             this.props.followingList.splice(index, 1);
@@ -78,11 +128,13 @@ class Post {
     }
 
     addComment = async (commentId) => {
+        await this.updatePost();
         this.props.commentList.push(commentId);
         await this.push();
     }
     
     removeComment = async (commentId) => {
+        await this.updatePost();
         const index = this.props.commentList.indexOf(commentId);
         if (index != -1) {
             // may or may not be necessary depending on how front end implements deleteComment
@@ -94,6 +146,7 @@ class Post {
     
 
     addTag = async (tagId) => {
+        await this.updatePost();
         this.props.tagList.push(tagId);
         const addedTag = await tag.getTagById(tagId);
         await addedTag.addPost(this.props.uuid);
@@ -102,6 +155,7 @@ class Post {
 
     // only removes the tag from the post list
     removeTag = async (tagId) => {
+        await this.updatePost();
         const index = this.props.tagList.indexOf(tagId);
         if (index != -1) {
             this.props.tagList.splice(index, 1);
@@ -121,11 +175,13 @@ class Post {
     }
 
     incrementScore = async () => {
+        await this.updatePost();
         this.props.score++;
         await this.push();
     }
 
     decrementScore = async() => {
+        await this.updatePost();
         this.props.score--;
         await this.push();
     }
@@ -288,6 +344,7 @@ getPostById = async (uuid) => {
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
             let r = new Post(snapshot.val());
+            if (!r) reject('No post by that id');
             if (!r.props.followingList) r.props.followingList = [];
             resolve(r);
         }, function (errorObject) {
