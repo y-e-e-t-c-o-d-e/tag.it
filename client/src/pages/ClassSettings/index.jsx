@@ -165,7 +165,7 @@ const ClassSettings = ({ currentUser, history }) => {
                             <Button variant="warning">Disable</Button>
                             <Button variant="warning" type="submit">Save Changes</Button>
                         </div>
-                        <AutocompleteTags initialTags={tags} setAddedTags={setAddedTags} setDeletedTags={setDeletedTags} />
+                        <AutocompleteTags initialTags={tags} setAddedTags={setAddedTags} setDeletedTags={setDeletedTags} onChange={() => {}} />
                     </form>
                 </div>
             </div>
