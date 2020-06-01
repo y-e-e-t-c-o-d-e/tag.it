@@ -213,19 +213,18 @@ exports.sendEmail = async (req, res) => {
         }
 
         let transporter = nodemailer.createTransport({
-            host: "smtp.mailtrap.io",
-            port: 2525,
+            service: 'gmail',
             auth: {
-                user: "927580363f9fc5",
-                pass: "81ac04611559b3"
+                user: "tag.it.yeetcode@gmail.com",
+                pass: "yeetcode"
             }
         });
 
         let mailOptions = {
-            from: 'tag.it',
+            from: "tag.it.yeetcode@gmail.com",
             to: bodyParams["email"],
             subject: "Invite link for new course " + courseObj.getName() + " on tag.it!",
-            text: "You've been invited to use the sickest platform to grace this planet! Check it out here: " + inviteURL
+            text: "You've been invited to use the sickest platform to grace this planet! Check it out here:\n" + inviteURL
         };
 
         await transporter.sendMail(mailOptions);
