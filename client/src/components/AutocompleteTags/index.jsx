@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactTags from 'react-tag-autocomplete';
 import './style.css';
 
-const AutocompleteTags = ({initialTags, onChange, setAddedTags, setDeletedTags, givenSuggestions}) => {
+const AutocompleteTags = ({initialTags, onChange, setAddedTags, setDeletedTags, givenSuggestions, validator }) => {
     // see package docs for additional options
     const [tags, setTags] = useState([])
     
@@ -65,6 +65,7 @@ const AutocompleteTags = ({initialTags, onChange, setAddedTags, setDeletedTags, 
             handleAddition={handleAddition}
             allowNew={true}
             delimiters={delimiters} 
+            handleValidate={validator}
         />
     );
 }
