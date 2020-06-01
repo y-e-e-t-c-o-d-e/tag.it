@@ -25,27 +25,24 @@ exports.addUser = async (req, res) => {
 
 exports.getUser = async (req, res) => {
     const userUUID = req.query.userUUID;
-    if (!userUUID) {
-        res.status(422).json({
-            status: 422,
-            error: "Missing paramater: userUUID"
-        });
-        return;
-    };
+    let userObj = req.user;
 
     // Grabs the user based on the userUUID. If fails, responds with an error.
     try {
-        const userObj = await user.getUserById(userUUID);
+        if (userUUID) {
+            userObj = await user.getUserById(userUUID);
+        }
+
         // get all the courses
         userObj.props.filledInStudentCourseList = await Promise.all(userObj.getStudentCourseList().map(async uuid => {
-            const toReturn =  (await course.getCourseById(uuid)).props;
-            return toReturn
-        }))
+            const toReturn = (await course.getCourseById(uuid)).props;
+            return toReturn;
+        }));
 
         userObj.props.filledInInstructorCourseList = await Promise.all(userObj.getInstructorCourseList().map(async uuid => {
-            const toReturn =  (await course.getCourseById(uuid)).props;
-            return toReturn
-        }))
+            const toReturn = (await course.getCourseById(uuid)).props;
+            return toReturn;
+        }));
 
         res.status(200).json(userObj.props);
     } catch (e) {
@@ -112,6 +109,9 @@ exports.updateUser = async (req, res) => {
 exports.addUserToCourse = async (req, res) => {
     const courseUUID = req.params.courseId;
     const bodyParams = req.body;
+
+    // If user id is given, add that user to the course. Otherwise, add authenticated user.
+    let userToAdd = bodyParams["userId"];
     let userObj = req.user;
 
     if (!courseUUID || !userObj) {
@@ -122,11 +122,14 @@ exports.addUserToCourse = async (req, res) => {
         return;
     };
 
+    if (userToAdd) {
+        userObj = await user.getUserById(userToAdd);
+    }
+
     try {
         let courseObj = await course.getCourseById(courseUUID);
 
         if ("type" in bodyParams && bodyParams["type"] == "instructor") {
-            await courseObj.addInstructor(userObj.getUUID());
             await userObj.addInstructorCourse(courseObj.getUUID());
             res.status(200).send("Added user as instructor to course " + courseObj.getUUID());
         } else {
@@ -180,13 +183,9 @@ exports.getUserType = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
-    const userUUID = req.query.userUUID;
+    let userUUID = req.query.userUUID;
     if (!userUUID) {
-        res.status(422).json({
-            status: 422,
-            error: "Missing paramater: userUUID"
-        });
-        return;
+        userUUID = req.user.props.uuid;
     };
 
     // Grabs the user based on the userUUID. If fails, responds with an error.

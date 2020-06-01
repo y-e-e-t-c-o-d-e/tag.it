@@ -3,27 +3,45 @@ import {Button} from 'react-bootstrap';
 import Navigation from "../../components/Navbar"
 import './style.css';
 import API from "../../utils/API";
+import { useParams } from "react-router-dom";
+import AutocompleteTags from "../../components/AutocompleteTags";
+import { createToast } from "../../utils";
 
 const bgColors = {
     "default": "white",
     "error": "#ffcccc",
 };
 
-const ClassSettings = ({ currentUser, classUuid, match}) => { 
-    if (match) {
-        const courseId = match.params.id;
-    }
+const ClassSettings = ({ currentUser, match}) => { 
+    const { courseId } = useParams();
 
+    const [course, setCourse] = useState({instructorInviteId: "2yiYLXnrgl",
+        instructorList: ["dummy_user_id"],
+        name: "cse110",
+        postList: [],
+        studentInviteId: "8foqG61ZzI",
+        studentList: [],
+        tagList: [],
+        term: "sp20",
+        type: "instructor",
+        uuid: "-M8UP_zBwB4OtDnGu5QR",
+        description: "yeet"
+    })
+    
+    const [tags, onChangeSetTags] = useState([]);
     const [courseNameValid, setCourseNameValid] = useState(true); // Invalid if empty
     const [courseName, setCourseName] = useState("Default Class Name");
+    const [courseInviteLink, setCourseInviteLink] = useState("");
     const invitationRef = useRef(null);
 
-    const uuid = classUuid || "FakeUUID";
-    let link = "https://tagdotit.netlify.app/course/" + uuid;
+    let link = "https://tagdotit.netlify.app/course/" + courseId;
 
     useEffect(() => {
-        API.getCourse(uuid).then((course) => {
-            setCourseName(course.name)
+        API.getCourse(courseId).then((response) => {
+            console.log(response.data)
+            setCourse(response.data)
+            setCourseName(response.data.name)
+            setCourseInviteLink(`https://tagdotit.netlify.app/course/${courseId}/invite/${course.studentInviteId}`)
         }).catch(() => {
             setCourseName('Default Class Name')
         })
@@ -36,11 +54,14 @@ const ClassSettings = ({ currentUser, classUuid, match}) => {
             const className = courseName;
             // updated the course name
             // TODO: Get some way to get the courseUUID (via props?)
-            const uuid = classUuid || "FakeUUID";
-            await API.updateCourse(uuid, className);
-            alert("Course updated!");
+            API.updateCourse(courseId, className).then(() => {
+                createToast("Changed Course Name!")
+            })
         }
-        else{alert("Course name can not be empty");}
+
+        // set tags
+        
+        else{createToast("Course name can not be empty");}
     };
 
     /* Copies invitation link to clipboard */
@@ -48,7 +69,7 @@ const ClassSettings = ({ currentUser, classUuid, match}) => {
         invitationRef.current.select();
         document.execCommand('copy');
         event.target.focus();
-        alert("Copied to clipboard!");
+        createToast("Copied to clipboard!");
     };
 
     /* Makes possible email input background color change  */
@@ -95,9 +116,8 @@ const ClassSettings = ({ currentUser, classUuid, match}) => {
 
                         <label>
                             <span>Description:{'\u00A0'} {'\u00A0'}</span>
-                            <textarea type="text">
-                                A course with focus on hardware engineering and collaboration.
-                                Prerequiisites: None. Course website: cse111.com
+                            <textarea type="text" defaultValue={course.description}>
+
                             </textarea> 
                         </label>
 
@@ -105,20 +125,21 @@ const ClassSettings = ({ currentUser, classUuid, match}) => {
                             <div className="invitation-section">
                                 <span>Invitation:{'\u00A0'} {'\u00A0'}</span>
                                 <textarea readOnly ref={invitationRef}
-                                    className="invitation-link" type="text" value={link}>
+                                    className="invitation-link" type="text" value={courseInviteLink}>
                                 </textarea> 
                                 <Button onClick={copyLinkToClipboard}>Copy</Button>
                             </div>
                         </label>
                         <div className="center-button">
                         </div>
-                            <div className="buttons">
-                                <Button>Instructors</Button>
-                                <Button>Tags</Button>
-                                <Button>Archive</Button>
-                                <Button>Disable</Button>
-                                <Button type="submit">Save Changes</Button>
-                            </div>
+                        <div className="buttons">
+                            <Button>Instructors</Button>
+                            <Button>Tags</Button>
+                            <Button>Archive</Button>
+                            <Button>Disable</Button>
+                            <Button type="submit">Save Changes</Button>
+                        </div>
+                        <AutocompleteTags onChange={onChangeSetTags} />
                     </form>
                 </div>
             </div>
