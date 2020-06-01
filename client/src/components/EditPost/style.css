@@ -14,13 +14,18 @@
 }
 
 .edit-subtitle {
+    color: #1D7B99;
     font-size: 1em;
     font-weight: bold;
     margin-bottom: 0.5em;
 }
 
 #edit-save {
-    margin: 5px 0;
+    margin: 5px 0.5em 0 0;
+}
+
+#cancel-edit {
+    margin: 5px 0.5em 0 0 ;
 }
 
 .editor {

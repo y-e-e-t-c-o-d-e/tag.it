@@ -10,8 +10,11 @@ const EditPost = ({postUUID, postText, isResolved, isPinned, setEditing}) => {
 
     // Updates the content of the post
     const updatePost = () =>{
-        console.log("postContent");
         API.editPost(postUUID, postContent, isResolved, isPinned);
+        setEditing(false);
+    }
+
+    const cancelEdit = () =>{
         setEditing(false);
     }
 
@@ -24,6 +27,7 @@ const EditPost = ({postUUID, postText, isResolved, isPinned, setEditing}) => {
                     <Form.Label className="edit-subtitle">Description</Form.Label>
                     <Form.Control defaultValue={postContent} as="textarea" rows="5" onChange={(e) => setPostContent(e.target.value)}/>
                     <Button className = "yellow-button" id="edit-save" type="submit" >Save</Button>
+                    <Button className ="yellow-button" id="cancel-edit" onClick={cancelEdit}>Cancel</Button>
                 </Form.Group> 
                 </Form>
         </div>
