@@ -62,11 +62,7 @@ const regularRender = (studentCourses, instructorCourses, courseId) => {
                     { courseId && 
                         <Nav.Link href={`/courses/${courseId}/settings`}>settings</Nav.Link>
                     }
-<<<<<<< HEAD
                     <Nav.Link href="/create-course">create course</Nav.Link>
-=======
-                  
->>>>>>> origin/master
                     <Nav.Link href="/" onClick={ () => { db.auth().signOut() } }>logout</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
