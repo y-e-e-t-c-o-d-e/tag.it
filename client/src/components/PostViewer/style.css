@@ -87,6 +87,10 @@
     margin: 1px 0;
 }
 
+.like-discuss {
+    margin:0;
+}
+
 .likes {
     display: inline-block;
     text-align: center;

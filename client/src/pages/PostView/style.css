@@ -28,7 +28,7 @@
     border: 3px solid #E0DEDE;
     background-color: white;
     border-radius: 0;
-    width: 500px;
+    width: 550px;
     margin-right: 2em;
     max-height: 40px;
     padding: 0.2em 0.5em;
@@ -45,7 +45,7 @@
     border-bottom: 0;
     background-color: white;
     border-radius: 0;
-    width: 600px;
+    width: 650px;
     padding: 0.5em 0.5em;
     min-height: 300px;
     justify-content: end;
@@ -54,7 +54,7 @@
 .posted-by {
     background-color: white;
     padding-right: 0.5em;
-    width: 600px;
+    width: 650px;
     text-align: right;
     border: 3px solid #E0DEDE;
     border-top: 0;
@@ -79,21 +79,27 @@
 .post-view-buttons {
     min-width: 650px;
     border: 0;
-    display: flex;
     margin: 0;
-    overflow-x: hidden;
-}
-
-.like-discuss {
     overflow: hidden;
 }
 
-.tag-buttons {
+.like-discuss {
+    display: flex;
+    min-width: 500px;
+    overflow: hidden;
+    margin-bottom: 0.5em;
+}
+
+.tagButtons {
     max-height: 100px;
-    overflow: scroll;
+    display: block;
+    min-width: 500px;
+    max-width: 500px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    margin-bottom: 0.5em;
 }
 
 .likes {
     display: inline-block;
-    text-align: center;
 }

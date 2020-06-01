@@ -136,23 +136,19 @@ const PostView = ({ currentUser, match }) => {
                             </div>
 
                             {/* Like / discuss/ tags */}
-                            <div className="post-view-buttons">
-                                    <Col className="like-discuss" xs={6} md={4}>
-                                        <Row>
-                                            <div className="likes">{post.score}</div>
-                                            <Button className="yellow-button">like.it</Button>
-                                        </Row>
-
-                                        <Row>
-                                            <Button className="yellow-button" onClick={toggleDiscussing}>{discussText}</Button>
-                                        </Row>
-
-                                    </Col>
-                                    <Col className="tagButtons">
-                                        {tagButtons}
-                                    </Col>
+                            <span>Tags:</span>
+                            <div className="tagButtons">
+                                {tagButtons}
                             </div>
-                            <CommentSection/>
+                            <div className="post-view-buttons">
+                                    <div className="like-discuss">
+                                        
+                                        <div className="likes"> {post.score} </div>
+                                        <Button className="yellow-button">like.it</Button>
+                                        <br/>
+                                    </div>
+                            </div>
+                            <CommentSection commentList={post.commentList} postId={postId}/>
 
                         </div>
                     </Col>
