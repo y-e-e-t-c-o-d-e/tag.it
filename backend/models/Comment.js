@@ -250,7 +250,7 @@ getCommentById = async (uuid) => {
             const r = new Comment(snapshot.val());
             // now get the user's name
             //console.log(r);
-            User.getUserById(r.getAuthor()).then(user => {
+            User.getUserById(r.getAuthor()).then(async user => {
                 r.props.authorName = user.getName();
                 r.props.likedStatus = await user.getLikedCommentStatus(uuid);
 

@@ -253,8 +253,6 @@ class User {
 
     getLikedCommentStatus = async (commentId) => {
         await this.updateUser();
-        console.log(commentId);
-        console.log(this.getLikedCommentList())
         return this.getLikedCommentList().indexOf(commentId) >= 0;
     }
     
