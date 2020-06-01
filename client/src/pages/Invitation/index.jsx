@@ -2,6 +2,7 @@ import React, {useState, useEffect } from "react";
 import Button from "../../components/Button/index";
 import './style.css';
 import API from "../../utils/API";
+import { createToast } from "../../utils";
 
 function Invitation(props){
 
@@ -46,17 +47,17 @@ function Invitation(props){
     }, [])
 
     const redirectHome = () => {
-        alert("Redirecting to home page...");
+        createToast("Redirecting to home page...");
         history.push("/");
     }
 
     const redirectClass = () => {
         API.addToCourse(courseId, state.accountType).then((val) => {
             let link = `/course/${courseId}`;
-            alert("Invitation accepted! Redirecting to class...");
+            createToast("Invitation accepted! Redirecting to class...");
             history.push(link);
             return null;
-        }).catch((e) => alert(e))
+        }).catch((e) => createToast(e))
     }
 
     if (state.pending) {

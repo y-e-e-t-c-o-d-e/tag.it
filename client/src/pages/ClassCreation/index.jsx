@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import logo from "../../assets/logo.png";
 import './style.css';
-import API from "../../utils/API";
+import {API, createToast} from "../../utils/";
 import AutocompleteTags from '../../components/AutocompleteTags';
 import Navigation from "../../components/Navbar/index.jsx";
 import { Button } from "react-bootstrap";
@@ -46,12 +46,11 @@ const ClassCreation = ({ currentUser, history }) => {
                 const courseId = (await API.createCourse(title.value, term.value, description.value)).data;
                 redirectAddStaff(courseId); // might need to change depending on how backend implements the return value
             } catch (error) {
-                alert(error);
-                console.error(error);
+                createToast(error);
             }
         } else {
-            if (!titleValid) { alert("Please enter a course title"); }
-            else if (!descValid) { alert("Please enter a course description"); }
+            if (!titleValid) { createToast("Please enter a course title"); }
+            else if (!descValid) { createToast("Please enter a course description"); }
         }
     }
 

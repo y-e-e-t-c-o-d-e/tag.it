@@ -6,6 +6,7 @@ import db from "../../base";
 import NavBar from "../../components/Navbar";
 import logo from "../../assets/logo.png";
 import './style.css';
+import { createToast } from '../../utils';
 
 const bgColors = {
     "default": "white",
@@ -37,10 +38,10 @@ const Login = ({ history }) => {
                     history.push("/");
                 }
             } catch (error) {
-                alert(error);
+                createToast(error);
             }
         }
-        else { alert("Invalid email address"); }
+        else { createToast("Invalid email address"); }
     }
 
     /* Makes possible email input background color change  */

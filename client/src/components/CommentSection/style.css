@@ -9,12 +9,16 @@
     width: 100%;
 }
 
+.comment-left {
+    padding: 0;
+}
+
 #cancel-button {
     margin-right: 25px;
 }
 
 #new-comment-button {
-    margin-left: 25px;
+    margin-left: 0;
 }
 
 .post-comment-form {
