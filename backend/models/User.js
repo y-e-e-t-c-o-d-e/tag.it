@@ -369,7 +369,7 @@ getUserById = async (uuid) => {
 
 
 deleteUserById = async (uuid) => {
-    const ref = db.ref('Comments/'+uuid);
+    const ref = db.ref('Users/'+uuid);
     try{
         const result = await ref.remove();
         return true;

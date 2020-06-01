@@ -23,8 +23,10 @@ const App = () => {
       <Router>
         <div>
           <Switch>
-            <PrivateRoute exact path="/" component={Home} />
+            <PrivateRoute exact path="/courses/:courseId/settings" component={ClassSettings} />
             <PrivateRoute exact path="/courses/:courseId" component={CourseView} />
+            <PrivateRoute exact path="/courses/:courseId/staff" component={Staff} />
+            <PrivateRoute exact path="/courses/:courseId/post/:postId" component={PostView} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
             <PrivateRoute exact path="/createclass" component={ClassCreation} />
@@ -32,7 +34,9 @@ const App = () => {
             <PrivateRoute exact path="/course/:courseId/post/:postId" component={PostView} />
             <PrivateRoute exact path="/course/:courseId/settings" component={ClassSettings} />
             <PrivateRoute exact path="/course/:courseId/invite/:inviteId" component={Invitation} />
+            <PrivateRoute exact path="/create-course" component={ClassCreation} />
             <PrivateRoute exact path="/add" component={AddClass} />
+            <PrivateRoute exact path="/" component={Home} />
             <Route exact path="/*" component={() => {
               window.location.href = "/";
             }} />
