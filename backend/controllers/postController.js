@@ -43,9 +43,31 @@ exports.getPost = async (req, res) => {
 };
 
 exports.updatePost = async (req, res) => {
-    // Object of fields and values to update in the Post object
-    const updateParams = req.body;
-    res.status(200).send("Updated Post.");
+    const bodyParams = req.body;
+    const postUUID = req.query.postUUID;
+    if (!postUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing paramater: postUUID"
+        });
+        return;
+    };
+
+    try {
+        const postObj = await getTagById(postUUID);
+        if ("isPinned" in bodyParams) {
+            tagObj.setPinned(bodyParams["isPinned"]);
+        }
+        if ("isResolved" in bodyParams) {
+            tagObj.setResolved(bodyParams["isResolved"]);
+        }
+        res.status(200).json(postObj);
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    };
 };
 
 // Adds user to post's following list if not there already, removes user otherwise
