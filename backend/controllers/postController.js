@@ -61,10 +61,13 @@ exports.updatePost = async (req, res) => {
 
     try {
         const postObj = await getPostById(postUUID);
-        if ("isPinned" in bodyParams) {
+        if (bodyParams["content"]) {
+            postObj.setContent(bodyParams["content"])
+        }
+        if (bodyParams["isPinned"]) {
             postObj.setPinned(bodyParams["isPinned"]);
         }
-        if ("isResolved" in bodyParams) {
+        if (bodyParams["isResolved"]) {
             postObj.setResolved(bodyParams["isResolved"]);
         }
         res.status(200).json(postObj);
