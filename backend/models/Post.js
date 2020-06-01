@@ -259,21 +259,12 @@ module.exports.pushPostToFirebase = (updateParams) => {
                 score: 0,
                 course: updateParams["course"]
             });
-<<<<<<< HEAD
-
-            const currentPost = await getPostById((await postRef).key);
-            await ((await (Course.getCourseById(updateParams["course"]))).addPost(post.key));
-
-            // Iterates through all tags in tagList and add this post to those tags
-            const tagList = updateParams["tagList"] ? updateParams["tagList"] : [];
-=======
             const currentPost = await getPostById((await postRef).key);
             await ((await (Course.getCourseById(updateParams["course"]))).addPost(post.key))
             await ((await (User.getUserById(updateParams["author"]))).addPost(post.key))
             
             // Iterates through all tags in tagList and add this post to those tags
             tagList = updateParams["tagList"] ? updateParams["tagList"] : [];
->>>>>>> Cross Model functionality exists but it is not tested
             for (let tagId of tagList) {
                 await currentPost.addTag(tagId);
             }
