@@ -18,7 +18,6 @@ const CommentSection = ({ commentList, postId }) => {
         API.getComments(postId)
             .then(response => {
                 setComments(response.data)
-                setNewComment(false)
             })
             .catch(error => {
 
