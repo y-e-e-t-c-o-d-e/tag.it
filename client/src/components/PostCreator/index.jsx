@@ -59,7 +59,6 @@ const PostCreator = ({tags, courseId, setView, views}) => {
                             }} setDeletedTags={(tags)=>{
                                 
                             }} onChange={(tags) => {
-                                console.log(tags)
                                 setSelectedTags(tags)
                             }} />
                 <Row>
