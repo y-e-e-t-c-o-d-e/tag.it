@@ -12,7 +12,7 @@ const CommentSection = ({ commentList, postId }) => {
     const [newComment, setNewComment] = useState(false);
     const [refreshComments, setRefreshComments] = useState(false);
     const [visibility, setVisiblity] = useState("public, visible");
-    const [comments, setComments] = useState([{uuid: "loading", author: "Loading", time: Date.now(), content: "Loading", childList: []}]);
+    const [comments, setComments] = useState([{ uuid: "loading", author: "Loading", time: Date.now(), content: "Loading", childList: [], score: 0 }]);
 
     useEffect(() => {
         API.getComments(postId)
@@ -81,7 +81,7 @@ const CommentSection = ({ commentList, postId }) => {
 
     return (
         <div className="comment-section">
-            
+
             {renderCreateNewComment()}
             <div className="comment-list">
                 {renderComments()}
