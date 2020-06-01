@@ -9,7 +9,7 @@ import CoursesView from '../../components/CoursesView/index.jsx';
 import CommentSection from "../../components/CommentSection"
 import PostCreator from "../../components/PostCreator"
 import { API, createToast, MarkdownEditor } from '../../utils';
-import PostEditor from '../../components/PostEditor';
+import PostEditor from '../../components/PostEditor/index';
 
 const PostView = ({currentUser, history}) => { 
     const { postId, courseId } = useParams();
@@ -94,14 +94,54 @@ const PostView = ({currentUser, history}) => {
         likeUnlikePostButton=likeUnlike;
     }
 
-    // discuss.it functionalities
-    const[discussing, setDiscussing] = useState(false);
-    const toggleDiscussing = () =>{
-        setDiscussing(!discussing);
-    }
-    let discussText = (discussing? "cancel":"discuss.it");
+    // The normal view to be rendered
+    let postViewer = (
+        <div className="post-viewer">
+            {/* Section with post title and change / actions */}
+            <div className="post-title-section">
+                <Row>
+                    <Col xs={8}>
+                        <div className="post-title-view">
+                            {post.title}
+                        </div>
+                    </Col>
+                </Row>
+                <div className="title-button-section">
+                    <Button className="yellow-button">change.it</Button>
+                    <DropdownButton className="yellow-button" title="actions">
+                        {followUnfollowButton}
+                        <Dropdown.Item key="copy-link" as="button" onClick={copyLink}>Copy Link</Dropdown.Item>
+                        {resolveUnresolveButton}
+                    </DropdownButton>
+                </div>
+            </div>
 
-    
+            {/* Post content with footer saying posted by */}
+            <div className="post-content-section">
+                <MarkdownEditor className="post-content-view" source={post.content} />
+                <div className="posted-by">Posted by: {post.authorName}</div>
+            </div>
+
+            {/* Like / discuss/ tags */}
+            <span>Tags:</span>
+            <div className="tagButtons">
+                {tagButtons}
+            </div>
+            <div className="post-view-buttons">
+                    <div className="like-discuss">
+                        
+                        <div className="likes"> {post.score} </div>
+                        {likeUnlikePostButton}
+                        <br/>
+                    </div>
+            </div>
+            <CommentSection commentList={post.commentList} postId={postId}/>
+
+        </div>
+    );
+
+    // The edit view that will show up if we are currently editing
+    const editor = <PostEditor postText={post.content} />
 
     // Returns the content of the page
     return (
@@ -115,49 +155,7 @@ const PostView = ({currentUser, history}) => {
                         <TagList tags={tags} />
                     </Col>
                     <Col>
-
-                        <div className="post-viewer">
-                            {/* Section with post title and change / actions */}
-                            <div className="post-title-section">
-                                <Row>
-                                    <Col xs={8}>
-                                        <div className="post-title-view">
-                                            {post.title}
-                                        </div>
-                                    </Col>
-                                </Row>
-                                <div className="title-button-section">
-                                    <Button className="yellow-button">change.it</Button>
-                                    <DropdownButton className="yellow-button" title="actions">
-                                        {followUnfollowButton}
-                                        <Dropdown.Item key="copy-link" as="button" onClick={copyLink}>Copy Link</Dropdown.Item>
-                                        {resolveUnresolveButton}
-                                    </DropdownButton>
-                                </div>
-                            </div>
-
-                            {/* Post content with footer saying posted by */}
-                            <div className="post-content-section">
-                                <MarkdownEditor className="post-content-view" source={post.content} />
-                                <div className="posted-by">Posted by: {post.authorName}</div>
-                            </div>
-
-                            {/* Like / discuss/ tags */}
-                            <span>Tags:</span>
-                            <div className="tagButtons">
-                                {tagButtons}
-                            </div>
-                            <div className="post-view-buttons">
-                                    <div className="like-discuss">
-                                        
-                                        <div className="likes"> {post.score} </div>
-                                        {likeUnlikePostButton}
-                                        <br/>
-                                    </div>
-                            </div>
-                            <CommentSection commentList={post.commentList} postId={postId}/>
-
-                        </div>
+                        {editor}
                     </Col>
                 </Row>
             </div>
