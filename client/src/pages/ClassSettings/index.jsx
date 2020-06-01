@@ -12,7 +12,7 @@ const bgColors = {
     "error": "#ffcccc",
 };
 
-const ClassSettings = ({ currentUser, match}) => { 
+const ClassSettings = ({ currentUser, history }) => { 
     const { courseId } = useParams();
 
     const [course, setCourse] = useState({instructorInviteId: "2yiYLXnrgl",
@@ -28,11 +28,16 @@ const ClassSettings = ({ currentUser, match}) => {
         description: "yeet"
     })
     
-    const [tags, onChangeSetTags] = useState([]);
+    const [tags, setTags] = useState([]);
     const [courseNameValid, setCourseNameValid] = useState(true); // Invalid if empty
     const [courseName, setCourseName] = useState("Default Class Name");
     const [courseInviteLink, setCourseInviteLink] = useState("");
     const invitationRef = useRef(null);
+
+    // form tags
+    const [addedTags, setAddedTags] = useState([]);
+    const [deletedTags, setDeletedTags] = useState([]);
+
 
     let link = "https://tagdotit.netlify.app/course/" + courseId;
 
@@ -41,6 +46,7 @@ const ClassSettings = ({ currentUser, match}) => {
             console.log(response.data)
             setCourse(response.data)
             setCourseName(response.data.name)
+            setTags(response.data.tagList)
             setCourseInviteLink(`https://tagdotit.netlify.app/course/${courseId}/invite/${course.studentInviteId}`)
         }).catch(() => {
             setCourseName('Default Class Name')
@@ -51,17 +57,37 @@ const ClassSettings = ({ currentUser, match}) => {
     const handleSettingsChange = async (event) =>{
         if(courseNameValid) {
             event.preventDefault();
-            const className = courseName;
-            // updated the course name
-            // TODO: Get some way to get the courseUUID (via props?)
-            API.updateCourse(courseId, className).then(() => {
+
+            API.updateCourse(courseId, courseName).then(() => {
                 createToast("Changed Course Name!")
             })
         }
+        else{
+            createToast("Course name can not be empty");
+        }
 
         // set tags
+        console.log(addedTags)
+        console.log(deletedTags)
+        const addedSet = new Set(addedTags.map(tag => tag.name))
+        const deletedSet = new Set(deletedTags.map(tag => tag.name))
         
-        else{createToast("Course name can not be empty");}
+        const added = addedTags.filter(tag => !deletedSet.has(tag.name)).map(tag => tag.name)
+        const deleted = deletedTags.filter(tag => {
+            return !addedSet.has(tag.name) && tag.uuid
+        }).map(tag => tag.uuid)
+
+        console.log("added tags")
+        console.log(added)
+        console.log("deleted tags")
+        console.log(deleted)
+
+        API.addRemoveTags(added, deleted, courseId).then(() => {
+            createToast("success!")
+        }).catch(err => {
+            createToast(err)
+        })
+
     };
 
     /* Copies invitation link to clipboard */
@@ -93,7 +119,7 @@ const ClassSettings = ({ currentUser, match}) => {
 
     return(
         <div>
-            <Navigation currentUser={currentUser} />
+            <Navigation  history={history} currentUser={currentUser} />
             <div className="content">
                 <div className="box">
 
@@ -133,13 +159,13 @@ const ClassSettings = ({ currentUser, match}) => {
                         <div className="center-button">
                         </div>
                         <div className="buttons">
-                            <Button>Instructors</Button>
-                            <Button>Tags</Button>
-                            <Button>Archive</Button>
-                            <Button>Disable</Button>
-                            <Button type="submit">Save Changes</Button>
+                            <Button variant="warning" onClick={ () => { history.push(`/courses/${courseId}/staff`); }}>Instructors</Button>
+                            <Button variant="warning">Tags</Button>
+                            <Button variant="warning">Archive</Button>
+                            <Button variant="warning">Disable</Button>
+                            <Button variant="warning" type="submit">Save Changes</Button>
                         </div>
-                        <AutocompleteTags onChange={onChangeSetTags} />
+                        <AutocompleteTags initialTags={tags} setAddedTags={setAddedTags} setDeletedTags={setDeletedTags} onChange={() => {}} />
                     </form>
                 </div>
             </div>

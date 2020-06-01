@@ -3,7 +3,7 @@ import './style.css';
 import Label from '../../components/Label';
 import SuggestionTextField from '../../components/SuggestionTextField';
 import {Button} from 'react-bootstrap';
-import {API, createToast} from '../../utils';
+import {API, createToast} from '../../utils/';
 import { AuthContext } from '../../auth/Auth';
 import { useContext } from 'react';
 import NavBar from "../../components/Navbar"
@@ -76,7 +76,7 @@ const AddClass = ({history, currentUser}) => {
 
     return (
         <>
-            <NavBar currentUser={currentUser}/>
+            <NavBar history={history} currentUser={currentUser}/>
             <div className="addClassPage">
                 <div className="left-section"> 
                     <h1>Add a Class</h1>

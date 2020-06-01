@@ -8,4 +8,7 @@ router.route("/")
     .get(commentController.getComment) // Read
     .put(commentController.updateComment) // Update
 
+// Matches with "/api/comment/like"
+router.route("/like")
+    .post(commentController.toggleLike)
 module.exports = router;

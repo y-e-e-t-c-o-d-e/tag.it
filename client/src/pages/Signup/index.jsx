@@ -4,7 +4,12 @@ import db from "../../base";
 import './style.css';
 import logo from '../../assets/logo.png';
 import NavBar from "../../components/Navbar";
-import { API, createToast } from "../../utils";
+import { API, createToast } from "../../utils"
+
+const bgColors = {
+    "default": "white",
+    "error": "#ffcccc",
+};
 
 const SignUp = ({ history }) => {
 
@@ -107,7 +112,7 @@ const SignUp = ({ history }) => {
 
     return (
         <div>
-            <NavBar />
+            <NavBar  history={history} />
             <div className="centered">
                 <div className="contents">
                     {/* The tag.it logo*/}

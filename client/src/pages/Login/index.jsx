@@ -5,8 +5,8 @@ import { AuthContext } from "../../auth/Auth";
 import db from "../../base";
 import NavBar from "../../components/Navbar";
 import logo from "../../assets/logo.png";
-import './style.css';
 import { createToast } from '../../utils';
+import './style.css';
 
 const bgColors = {
     "default": "white",
@@ -80,7 +80,7 @@ const Login = ({ history }) => {
 
     return (
         <div>
-            <NavBar />
+            <NavBar history={history}  />
             <div className="container">
                 <div id="center-logo">
                     <img src={logo} alt="Tag.it" height="125" />

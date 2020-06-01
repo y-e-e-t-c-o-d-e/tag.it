@@ -11,4 +11,8 @@ router.route("/")
 // Matches with "/api/post/follow"
 router.route("/follow")
     .post(postController.toggleFollow)
+
+// Matches with "/api/post/like"
+router.route("/like")
+    .post(postController.toggleLike)
 module.exports = router;

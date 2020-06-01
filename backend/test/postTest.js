@@ -54,10 +54,10 @@ describe('post', async () => {
 
     it('should add and remove follower of post in firebase', async() => {
         expect(testPost.getUsersFollowing().length).to.equal(1);
-        testPost.addFollower('user2');
+        await testPost.addFollower('user2');
         expect(testPost.getUsersFollowing().length).to.equal(2);
-        testPost.addFollower('user3');
-        testPost.removeFollower('user3');
+        await testPost.addFollower('user3');
+        await testPost.removeFollower('user3');
         expect(testPost.getUsersFollowing().length).to.equal(2);
     })
 
@@ -77,9 +77,9 @@ describe('post', async () => {
         }
 
         expect(testPost.getCommentList().length).to.equal(0);
-        testPost.addComment('comment1');
+        await testPost.addComment('comment1');
         expect(testPost.getCommentList().length).to.equal(1);
-        testPost.addComment(commentKey);
+        await testPost.addComment(commentKey);
         await testPost.removeComment(commentKey);
         expect(testPost.getCommentList().length).to.equal(1);
         await comment.deleteCommentById(commentKey);
@@ -106,7 +106,7 @@ describe('post', async () => {
         }
         await testPost.addTag(tagKey);
         expect(testPost.getTagList().length).to.equal(3);
-        await testPost.removeTag(tagKey);
+        await testPost.deleteTag(tagKey);
         expect(testPost.getTagList().length).to.equal(2);
         tag.deleteTagById(tagKey);
     })

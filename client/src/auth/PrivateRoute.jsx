@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { AuthContext } from "./Auth";
+import logo from "../assets/logo.png"
 import API from '../utils/API';
 
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
@@ -31,7 +32,15 @@ const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
 
     // If Firebase is still fetching the current user, render the loading state. 
     if (pending) {
-        return <h1>waiting to fetch user</h1>         
+        return (
+            <div class="container h-100">
+                <div class="row align-items-center h-100">
+                    <div class="col-6 mx-auto">
+                            <img src={logo}/>
+                    </div>
+                </div>
+            </div>
+        )  
     }
 
     return (

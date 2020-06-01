@@ -22,7 +22,7 @@ class Tag {
     getNumUsed = async() => {
         return this.props.numUsed;
     }
-    getCourse = async() => {
+    getCourse = () => {
         return this.props.course;
     }
     getParentTag = async() => {
@@ -213,10 +213,17 @@ getTagById = async (uuid) => {
 }
 
 deleteTagById = async (uuid) => {
-    
     const ref = db.ref('Tags/' + uuid);
     try{
-        const result = await ref.remove();
+        const tag = await this.getTagById(uuid);
+        console.log(tag)
+        for (let postId of await tag.getPostList()) {
+            await (await post.getPostById(postId)).removeTag(uuid);
+        }
+
+        await (await course.getCourseById(tag.getCourse())).removeTag(uuid)
+
+        await ref.remove();
         return true;
     } catch (e) {
         console.log(e);
