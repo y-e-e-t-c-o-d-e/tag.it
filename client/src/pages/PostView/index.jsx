@@ -32,6 +32,9 @@ const PostView = ({currentUser, history}) => {
         filledInTags: []
     })
 
+    // State to show if we are editing
+    const [editing, setEditing] = useState(false);
+
     useEffect(() => {
         API.getPost(postId).then((response) => {
             console.log(response.data)
@@ -39,7 +42,7 @@ const PostView = ({currentUser, history}) => {
         }).catch(err => {
             createToast("an error occurred")
         })
-    }, [])
+    }, [editing])
 
     const [tags, setTags] = useState([])
     useEffect(() => {
@@ -97,9 +100,6 @@ const PostView = ({currentUser, history}) => {
         likeUnlikePostButton=likeUnlike;
     }
 
-
-    // State to show if we are editing
-    const [editing, setEditing] = useState(false);
 
     // Attempt to edit the post
     const attemptEdit = () =>{
@@ -159,7 +159,9 @@ const PostView = ({currentUser, history}) => {
     // The edit view that will show up if we are currently editing
     const postContent = post.content;
     console.log(postContent);
-    const editor = <EditPost postText={postContent} />
+    const editor = <EditPost postUUID={postId} postText={postContent} 
+                    isResolved={post.isResolved} isPinned={post.isPinned}
+                    setEditing={setEditing} />
 
     // The content to be shown depending on if we are editing
     let content = editing? editor:postViewer;
