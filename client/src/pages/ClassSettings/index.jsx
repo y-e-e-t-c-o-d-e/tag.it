@@ -28,11 +28,16 @@ const ClassSettings = ({ currentUser, history }) => {
         description: "yeet"
     })
     
-    const [tags, onChangeSetTags] = useState([]);
+    const [tags, setTags] = useState([]);
     const [courseNameValid, setCourseNameValid] = useState(true); // Invalid if empty
     const [courseName, setCourseName] = useState("Default Class Name");
     const [courseInviteLink, setCourseInviteLink] = useState("");
     const invitationRef = useRef(null);
+
+    // form tags
+    const [addedTags, setAddedTags] = useState([]);
+    const [deletedTags, setDeletedTags] = useState([]);
+
 
     let link = "https://tagdotit.netlify.app/course/" + courseId;
 
@@ -41,6 +46,7 @@ const ClassSettings = ({ currentUser, history }) => {
             console.log(response.data)
             setCourse(response.data)
             setCourseName(response.data.name)
+            setTags(response.data.tagList)
             setCourseInviteLink(`https://tagdotit.netlify.app/course/${courseId}/invite/${course.studentInviteId}`)
         }).catch(() => {
             setCourseName('Default Class Name')
@@ -51,17 +57,29 @@ const ClassSettings = ({ currentUser, history }) => {
     const handleSettingsChange = async (event) =>{
         if(courseNameValid) {
             event.preventDefault();
-            const className = courseName;
-            // updated the course name
-            // TODO: Get some way to get the courseUUID (via props?)
-            API.updateCourse(courseId, className).then(() => {
-                createToast("Changed Course Name!")
-            })
+
+            // API.updateCourse(courseId, courseName).then(() => {
+            //     createToast("Changed Course Name!")
+            // })
+        }
+        else{
+            createToast("Course name can not be empty");
         }
 
         // set tags
+        console.log(addedTags)
+        console.log(deletedTags)
+        const addedSet = new Set(addedTags.map(tag => tag.name))
+        const deletedSet = new Set(deletedTags.map(tag => tag.name))
         
-        else{createToast("Course name can not be empty");}
+        const added = addedTags.filter(tag => !deletedSet.has(tag.name))
+        const deleted = deletedTags.filter(tag => !addedSet.has(tag.name))
+
+        console.log("added tags")
+        console.log(added)
+        console.log("deleted tags")
+        console.log(deleted)
+
     };
 
     /* Copies invitation link to clipboard */
@@ -139,7 +157,7 @@ const ClassSettings = ({ currentUser, history }) => {
                             <Button variant="warning">Disable</Button>
                             <Button variant="warning" type="submit">Save Changes</Button>
                         </div>
-                        <AutocompleteTags onChange={onChangeSetTags} />
+                        <AutocompleteTags initialTags={tags} setAddedTags={setAddedTags} setDeletedTags={setDeletedTags} />
                     </form>
                 </div>
             </div>
