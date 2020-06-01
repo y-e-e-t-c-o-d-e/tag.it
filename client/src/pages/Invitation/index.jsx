@@ -2,6 +2,7 @@ import React, {useState, useEffect } from "react";
 import Button from "../../components/Button/index";
 import './style.css';
 import { API, createToast } from "../../utils"
+import Navigation from "../../components/Navbar";
 
 function Invitation(props){
 
@@ -69,7 +70,7 @@ function Invitation(props){
     
     return(
         <div>
-            {/* Insert Nav bar here... */}
+            <Navigation history={props.history} currentUser={props.currentUser} courseId={courseId} />
             <div className="content">
                 <div className="box">
 
