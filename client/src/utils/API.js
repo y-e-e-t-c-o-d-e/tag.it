@@ -210,6 +210,20 @@ export default {
             headers: authHeaders()
         };
         return axios.delete(`${baseURL}/api/course/${courseUUID}/pending/${email}`, config)
+    },
+
+    // Use for changing post contents, resolving post, and pinning post
+    editPost: function(postUUID, content, isResolved, isPinned) {
+        const config = {
+            method: 'put',
+            headers: authHeaders(),
+            data: {
+                content: content,
+                isResolved: isResolved,
+                isPinned: isPinned
+            }
+        };
+        return axios.put(`${baseURL}/api/post?postUUID=${postUUID}`, config)
     }
 }
 
