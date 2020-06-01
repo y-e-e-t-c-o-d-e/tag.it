@@ -31,7 +31,7 @@ const ClassCreation = ({ currentUser, history }) => {
     const [selectedTags, setSelectedTags] = useState([]);
 
     const onChangeSetTags = (tagState) => {
-        setSelectedTags(tagState);
+        // setSelectedTags(tagState);
     };
 
     /* Main function for handling class creation */
@@ -40,12 +40,12 @@ const ClassCreation = ({ currentUser, history }) => {
         if (titleValid && descValid) {
             const { title, description, term } = event.target.elements;
             const tags = selectedTags.tags;
-
+            console.log(selectedTags)
             /* try to create a course in database */
             try {
                 console.log(selectedTags)
-                // const courseId = (await API.createCourse(title.value, term.value, description.value)).data;
-                // redirectAddStaff(courseId); // might need to change depending on how backend implements the return value
+                const courseId = (await API.createCourse(title.value, term.value, description.value)).data;
+                redirectAddStaff(courseId); // might need to change depending on how backend implements the return value
             } catch (error) {
                 createToast(error);
                 console.error(error);
@@ -142,7 +142,14 @@ const ClassCreation = ({ currentUser, history }) => {
                         <div className="flex-row">
                             <p>Initial Tags (Optional):</p>
 
-                            <AutocompleteTags initialTags={[]} setAddedTags={()=>{}} setDeletedTags={()=>{}} onChange={onChangeSetTags} />
+                            <AutocompleteTags initialTags={[]} setAddedTags={(tags)=>{
+                                
+                            }} setDeletedTags={(tags)=>{
+                                
+                            }} onChange={(tags) => {
+                                console.log(tags)
+                                setSelectedTags(tags)
+                            }} />
                         </div>
                         <Button id="next-button" type="submit">Next Step: Adding Instructors</Button>
                     </form>

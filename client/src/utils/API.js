@@ -131,7 +131,7 @@ export default {
         return axios.get(`${baseURL}/api/course/${courseId}/invite/${inviteId}`, config);
     },
 
-    createCourse: function (name, term, description) {
+    createCourse: function (name, term, description, tagList) {
         const config = {
             method: 'post',
             url: `${baseURL}/api/course`,
@@ -139,7 +139,8 @@ export default {
             data: {
                 name: name,
                 term: term,
-                description: description
+                description: description,
+                tagList: tagList
             }
         };
         return axios(config);
