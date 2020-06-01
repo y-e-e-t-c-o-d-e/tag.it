@@ -25,23 +25,24 @@ exports.addUser = async (req, res) => {
 
 exports.getUser = async (req, res) => {
     const userUUID = req.query.userUUID;
-    if (!userUUID) {
-        res.status(200).json(req.user.props);
-    };
+    let userObj = req.user;
 
     // Grabs the user based on the userUUID. If fails, responds with an error.
     try {
-        const userObj = await user.getUserById(userUUID);
+        if (userUUID) {
+            userObj = await user.getUserById(userUUID);
+        }
+
         // get all the courses
         userObj.props.filledInStudentCourseList = await Promise.all(userObj.getStudentCourseList().map(async uuid => {
-            const toReturn =  (await course.getCourseById(uuid)).props;
-            return toReturn
-        }))
+            const toReturn = (await course.getCourseById(uuid)).props;
+            return toReturn;
+        }));
 
         userObj.props.filledInInstructorCourseList = await Promise.all(userObj.getInstructorCourseList().map(async uuid => {
-            const toReturn =  (await course.getCourseById(uuid)).props;
-            return toReturn
-        }))
+            const toReturn = (await course.getCourseById(uuid)).props;
+            return toReturn;
+        }));
 
         res.status(200).json(userObj.props);
     } catch (e) {
