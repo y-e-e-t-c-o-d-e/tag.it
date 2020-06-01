@@ -75,13 +75,13 @@ const CommentSection = ({ commentList, postId }) => {
             );
         }
         return (
-            <Button id="new-comment-button" onClick={() => { setNewComment(true) }}>discuss.it</Button>
+            <Button id="new-comment-button" className="yellow-button" onClick={() => { setNewComment(true) }}>discuss.it</Button>
         );
     };
 
     return (
         <div className="comment-section">
-            <h2>Followup:</h2>
+            
             {renderCreateNewComment()}
             <div className="comment-list">
                 {renderComments()}

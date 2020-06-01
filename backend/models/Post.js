@@ -269,7 +269,8 @@ getPostById = async (uuid) => {
 
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
-            const r = new Post(snapshot.val());
+            let r = new Post(snapshot.val());
+            if (!r.props.followingList) r.props.followingList = [];
             resolve(r);
         }, function (errorObject) {
             reject(errorObject);

@@ -6,16 +6,9 @@ import Navigation from "../../components/Navbar";
 import TagList from "../../components/TagList/index.jsx";
 import { Row, Col, Nav } from 'react-bootstrap';
 import CoursesView from '../../components/CoursesView/index.jsx';
+import PostViewer from '../../components/PostViewer/index';
 
 const Home = ({ currentUser, history, match }) => {
-    if (match) {
-        const courseId = match.params.courseId;
-    }
-
-    const redirectClassCreation = () => {
-        history.push("/createclass");
-    }
-
     const displayName = currentUser ? currentUser.name : "Loading"
     const { courseId } = useParams();
 

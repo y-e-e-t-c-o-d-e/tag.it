@@ -38,11 +38,11 @@ const AddClass = ({history, currentUser}) => {
             return <></>
         };
 
-        const studentLabels = currentUser.studentCourseList.map((val) => 
-            <Label type="student">{val}</Label>
+        const studentLabels = currentUser.filledInStudentCourseList.map((val) => 
+            <Label type="student">{val.name}</Label>
         );
-        const instructorLabels = currentUser.instructorCourseList.map((val) => 
-            <Label type="instructor">{val}</Label>
+        const instructorLabels = currentUser.filledInInstructorCourseList.map((val) => 
+            <Label type="instructor">{val.name}</Label>
         );
         
         return studentLabels.concat(instructorLabels);

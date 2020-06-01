@@ -110,3 +110,31 @@ const getSubComments = async (commentObj) => {
     commentObj.props.childList = subComments;
     return commentObj;
 }
+
+// Adds comment to user's likedCommentList if not there already, removes post otherwise
+exports.toggleLike = async (req, res) => {
+    const userObj = req.user;
+    const commentUUID = req.query.commentUUID;
+    if (!commentUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing parameter: commentUUID"
+        });
+        return;
+    };
+    
+    try {
+        if (userObj.getLikedCommentList().indexOf(commentUUID) == -1) {
+            await userObj.addLikedComment(commentUUID);
+            res.status(200).json(await comment.getCommentById(commentUUID));
+        } else {
+            await userObj.removeLikedComment(commentUUID);
+            res.status(200).json(await comment.getCommentById(commentUUID));
+        }
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e.message
+        });
+    };
+}

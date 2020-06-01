@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "react-bootstrap";
 import db from "../../base";
 import './style.css';
@@ -6,7 +6,7 @@ import logo from '../../assets/logo.png';
 import NavBar from "../../components/Navbar";
 import { API, createToast } from "../../utils"
 
-var bgColors = {
+const bgColors = {
     "default": "white",
     "error": "#ffcccc",
 };
@@ -18,19 +18,18 @@ const SignUp = ({ history }) => {
         history.push("/")
     }
 
-    /* Checks whether the input form is valid */
-    const [emailValid, setEmailValid] = useState(false);
-    const [passwordValid, setPasswordValid] = useState(false);
-    const [nameValid, setnameValid] = useState(false);
-
     /* Pushes signup data to database and redirect to Login */
     const handleSignUp = async (event) => {
+        let nameValid = handleNameChange(event.target.elements[0].value);
+        let emailValid = handleEmailChange(event.target.elements[1].value);
+        let passwordValid = handlePasswordChange(event.target.elements[2].value, event.target.elements[3].value);
+
         if (nameValid && emailValid && passwordValid) {
             event.preventDefault();
             const { name, email, password } = event.target.elements;
 
             try {
-                const {user} = await db
+                const { user } = await db
                     .auth()
                     .createUserWithEmailAndPassword(email.value,
                         password[0].value);
@@ -46,49 +45,43 @@ const SignUp = ({ history }) => {
                 createToast(error);
             }
         }
-        else{
-            if(!nameValid){createToast("Please enter your first and last name");}
-            else if(!emailValid){createToast("Invalid email address");}
-            else if(!passwordValid){createToast("Passwords do not match");}
+        else {
+            event.preventDefault();
+            if (!nameValid) {
+                createToast("Please enter your first and last name");
+            }
+            else if (!emailValid) {
+                createToast("Invalid email address");
+            }
+            else if (!passwordValid) {
+                createToast("Passwords do not match");
+            }
         }
     }
 
-    /* Makes possible email input background color change  */
-    const [nameBgColor, setNameBgColor] = useState(
-        bgColors.default
-    );
-
     /* Makes sure name has the correct format */
-    const handleNameChange = (event) => {
-
+    const handleNameChange = (name) => {
         // Checking for format of the name
-        const nameInput = event.target.value;
+        const nameInput = name;
         let lastSpacePos = nameInput.lastIndexOf(' ');
         let firstNameValid = lastSpacePos > 0;
         let lastNameValid = nameInput.length - lastSpacePos > 1;
 
         // If invalid, indicate an error
-        if(nameInput==="" || !firstNameValid || !lastNameValid){
-            setNameBgColor(bgColors.error);
-            setnameValid(false);
+        if (nameInput === "" || !firstNameValid || !lastNameValid) {
+            return false;
         }
 
         // If valid, indicate valid
-        else{
-            setNameBgColor(bgColors.default);
-            setnameValid(true);
+        else {
+            return true;
         }
-    
+
     }
 
-    /* Makes possible email input background color change  */
-    const [emailBgColor, setEmailBgColor] = useState(
-        bgColors.default
-    );
-
     /* When input for email address changes, try to validate the email address */
-    const handleEmailChange = (event) => {
-        const emailInput = event.target.value;
+    const handleEmailChange = (email) => {
+        const emailInput = email;
         let lastAtPos = emailInput.lastIndexOf('@');
         let lastDotPos = emailInput.lastIndexOf('.');
 
@@ -99,66 +92,21 @@ const SignUp = ({ history }) => {
 
         // If any of the logics are not satisfied, change the background color to red
         if (emailInput === "" || !validFormat || !validOrgNameLength || containsDoubleAt) {
-            setEmailBgColor(bgColors.error);
-            setEmailValid(false);
+            return false;
         }
 
         // Otherwise, set the background color as light blue (to indicate correctness)
         else {
-            setEmailBgColor(bgColors.default);
-            setEmailValid(true);
+            return true;
         }
     };
 
-    /* Makes possible password input background color change  */
-    const [passwordBgColor, setPasswordBgColor] = useState(
-        bgColors.default
-    );
-
-    /* Keeps track of the password inputs */
-    const [firstPassword, setFirstPassword] = useState("");
-    const [secondPassword, setSecondPassword] = useState("");
-
-    /* Handles first password change */
-    const handleFirstPasswordChange = (event) =>{
-        const input = event.target.value;
-        setFirstPassword(input);
-        if(firstPassword === secondPassword){
-            setPasswordBgColor(bgColors.default);
-            setPasswordValid(true);
-        }
-
-        else{
-            if(secondPassword !== ""){setPasswordBgColor(bgColors.error);}
-            setPasswordValid(false);
-        }
-    }
-
-    /* Handles second password change */
-    const handleSecondPasswordChange = (event) =>{
-        const input = event.target.value;
-        setSecondPassword(input);
-        if(firstPassword === secondPassword){
-            setPasswordValid(true);
-        }
-
-        else{
-            setPasswordValid(false);
-        }
-    }
-
-    /* Handles second password blur */
-    const handleSecondPasswordBlur = (event) =>{
-        const input = event.target.value;
-        setSecondPassword(input);
-        if(firstPassword === secondPassword){
-            setPasswordBgColor(bgColors.default);
-            setPasswordValid(true);
-        }
-
-        else{
-            if(firstPassword !== ""){setPasswordBgColor(bgColors.error);}
-            setPasswordValid(false);
+    /* Handles password change */
+    const handlePasswordChange = (firstPwd, secondPwd) => {
+        if (firstPwd === secondPwd) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -182,32 +130,22 @@ const SignUp = ({ history }) => {
                             <form onSubmit={handleSignUp}>
                                 <label>
                                     <p>Please enter your name:</p>
-                                    <input name="name" type="name" placeholder="First & Last Name"
-                                        onBlur={handleNameChange}
-                                        style={{ backgroundColor: nameBgColor }}
+                                    <input name="name" type="name" placeholder="First & Last Name" style={{ backgroundColor: "white" }}
                                     />
                                 </label>
                                 <label>
                                     <p>Please enter your email:</p>
-                                    <input name="email" type="email" placeholder="Email"
-                                        onBlur={handleEmailChange}
-                                        style={{ backgroundColor: emailBgColor }}
+                                    <input name="email" type="email" placeholder="Email" style={{ backgroundColor: "white" }}
                                     />
                                 </label>
                                 <label>
                                     <p>Please enter your password:</p>
-                                    <input name="password" type="password" placeholder="Password" 
-                                        onChange={handleFirstPasswordChange}
-                                        onBlur={handleFirstPasswordChange}
-                                        style={{backgroundColor: passwordBgColor}}
+                                    <input name="password" type="password" placeholder="Password" style={{ backgroundColor: "white" }}
                                     />
                                 </label>
                                 <label>
                                     <p>Please enter your password again:</p>
-                                    <input name="password" type="password" placeholder="Confirm Password" 
-                                        onChange={handleSecondPasswordChange}
-                                        onBlur={handleSecondPasswordBlur}
-                                        style={{backgroundColor: passwordBgColor}}
+                                    <input name="password" type="password" placeholder="Confirm Password" style={{ backgroundColor: "white" }}
                                     />
                                 </label>
                                 <br />

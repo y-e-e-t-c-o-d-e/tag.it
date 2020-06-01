@@ -1,6 +1,7 @@
 // TODO: uncomment when models are done
 const post = require("../models/Post");
 const Tag = require("../models/Tag");
+const User = require("../models/User")
 
 exports.addPost = async (req, res) => {
     // TODO: Handle later with models
@@ -39,13 +40,39 @@ exports.getPost = async (req, res) => {
         return (await Tag.getTagById(tagUUID)).props
     }))
 
+    // get author's name
+
+    postObj.props.authorName = (await User.getUserById(postObj.getAuthor())).getName();
+
     res.status(200).json(postObj.props);
 };
 
 exports.updatePost = async (req, res) => {
-    // Object of fields and values to update in the Post object
-    const updateParams = req.body;
-    res.status(200).send("Updated Post.");
+    const bodyParams = req.body;
+    const postUUID = req.query.postUUID;
+    if (!postUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing paramater: postUUID"
+        });
+        return;
+    };
+
+    try {
+        const postObj = await getPostById(postUUID);
+        if ("isPinned" in bodyParams) {
+            postObj.setPinned(bodyParams["isPinned"]);
+        }
+        if ("isResolved" in bodyParams) {
+            postObj.setResolved(bodyParams["isResolved"]);
+        }
+        res.status(200).json(postObj);
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e
+        });
+    };
 };
 
 // Adds user to post's following list if not there already, removes user otherwise
@@ -69,6 +96,34 @@ exports.toggleFollow = async (req, res) => {
         } else {
             userObj.removeFollowedPost(postUUID);
             res.status(200).send("Removed user as a follower");
+        }
+    } catch (e) {
+        res.status(410).json({
+            status: 410,
+            error: e.message
+        });
+    };
+}
+
+// Adds post to user's likedPostList if not there already, removes post otherwise
+exports.toggleLike = async (req, res) => {
+    const userObj = req.user;
+    const postUUID = req.query.postUUID;
+    if (!postUUID) {
+        res.status(422).json({
+            status: 422,
+            error: "Missing parameter: postUUID"
+        });
+        return;
+    };
+    
+    try {
+        if (userObj.getLikedPostList().indexOf(postUUID) == -1) {
+            await userObj.addLikedPost(postUUID);
+            res.status(200).json(await post.getPostById(postUUID));
+        } else {
+            await userObj.removeLikedPost(postUUID);
+            res.status(200).json(await post.getPostById(postUUID));
         }
     } catch (e) {
         res.status(410).json({
