@@ -215,8 +215,8 @@ getTagById = async (uuid) => {
 deleteTagById = async (uuid) => {
     const ref = db.ref('Tags/' + uuid);
     try{
-        const tag = await this.getTagById(uuid);
-        for (let postId of tag.getPostList()) {
+        const tagObj = await this.getTagById(uuid);
+        for (let postId of tagObj.getPostList()) {
             await (await post.getPostById(postId)).removeTag(uuid);
         }
 
