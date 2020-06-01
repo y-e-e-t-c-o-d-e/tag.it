@@ -34,7 +34,6 @@ const ClassSettings = ({ currentUser, match}) => {
     const [courseInviteLink, setCourseInviteLink] = useState("");
     const invitationRef = useRef(null);
 
-    const uuid = classUuid || "FakeUUID";
     let link = "https://tagdotit.netlify.app/course/" + courseId;
 
     useEffect(() => {
@@ -42,7 +41,7 @@ const ClassSettings = ({ currentUser, match}) => {
             console.log(response.data)
             setCourse(response.data)
             setCourseName(response.data.name)
-            setCourseInviteLink(`https://tagdotit.netlify.app/course/${uuid}/invite/${course.studentInviteId}`)
+            setCourseInviteLink(`https://tagdotit.netlify.app/course/${courseId}/invite/${course.studentInviteId}`)
         }).catch(() => {
             setCourseName('Default Class Name')
         })
