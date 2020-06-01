@@ -23,8 +23,9 @@ const PostCreator = ({tags, courseId, setView, views}) => {
             createToast("make a longer post!")
             return;
         }
-        console.log(addedTags)
-        API.createPost(questionTitle, questionContent, courseId, Array.from(addedTags)).then((response) => {
+        const tagsToAdd = Array.from(addedTags).map(tag => tag.uuid)
+        console.log(tagsToAdd)
+        API.createPost(questionTitle, questionContent, courseId, tagsToAdd).then((response) => {
             createToast(response.data)
             setView(views.questions)
         })
@@ -53,10 +54,13 @@ const PostCreator = ({tags, courseId, setView, views}) => {
                         </DropdownButton>
                     </Col>
                     <Col md={3}>
+                        
                         <DropdownButton id="dropdown-button-tags" title="tag.it" drop="up">
                             { 
                                 tags.map((tag, key) => {
-                                    return <Dropdown.Item key={key} as="button" onClick={() => {
+                                    return <Dropdown.Item key={key} as="button" variant={
+                                        addedTags.has(tag) ? "success" : "primary"
+                                    } onClick={() => {
                                         const newAddedTags = new Set(addedTags);
                                         if (addedTags.has(tag)) {
                                             newAddedTags.delete(tag);
