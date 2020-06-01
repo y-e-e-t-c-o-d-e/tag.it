@@ -23,7 +23,6 @@ const Home = ({currentUser, match}) => {
                     <Col xs={2}></Col>
                 </Row>
             </div>
-            <PostViewer/>
         </div>
     )
 

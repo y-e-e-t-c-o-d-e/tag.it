@@ -58,6 +58,20 @@ export default {
         };
         return axios(config);
     },
+
+    toggleFollow: function(user, postUUID) {
+        const config = {
+            method: 'post',
+            url: `${baseURL}/api/course/follow`,
+            data: {
+                userObj: user,
+                postUUID: postUUID
+            },
+            headers: authHeaders()
+        };
+        return axios(config);
+    },
+
     /** COURSES */
     // courses is an array of course objects
     addToCourses: function(courses) {

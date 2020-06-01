@@ -20,8 +20,6 @@ const PostCreator = ({courseId, setView, views}) => {
         })
     }
 
-
-
     return (
         <div className="post-creator">
             <Form>

@@ -48,9 +48,38 @@ const PostView = ({ currentUser, match }) => {
         })
     }, [])
 
+    // A list of all the tags to be rendered
     const tagButtons = post.tagList.map((tag)=>{
         return(<Button variant="primary" block key={tag.uuid} className="tagItem"><b>{tag.title}</b></Button>);
     });
+
+    // Toggles the following status of the post
+    const toggleFollow = () =>{
+        API.toggleFollow(currentUser, postId);
+    }
+
+    // Render corresponding button depending on the current following state;
+    let followUnfollowButton;
+    if(currentUser){
+        let followUnfollow = (
+                currentUser.followingList.includes(postId)?
+                <Dropdown.Item key="unfollow" as="button" onClick={toggleFollow}>Unfollow</Dropdown.Item>:
+                <Dropdown.Item key="follow" as="button" onClick={toggleFollow}>Follow Post</Dropdown.Item>
+        );
+        followUnfollowButton = followUnfollow;
+    }else{
+        followUnfollowButton = (<Dropdown.Item key="follow" as="button">Loading </Dropdown.Item>);
+    }
+    
+    // Render corresponding button depending on the current resolved state;
+    let resolveUnresolveButton;
+    resolveUnresolveButton = ( post.isResolved?
+        <Dropdown.Item key="resolve" as="button">Resolve</Dropdown.Item>:
+        <Dropdown.Item key="resolve" as="button">Resolve</Dropdown.Item>
+    );
+
+    console.log(currentUser);
+    // Returns the content of the page
     return (
 
         <div className="home">
@@ -76,9 +105,9 @@ const PostView = ({ currentUser, match }) => {
                                 <div className="title-button-section">
                                     <Button className="yellow-button">change.it</Button>
                                     <DropdownButton className="yellow-button" title="actions">
-                                        <Dropdown.Item key="follow" as="button">Follow Post</Dropdown.Item>
+                                        {followUnfollowButton}
                                         <Dropdown.Item key="copy-link" as="button">Copy Link</Dropdown.Item>
-                                        <Dropdown.Item key="resolve" as="button">Resolve</Dropdown.Item>
+                                        {resolveUnresolveButton}
                                     </DropdownButton>
                                 </div>
                             </div>
