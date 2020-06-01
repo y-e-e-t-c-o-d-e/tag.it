@@ -8,7 +8,8 @@
 /* The box containing the class settings */
 .box {
     width: 600px;
-    height: 600px;
+    min-height: 600px;
+    height: auto;
     border: 30px solid #A6D1DF;
     margin-top:50px; /*Should probably move this into navbar as margin-bottom*/
 }

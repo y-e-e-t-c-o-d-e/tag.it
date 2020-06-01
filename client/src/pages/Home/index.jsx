@@ -19,7 +19,7 @@ const Home = ({ currentUser, history, match }) => {
                 <Row>
                     <Col xs={2}></Col>
                     <Col xs={8}>
-                        <CoursesView currentUser={currentUser} username={displayName} />
+                        <CoursesView currentUser={currentUser} username={displayName} history={history} />
                     </Col>
                     <Col xs={2}></Col>
                 </Row>

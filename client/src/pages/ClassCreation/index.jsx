@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import logo from "../../assets/logo.png";
 import './style.css';
-import {API, createToast} from "../../utils/";
 import AutocompleteTags from '../../components/AutocompleteTags';
 import Navigation from "../../components/Navbar/index.jsx";
 import { Button } from "react-bootstrap";
+import { createToast, API } from "../../utils"
+
 
 const bgColors = {
     "default": "white",
@@ -47,6 +48,7 @@ const ClassCreation = ({ currentUser, history }) => {
                 redirectAddStaff(courseId); // might need to change depending on how backend implements the return value
             } catch (error) {
                 createToast(error);
+                console.error(error);
             }
         } else {
             if (!titleValid) { createToast("Please enter a course title"); }

@@ -3,7 +3,7 @@ import './style.css';
 import Label from '../../components/Label';
 import SuggestionTextField from '../../components/SuggestionTextField';
 import Button from '../../components/Button';
-import {API, createToast} from '../../utils';
+import { API, createToast } from '../../utils/';
 import { AuthContext } from '../../auth/Auth';
 import { useContext } from 'react';
 import NavBar from "../../components/Navbar"

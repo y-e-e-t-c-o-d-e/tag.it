@@ -2,7 +2,7 @@ import React, {useRef, useState, useEffect } from "react";
 import './style.css';
 import PostGrid from '../PostGrid/index';
 
-const QuestionList = ({ questions, courseId}) =>{
+const QuestionList = ({ questions, courseId, history }) =>{
 
     // Sorts the posts by pinned first then reverse chronological order
     const orderedPosts = questions.sort((post1, post2) =>{
@@ -20,7 +20,7 @@ const QuestionList = ({ questions, courseId}) =>{
         
         return (
             !post.isPrivate &&
-            <PostGrid title={post.title} link={link} />
+            <PostGrid title={post.title} history={history} link={link} />
         )
     })
 

@@ -1,8 +1,7 @@
 import React, {useState, useEffect } from "react";
 import Button from "../../components/Button/index";
 import './style.css';
-import API from "../../utils/API";
-import { createToast } from "../../utils";
+import { API, createToast } from "../../utils"
 
 function Invitation(props){
 

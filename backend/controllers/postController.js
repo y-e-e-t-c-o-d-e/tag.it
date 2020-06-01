@@ -1,6 +1,7 @@
 // TODO: uncomment when models are done
 const post = require("../models/Post");
 const Tag = require("../models/Tag");
+const User = require("../models/User")
 
 exports.addPost = async (req, res) => {
     // TODO: Handle later with models
@@ -38,6 +39,10 @@ exports.getPost = async (req, res) => {
     postObj.props.filledInTags = await Promise.all(postObj.getTagList().map(async tagUUID => {
         return (await Tag.getTagById(tagUUID)).props
     }))
+
+    // get author's name
+
+    postObj.props.authorName = (await User.getUserById(postObj.getAuthor())).getName();
 
     res.status(200).json(postObj.props);
 };
