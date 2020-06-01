@@ -176,8 +176,6 @@ export default {
     },
 
     inviteUserToCourse: function (courseUUID, userEmail) {
-        console.log(userEmail);
-        console.log(courseUUID);
         const config = {
             method: 'post',
             url: `${baseURL}/api/course/${courseUUID}/invite`,
@@ -210,6 +208,22 @@ export default {
             headers: authHeaders()
         };
         return axios.delete(`${baseURL}/api/course/${courseUUID}/pending/${email}`, config)
+    },
+
+    /** TAGS */
+
+    addRemoveTags: function (addedTags, removeTags, courseId) {
+        const config = {
+            method: 'post',
+            url: `${baseURL}/api/tag`,
+            headers: authHeaders(),
+            data: {
+                courseId: courseId,
+                newTags: addedTags,
+                removedTags: removeTags
+            }
+        };
+        return axios(config);
     }
 }
 

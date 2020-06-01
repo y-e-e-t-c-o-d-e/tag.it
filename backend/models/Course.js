@@ -107,8 +107,16 @@ class Course {
     }
 
     addTag = async (tagId) => {
-        this.updateCourse();
+        await this.updateCourse();
         this.props.tagList.push(tagId);
+        await this.push();
+    }
+
+    removeTag = async (tagId) => {
+        await this.updateCourse();
+        this.props.tagList.splice(
+            this.props.tagList.indexOf(tagId)
+        );
         await this.push();
     }
 
