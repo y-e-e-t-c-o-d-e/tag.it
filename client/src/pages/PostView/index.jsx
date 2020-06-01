@@ -30,10 +30,12 @@ const PostView = ({ currentUser, history }) => {
         isAnonymous: false,
         score: 12,
         isInstructor: false,
+        filledInTags: []
     })
 
     useEffect(() => {
         API.getPost(postId).then((response) => {
+            console.log(response.data)
             setPost(response.data)
         }).catch(err => {
             createToast("an error occurred")
@@ -49,8 +51,8 @@ const PostView = ({ currentUser, history }) => {
     }, [])
 
     // A list of all the tags to be rendered
-    const tagButtons = post.tagList.map((tag) => {
-        return (<Button variant="primary" block key={tag.uuid} className="tagListItem"><b>{tag}</b></Button>);
+    const tagButtons = post.filledInTags.map((tag)=>{
+        return(<Button variant="primary" block key={tag.uuid} className="tagListItem"><b>{tag.name}</b></Button>);
     });
 
     // Toggles the following status of the post

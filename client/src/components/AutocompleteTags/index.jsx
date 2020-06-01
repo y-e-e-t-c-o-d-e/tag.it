@@ -32,6 +32,7 @@ const AutocompleteTags = ({initialTags, onChange, setAddedTags, setDeletedTags})
         setTags(newTags);
         setDeleted(deleted.concat(tag))
         setDeletedTags(deleted.concat(tag))
+        onChange(newTags)
     }
 
     const handleAddition = (tag) => {
@@ -39,6 +40,7 @@ const AutocompleteTags = ({initialTags, onChange, setAddedTags, setDeletedTags})
         setTags(newTags);
         setAdded(added.concat(tag))
         setAddedTags(added.concat(tag))
+        onChange(newTags)
     }
 
     return (

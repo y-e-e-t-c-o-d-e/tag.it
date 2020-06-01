@@ -35,6 +35,7 @@ exports.getPost = async (req, res) => {
         return;
     };
 
+    console.log('time to shine')
     const postObj = await post.getPostById(postUUID)
     postObj.props.filledInTags = await Promise.all(postObj.getTagList().map(async tagUUID => {
         return (await Tag.getTagById(tagUUID)).props

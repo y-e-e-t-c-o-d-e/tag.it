@@ -84,7 +84,6 @@ class Post {
     }
 
     getTagList() {
-        console.log(this.props)
         if (this.props.tagList[0] == "dummy_tag") {
             return this.props.tagList.slice(1, this.props.tagList.length);
         }
@@ -319,14 +318,10 @@ module.exports.pushPostToFirebase = (updateParams) => {
                 course: updateParams["course"]
             });
             const currentPost = await getPostById((await postRef).key);
+            console.log(currentPost)
             const course = await (Course.getCourseById(updateParams["course"]));
             await (course.addPost(currentPost.props.uuid));
 
-            // Iterates through all tags in tagList and add this post to those tags
-            const tagList = updateParams["tagList"] ? updateParams["tagList"] : [];
-            for (let tag of tagList) {
-                await currentPost.addTag(tag.uuid);
-            }
             resolve((await postRef).key);
         } catch(e) {
             console.log("There was an error: " + e);
