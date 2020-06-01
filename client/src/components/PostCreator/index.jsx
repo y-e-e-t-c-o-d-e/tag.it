@@ -24,8 +24,8 @@ const PostCreator = ({tags, courseId, setView, views}) => {
             createToast("make a longer post!")
             return;
         }
-        const tagsToAdd = Array.from(addedTags).map(tag => tag.uuid)
-        console.log(tagsToAdd)
+        
+        const tagsToAdd = Array.from(selectedTags).map(tag => tag.uuid)
         API.createPost(questionTitle, questionContent, courseId, tagsToAdd).then((response) => {
             createToast(response.data)
             setView(views.questions)
@@ -46,7 +46,15 @@ const PostCreator = ({tags, courseId, setView, views}) => {
             </Form>
             
             <div className="post-buttons">
-            <AutocompleteTags initialTags={[]} givenSuggestions={tags} setAddedTags={(tags)=>{
+            <AutocompleteTags validator={(tag) => {
+                let valid = false
+                for (const courseTag of tags) {
+                    if (tag.name === courseTag.name) {
+                        valid = true
+                    }
+                }
+                return valid
+            }} initialTags={[]} givenSuggestions={tags} setAddedTags={(tags)=>{
                                 
                             }} setDeletedTags={(tags)=>{
                                 
@@ -64,9 +72,6 @@ const PostCreator = ({tags, courseId, setView, views}) => {
                             <Dropdown.Item as="button" onClick={() => { setVisiblity("public, anonymous")}} >public, anonymous</Dropdown.Item>
                             <Dropdown.Item as="button" onClick={() => { setVisiblity("private")}} >private</Dropdown.Item>
                         </DropdownButton>
-                    </Col>
-                    <Col>
-                        
                     </Col>
                     <Col>
                         <Button id="create-button" onClick={createPost}>create.it</Button>
