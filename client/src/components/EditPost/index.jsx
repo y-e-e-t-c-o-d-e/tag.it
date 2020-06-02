@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { Form, Button } from "react-bootstrap";
-import { API, MarkdownEditor } from '../../utils';
+import { Button, Form } from "react-bootstrap";
+import MarkdownEditor from "../MarkdownEditor"
+import { API } from '../../utils';
 import './style.css';
 
 // TODO: Grab text from backend route & set better styling. Add Submit Button. Add HTML parsing.

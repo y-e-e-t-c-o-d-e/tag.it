@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import './style.css';
 import { Button, ListGroup, Row, Col } from "react-bootstrap";
+import './style.css';
 
 const TagList = ({ tags, filters, setFilters }) => {
     const [search, setSearch] = useState(""); // default to no search input
@@ -31,7 +31,6 @@ const TagList = ({ tags, filters, setFilters }) => {
                                 selectedTags.add(tag);
                             }
                             setFilters({...filters, tags: Array.from(selectedTags)})
-                            console.log(selectedTags)
                         }}><b>{tag.name}</b></Button>
                     })
                 }

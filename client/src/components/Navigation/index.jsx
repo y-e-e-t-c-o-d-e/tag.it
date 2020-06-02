@@ -1,12 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Nav, Navbar, NavDropdown, Breadcrumb } from "react-bootstrap";
+import React, { useState } from 'react';
 import { useParams } from "react-router-dom"
-import { AuthContext } from "../../auth/Auth";
-import './style.css';
-import logo from '../../assets/logo.png'
+import { Breadcrumb, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import db from "../../base"
-import API from "../../utils/API"
 import { courseToLink } from '../../utils';
+import logo from '../../assets/logo.png'
+import './style.css';
 
 const loginRender = (history) => (
     <Navbar expand="lg" inverse fluid>

@@ -1,8 +1,7 @@
 import React, {useState, useEffect } from "react";
-import Button from "../../components/Button/index";
-import './style.css';
+import { Button, Navigation } from "../../components";
 import { API, createToast } from "../../utils"
-import Navigation from "../../components/Navbar";
+import './style.css';
 
 function Invitation(props){
 

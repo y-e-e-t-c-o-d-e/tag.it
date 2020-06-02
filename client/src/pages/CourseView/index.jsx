@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom"
-import './style.css';
-import db from "../../base";
-import Navigation from "../../components/Navbar";
-import TagList from "../../components/TagList/index.jsx";
-import { Row, Col, Nav, Button } from 'react-bootstrap';
-import CoursesView from '../../components/CoursesView/index.jsx';
-import QuestionList from "../../components/QuestionList"
-import PostCreator from "../../components/PostCreator"
+import { useParams } from "react-router-dom";
+import { Row, Col, Button } from 'react-bootstrap';
+import { Navigation, TagList, QuestionList, PostCreator } from "../../components";
 import { API } from '../../utils';
+import './style.css';
 
 const states = {
     questions: "questions",
@@ -28,7 +23,6 @@ const CourseView = ({currentUser, history }) => {
 
     useEffect(() => {
         API.getCourse(courseId).then(response => {
-            console.log(response.data)
             setCourse(response.data)
 
             setTags(response.data.tagList.map(tag => {
@@ -38,7 +32,7 @@ const CourseView = ({currentUser, history }) => {
         }).catch(err => {
             setCourse({name: "Error", postList: [], uuid: err})
         })
-    }, [view])
+    }, [view, window.location.href])
 
     
     let action;

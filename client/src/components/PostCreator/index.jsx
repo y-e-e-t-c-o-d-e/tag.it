@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import './style.css';
 import { Dropdown, DropdownButton, Button, Form, Row, Col } from 'react-bootstrap';
 import PostEditor from "../PostEditor";
 import AutocompleteTags from "../AutocompleteTags"
 import { API, createToast} from '../../utils';
+import './style.css';
 
 const PostCreator = ({tags, courseId, setView, views}) => {
     // const [tags, setTags] = useState([{name: "sample tag", uuid: "jlkd8f2348"}]); // all possible tags

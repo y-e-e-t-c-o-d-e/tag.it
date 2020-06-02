@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import logo from "../../assets/logo.png";
-import './style.css';
-import AutocompleteTags from '../../components/AutocompleteTags';
-import Navigation from "../../components/Navbar/index.jsx";
 import { Button } from "react-bootstrap";
-import { createToast, API } from "../../utils"
+import { AutocompleteTags, Navigation } from "../../components"
+import { API, createToast } from "../../utils"
+import './style.css';
 
 
 const bgColors = {
@@ -40,10 +38,8 @@ const ClassCreation = ({ currentUser, history }) => {
         if (titleValid && descValid) {
             const { title, description, term } = event.target.elements;
             const tags = selectedTags.tags;
-            console.log(selectedTags)
             /* try to create a course in database */
             try {
-                console.log(selectedTags)
                 const courseId = (await API.createCourse(title.value, term.value, description.value)).data;
                 redirectAddStaff(courseId); // might need to change depending on how backend implements the return value
             } catch (error) {
@@ -147,7 +143,6 @@ const ClassCreation = ({ currentUser, history }) => {
                             }} setDeletedTags={(tags)=>{
                                 
                             }} onChange={(tags) => {
-                                console.log(tags)
                                 setSelectedTags(tags)
                             }} />
                         </div>
