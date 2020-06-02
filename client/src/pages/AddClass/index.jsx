@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './style.css';
-import Label from '../../components/Label';
-import SuggestionTextField from '../../components/SuggestionTextField';
 import {Button} from 'react-bootstrap';
+import { Label, SuggestionTextField, Navigation } from "../../components"
 import {API, createToast} from '../../utils/';
-import { AuthContext } from '../../auth/Auth';
-import { useContext } from 'react';
-import NavBar from "../../components/Navbar"
+import './style.css';
 
 const AddClass = ({history, currentUser}) => {
     const [selectedClasses, setSelectedClasses] = useState(["", "", "", "", ""]);
@@ -76,7 +72,7 @@ const AddClass = ({history, currentUser}) => {
 
     return (
         <>
-            <NavBar history={history} currentUser={currentUser}/>
+            <Navigation history={history} currentUser={currentUser}/>
             <div className="addClassPage">
                 <div className="left-section"> 
                     <h1>Add a Class</h1>

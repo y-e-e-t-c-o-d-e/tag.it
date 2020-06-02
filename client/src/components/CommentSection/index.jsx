@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import "./style.css";
-
-import Comment from "./Comment/index.jsx";
-import API from "../../utils/API.js";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
-import { createToast } from '../../utils';
+import Comment from "./Comment/";
+import { API, createToast } from '../../utils';
+import "./style.css";
 
 // Post.commentList and Post.uuid should be passed in
 const CommentSection = ({ commentList, postId }) => {

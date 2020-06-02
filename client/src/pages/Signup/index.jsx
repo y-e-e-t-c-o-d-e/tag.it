@@ -1,10 +1,10 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import db from "../../base";
-import './style.css';
 import logo from '../../assets/logo.png';
-import NavBar from "../../components/Navbar";
+import { Navigation } from "../../components";
+import db from "../../base";
 import { API, createToast } from "../../utils"
+import './style.css';
 
 const bgColors = {
     "default": "white",
@@ -112,7 +112,7 @@ const SignUp = ({ history }) => {
 
     return (
         <div>
-            <NavBar  history={history} />
+            <Navigation history={history} />
             <div className="centered">
                 <div className="contents">
                     {/* The tag.it logo*/}

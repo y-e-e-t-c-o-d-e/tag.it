@@ -1,6 +1,6 @@
-import React, {useRef, useState, useEffect } from "react";
+import React from "react";
+import PostGrid from '../PostGrid';
 import './style.css';
-import PostGrid from '../PostGrid/index';
 
 const QuestionList = ({ questions, courseId, history, filters }) =>{
 
