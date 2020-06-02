@@ -54,7 +54,6 @@ class Post {
         while(!this.equalTo(other)) {
             this.props = other.props;
             other = await getPostById(this.props.uuid);
-            console.log('inf');
         }
     }
 
@@ -316,7 +315,6 @@ module.exports.pushPostToFirebase = (updateParams) => {
                 course: updateParams["course"]
             });
             const currentPost = await getPostById((await postRef).key);
-            console.log(currentPost)
             const course = await (Course.getCourseById(updateParams["course"]));
             await (course.addPost(currentPost.props.uuid));
 

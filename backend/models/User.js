@@ -221,7 +221,6 @@ class User {
         
     addLikedPost = async (postId) => {
         await this.updateUser();
-<<<<<<< HEAD
         const index = this.props.likedPostList.indexOf(postId);
         if (index == -1) {
             this.props.likedPostList.push(postId);
@@ -229,12 +228,6 @@ class User {
             await postObj.incrementScore();
             await this.push();
         }
-=======
-        this.props.likedPostList.push(postId);
-        let postObj = await post.getPostById(postId);
-        await postObj.incrementScore();
-        await this.push();
->>>>>>> Implemented Score Likes for Posts & Comments (#120)
     }
 
     removeLikedPost = async (postId) => {
