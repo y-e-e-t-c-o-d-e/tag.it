@@ -79,7 +79,6 @@ describe('comment', () => {
     })
 
     it('should increment testComment score', async () => {
-        //console.log(testComment.props.name);
         await testComment.incrementScore();
         const t1 = await getCommentById(testComment.getUUID());
         expect(t1.getScore()).to.equal(1);
