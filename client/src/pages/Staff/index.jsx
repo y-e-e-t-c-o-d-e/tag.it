@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import logo from "../../assets/logo.png";
-import './style.css';
-import {API, createToast} from "../../utils";
-import Navigation from "../../components/Navbar/index.jsx";
 import { Button } from "react-bootstrap";
+import { Navigation } from "../../components";
+import {API, createToast} from "../../utils";
+import './style.css';
 
 const Staff = ({ history, match, currentUser }) => {
 

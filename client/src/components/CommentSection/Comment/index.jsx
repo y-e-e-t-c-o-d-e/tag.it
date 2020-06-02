@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import "./style.css";
-
-import API from "../../../utils/API.js";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
-import { createToast } from '../../../utils';
+import { API, createToast } from '../../../utils';
+import "./style.css";
 
 /* recursive functional component for comments */
 const Comment = ({ comment, postId, refresh, isTopLevel }) => {

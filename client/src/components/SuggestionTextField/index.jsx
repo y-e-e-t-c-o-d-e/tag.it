@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import "./style.css";
 import AutoSuggest from 'react-autosuggest';
 import ClassUtil from './ClassUtil';
+import "./style.css";
 
 // Add new UTIL files here when needed
 const utilMap = {

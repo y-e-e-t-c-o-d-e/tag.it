@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Jumbotron, Row, Col } from "react-bootstrap";
-import { API, courseToLink } from "../../utils"
+import React, { useState } from 'react'
+import { Button, Jumbotron } from "react-bootstrap";
+import { courseToLink } from "../../utils"
 import './style.css';
 
 const CoursesView = ({currentUser, username, history }) => {

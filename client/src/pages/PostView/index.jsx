@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom"
+import { Row, Col, Button, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Navigation, TagList, CommentSection, EditPost, MarkdownEditor } from "../../components";
+import { API, createToast } from '../../utils';
 import './style.css';
-import db from "../../base";
-import Navigation from "../../components/Navbar";
-import TagList from "../../components/TagList/index.jsx";
-import { Container, Row, Col, Nav, Button, Dropdown, DropdownButton } from 'react-bootstrap';
-import CoursesView from '../../components/CoursesView/index.jsx';
-import CommentSection from "../../components/CommentSection"
-import PostCreator from "../../components/PostCreator"
-import { API, createToast, MarkdownEditor } from '../../utils';
-import PostEditor from '../../components/PostEditor/index';
-import EditPost from '../../components/EditPost/index';
 
 const PostView = ({ currentUser, history }) => {
     const { postId, courseId } = useParams();

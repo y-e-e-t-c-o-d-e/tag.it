@@ -1,11 +1,9 @@
 import React, {useRef, useState, useEffect } from "react";
-import {Button} from 'react-bootstrap';
-import Navigation from "../../components/Navbar"
-import './style.css';
-import API from "../../utils/API";
 import { useParams } from "react-router-dom";
-import AutocompleteTags from "../../components/AutocompleteTags";
-import { createToast } from "../../utils";
+import { Button } from 'react-bootstrap';
+import { Navigation, AutocompleteTags } from "../../components"
+import { API, createToast } from "../../utils";
+import './style.css';
 
 const bgColors = {
     "default": "white",
@@ -43,7 +41,6 @@ const ClassSettings = ({ currentUser, history }) => {
 
     useEffect(() => {
         API.getCourse(courseId).then((response) => {
-            console.log(response.data)
             setCourse(response.data)
             setCourseName(response.data.name)
             setTags(response.data.tagList)
@@ -67,8 +64,6 @@ const ClassSettings = ({ currentUser, history }) => {
         }
 
         // set tags
-        console.log(addedTags)
-        console.log(deletedTags)
         const addedSet = new Set(addedTags.map(tag => tag.name))
         const deletedSet = new Set(deletedTags.map(tag => tag.name))
         
@@ -76,11 +71,6 @@ const ClassSettings = ({ currentUser, history }) => {
         const deleted = deletedTags.filter(tag => {
             return !addedSet.has(tag.name) && tag.uuid
         }).map(tag => tag.uuid)
-
-        console.log("added tags")
-        console.log(added)
-        console.log("deleted tags")
-        console.log(deleted)
 
         API.addRemoveTags(added, deleted, courseId).then(() => {
             createToast("success!")
