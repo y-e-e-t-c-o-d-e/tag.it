@@ -55,7 +55,8 @@ class Course {
         return this.props.term;
     }
 
-    getInstructorList() {
+    getInstructorList = async () => {
+        await this.updateCourse();
         return this.props.instructorList.slice(1, this.props.instructorList.length);
     }
 
@@ -67,7 +68,8 @@ class Course {
         return this.props.tagList.slice(1, this.props.tagList.length);
     }
 
-    getStudentList() {
+    getStudentList = async () => {
+        await this.updateCourse();
         return this.props.studentList.slice(1, this.props.studentList.length);
     }
 
@@ -87,7 +89,8 @@ class Course {
         return this.props.instructorInviteId;
     }
 
-    getPendingInstructorList() {
+    getPendingInstructorList = async () => {
+        await this.updateCourse();
         return this.props.pendingInstructorList.slice(1, this.props.pendingInstructorList.length);
     }
 
@@ -132,11 +135,13 @@ class Course {
 
     addInstructor = async (userId, userEmail = null) => {
         this.updateCourse();
-        this.props.instructorList.push(userId);
+        if (this.props.instructorList.indexOf(userId) < 0) {
+            this.props.instructorList.push(userId);
 
-        // Checks if instructor is in pendingInstructorList and removes if so
-        while (this.props.pendingInstructorList.indexOf(userEmail) >= 0) {
-            this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
+            // Checks if instructor is in pendingInstructorList and removes if so
+            while (this.props.pendingInstructorList.indexOf(userEmail) >= 0) {
+                this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
+            }
         }
 
         await this.push();
@@ -176,17 +181,12 @@ class Course {
     
     removeInstructor = async (userId) => {
         this.updateCourse();
-        if (this.props.instructorList.indexOf(userId) >= 0) {
+
+        if (this.props.instructorList.indexOf(userId) >= 0) {      
             this.props.instructorList.splice(this.props.instructorList.indexOf(userId), 1);
-
-            const userObj = await User.getUserById(userId);
-            await userObj.removeInstructorCourse(userId);
-
-            // while (this.props.pendingInstructorList.indexOf(userObj.getEmail()) >= 0) {
-            //     this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
-            // }
-
             await this.push();
+            const userObj = await User.getUserById(userId);
+            await userObj.removeInstructorCourse(this.props.uuid);
         }
     }
 
@@ -197,7 +197,7 @@ class Course {
             await this.push();
 
             const userObj = await User.getUserById(userId);
-            await userObj.removeStudentCourse(userId);
+            await userObj.removeStudentCourse(this.props.uuid);
         }
     }
 
@@ -366,20 +366,6 @@ getCourseById = async (uuid) => {
             reject(errorObject);
         })
     }) 
-
-
-    /**
-     * This is for reference to the callback but, we're using promises now.
-     */
-
-    // // Attach an asynchronous callback to read the data at our posts reference
-    // await ref.once("value", function(snapshot) {
-    //     const r = new User(snapshot.val());
-    //     console.log(r.props.name);
-    //     callback(r);
-    // }, function (errorObject) {
-    //     console.log("The read failed: " + errorObject.code);
-    // })
 }
 
 deleteCourseById = async (uuid) => {

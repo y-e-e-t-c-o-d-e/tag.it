@@ -272,7 +272,7 @@ deleteCommentById = async (uuid) => {
     // if comment has children
     const currentComment = await this.getCommentById(uuid);
 
-    currentComment.getChildList().forEach(subUUID => {
+    await currentComment.getChildList().forEach(async subUUID => {
         await this.deleteCommentById(subUUID);
     })
 

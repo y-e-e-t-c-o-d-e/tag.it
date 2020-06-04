@@ -364,7 +364,7 @@ deletePostById = async (uuid) => {
     const currentPost = await this.getPostById(uuid);
     const currentUser = await user.getUserById(currentPost.getAuthor());
     const currentCourse = await course.getCourseById(currentPost.getCourse());
-    currentPost.getCommentList().forEach(commentUUID => {
+    await currentPost.getCommentList().forEach(async commentUUID => {
         await comment.deleteCommentById(commentUUID);
     });
     await currentUser.removePost(uuid);

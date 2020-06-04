@@ -49,47 +49,6 @@ class User {
         }
     }
 
-    /**
-     * Update a given user's data fields.
-     * 
-     * @param updateParams - Object consisting of keys & values that will be updated for the user
-     */
-    // setName = async (name) => {
-    //     this.props.name = name;
-    // }
-    
-    // removeStudentCourse = async (courseId) => {
-    //     await this.updateUser();
-    //     const index = this.props.studentCourseList.indexOf(courseId);
-    //     if (index != -1) {
-    //         this.props.studentCourseList.splice(index, 1);
-    //     }
-    //     await this.push();
-    // }
-
-
-    // addInstructorCourse = async (courseId) => {
-    //     await this.updateUser();
-    //     // Avoid adding duplicates
-    //     if (this.props.instructorCourseList.indexOf(courseId) < 0) {
-    //         this.props.instructorCourseList.push(courseId);
-    //         const currentCourse = await course.getCourseById(courseId);
-    //         await currentCourse.addInstructor(this.props.uuid, this.props.email);
-    //         await this.push();
-    //     } else {
-    //         throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
-    //     }
-    // }
-
-    // removeInstructorCourse = async (courseId) => {
-    //     await this.updateUser();
-    //     const index = this.props.instructorCourseList.indexOf(courseId);
-    //     if (index != -1) {
-    //         this.props.instructorCourseList.splice(index, 1);
-    //     }
-    //     await this.push();
-    // }
-
     setEmail = async (email) => {
         this.props.email = email;
         await this.push();
@@ -99,7 +58,7 @@ class User {
     updateStudentCourses = async () => {
         let user = await getUserById(this.props.uuid);
         while(!this.arraysEqual(this.props.studentCourseList, user.props.studentCourseList)) {
-            this.props.studentCourseList = tag.props.studentCourseList;
+            this.props.studentCourseList = user.props.studentCourseList;
             user = await getUserById(this.props.uuid);
         }
     }
@@ -113,8 +72,6 @@ class User {
             await currentCourse.addStudent(this.props.uuid);
             await this.push();
         } else {
-            // I don't know if this should throw an error, unless we want frontend to catch it.
-            // I think it should just return failure
             throw new InternalServerError(`Student Course ${courseId} already exists.`);
         }
         
@@ -123,7 +80,7 @@ class User {
     updateInstructorCourses = async () => {
         let user = await getUserById(this.props.uuid);
         while(!this.arraysEqual(this.props.instructorCourseList, user.props.instructorCourseList)) {
-            this.props.instructorCourseList = tag.props.instructorCourseList;
+            this.props.instructorCourseList = user.props.instructorCourseList;
             user = await getUserById(this.props.uuid);
         }
     }
@@ -133,6 +90,8 @@ class User {
         // Avoid adding duplicates
         if (this.props.instructorCourseList.indexOf(courseId) < 0) {
             this.props.instructorCourseList.push(courseId);
+            const currentCourse = await course.getCourseById(courseId);
+            await currentCourse.addInstructor(this.props.uuid, this.props.email);
             await this.push();
         } else {
             throw new InternalServerError(`Instructor Course ${courseId} already exists.`);
@@ -146,11 +105,11 @@ class User {
             this.props.instructorCourseList.splice(this.props.instructorCourseList.indexOf(courseId), 1);
             await this.push();
         }
+        await this.updateInstructorCourses();
     }
 
     removeStudentCourse = async (courseId) => {
         await this.updateStudentCourses();
-        
         if (this.props.studentCourseList.indexOf(courseId) >= 0) {
             this.props.studentCourseList.splice(this.props.studentCourseList.indexOf(courseId), 1);
             await this.push();
@@ -297,11 +256,13 @@ class User {
         return this.props.uuid;
     }
 
-    getStudentCourseList() {
+    getStudentCourseList = async () => {
+        await this.updateStudentCourses();
         return this.props.studentCourseList.slice(1, this.props.studentCourseList.length);
     }
 
-    getInstructorCourseList() {
+    getInstructorCourseList = async () => {
+        await this.updateInstructorCourses();
         return this.props.instructorCourseList.slice(1, this.props.instructorCourseList.length);
     }
 
