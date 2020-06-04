@@ -109,6 +109,7 @@ describe('shared', () => {
         courseList = await courseObj1.getStudentList();
         expect(courseList.length).to.equal(0);
         expect(userList.length).to.equal(0);
+        expect(1).to.equal(1);
 
     })
 
