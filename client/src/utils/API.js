@@ -231,6 +231,20 @@ export default {
         return axios.delete(`${baseURL}/api/course/${courseUUID}/pending/${email}`, config)
     },
 
+    // Use for changing post contents, resolving post, and pinning post
+    editPost: function(postUUID, content, isResolved, isPinned) {
+        const config = {
+            method: 'put',
+            headers: authHeaders(),
+            url: `${baseURL}/api/post?postUUID=${postUUID}`,
+            data: {
+                content: content,
+                isResolved: isResolved,
+                isPinned: isPinned
+            }
+        };
+        return axios(config);
+    },
     /** TAGS */
 
     addRemoveTags: function (addedTags, removeTags, courseId) {
@@ -242,20 +256,6 @@ export default {
                 courseId: courseId,
                 newTags: addedTags,
                 removedTags: removeTags
-            }
-        };
-        return axios(config);
-    },
-    // Use for changing post contents, resolving post, and pinning post
-    editPost: function(postUUID, content, isResolved, isPinned) {
-        const config = {
-            method: 'put',
-            headers: authHeaders(),
-            url: `${baseURL}/api/post?postUUID=${postUUID}`,
-            data: {
-                content: content,
-                isResolved: isResolved,
-                isPinned: isPinned
             }
         };
         return axios(config);

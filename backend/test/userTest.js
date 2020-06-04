@@ -173,5 +173,3 @@ describe('user', () => {
 
 });
 */
-
-// gotta make sure all the posts and comments and courses are real

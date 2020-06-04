@@ -46,6 +46,12 @@ const PostView = ({ currentUser, history }) => {
         })
     }, [])
 
+    useEffect(() => {
+        if (currentUser) {
+            setPostLike(currentUser.likedPostList.includes(postId))
+        }
+    }, [currentUser])
+
     // A list of all the tags to be rendered
     const tagButtons = post.filledInTags.map((tag)=>{
         return(<Button variant="primary" block key={tag.uuid} className="tagListItem"><b>{tag.name}</b></Button>);
@@ -69,6 +75,10 @@ const PostView = ({ currentUser, history }) => {
         followUnfollowButton = (<Dropdown.Item key="follow" as="button">Loading </Dropdown.Item>);
     }
 
+<<<<<<< HEAD
+=======
+    
+>>>>>>> origin
     // Copy link on click of the copy button
     const copyLink = () => {
         let link = `tagdotit.netlify.com/course/${courseId}/post/${postId}`;
@@ -152,7 +162,7 @@ const PostView = ({ currentUser, history }) => {
                     <div className="like-discuss">
                         
                         <div className="likes"> {post.score} </div>
-                        {likeUnlikePostButton}
+                        {renderPostLiked()}
                         <br/>
                     </div>
             </div>
@@ -169,14 +179,6 @@ const PostView = ({ currentUser, history }) => {
 
     // The content to be shown depending on if we are editing
     let content = editing? editor:postViewer;
-    // discuss.it functionalities
-    const [discussing, setDiscussing] = useState(false);
-    const toggleDiscussing = () => {
-        setDiscussing(!discussing);
-    }
-    let discussText = (discussing ? "cancel" : "discuss.it");
-
-
 
     // Returns the content of the page
     return (
@@ -190,6 +192,7 @@ const PostView = ({ currentUser, history }) => {
                         <TagList tags={tags} />
                     </Col>
                     <Col>
+<<<<<<< HEAD
 
                         <div className="post-viewer">
                             {/* Section with post title and change / actions */}
@@ -233,6 +236,9 @@ const PostView = ({ currentUser, history }) => {
                             <CommentSection commentList={post.commentList} postId={postId} />
 
                         </div>
+=======
+                        {content}
+>>>>>>> origin
                     </Col>
                 </Row>
             </div>

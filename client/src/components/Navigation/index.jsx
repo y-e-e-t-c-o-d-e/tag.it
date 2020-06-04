@@ -85,7 +85,7 @@ const regularRender = (studentCourses, instructorCourses, courseId, postId, hist
                             <NavDropdown.Item onClick={() => {history.push(`/add`)}}>Add a Course</NavDropdown.Item>
                         </NavDropdown>
 
-                        { courseId && 
+                        { courseId && instructorCourses.map(course => course.uuid).includes(courseId) &&
                             <Nav.Link onClick={() => {history.push(`/courses/${courseId}/settings`)}}>settings</Nav.Link>
                         }
                         <Nav.Link onClick={() => {history.push(`/create-course`)}}>create course</Nav.Link>
