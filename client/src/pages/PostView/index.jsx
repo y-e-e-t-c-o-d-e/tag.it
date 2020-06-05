@@ -75,10 +75,7 @@ const PostView = ({ currentUser, history }) => {
         followUnfollowButton = (<Dropdown.Item key="follow" as="button">Loading </Dropdown.Item>);
     }
 
-<<<<<<< HEAD
-=======
     
->>>>>>> origin
     // Copy link on click of the copy button
     const copyLink = () => {
         let link = `tagdotit.netlify.com/course/${courseId}/post/${postId}`;
@@ -192,53 +189,7 @@ const PostView = ({ currentUser, history }) => {
                         <TagList tags={tags} />
                     </Col>
                     <Col>
-<<<<<<< HEAD
-
-                        <div className="post-viewer">
-                            {/* Section with post title and change / actions */}
-                            <div className="post-title-section">
-                                <Row>
-                                    <Col xs={8}>
-                                        <div className="post-title-view">
-                                            {post.title}
-                                        </div>
-                                    </Col>
-                                </Row>
-                                <div className="title-button-section">
-                                    <Button className="yellow-button">change.it</Button>
-                                    <DropdownButton className="yellow-button" title="actions">
-                                        {followUnfollowButton}
-                                        <Dropdown.Item key="copy-link" as="button" onClick={copyLink}>Copy Link</Dropdown.Item>
-                                        {resolveUnresolveButton}
-                                    </DropdownButton>
-                                </div>
-                            </div>
-
-                            {/* Post content with footer saying posted by */}
-                            <div className="post-content-section">
-                                <MarkdownEditor className="post-content-view" source={post.content} />
-                                <div className="posted-by">Posted by: {post.authorName}</div>
-                            </div>
-
-                            {/* Like / discuss/ tags */}
-                            <span>Tags:</span>
-                            <div className="tagButtons">
-                                {tagButtons}
-                            </div>
-                            <div className="post-view-buttons">
-                                <div className="like-discuss">
-
-                                    <div className="likes"> {post.score} </div>
-                                    {renderPostLiked()}
-                                    <br />
-                                </div>
-                            </div>
-                            <CommentSection commentList={post.commentList} postId={postId} />
-
-                        </div>
-=======
                         {content}
->>>>>>> origin
                     </Col>
                 </Row>
             </div>
