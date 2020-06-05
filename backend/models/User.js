@@ -1,9 +1,9 @@
-const post = require("./Post");
-const tag = require("./Tag");
-const course = require("./Course")
+const Post = require("./Post");
+const Tag = require("./Tag");
+const Course = require("./Course")
 const { db } = require("../shared/firebase");
 const { InternalServerError } = require("../shared/error");
-const comment = require("./Comment");
+const Comment = require("./Comment");
 
 class User {
     constructor(props) {
@@ -68,7 +68,7 @@ class User {
         // Avoid adding duplicates
         if (this.props.studentCourseList.indexOf(courseId) < 0) {
             this.props.studentCourseList.push(courseId);
-            const currentCourse = await course.getCourseById(courseId);
+            const currentCourse = await Course.getCourseById(courseId);
             await currentCourse.addStudent(this.props.uuid);
             await this.push();
         } else {
@@ -90,7 +90,7 @@ class User {
         // Avoid adding duplicates
         if (this.props.instructorCourseList.indexOf(courseId) < 0) {
             this.props.instructorCourseList.push(courseId);
-            const currentCourse = await course.getCourseById(courseId);
+            const currentCourse = await Course.getCourseById(courseId);
             await currentCourse.addInstructor(this.props.uuid, this.props.email);
             await this.push();
         } else {
@@ -134,7 +134,6 @@ class User {
         await this.updateUser();
         const index = this.props.postList.indexOf(postId);
         if (index != -1) {
-            // await post.deletePostById(postId);
             this.props.postList.splice(index, 1);
         }
         await this.push();
@@ -150,7 +149,6 @@ class User {
         await this.updateUser();
         const index = this.props.commentList.indexOf(commentId);
         if (index != -1) {
-            // await comment.deleteCommentById(commentId);
             this.props.commentList.splice(index, 1);
         }
         await this.push();
@@ -161,7 +159,7 @@ class User {
         const index = this.props.followingList.indexOf(postId);
         if (index == -1) {
             this.props.followingList.push(postId);
-            const currentPost = await post.getPostById(postId);
+            const currentPost = await Post.getPostById(postId);
             await currentPost.addFollower(this.props.uuid);
             await this.push();
         }
@@ -171,7 +169,7 @@ class User {
         await this.updateUser();
         const index = this.props.followingList.indexOf(postId);
         if (index != -1) {
-            const currentPost = await post.getPostById(postId);
+            const currentPost = await Post.getPostById(postId);
             await currentPost.removeFollower(this.props.uuid);
             this.props.followingList.splice(index, 1);
         }
@@ -183,7 +181,7 @@ class User {
         const index = this.props.likedPostList.indexOf(postId);
         if (index == -1) {
             this.props.likedPostList.push(postId);
-            let postObj = await post.getPostById(postId);
+            let postObj = await Post.getPostById(postId);
             await postObj.incrementScore();
             await this.push();
         }
@@ -194,7 +192,7 @@ class User {
         const index = this.props.likedPostList.indexOf(postId);
         if (index != -1) {
             this.props.likedPostList.splice(this.props.likedPostList.indexOf(postId), 1);
-            let postObj = await post.getPostById(postId);
+            let postObj = await Post.getPostById(postId);
             await postObj.decrementScore();
             await this.push();
         }
@@ -205,7 +203,7 @@ class User {
         const index = this.props.likedCommentList.indexOf(commentId);
         if (index == -1) {
             this.props.likedCommentList.push(commentId);
-            let commentObj = await comment.getCommentById(commentId);
+            let commentObj = await Comment.getCommentById(commentId);
             await commentObj.incrementScore();
             await this.push();
         }
@@ -216,7 +214,7 @@ class User {
         const index = this.props.likedCommentList.indexOf(commentId);
         if (index == -1) {
             this.props.likedCommentList.splice(this.props.likedCommentList.indexOf(commentId), 1);
-            let commentObj = await comment.getCommentById(commentId);
+            let commentObj = await Comment.getCommentById(commentId);
             await commentObj.decrementScore();
             await this.push();
         }
@@ -347,9 +345,7 @@ module.exports.pushUserToFirebase = (updateParams) => {
 
 
 getUserById = async (uuid) => {
-    const ref = db.ref('Users/' + uuid);
-
-
+    const ref = db.ref(`Users/${uuid}`);
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
             const r = new User(snapshot.val());
@@ -362,7 +358,7 @@ getUserById = async (uuid) => {
 
 
 deleteUserById = async (uuid) => {
-    const ref = db.ref('Users/'+uuid);
+    const ref = db.ref(`Users/${uuid}`);
     try{
         const result = await ref.remove();
         return true;

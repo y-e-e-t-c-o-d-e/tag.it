@@ -1,8 +1,7 @@
  
 // Install these dependencies before you run
-const user = require("./User");
-const post = require("./Post");
-const course = require("./Course");
+const Post = require("./Post");
+const Course = require("./Course");
 const db = require("../shared/firebase").db;
  
  
@@ -176,26 +175,26 @@ class Tag {
 module.exports.pushTagToFirebase = (updateParams) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const tagRef = db.ref("Tags").push();
+            const tagRef = await db.ref("Tags").push();
             await tagRef.set({
                 name: updateParams["name"], 
                 numUsed: "postList" in updateParams ? updateParams["postList"].length : 0,
                 parentTag: "parentTag" in updateParams ? updateParams["parentTag"] : "dummy_parent", 
-                uuid: (await tagRef).key,
+                uuid: tagRef.key,
                 subTags: "subTags" in updateParams ? updateParams["subTags"] : ["dummy_tag"],
                 course: updateParams["course"],
                 postList: "postList" in updateParams ? updateParams["postList"] : ["dummy_post"],
             });
-            const courseObj = await course.getCourseById(updateParams["course"]);
-            await courseObj.addTag((await tagRef).key);
+            const courseObj = await Course.getCourseById(updateParams["course"]);
+            await courseObj.addTag(tagRef.key);
 
             postList = updateParams["postList"] ? updateParams["postList"] : [];
             for (let postId of postList) {
-                const currentPost = await post.getPostById(postId);
-                await currentPost.addTag((await tagRef).key)
+                const currentPost = await Post.getPostById(postId);
+                await currentPost.addTag(tagRef.key)
             }
 
-            resolve((await tagRef).key);
+            resolve(tagRef.key);
         } catch(e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");
@@ -207,7 +206,7 @@ module.exports.pushTagToFirebase = (updateParams) => {
  
  
 getTagById = async (uuid) => {
-    const ref = db.ref('Tags/' + uuid);
+    const ref = db.ref(`Tags/${uuid}`);
 
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
@@ -221,14 +220,16 @@ getTagById = async (uuid) => {
 }
 
 deleteTagById = async (uuid) => {
-    const ref = db.ref('Tags/' + uuid);
+    const ref = db.ref(`Tags/${uuid}`);
     try{
         const tag = await this.getTagById(uuid);
-        for (let postId of await tag.getPostList()) {
-            await (await post.getPostById(postId)).removeTag(uuid);
+        for (const postId of await tag.getPostList()) {
+            const currentPost = await Post.getPostById(postId)
+            await currentPost.removeTag(uuid);
         }
 
-        await (await course.getCourseById(tag.getCourse())).removeTag(uuid)
+        const currentCourse = await Course.getCourseById(tag.getCourse());
+        await currentCourse.removeTag(uuid)
 
         await ref.remove();
         return true;

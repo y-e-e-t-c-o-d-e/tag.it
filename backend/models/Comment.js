@@ -217,11 +217,11 @@ class Comment {
 module.exports.pushCommentToFirebase = (updateParams) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const commentRef = db.ref("Comments").push();
+            const commentRef = await db.ref("Comments").push();
             await commentRef.set({
                 content: updateParams["content"],
                 author: updateParams["author"],
-                uuid: (await commentRef).key,
+                uuid: commentRef.key,
                 time: Date.now(),
                 postId: updateParams["postId"],
                 parentComment: "parentComment" in updateParams ? updateParams["parentComment"] : "dummy_parent",
@@ -232,11 +232,13 @@ module.exports.pushCommentToFirebase = (updateParams) => {
                 isResolved: false,
 
             });
-            await ((await (User.getUserById(updateParams["author"]))).addComment((await commentRef).key));
+            const currentUser = await User.getUserById(updateParams["author"]);
+            const currentPost = await Post.getPostById(updateParams["post"]);
+            await currentUser.addComment(commentRef.key);
             if (!updateParams["parentComment"]) {
-                await ((await (Post.getPostById(updateParams["postId"]))).addComment((await commentRef).key));
+                await currentPost.addComment(commentRef.key);
             }
-            resolve((await commentRef).key);
+            resolve(commentRef.key);
         } catch (e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");
@@ -248,13 +250,11 @@ module.exports.pushCommentToFirebase = (updateParams) => {
 
 
 getCommentById = async (uuid) => {
-    const ref = db.ref('Comments/' + uuid);
+    const ref = db.ref(`Comments/${uuid}`);
     return new Promise((resolve, reject) => {
         ref.once("value", function (snapshot) {
-            //console.log(snapshot.val());
             const r = new Comment(snapshot.val());
-            // now get the user's name
-            //console.log(r);
+
             User.getUserById(r.getAuthor()).then(async user => {
                 r.props.authorName = user.getName();
                 r.props.likedStatus = await user.getLikedCommentStatus(uuid);
@@ -268,7 +268,7 @@ getCommentById = async (uuid) => {
 }
 
 deleteCommentById = async (uuid) => {
-    const ref = db.ref('Comments/'+uuid);
+    const ref = db.ref(`Comments/${uuid}`);
     // if comment has children
     const currentComment = await this.getCommentById(uuid);
 

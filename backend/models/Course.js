@@ -1,5 +1,5 @@
 // Install these dependencies before you run
-const post = require("../models/Post");
+const Post = require("../models/Post");
 const { db } = require("../shared/firebase")
 const { InternalServerError } = require("../shared/error");
 const User = require("./User");
@@ -165,7 +165,6 @@ class Course {
         await this.updateCourse();
         const index = this.props.postList.indexOf(postId);
         if (index != -1) {
-            // await post.deletePostById(postId);
             this.props.postList.splice(index, 1);
         }
         await this.push();
@@ -207,7 +206,7 @@ class Course {
         for (let i = 0; i < list.length; i ++) {
             // get each post object from firebase
             //console.log(list[i]);
-            const currentPost = await post.getPostById(list[i]);
+            const currentPost = await Post.getPostById(list[i]);
             const tagList = await currentPost.getTagList();
             for (let j = 0; j < tagList.length; j ++) {
                 if (tagList[j] === tagId) {
@@ -238,7 +237,7 @@ class Course {
             let list = this.getPostList();
             const posts = [];
             for (let i = 0; i < list.length; i ++) {
-                const currentPost = await post.getPostById(list[i]);
+                const currentPost = await Post.getPostById(list[i]);
                 if (currentPost.isPrivate()) {
                     posts.push(currentPost.getUUID());
                 }
@@ -252,7 +251,7 @@ class Course {
             let list = this.getPostList();
             const posts = [];
             for (let i = 0; i < list.length; i ++) {
-                const currentPost = await post.getPostById(list[i]);
+                const currentPost = await Post.getPostById(list[i]);
                 if (!currentPost.isPrivate()) {
                     posts.push(currentPost.getUUID());
                 }
@@ -266,7 +265,7 @@ class Course {
             let list = this.getPostList();
             const posts = [];
             for (let i = 0; i < list.length; i ++) {
-                const currentPost = await post.getPostById(list[i]);
+                const currentPost = await Post.getPostById(list[i]);
                 if (currentPost.isPinned()) {
                     posts.push(currentPost.getUUID());
                 }
@@ -280,7 +279,7 @@ class Course {
             let list = this.getPostList();
             const posts = [];
             for (let i = 0; i < list.length; i ++) {
-                const currentPost = await post.getPostById(list[i]);
+                const currentPost = await Post.getPostById(list[i]);
                 if (currentPost.isAnnouncement()) {
                     posts.push(currentPost.getUUID());
                 }
@@ -329,11 +328,11 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                 await db.ref("Courses").child(courseUUID).set(updateParams);
                 resolve(courseUUID);
             } else {
-                const courseRef = db.ref("Courses").push();
+                const courseRef = await db.ref("Courses").push();
                 await courseRef.set({
                     name: updateParams['name'],
                     term: updateParams['term'], 
-                    uuid: (await courseRef).key,
+                    uuid: courseRef.key,
                     studentInviteId: makeId(10),
                     instructorInviteId: makeId(10),
                     studentList: ["dummy_val"],         // Firebase doesn't initialize a list if its empty
@@ -343,8 +342,8 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                     postList: ["dummy_val"],
                     description: updateParams['description']
                 });
-                await user.addInstructorCourse((await courseRef).key);
-                resolve((await courseRef).key);
+                await user.addInstructorCourse(courseRef.key);
+                resolve(courseRef.key);
             }
         } catch(e) {
             console.log("There was an error: " + e);
@@ -354,7 +353,7 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
 };
 
 getCourseById = async (uuid) => {
-    const ref = db.ref('Courses/' + uuid);
+    const ref = db.ref(`Courses/${uuid}`);
 
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
@@ -370,8 +369,7 @@ getCourseById = async (uuid) => {
 }
 
 deleteCourseById = async (uuid) => {
-    //console.log("yeet")
-    const ref = db.ref('Courses/' + uuid);
+    const ref = db.ref(`Courses/${uuid}`);
     try{
         const result = await ref.remove();
         return true;
