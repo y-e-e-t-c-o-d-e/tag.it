@@ -309,6 +309,7 @@ class Course {
         await db.ref("Courses").child(this.props.uuid).set({
             name: this.props.name, 
             term: this.props.term,
+            description: this.props.description,
             uuid: this.props.uuid,
             instructorList: this.props.instructorList, 
             studentList: this.props.studentList,

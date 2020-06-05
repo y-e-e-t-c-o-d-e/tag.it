@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "test": "mocha --exit",
-    "test-single": "mocha --timeout 5000 -R nyan --exit",
+    "test": "mocha --timeout 10000 --exit",
+    "test-single": "mocha --timeout 10000 -R nyan --exit",
     "clean": "rm -rf node_modules/"
   },
   "author": "",

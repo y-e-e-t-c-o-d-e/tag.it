@@ -4,7 +4,7 @@ const should = chai.should();
 const post = require("../models/Post");
 const user = require("../models/User");
 const course = require("../models/Course");
-
+/** 
 // Tag test suite 
 describe('course', () => {
 
@@ -40,7 +40,7 @@ describe('course', () => {
         }  
     })
 
-    /*it('should get course from firebase', async () => {
+    it('should get course from firebase', async () => {
         const uuid = 'course1';
         const testCourse = await course.getCourseById(uuid);
         expect(testCourse.getTerm()).to.equal("sp20");
@@ -129,5 +129,5 @@ describe('course', () => {
         await testCourse.removePendingInstructor("d1truong@ucsd.edu");
         const pendingInstructorList = await testCourse.getPendingInstructorList();
         expect(pendingInstructorList.length).to.equal(0);
-    })*/
-});
+    })
+});*/

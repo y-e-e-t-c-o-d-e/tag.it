@@ -159,7 +159,7 @@ class User {
     addFollowedPost = async (postId) => {
         await this.updateUser();
         const index = this.props.followingList.indexOf(postId);
-        if (index != -1) {
+        if (index == -1) {
             this.props.followingList.push(postId);
             const currentPost = await post.getPostById(postId);
             await currentPost.addFollower(this.props.uuid);
@@ -192,10 +192,12 @@ class User {
     removeLikedPost = async (postId) => {
         await this.updateUser();
         const index = this.props.likedPostList.indexOf(postId);
-        this.props.likedPostList.splice(this.props.likedPostList.indexOf(postId), 1);
-        let postObj = await post.getPostById(postId);
-        await postObj.decrementScore();
-        await this.push();
+        if (index != -1) {
+            this.props.likedPostList.splice(this.props.likedPostList.indexOf(postId), 1);
+            let postObj = await post.getPostById(postId);
+            await postObj.decrementScore();
+            await this.push();
+        }
     }
 
     addLikedComment = async (commentId) => {

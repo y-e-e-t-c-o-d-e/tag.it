@@ -6,6 +6,7 @@ const post = require("../models/Post");
 const user = require("../models/User");
 const { db } = require("../shared/firebase")
 
+/** 
 // User test suite 
 describe('comment', () => {
     let commentKey;
@@ -124,4 +125,4 @@ describe('comment', () => {
         expect(testComment.getChildList().length).to.equal(0);
         await comment.deleteCommentById(replyKey);
     })
-});
+});*/

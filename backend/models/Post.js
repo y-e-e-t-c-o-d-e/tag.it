@@ -155,6 +155,8 @@ class Post {
         const index = this.props.tagList.indexOf(tagId);
         if (index != -1) {
             this.props.tagList.splice(index, 1);
+            const removedTag = await tag.getTagById(tagId);
+            await removedTag.removePost(this.props.uuid);
         }
         await this.push();
     }
@@ -315,8 +317,8 @@ module.exports.pushPostToFirebase = (updateParams) => {
                 course: updateParams["course"]
             });
             const currentPost = await getPostById((await postRef).key);
-            await ((await (Course.getCourseById(updateParams["course"]))).addPost(post.key))
-            await ((await (User.getUserById(updateParams["author"]))).addPost(post.key))
+            await ((await (course.getCourseById(updateParams["course"]))).addPost((await postRef).key));
+            await ((await user.getUserById(updateParams["author"])).addPost((await postRef).key))
             
             // Iterates through all tags in tagList and add this post to those tags
             tagList = updateParams["tagList"] ? updateParams["tagList"] : [];
@@ -367,6 +369,12 @@ deletePostById = async (uuid) => {
     await currentPost.getCommentList().forEach(async commentUUID => {
         await comment.deleteCommentById(commentUUID);
     });
+
+    await currentPost.getTagList().forEach(async tagUUID => {
+        const currentTag = await tag.getTagById(tagUUID);
+        await currentTag.removePost(uuid);
+    })
+
     await currentUser.removePost(uuid);
     await currentCourse.removePost(uuid);
 

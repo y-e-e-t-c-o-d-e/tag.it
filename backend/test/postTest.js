@@ -5,7 +5,7 @@ const post = require("../models/Post");
 const user = require("../models/User");
 const comment = require("../models/Comment");
 const tag = require("../models/Tag");
-
+/*
 // User test suite 
 describe('post', async () => {
     let key;
@@ -112,9 +112,9 @@ describe('post', async () => {
     })
 
     // This test will not send the email, since Node returns before finishing the call. How to fix, idk.
-    /*it('should send an email to the user from us', async () => {
+    it('should send an email to the user from us', async () => {
         const testPost = await post.getPostById('post1');
         await testPost.sendUpdate();
         expect(testPost.props.uuid).to.equal("post1");
-    })*/
-});
+    })
+});*/

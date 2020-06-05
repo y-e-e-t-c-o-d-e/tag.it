@@ -29,13 +29,11 @@ class Tag {
         let currentTag = await getTagById(this.props.uuid);
         return (await currentTag).props.parentTag;
     }
-    getPostList = async() => {
-        let currentTag = await getTagById(this.props.uuid);
-        let currentList = currentTag.props.postList;
-        if (currentList[0] == "dummy_post") {
-            return currentList.slice(1, currentList.length);
+    getPostList() {
+        if (this.props.postList[0] == "dummy_post") {
+            return this.props.postList.slice(1, this.props.postList.length);
         }
-        return currentList;
+        return this.props.postList;
         
     }
     getSubTags = async() => {
@@ -97,7 +95,7 @@ class Tag {
 
     addPost = async(postId) => {
         const index = this.props.postList.indexOf(postId);
-        if (index != -1) {
+        if (index == -1) {
             await this.updatePostList();
             this.props.postList.push(postId);
         }
