@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css';
 
-const privateStyle = {backgroundColor: "#AAAAAA"};
+const privateStyle = {border: "solid 4px", backgroundColor: "#1D7B99AA"};
 
 const PostGrid = (props) =>{
     return(

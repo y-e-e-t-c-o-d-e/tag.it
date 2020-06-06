@@ -2,20 +2,11 @@
     background-color: #1D7B99;
     width: 200px;
     height: 80px;
-    padding: 0 1em;
+    padding: 0 0.5em;
     text-align: center;
     overflow: hidden;
     display: inline-block;
     margin: 0 0.5em;
-}
-
-.post-grid:after{
-    content: "";
-    display: block;
-    height: 1em;
-    position: sticky;
-    bottom: 0;
-    background: inherit;
 }
 
 .postview-center {
@@ -26,7 +17,6 @@
 
 .postview-center a {
     color: white;
-    /* cursor: pointer; */
     text-decoration: none;
 }
 
