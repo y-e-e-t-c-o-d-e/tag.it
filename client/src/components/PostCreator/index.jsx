@@ -16,8 +16,6 @@ const PostCreator = ({tags, courseId, setView, views}) => {
     const [questionTitle, setQuestionTitle] = useState("");
     const [questionContent, setQuestionContent] = useState("**b**");
     
-    console.log(options);
-   
     const createPost = () => {
         if (questionTitle.length <=5) {
             createToast("make a longer title!")
