@@ -26,11 +26,13 @@
 
 .postview-center a {
     color: white;
+    /* cursor: pointer; */
     text-decoration: none;
 }
 
 .postview-center a:hover {
     text-decoration: underline;
+    color: white;
 }
 
 .postview-center a:visited {
