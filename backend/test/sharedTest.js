@@ -18,6 +18,7 @@ describe('shared', () => {
     let course1Key, courseObj1
     let post1Key, testPost1, post2Key, testPost2
     let testTag1, tag1Key
+    let testComment1, comment1Key, testComment2, comment2Key
 
     // Setup function before test is run
     before(async () => {
@@ -95,6 +96,26 @@ describe('shared', () => {
         tag1Key = await Tag.pushTagToFirebase(tag1Params);
         testTag1 = await Tag.getTagById(tag1Key);
 
+        // comment created by instructor1 on post1, which was authored by student1
+        const comment1Params = {
+            content: "TEST COMMENT 1",
+            author: instructor1Key,
+            postId: post1Key
+        }
+
+        comment1Key = await Comment.pushCommentToFirebase(comment1Params);
+        testComment1 = await Comment.getCommentById(comment1Key);
+
+        const comment2Params = {
+            content: "TEST SUBCOMMENT",
+            author: student1Key,
+            postId: post1Key,
+            parentComment: comment1Key
+        }
+
+        comment2Key = await Comment.pushCommentToFirebase(comment2Params);
+        testComment2 = await Comment.getCommentById(comment2Key);
+
 
 
     } catch(e) {
@@ -106,14 +127,14 @@ describe('shared', () => {
     after(async () => {
        console.log("Teardown for Shared Test Suite");
        
-       await Post.deletePostById(post1Key);
-       await Tag.deleteTagById(tag1Key);
-       await Post.deletePostById(post2Key);
-       await User.deleteUserById(student1Key);
-       await User.deleteUserById(instructor1Key);
-       await User.deleteUserById(instructor2Key);
-       await Course.deleteCourseById(course1Key);
-       
+        await Post.deletePostById(post1Key);
+        await Tag.deleteTagById(tag1Key);
+        await Post.deletePostById(post2Key);
+        await User.deleteUserById(student1Key);
+        await User.deleteUserById(instructor1Key);
+        await User.deleteUserById(instructor2Key);
+        await Course.deleteCourseById(course1Key);
+       //await Comment.deleteCommentById(comment1Key);
     });
  
  
@@ -257,6 +278,33 @@ describe('shared', () => {
         expect(userList.length).to.equal(0);
     })
     
+    it('should test that comment is in post1 and instructor1s commentList', async () => {
+        testPost1 = await Post.getPostById(post1Key);
+        testInstructor1 = await User.getUserById(instructor1Key);
+        const instructorCommentList =  testInstructor1.getCommentList();
+        const postCommentList = testPost1.getCommentList();
+        expect(instructorCommentList[0]).to.equal(postCommentList[0]);
+    })
+
+    it('should test the liking feature for comments', async ()=> {
+        testStudent1 = await User.getUserById(student1Key);
+        await testStudent1.addLikedComment(comment1Key);
+        testComment1 = await Comment.getCommentById(comment1Key);
+        const likedList = testStudent1.getLikedCommentList();
+        expect(likedList[0]).to.equal(comment1Key);
+        expect(testComment1.getScore()).to.equal(1);
+
+    })
+
+    it('should test the unliking feature for comments', async ()=> {
+        testStudent1 = await User.getUserById(student1Key);
+        await testStudent1.removeLikedComment(comment1Key);
+        testComment1 = await Comment.getCommentById(comment1Key);
+        const likedList = testStudent1.getLikedCommentList();
+        expect(likedList.length).to.equal(0);
+        expect(testComment1.getScore()).to.equal(0);
+
+    })
 
 
 

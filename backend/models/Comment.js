@@ -233,10 +233,13 @@ module.exports.pushCommentToFirebase = (updateParams) => {
 
             });
             const currentUser = await User.getUserById(updateParams["author"]);
-            const currentPost = await Post.getPostById(updateParams["post"]);
+            const currentPost = await Post.getPostById(updateParams["postId"]);
             await currentUser.addComment(commentRef.key);
             if (!updateParams["parentComment"]) {
                 await currentPost.addComment(commentRef.key);
+            } else {
+                const parentComment = await getCommentById(updateParams["parentComment"]);
+                await parentComment.addChild(commentRef.key);
             }
             resolve(commentRef.key);
         } catch (e) {
@@ -267,7 +270,8 @@ getCommentById = async (uuid) => {
     })
 }
 
-deleteCommentById = async (uuid) => {
+deleteCommentById = async (uuid, deletingPost = false) => {
+    
     const ref = db.ref(`Comments/${uuid}`);
     // if comment has children
     const currentComment = await this.getCommentById(uuid);
@@ -280,8 +284,11 @@ deleteCommentById = async (uuid) => {
     const currentUser = await User.getUserById(currentComment.getAuthor());
     await currentUser.removeComment(uuid);
     // find the post on which I am placed
-    const currentPost = post.getPostById(currentComment.getPostId());
-    await currentPost.removeComment(uuid);
+    if (!deletingPost && currentComment.getParentComment() == "dummy_parent") {
+        const currentPost = await Post.getPostById(currentComment.getPostId());
+        await currentPost.removeComment(uuid);
+    }
+    
 
     try{
         const result = await ref.remove();

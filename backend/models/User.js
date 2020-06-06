@@ -212,7 +212,7 @@ class User {
     removeLikedComment = async (commentId) => {
         await this.updateUser();
         const index = this.props.likedCommentList.indexOf(commentId);
-        if (index == -1) {
+        if (index != -1) {
             this.props.likedCommentList.splice(this.props.likedCommentList.indexOf(commentId), 1);
             let commentObj = await Comment.getCommentById(commentId);
             await commentObj.decrementScore();
