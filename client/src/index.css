@@ -13,6 +13,12 @@ code {
     monospace;
 }
 
+.btn-primary {
+  border-radius: 0;
+  background-color: #1D7B99 !important;
+  padding-top: 0.5em;
+}
+
 /* For Toasts */
 
 .snackbar {
