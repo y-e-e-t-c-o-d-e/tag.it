@@ -54,7 +54,6 @@ class Post {
         while(!this.equalTo(other)) {
             this.props = other.props;
             other = await getPostById(this.props.uuid);
-            console.log('inf');
         }
     }
 
@@ -321,11 +320,6 @@ module.exports.pushPostToFirebase = (updateParams) => {
             const course = await (Course.getCourseById(updateParams["course"]));
             await (course.addPost(currentPost.props.uuid));
 
-            // Iterates through all tags in tagList and add this post to those tags
-            const tagList = updateParams["tagList"] ? updateParams["tagList"] : [];
-            for (let tag of tagList) {
-                await currentPost.addTag(tag.uuid);
-            }
             resolve((await postRef).key);
         } catch(e) {
             console.log("There was an error: " + e);
@@ -337,7 +331,7 @@ module.exports.pushPostToFirebase = (updateParams) => {
 
 
 
-getPostById = async (uuid) => {
+getPostById = async (uuid, userObj) => {
     const ref = db.ref('Posts/' + uuid);
 
     return new Promise((resolve, reject) => {
@@ -345,7 +339,17 @@ getPostById = async (uuid) => {
             let r = new Post(snapshot.val());
             if (!r) reject('No post by that id');
             if (!r.props.followingList) r.props.followingList = [];
-            resolve(r);
+            if (!r.props.tagList) r.props.tagList = ["dummy_tag"];
+
+            if (userObj) {
+                userObj.getLikedPostStatus().then((result) => {
+                    r.props.likedStatus = result;
+                    resolve(r);
+                });
+            } else {
+                resolve(r);
+            }
+            
         }, function (errorObject) {
             reject(errorObject);
         })

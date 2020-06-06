@@ -62,7 +62,6 @@ describe('tag', () => {
         await testTag.addPost('post5');
         let list = await testTag.getPostList();
         expect(list.length).to.equal(4);
-        //console.log("lkasdjfkjlasdflkaskldfkla;s" + list);
     })
  
    it('should remove a post from testTag in firebase', async() => {
@@ -114,30 +113,5 @@ describe('tag', () => {
        expect(await testTag2.getParentTag()).to.equal(testTag.getUUID());
       
        tag.deleteTagById(key2)
-   })
- 
-  
-   it('should remove a subtag from testTag in firebase', async() => {
-       const tagParams3 = {
-           name: "pa1d",
-           numUsed: "1",
-           parentTag: "dummy_parent",
-           subTags: ["dummy_tag"],
-           course: "course1",
-           postList: ["post1, post3, post6"],
-       }
- 
-       try {
-           key3 = await tag.pushTagToFirebase(tagParams3);
-           testTag3 = await tag.getTagById(key3);
-       } catch(e) {
-           console.log(e);
-       }
-       await testTag.addSubTag(key3);
-       await testTag.removeSubTag(key3);
-       let subTags = await testTag.getSubTags()
-       expect(subTags.length).to.equal(1);
-       expect(await testTag3.getParentTag()).to.equal("dummy_parent");
-       tag.deleteTagById(key3);
    })
 });

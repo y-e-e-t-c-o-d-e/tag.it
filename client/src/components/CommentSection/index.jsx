@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import "./style.css";
-
-import Comment from "./Comment/index.jsx";
-import API from "../../utils/API.js";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
-import { createToast } from '../../utils';
+import Comment from "./Comment/";
+import { API, createToast } from '../../utils';
+import "./style.css";
 
 // Post.commentList and Post.uuid should be passed in
 const CommentSection = ({ commentList, postId }) => {
@@ -12,7 +10,7 @@ const CommentSection = ({ commentList, postId }) => {
     const [newComment, setNewComment] = useState(false);
     const [refreshComments, setRefreshComments] = useState(false);
     const [visibility, setVisiblity] = useState("public, visible");
-    const [comments, setComments] = useState([{uuid: "loading", author: "Loading", time: Date.now(), content: "Loading", childList: []}]);
+    const [comments, setComments] = useState([{ uuid: "loading", author: "Loading", time: Date.now(), content: "Loading", childList: [], score: 0 }]);
 
     useEffect(() => {
         API.getComments(postId)
@@ -81,7 +79,7 @@ const CommentSection = ({ commentList, postId }) => {
 
     return (
         <div className="comment-section">
-            
+
             {renderCreateNewComment()}
             <div className="comment-list">
                 {renderComments()}

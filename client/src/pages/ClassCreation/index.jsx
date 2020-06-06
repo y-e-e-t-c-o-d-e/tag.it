@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import logo from "../../assets/logo.png";
-import './style.css';
-import AutocompleteTags from '../../components/AutocompleteTags';
-import Navigation from "../../components/Navbar/index.jsx";
 import { Button } from "react-bootstrap";
-import { createToast, API } from "../../utils"
+import { AutocompleteTags, Navigation } from "../../components"
+import { API, createToast } from "../../utils"
+import './style.css';
 
 
 const bgColors = {
@@ -31,7 +29,7 @@ const ClassCreation = ({ currentUser, history }) => {
     const [selectedTags, setSelectedTags] = useState([]);
 
     const onChangeSetTags = (tagState) => {
-        setSelectedTags(tagState);
+        // setSelectedTags(tagState);
     };
 
     /* Main function for handling class creation */
@@ -40,10 +38,8 @@ const ClassCreation = ({ currentUser, history }) => {
         if (titleValid && descValid) {
             const { title, description, term } = event.target.elements;
             const tags = selectedTags.tags;
-
             /* try to create a course in database */
             try {
-                // TODO: use API to create course
                 const courseId = (await API.createCourse(title.value, term.value, description.value)).data;
                 redirectAddStaff(courseId); // might need to change depending on how backend implements the return value
             } catch (error) {
@@ -115,7 +111,7 @@ const ClassCreation = ({ currentUser, history }) => {
 
     return (
         <div>
-            <Navigation currentUser={currentUser} />
+            <Navigation history={history} currentUser={currentUser} />
             <div className="container">
                 <div className="container-title">
                     <h1>Create a Class</h1>
@@ -141,7 +137,14 @@ const ClassCreation = ({ currentUser, history }) => {
                         </div>
                         <div className="flex-row">
                             <p>Initial Tags (Optional):</p>
-                            <AutocompleteTags onChange={onChangeSetTags} />
+
+                            <AutocompleteTags initialTags={[]} setAddedTags={(tags)=>{
+                                
+                            }} setDeletedTags={(tags)=>{
+                                
+                            }} onChange={(tags) => {
+                                setSelectedTags(tags)
+                            }} />
                         </div>
                         <Button id="next-button" type="submit">Next Step: Adding Instructors</Button>
                     </form>

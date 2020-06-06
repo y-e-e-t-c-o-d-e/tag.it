@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
-import { Button } from "react-bootstrap"
 import { Redirect } from "react-router-dom";
-import { AuthContext } from "../../auth/Auth";
+import { Button } from "react-bootstrap"
+import { AuthContext } from "../../auth";
+import { Navigation } from "../../components";
 import db from "../../base";
-import NavBar from "../../components/Navbar";
-import logo from "../../assets/logo.png";
 import { createToast } from '../../utils';
+import logo from "../../assets/logo.png";
 import './style.css';
 
 const bgColors = {
@@ -80,7 +80,7 @@ const Login = ({ history }) => {
 
     return (
         <div>
-            <NavBar />
+            <Navigation history={history}  />
             <div className="container">
                 <div id="center-logo">
                     <img src={logo} alt="Tag.it" height="125" />

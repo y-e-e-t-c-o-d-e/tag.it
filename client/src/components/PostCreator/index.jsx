@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import './style.css';
 import { Dropdown, DropdownButton, Button, Form, Row, Col } from 'react-bootstrap';
 import PostEditor from "../PostEditor";
+import AutocompleteTags from "../AutocompleteTags"
 import { API, createToast} from '../../utils';
+import './style.css';
 
 const PostCreator = ({tags, courseId, setView, views}) => {
     // const [tags, setTags] = useState([{name: "sample tag", uuid: "jlkd8f2348"}]); // all possible tags
@@ -23,12 +24,16 @@ const PostCreator = ({tags, courseId, setView, views}) => {
             createToast("make a longer post!")
             return;
         }
-        console.log(addedTags)
-        API.createPost(questionTitle, questionContent, courseId, Array.from(addedTags)).then((response) => {
+        
+        const tagsToAdd = Array.from(selectedTags).map(tag => tag.uuid)
+        API.createPost(questionTitle, questionContent, courseId, tagsToAdd).then((response) => {
             createToast(response.data)
             setView(views.questions)
         })
     }
+
+    const [selectedTags, setSelectedTags] = useState([]);
+
 
     return (
         <div className="post-creator">
@@ -41,35 +46,33 @@ const PostCreator = ({tags, courseId, setView, views}) => {
             </Form>
             
             <div className="post-buttons">
+            <AutocompleteTags validator={(tag) => {
+                let valid = false
+                for (const courseTag of tags) {
+                    if (tag.name === courseTag.name) {
+                        valid = true
+                    }
+                }
+                return valid
+            }} initialTags={[]} givenSuggestions={tags} setAddedTags={(tags)=>{
+                                
+                            }} setDeletedTags={(tags)=>{
+                                
+                            }} onChange={(tags) => {
+                                setSelectedTags(tags)
+                            }} />
                 <Row>
-                    <Col md={3}>
+                    <Col>
                         <h3>Post as:</h3>
                     </Col>
-                    <Col md={3}>
+                    <Col>
                         <DropdownButton id="dropdown-button-form" title={visibility} drop="up">
                             <Dropdown.Item as="button" onClick={() => { setVisiblity("public, visible")}} >public, visible</Dropdown.Item>
                             <Dropdown.Item as="button" onClick={() => { setVisiblity("public, anonymous")}} >public, anonymous</Dropdown.Item>
                             <Dropdown.Item as="button" onClick={() => { setVisiblity("private")}} >private</Dropdown.Item>
                         </DropdownButton>
                     </Col>
-                    <Col md={3}>
-                        <DropdownButton id="dropdown-button-tags" title="tag.it" drop="up">
-                            { 
-                                tags.map((tag, key) => {
-                                    return <Dropdown.Item key={key} as="button" onClick={() => {
-                                        const newAddedTags = new Set(addedTags);
-                                        if (addedTags.has(tag)) {
-                                            newAddedTags.delete(tag);
-                                        } else {
-                                            newAddedTags.add(tag);
-                                        }
-                                        setAddedTags(newAddedTags);
-                                    }}>{tag.name}</Dropdown.Item>
-                                })
-                            }
-                        </DropdownButton>
-                    </Col>
-                    <Col md={3}>
+                    <Col>
                         <Button id="create-button" onClick={createPost}>create.it</Button>
                     </Col>
                 </Row>

@@ -19,7 +19,6 @@ export const AuthProvider = ({ children }) => {
                 // Sets current user only if user is signed in
                 if (user.emailVerified) {
                     setCurrentUser(user);
-                    console.log(user);
                 } else {
                     // Handles when user is signed in BUT email is not verified
                     createToast(`Email ${user.email} needs to be verified.`);

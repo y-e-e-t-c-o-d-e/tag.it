@@ -44,23 +44,24 @@ export default {
         return axios.get(`${baseURL}/api/post`, config);
     },
 
-    createPost: function (title, content, course, tags) {
+    createPost: function (title, content, course, tags, anonymous) {
         const config = {
-            method: 'post', 
+            method: 'post',
             url: `${baseURL}/api/post`,
             data: {
                 title: title,
                 content: content,
                 author: db.auth().currentUser.uid,
                 course: course,
-                tagList: tags
+                tagList: tags,
+                anonymous: anonymous
             },
             headers: authHeaders()
         };
         return axios(config);
     },
 
-    toggleFollow: function(user, postUUID) {
+    toggleFollow: function (user, postUUID) {
         const config = {
             method: 'post',
             url: `${baseURL}/api/post/follow?postUUID=${postUUID}`,
@@ -69,6 +70,15 @@ export default {
                 // postUUID: postUUID
             },
             headers: authHeaders()
+        };
+        return axios(config);
+    },
+
+    togglePostLike: function (postUUID) {
+        const config = {
+            method: 'post',
+            url: `${baseURL}/api/post/like?postUUID=${postUUID}`,
+            headers: authHeaders(),
         };
         return axios(config);
     },
@@ -99,7 +109,7 @@ export default {
         return axios(config);
     },
 
-    addToCourse: function(courseId, accountType=null) {
+    addToCourse: function (courseId, accountType = null) {
         const config = {
             method: 'post',
             url: `${baseURL}/api/user/${courseId}`,
@@ -111,7 +121,7 @@ export default {
         return axios(config);
     },
 
-    getAllCourses: function() {
+    getAllCourses: function () {
         const config = {
             headers: authHeaders(),
             transformResponse: [function (data) {
@@ -124,14 +134,14 @@ export default {
         return axios.get(`${baseURL}/api/course`, config);
     },
 
-    confirmVerificationLink: function(courseId, inviteId) {
+    confirmVerificationLink: function (courseId, inviteId) {
         const config = {
             headers: authHeaders()
         };
         return axios.get(`${baseURL}/api/course/${courseId}/invite/${inviteId}`, config);
     },
 
-    createCourse: function (name, term, description) {
+    createCourse: function (name, term, description, tagList) {
         const config = {
             method: 'post',
             url: `${baseURL}/api/course`,
@@ -139,11 +149,12 @@ export default {
             data: {
                 name: name,
                 term: term,
-                description: description
+                description: description,
+                tagList: tagList
             }
         };
         return axios(config);
-    }, 
+    },
 
     /** COMMENTS */
     createComment: function (content, visibility, parentComment, postId) {
@@ -158,6 +169,15 @@ export default {
                 parentComment: parentComment,
                 postId: postId
             }
+        };
+        return axios(config);
+    },
+
+    toggleLike: function (commentUUID) {
+        const config = {
+            method: 'post',
+            url: `${baseURL}/api/comment/like?commentUUID=${commentUUID}`,
+            headers: authHeaders(),
         };
         return axios(config);
     },
@@ -211,6 +231,20 @@ export default {
         return axios.delete(`${baseURL}/api/course/${courseUUID}/pending/${email}`, config)
     },
 
+    // Use for changing post contents, resolving post, and pinning post
+    editPost: function(postUUID, content, isResolved, isPinned) {
+        const config = {
+            method: 'put',
+            headers: authHeaders(),
+            url: `${baseURL}/api/post?postUUID=${postUUID}`,
+            data: {
+                content: content,
+                isResolved: isResolved,
+                isPinned: isPinned
+            }
+        };
+        return axios(config);
+    },
     /** TAGS */
 
     addRemoveTags: function (addedTags, removeTags, courseId) {

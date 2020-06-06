@@ -1,12 +1,8 @@
 import React from 'react';
-import { useParams } from "react-router-dom"
-import Button from "../../components/Button/index.jsx";
-import './style.css';
-import Navigation from "../../components/Navbar";
-import TagList from "../../components/TagList/index.jsx";
+import { useParams } from "react-router-dom";
 import { Row, Col, Nav } from 'react-bootstrap';
-import CoursesView from '../../components/CoursesView/index.jsx';
-import PostViewer from '../../components/PostViewer/index';
+import { Button, Navigation, TagList, CoursesView, PostViewer, CommentSection } from "../../components";
+import './style.css';
 
 const Home = ({ currentUser, history, match }) => {
     const displayName = currentUser ? currentUser.name : "Loading"
@@ -14,7 +10,7 @@ const Home = ({ currentUser, history, match }) => {
 
     return (
         <div className="home">
-            <Navigation currentUser={currentUser} courseId={courseId} />
+            <Navigation history={history} currentUser={currentUser} courseId={courseId} />
             <div className="cont">
                 <Row>
                     <Col xs={2}></Col>

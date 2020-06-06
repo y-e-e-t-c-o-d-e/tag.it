@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import logo from "../../assets/logo.png";
-import './style.css';
-import {API, createToast} from "../../utils";
-import Navigation from "../../components/Navbar/index.jsx";
 import { Button } from "react-bootstrap";
+import { Navigation } from "../../components";
+import {API, createToast} from "../../utils";
+import './style.css';
 
 const Staff = ({ history, match, currentUser }) => {
 
@@ -68,7 +67,7 @@ const Staff = ({ history, match, currentUser }) => {
 
     return (
         <>
-            <Navigation currentUser={currentUser} />
+            <Navigation history={history}  currentUser={currentUser} />
             <div className="flex-instructors">
                 <div className="invite-box">
                     <div className="invite-content">
@@ -84,6 +83,7 @@ const Staff = ({ history, match, currentUser }) => {
                         <p>*Instructors will have access to the class setting page, and will be able to manage tags, pin posts, make announcements, etc.</p>
                     </div>
                     <div className="input">
+                        <Button id="return-button" href={`/courses/${courseId}`}>Return to Course</Button>
                         <Button id="return-button" href={`/courses/${courseId}/settings`}>Return to Course Settings</Button>
                     </div>
                 </div>

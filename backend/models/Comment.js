@@ -26,22 +26,22 @@ class Comment {
         if (a === b) return true;
         if (a == null || b == null) return false;
         if (a.length != b.length) return false;
-      
+
         // If you don't care about the order of the elements inside
         // the array, you should sort both arrays here.
         // Please note that calling sort on an array will modify that array.
         // you might want to clone your array first.
-      
+
         for (var i = 0; i < a.length; ++i) {
-          if (a[i] !== b[i]) return false;
+            if (a[i] !== b[i]) return false;
         }
         return true;
     }
 
-    
+
     updateComment = async () => {
         let comment = await getCommentById(this.getUUID());
-        while(!this.equalTo(comment)) {
+        while (!this.equalTo(comment)) {
             this.props = comment.props;
             comment = await getCommentById(this.getUUID());
         }
@@ -49,7 +49,7 @@ class Comment {
 
     /**
      * Update a given user's data fields.
-     * 
+     *
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
     getContent() {
@@ -112,7 +112,7 @@ class Comment {
         await this.push();
     }
 
-    removeChild = async(commentId) => {
+    removeChild = async (commentId) => {
         await this.updateComment();
         const index = this.props.childList.indexOf(commentId);
         if (index != -1) {
@@ -159,44 +159,44 @@ class Comment {
         this.props.parentComment = commentId;
         await this.push();
     }
-/*
-    sendUpdate = async () => {
-        for (var i = 0; i < this.props.followingList.length; i ++) {
-            const currUser = await user.getUserById(this.props.followingList[i]);
-            const email = await currUser.getEmail();
-            console.log(email)
-            var transporter = nodemailer.createTransport({
-                host: "smtp.mailtrap.io",
-                port: 2525,
-                auth: {
-                  user: "60438c70e2cd80",
-                  pass: "4320d95a84005b"
-                }
-              });
-
-            var mailOptions = {
-                from: 'tagitcse110',
-                to: email,
-                subject: this.props.title + ' has been updated!',
-                // TODO: Need field for post url to add to updated email.
-                text: 'Check it out here'
-            };
-
-            await transporter.sendMail(mailOptions);
-        } 
-    }
-*/
+    /*
+        sendUpdate = async () => {
+            for (var i = 0; i < this.props.followingList.length; i ++) {
+                const currUser = await user.getUserById(this.props.followingList[i]);
+                const email = await currUser.getEmail();
+                console.log(email)
+                var transporter = nodemailer.createTransport({
+                    host: "smtp.mailtrap.io",
+                    port: 2525,
+                    auth: {
+                      user: "60438c70e2cd80",
+                      pass: "4320d95a84005b"
+                    }
+                  });
+    
+                var mailOptions = {
+                    from: 'tagitcse110',
+                    to: email,
+                    subject: this.props.title + ' has been updated!',
+                    // TODO: Need field for post url to add to updated email.
+                    text: 'Check it out here'
+                };
+    
+                await transporter.sendMail(mailOptions);
+            }
+        }
+    */
 
     /**
      * Update a given post's data fields.
-     * 
+     *
      * @param updateParams - Object consisting of keys & values that will be updated for the user
      */
     push = async () => {
         try {
             await db.ref("Comments").child(this.props.uuid).set({
                 content: this.props.content,
-                author: this.props.author, 
+                author: this.props.author,
                 uuid: this.props.uuid,
                 time: this.props.time,
                 postId: this.props.postId,
@@ -210,7 +210,7 @@ class Comment {
         } catch (err) {
             console.log(err)
         }
-    } 
+    }
 }
 
 module.exports.pushCommentToFirebase = (updateParams) => {
@@ -219,24 +219,24 @@ module.exports.pushCommentToFirebase = (updateParams) => {
             const commentRef = db.ref("Comments").push();
             await commentRef.set({
                 content: updateParams["content"],
-                author: updateParams["author"], 
+                author: updateParams["author"],
                 uuid: (await commentRef).key,
                 time: Date.now(),
                 postId: updateParams["postId"],
                 parentComment: "parentComment" in updateParams ? updateParams["parentComment"] : "dummy_parent",
                 score: 0,
-                childList: ["dummy_child"]  ,
+                childList: ["dummy_child"],
                 isEndorsed: "isEndorsed" in updateParams ? updateParams["isEndorsed"] : false,
                 isAnonymous: "isAnonymous" in updateParams ? updateParams["isAnonymous"] : false,
                 isResolved: false,
-                
+
             });
             resolve((await commentRef).key);
-        } catch(e) {
+        } catch (e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");
         }
-        
+
     })
 };
 
@@ -245,24 +245,26 @@ module.exports.pushCommentToFirebase = (updateParams) => {
 getCommentById = async (uuid) => {
     const ref = db.ref('Comments/' + uuid);
     return new Promise((resolve, reject) => {
-        ref.once("value", function(snapshot) {
+        ref.once("value", function (snapshot) {
             //console.log(snapshot.val());
             const r = new Comment(snapshot.val());
             // now get the user's name
             //console.log(r);
-            User.getUserById(r.getAuthor()).then(user => {
+            User.getUserById(r.getAuthor()).then(async user => {
                 r.props.authorName = user.getName();
+                r.props.likedStatus = await user.getLikedCommentStatus(uuid);
+
                 resolve(r);
             }).catch(reject)
         }, function (errorObject) {
             reject(errorObject);
         })
-    }) 
+    })
 }
 
 deleteCommentById = async (uuid) => {
-    const ref = db.ref('Comments/'+uuid);
-    try{
+    const ref = db.ref('Comments/' + uuid);
+    try {
         const result = await ref.remove();
         return true;
     } catch (e) {
@@ -271,7 +273,7 @@ deleteCommentById = async (uuid) => {
     }
 }
 
-   
+
 module.exports.Comment = Comment
 module.exports.getCommentById = getCommentById
 module.exports.deleteCommentById = deleteCommentById

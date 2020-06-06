@@ -1,6 +1,6 @@
-import React, {useRef, useState, useEffect } from "react";
+import React from "react";
+import PostGrid from '../PostGrid';
 import './style.css';
-import PostGrid from '../PostGrid/index';
 
 const QuestionList = ({ questions, courseId, history, filters }) =>{
 
@@ -19,13 +19,13 @@ const QuestionList = ({ questions, courseId, history, filters }) =>{
         if (filters.tags.size > 0) {
 
         }
-        return post.title.includes(filters.search) && (filterTags.length === 0 || filterTags.some(item => post.tagList.includes(item)))
+        return post.title.toLowerCase().includes(filters.search.toLowerCase()) && (filterTags.length === 0 || filterTags.some(item => post.tagList.includes(item)))
     })
 
 
     // Displays all posts that are not private
     const listBody = orderedPosts.map((post) =>{
-        let link = "/courses/"+ courseId+ "/post/"+post.uuid;
+        let link = "/courses/"+ courseId+ "/posts/"+post.uuid;
         
         return (
             !post.isPrivate &&
