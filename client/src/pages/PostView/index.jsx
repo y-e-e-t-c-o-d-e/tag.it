@@ -25,16 +25,16 @@ const PostView = ({ currentUser, history }) => {
         score: 12,
         isInstructor: false,
         filledInTags: []
-    })
+    });
 
     // State to show if we are editing
     const [editing, setEditing] = useState(false);
 
     useEffect(() => {
         API.getPost(postId).then((response) => {
-            setPost(response.data)
+            setPost(response.data);
         }).catch(err => {
-            createToast("an error occurred")
+            createToast("an error occurred");
         })
     }, [editing])
 
@@ -147,7 +147,7 @@ const PostView = ({ currentUser, history }) => {
             {/* Post content with footer saying posted by */}
             <div className="post-content-section">
                 <MarkdownEditor className="post-content-view" source={post.content} />
-                <div className="posted-by">Posted by: {post.authorName}</div>
+                <div className="posted-by">Posted by: {post.isAnonymous ? "anonymous" : post.authorName}</div>
             </div>
 
             {/* Like / discuss/ tags */}

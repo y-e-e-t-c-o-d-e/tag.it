@@ -44,7 +44,7 @@ export default {
         return axios.get(`${baseURL}/api/post`, config);
     },
 
-    createPost: function (title, content, course, tags, anonymous) {
+    createPost: function (title, content, course, tags, postOptions) {
         const config = {
             method: 'post',
             url: `${baseURL}/api/post`,
@@ -54,7 +54,8 @@ export default {
                 author: db.auth().currentUser.uid,
                 course: course,
                 tagList: tags,
-                anonymous: anonymous
+                isAnonymous: postOptions.isAnonymous,
+                isPrivate: postOptions.isPrivate
             },
             headers: authHeaders()
         };
