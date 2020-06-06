@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Redirect } from "react-router-dom";
-import { Button } from "react-bootstrap"
+import { Button, Form } from "react-bootstrap"
 import { AuthContext } from "../../auth";
 import { Navigation } from "../../components";
 import db from "../../base";
@@ -84,28 +84,28 @@ const Login = ({ history }) => {
             <div className="container">
                 <div id="center-logo">
                     <img src={logo} alt="Tag.it" height="125" />
-                    <h2>Connecting Students to Professors</h2>
+                    <p>Connecting Students to Professors</p>
                 </div>
                 <div className="input-row">
                     <div className="input">
                         <h2>Log In</h2>
-                        <form onSubmit={handleLogin}>
+                        <Form onSubmit={handleLogin}>
                             <div className="inputField">
-                                <label>Email</label>
-                                <input name="email" type="email" placeholder="Email"
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control name="email" type="email" placeholder="Email"
                                     onBlur={handleEmailChange}
                                     style={{ backgroundColor: emailBgColor }}
                                 />
                             </div>
 
                             <div className="inputField">
-                                <label>Password</label>
-                                <input name="password" type="password" placeholder="Password" />
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control name="password" type="password" placeholder="Password" />
                                 <a href="/" id="pwdRecover">Forgot your password?</a>
                             </div>
 
                             <Button type="submit">Log In</Button>
-                        </form>
+                        </Form>
                     </div>
                     <div className="input">
                         <h3>Don't have an account?</h3>

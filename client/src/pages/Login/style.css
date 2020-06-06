@@ -13,6 +13,11 @@ input {
 
 .container {
     text-align: center;
+    color: #005D83;
+}
+
+.container h2{
+    color: #005D83;
 }
 
 .input {
@@ -26,7 +31,9 @@ input {
 }
 
 .inputField {
-    text-align: center;
+    text-align: left;
+    font-size: 14px;
+    font-weight: normal;
     width: 100%;
 }
 
