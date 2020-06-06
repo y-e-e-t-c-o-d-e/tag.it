@@ -22,7 +22,7 @@ const PostView = ({ currentUser, history }) => {
         isResolved: false,
         isPrivate: false,
         isAnonymous: false,
-        score: 12,
+        score: 0,
         isInstructor: false,
         filledInTags: []
     })
