@@ -22,19 +22,19 @@ const PostView = ({ currentUser, history }) => {
         isResolved: false,
         isPrivate: false,
         isAnonymous: false,
-        score: 12,
+        score: 0,
         isInstructor: false,
         filledInTags: []
-    })
+    });
 
     // State to show if we are editing
     const [editing, setEditing] = useState(false);
 
     useEffect(() => {
         API.getPost(postId).then((response) => {
-            setPost(response.data)
+            setPost(response.data);
         }).catch(err => {
-            createToast("an error occurred")
+            createToast("an error occurred");
         })
     }, [editing])
 
@@ -54,7 +54,7 @@ const PostView = ({ currentUser, history }) => {
 
     // A list of all the tags to be rendered
     const tagButtons = post.filledInTags.map((tag)=>{
-        return(<Button variant="primary" block key={tag.uuid} className="tagListItem"><b>{tag.name}</b></Button>);
+        return(<Button block key={tag.uuid} className="tagListItem"><b>{tag.name}</b></Button>);
     });
 
     // Toggles the following status of the post
@@ -84,8 +84,7 @@ const PostView = ({ currentUser, history }) => {
     }
 
     // Render resolve button depending on the current resolved state;
-    let resolveUnresolveButton;
-    resolveUnresolveButton = (post.isResolved ?
+    let resolveUnresolveButton = (post.isResolved ?
         <Dropdown.Item key="resolve" as="button">Resolve</Dropdown.Item> :
         <Dropdown.Item key="resolve" as="button">Resolve</Dropdown.Item>
     );
@@ -109,7 +108,6 @@ const PostView = ({ currentUser, history }) => {
 
         }
         return <Button className="yellow-button" onClick={handlePostLike}>like.it</Button>
-
     };
 
 
@@ -147,7 +145,7 @@ const PostView = ({ currentUser, history }) => {
             {/* Post content with footer saying posted by */}
             <div className="post-content-section">
                 <MarkdownEditor className="post-content-view" source={post.content} />
-                <div className="posted-by">Posted by: {post.authorName}</div>
+                <div className="posted-by">Posted by: {post.isAnonymous ? "anonymous" : post.authorName}</div>
             </div>
 
             {/* Like / discuss/ tags */}

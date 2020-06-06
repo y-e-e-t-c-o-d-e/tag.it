@@ -172,7 +172,12 @@ exports.getCourseInfo = async (req, res) => {
             // Ensures that only a certain amount of posts are rendered
             try {
                 const postObj = await post.getPostById(postId);
-                (await acc).push(postObj.props);
+
+                // Does not add private posts if user is a student (except if the private post is yours)
+                if (type === "instructor" || !postObj.isPrivate || postObj.getAuthor() === req.user.getUUID()) {
+                    (await acc).push(postObj.props);
+                }
+                
                 return acc;
             } catch (e) {
                 return acc;
