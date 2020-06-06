@@ -1,13 +1,13 @@
 import React from 'react';
 import './style.css';
 
+const privateStyle = {backgroundColor: "#FFFFFF"};
+
 const PostGrid = (props) =>{
-    console.log(props);
     return(
-        <div className="post-grid">
+        <div className="post-grid" style={!!props.isPrivate ? privateStyle : {}}>
             <div className="postview-center">
                 <a href="#" onClick={() => {props.history.push(props.link)}}> {props.title} </a>
-                {props.isPrivate && <p>Private</p>}
             </div>
         </div>
     );
