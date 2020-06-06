@@ -84,8 +84,7 @@ const PostView = ({ currentUser, history }) => {
     }
 
     // Render resolve button depending on the current resolved state;
-    let resolveUnresolveButton;
-    resolveUnresolveButton = (post.isResolved ?
+    let resolveUnresolveButton = (post.isResolved ?
         <Dropdown.Item key="resolve" as="button">Resolve</Dropdown.Item> :
         <Dropdown.Item key="resolve" as="button">Resolve</Dropdown.Item>
     );
@@ -109,7 +108,6 @@ const PostView = ({ currentUser, history }) => {
 
         }
         return <Button className="yellow-button" onClick={handlePostLike}>like.it</Button>
-
     };
 
 
