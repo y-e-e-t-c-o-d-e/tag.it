@@ -68,9 +68,6 @@ const PostCreator = ({tags, courseId, setView, views}) => {
                     </Col>
                     <Col>
                         <DropdownButton id="dropdown-button-form" title={options.text} drop="up">
-                            {/* <Dropdown.Item as="button" onClick={() => { setVisiblity("public, visible")}} >public, visible</Dropdown.Item>
-                            <Dropdown.Item as="button" onClick={() => { setVisiblity("public, anonymous")}} >public, anonymous</Dropdown.Item>
-                            <Dropdown.Item as="button" onClick={() => { setVisiblity("private")}} >private</Dropdown.Item> */}
                             {Object.keys(PostOptions).map((optionText) => 
                                 <Dropdown.Item as="button" onClick={() => setOptions({...PostOptions[optionText], text: optionText})}>{optionText}</Dropdown.Item> 
                             )}
