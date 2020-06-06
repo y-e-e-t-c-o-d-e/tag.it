@@ -7,7 +7,7 @@ const PostGrid = (props) =>{
     return(
         <div className="post-grid" style={!!props.isPrivate ? privateStyle : {}}>
             <div className="postview-center">
-                <a href="#" onClick={() => {props.history.push(props.link)}}> {props.title} </a>
+                <a onClick={() => {props.history.push(props.link)}} href="javascript:;"> {props.title} </a>
             </div>
         </div>
     );
