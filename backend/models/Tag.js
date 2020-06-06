@@ -211,7 +211,6 @@ getTagById = async (uuid) => {
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
             const r = new Tag(snapshot.val());
-            //console.log(r.props.author);
             resolve(r);
         }, function (errorObject) {
             reject(errorObject);
