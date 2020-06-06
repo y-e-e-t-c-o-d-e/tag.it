@@ -54,7 +54,7 @@ const PostView = ({ currentUser, history }) => {
 
     // A list of all the tags to be rendered
     const tagButtons = post.filledInTags.map((tag)=>{
-        return(<Button variant="primary" block key={tag.uuid} className="tagListItem"><b>{tag.name}</b></Button>);
+        return(<Button block key={tag.uuid} className="tagListItem"><b>{tag.name}</b></Button>);
     });
 
     // Toggles the following status of the post
