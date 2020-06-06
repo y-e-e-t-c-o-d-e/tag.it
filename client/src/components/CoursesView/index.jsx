@@ -27,7 +27,7 @@ const CoursesView = ({currentUser, username, history }) => {
                     { studentCourses.length > 0 &&
                         studentCourses.map((course, key) => {
                             return (<div>
-                                <Button className="course-btn" key={key} onClick={() => { history.push(courseToLink(course.uuid)) }}>{course.name}</Button>
+                                <Button className="course-btn" key={key} variant="primary" onClick={() => { history.push(courseToLink(course.uuid)) }}>{course.name}</Button>
                                 <br/>
                                 </div>
                             )

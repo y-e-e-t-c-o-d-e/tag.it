@@ -67,14 +67,14 @@ const PostCreator = ({tags, courseId, setView, views}) => {
                         <h3>Post as:</h3>
                     </Col>
                     <Col>
-                        <DropdownButton id="dropdown-button-form" title={options.text} drop="up">
+                        <DropdownButton variant="warning" id="dropdown-button-form" title={options.text} drop="up">
                             {Object.keys(PostOptions).map((optionText) => 
                                 <Dropdown.Item as="button" onClick={() => setOptions({...PostOptions[optionText], text: optionText})}>{optionText}</Dropdown.Item> 
                             )}
                         </DropdownButton>
                     </Col>
                     <Col>
-                        <Button id="create-button" onClick={createPost}>create.it</Button>
+                        <Button id="create-button" variant="warning" onClick={createPost}>create.it</Button>
                     </Col>
                 </Row>
             </div>
@@ -83,3 +83,4 @@ const PostCreator = ({tags, courseId, setView, views}) => {
 }
 
 export default PostCreator;
+    

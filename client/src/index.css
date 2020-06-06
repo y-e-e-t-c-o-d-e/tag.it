@@ -15,7 +15,7 @@ code {
 
 .btn-primary {
   border-radius: 0;
-  background-color: #1D7B99;
+  background-color: #1D7B99 !important;
   padding-top: 0.5em;
 }
 
