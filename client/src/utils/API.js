@@ -97,13 +97,14 @@ export default {
         return axios.get(`${baseURL}/api/course/${uuid}`, config);
     },
 
-    updateCourse: function (courseUUID, courseName) {
+    updateCourse: function (courseUUID, courseName, description) {
         const config = {
             method: 'put',
             url: `${baseURL}/api/course`,
             data: {
                 uuid: courseUUID,
                 name: courseName,
+                description: description
             },
             headers: authHeaders()
         };

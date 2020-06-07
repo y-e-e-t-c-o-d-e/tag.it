@@ -29,6 +29,8 @@ const ClassSettings = ({ currentUser, history }) => {
     const [tags, setTags] = useState([]);
     const [courseNameValid, setCourseNameValid] = useState(true); // Invalid if empty
     const [courseName, setCourseName] = useState("Default Class Name");
+    const [courseDescription, setCourseDescription] = useState("Loading Course Description");
+    const [courseDescriptionValid, setCourseDescriptionValid] = useState(true); // Invalid if empty
     const [courseInviteLink, setCourseInviteLink] = useState("");
     const invitationRef = useRef(null);
 
@@ -41,6 +43,7 @@ const ClassSettings = ({ currentUser, history }) => {
     useEffect(() => {
         API.getCourse(courseId).then((response) => {
             setCourse(response.data)
+            setCourseDescription(response.data.description);
             setCourseName(response.data.name)
             setTags(response.data.tagList)
             setCourseInviteLink(`https://tagdotit.netlify.app/courses/${courseId}/invite/${response.data.studentInviteId}`)
@@ -54,7 +57,7 @@ const ClassSettings = ({ currentUser, history }) => {
         if(courseNameValid) {
             event.preventDefault();
 
-            API.updateCourse(courseId, courseName).then(() => {
+            API.updateCourse(courseId, courseName, courseDescription).then(() => {
                 createToast("Changed Course Name!")
             })
         }
@@ -91,6 +94,9 @@ const ClassSettings = ({ currentUser, history }) => {
     const [classNameBgColor, setClassNameBgColor] = useState(
         bgColors.default
     );
+    const [courseDescriptionBgColor, setCourseDescriptionBgColor] = useState(
+        bgColors.default
+    );
 
     const handleClassNameChange = (event) =>{
         const classNameInput = event.target.value;
@@ -103,6 +109,20 @@ const ClassSettings = ({ currentUser, history }) => {
         else{
             setClassNameBgColor(bgColors.default);
             setCourseNameValid(true);
+        }
+    }
+    
+    const handleCourseDescriptionChange = (event) =>{
+        const classDescInput = event.target.value;
+        setCourseDescription(classDescInput);
+        if(classDescInput === ""){
+            setCourseDescriptionBgColor(bgColors.error);
+            setCourseDescriptionValid(false);
+        }
+
+        else{
+            setCourseDescriptionBgColor(bgColors.default);
+            setCourseDescriptionValid(true);
         }
     }
 
@@ -131,7 +151,7 @@ const ClassSettings = ({ currentUser, history }) => {
 
                         <label>
                             <span>Description:{'\u00A0'} {'\u00A0'}</span>
-                            <textarea type="text" defaultValue={course.description}>
+                            <textarea style={{ backgroundColor: courseDescriptionBgColor }} type="text" value={courseDescription} onChange={handleCourseDescriptionChange} onBlur={handleCourseDescriptionChange}>
 
                             </textarea> 
                         </label>

@@ -1,9 +1,9 @@
 //Uncomment this wheen the models are good
-const course = require("../models/Course");
+const Course = require("../models/Course");
 const nodemailer = require('nodemailer');
-const post = require("../models/Post");
-const tag = require("../models/Tag");
-const user = require("../models/User");
+const Post = require("../models/Post");
+const Tag = require("../models/Tag");
+const User = require("../models/User");
 const { db } = require("../shared/firebase")
 
 // Adds a course to the database based on req body
@@ -20,12 +20,12 @@ exports.addCourse = async (req, res) => {
    };
 
    try {
-       const courseId = await course.pushCourseToFirebase(bodyParams, req.user);
+       const courseId = await Course.pushCourseToFirebase(bodyParams, req.user);
        res.status(200).send(courseId);
    } catch (e) {
        res.status(410).json({
            status: 410,
-           error: "Server could not push to firebase"
+           error: e
        })
    }
 };
@@ -53,10 +53,13 @@ exports.updateCourse = async (req, res) => {
     };
 
     try {
-        const courseObj = await course.getCourseById(courseUUID);
+        const courseObj = await Course.getCourseById(courseUUID);
 
         if ("name" in bodyParams) {
             courseObj.setName(bodyParams["name"]);
+        }
+        if ("description" in bodyParams) {
+            courseObj.setDescription(bodyParams["description"]);
         }
         if ("term" in bodyParams) {
             courseObj.setTerm(bodyParams["term"]);
@@ -106,7 +109,7 @@ exports.verifyCourse = async (req, res) => {
     }
 
     try {
-        const courseObj = await course.getCourseById(courseid);
+        const courseObj = await Course.getCourseById(courseid);
 
         // Verify that invite code is equal
         if (courseObj.getStudentInviteId() === inviteId) {
@@ -164,14 +167,14 @@ exports.getCourseInfo = async (req, res) => {
     }
 
     try {
-        const courseObj = await course.getCourseById(courseUUID);
+        const courseObj = await Course.getCourseById(courseUUID);
         let type = courseObj.classifyUser(req.user.getUUID());
 
         // Gets all the Post Objects
         let postContentList = await courseObj.getPostList().reduce(async (acc, postId, index) => {
             // Ensures that only a certain amount of posts are rendered
             try {
-                const postObj = await post.getPostById(postId);
+                const postObj = await Post.getPostById(postId);
 
                 // Does not add private posts if user is a student (except if the private post is yours)
                 if (type === "instructor" || !postObj.isPrivate || postObj.getAuthor() === req.user.getUUID()) {
@@ -187,7 +190,7 @@ exports.getCourseInfo = async (req, res) => {
         // Gets all the Tag Objects
         const tagContentList = await courseObj.getTagList().reduce(async (acc, tagId) => {
             try {
-                const tagObj = await tag.getTagById(tagId);
+                const tagObj = await Tag.getTagById(tagId);
                 (await acc).push(tagObj.props);
                 return acc;
             } catch (e) {
@@ -239,7 +242,7 @@ exports.deleteCourse = async (req, res) => {
         return;
     };
     try {
-        course.deleteCourseById(courseUUID);
+        Course.deleteCourseById(courseUUID);
         res.status(200).send("removed course with the following courseUUID:" + courseUUID);
     } catch (e) {
         res.status(410).json({
@@ -261,15 +264,15 @@ exports.getCourseUsers = async (req, res) => {
     };
 
     try {
-        const courseObj = await course.getCourseById(courseUUID);
+        const courseObj = await Course.getCourseById(courseUUID);
         
         const studentList = await courseObj.getStudentList();
         const instructorList = await courseObj.getInstructorList();
 
         const filledInInstructors = await Promise.all(instructorList.map(
-            async (instructorId) => (await user.getUserById(instructorId)).props));
+            async (instructorId) => (await User.getUserById(instructorId)).props));
         const filledInStudents = await Promise.all(studentList.map(
-            async (studentId) => (await user.getUserById(studentId)).props));
+            async (studentId) => (await User.getUserById(studentId)).props));
 
         res.status(200).json({
             students: filledInStudents,
@@ -304,7 +307,7 @@ exports.sendEmail = async (req, res) => {
     };
 
     try {
-        const courseObj = await course.getCourseById(courseUUID);
+        const courseObj = await Course.getCourseById(courseUUID);
 
         // Adds user to pending instructor list
         await courseObj.addPendingInstructor(bodyParams["email"]);
@@ -355,7 +358,7 @@ exports.removeUser = async (req, res) => {
     }
 
     try {
-        const courseObj = await course.getCourseById(courseUUID);
+        const courseObj = await Course.getCourseById(courseUUID);
         const userType = courseObj.classifyUser(userUUID);
 
         if (userType === "student") {
@@ -364,7 +367,7 @@ exports.removeUser = async (req, res) => {
             await courseObj.removeInstructor(userUUID);
         } else {
             // Remove user from pending instructor
-            const userObj = await user.getUserById(userUUID);
+            const userObj = await User.getUserById(userUUID);
             await courseObj.removePendingInstructor(userObj.getEmail());
 
             res.status(410).send({
@@ -395,7 +398,7 @@ exports.deletePendingUser = async (req, res) => {
     }
 
     try {
-        const courseObj = await course.getCourseById(courseUUID);
+        const courseObj = await Course.getCourseById(courseUUID);
         courseObj.removePendingInstructor(email);
         res.status(200).send(`User removed as a pending instructor`);
 
