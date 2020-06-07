@@ -172,7 +172,7 @@ exports.getCourseInfo = async (req, res, next) => {
         let type = courseObj.classifyUser(req.user.getUUID());
 
         // Checks whether user should have access to course material or not
-        if (type !== "student" || type !== "instructor") {
+        if (type !== "student" && type !== "instructor") {
             throw new Unauthorized("User not allowed to access the course");
         }
 
