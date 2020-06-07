@@ -347,8 +347,6 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                 await user.addInstructorCourse(courseRef.key);
 
                 // add all the tags
-                debugger
-                
                 for await (const tagName of updateParams.tagList) {
                     await Tag.pushTagToFirebase({
                         name: tagName,
