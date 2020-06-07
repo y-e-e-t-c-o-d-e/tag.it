@@ -7,6 +7,7 @@ import './style.css';
 const Staff = ({ history, match, currentUser }) => {
 
     const [currCourses, setCurrCourses] = useState([]);
+    const [pendingCourses, setPendingCourses] = useState([]);
     const [emailToIdMap, setEmailToIdMap] = useState({});
 
     const courseId = match.params.courseId;
@@ -14,7 +15,9 @@ const Staff = ({ history, match, currentUser }) => {
 
     useEffect(() => {
         API.getCourseUsers(courseId).then((data) => {
+            console.log(data.data.pendingInstructorList);
             setCurrCourses(data.data.instructors.map((instructorObj) => instructorObj.email));
+            setPendingCourses(data.data.pendingInstructorList);
             setEmailToIdMap(data.data.instructors.reduce((acc, instructorObj) => {
                 acc[instructorObj.email] = instructorObj.uuid;
                 return acc;
@@ -30,10 +33,16 @@ const Staff = ({ history, match, currentUser }) => {
         event.preventDefault();
         const email = event.target.elements.email.value;
 
+        // if email is the same as existing pending or current instructor, do not invite
+        if (emailToIdMap[email]) { 
+            createToast("User already exists as an instructor in this course"); 
+            return;
+        }
+
         // try to add staff to course in database
         try {
             await API.inviteUserToCourse(courseId, email);
-            setCurrCourses(currCourses.concat(email));
+            setPendingCourses(pendingCourses.concat(email));
         } catch (error) {
             createToast(error);
         }
@@ -54,6 +63,7 @@ const Staff = ({ history, match, currentUser }) => {
                 }
             }
             setCurrCourses(currCourses.filter((val) => val !== instructor));
+            setPendingCourses(pendingCourses.filter((val) => val !== instructor));
         } catch (error) {
             createToast("An error occurred when removing this instructor.");
         }
@@ -63,7 +73,12 @@ const Staff = ({ history, match, currentUser }) => {
         const instructorEmails = currCourses.map((val, key) =>
             <button key={key} className="email-button" onClick={() => removeInstructor(val)}>{val}</button>
         );
-        return instructorEmails;
+
+        const pendingInstructors = pendingCourses.map((val, key) =>
+            <button key={key} className="email-button" style={{backgroundColor: "yellow"}}onClick={() => removeInstructor(val)}>{val}</button>
+        );
+
+        return instructorEmails.concat(pendingInstructors);
     }
 
     return (
