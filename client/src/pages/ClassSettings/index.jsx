@@ -163,7 +163,7 @@ const ClassSettings = ({ currentUser, history }) => {
                                 <textarea readOnly ref={invitationRef}
                                     className="invitation-link" type="text" value={courseInviteLink}>
                                 </textarea>
-                                <Button onClick={copyLinkToClipboard}>Copy</Button>
+                                <Button variant="warning" onClick={copyLinkToClipboard}>Copy</Button>
                             </div>
                         </label>
                         <div className="center-button">

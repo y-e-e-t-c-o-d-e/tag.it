@@ -78,8 +78,8 @@ const AddClass = ({ history, currentUser }) => {
                     <h1>Add a Course</h1>
                     {renderFields()}
                     <div className="buttons">
-                        <Button variant="primary" onClick={() => history.push("/")}>Cancel</Button>
-                        <Button variant="primary" onClick={onSubmit}>Add Courses</Button>
+                        <Button variant="warning" onClick={() => history.push("/")}>Cancel</Button>
+                        <Button variant="warning" onClick={onSubmit}>Add Courses</Button>
                     </div>
                 </div>
                 <div className="right-section">
