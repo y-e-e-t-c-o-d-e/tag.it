@@ -162,12 +162,11 @@ exports.getUserType = async (req, res) => {
     // Grabs the user's type based on the courseUUID. If fails, responds with an error.
     try {
         const courseObj = await Course.getCourseById(courseUUID);
-
-        if (courseObj.getInstructorList().indexOf(userObj.getUUID()) != -1) {
+        if ((await courseObj.getInstructorList()).indexOf(userObj.getUUID()) != -1) {
             res.status(200).json({
                 type: "Instructor"
             });
-        } else if (courseObj.getStudentList().indexOf(userObj.getUUID()) != -1) {
+        } else if ((await courseObj.getStudentList()).indexOf(userObj.getUUID()) != -1) {
             res.status(200).json({
                 type: "Student"
             });

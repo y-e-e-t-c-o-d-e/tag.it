@@ -15,6 +15,8 @@ describe('index routes', () => {
 
   let userUUID = "uuid";
   let userObj;
+  let userUUID2 = "uuid2"
+  let userObj2;
 
   let courseKey;
   let courseObj;
@@ -23,14 +25,23 @@ describe('index routes', () => {
   before(async () => {
     server = require('../app');
 
-    // Student set up 
-    const student1Params = {
+    // User 1 set up 
+    const user1Params = {
       name: "student1",
       email: "u3@ucsd.edu",
       uuid: userUUID
     };
-    await User.pushUserToFirebase(student1Params);
+    await User.pushUserToFirebase(user1Params);
     userObj = await User.getUserById(userUUID);
+
+    // User 2 set up 
+    const user2Params = {
+      name: "student2",
+      email: "u2@ucsd.edu",
+      uuid: userUUID2
+    };
+    await User.pushUserToFirebase(user2Params);
+    userObj2 = await User.getUserById(userUUID2);
 
     // Course set up 
     const course1 = {
@@ -40,6 +51,7 @@ describe('index routes', () => {
     };
     courseKey = await Course.pushCourseToFirebase(course1, userObj);
     courseObj = await Course.getCourseById(courseKey);
+    await courseObj.addStudent(userUUID2);
   });
 
   // Tear down function that runs after every test
@@ -83,10 +95,35 @@ describe('index routes', () => {
           done();
         });
     });
+
+    it('get user type: instructor', (done) => {
+      chai.request(server)
+        .get(`/api/user/${courseKey}`)
+        .set("Authorization", `Bearer ${userUUID}`)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).deep.equal({
+            type: "Instructor"
+          });
+          done();
+        });
+    });
+    
+    it('get user type: student', (done) => {
+      chai.request(server)
+        .get(`/api/user/${courseKey}`)
+        .set("Authorization", `Bearer ${userUUID2}`)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).deep.equal({
+            type: "Student"
+          });
+          done();
+        });
+    });
   });
 
   describe('course routes', () => {
-
     it('get all courses', (done) => {
       chai.request(server)
         .get('/api/course')
