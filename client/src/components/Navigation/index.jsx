@@ -60,7 +60,7 @@ const regularRender = (studentCourses, instructorCourses, courseId, postId, hist
                 <Navbar.Brand onClick={() => {history.push("/")}}><img
                     alt=""
                     src={logo}
-                    width="130"
+                    width="100"
                     height="50"
                     className="d-inline-block align-top"
                 />{'   '}
