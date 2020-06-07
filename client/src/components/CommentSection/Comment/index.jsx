@@ -47,14 +47,14 @@ const Comment = ({ comment, postId, refresh, isTopLevel }) => {
                         <div className="comment-post-options">
                             <div className="select-anonymous">
                                 <p>Discuss as: </p>
-                                <DropdownButton id="dropdown-button-form" title={visibility} drop="up">
+                                <DropdownButton id="dropdown-button-form" variant="warning" title={visibility} drop="up">
                                     <Dropdown.Item onClick={() => { setVisiblity("public, visible") }} >public, visible</Dropdown.Item>
                                     <Dropdown.Item onClick={() => { setVisiblity("public, anonymous") }} >public, anonymous</Dropdown.Item>
                                     <Dropdown.Item onClick={() => { setVisiblity("private") }} >private</Dropdown.Item>
                                 </DropdownButton>
                             </div>
-                            <Button id="cancel-button" onClick={() => { setNewReply(false) }}>cancel</Button>
-                            <Button id="create-button" type="submit">create.it</Button>
+                            <Button id="cancel-button" variant="warning" onClick={() => { setNewReply(false) }}>cancel</Button>
+                            <Button id="create-button" variant="warning" type="submit">create.it</Button>
                         </div>
                     </form>
                 </div>
@@ -88,7 +88,7 @@ const Comment = ({ comment, postId, refresh, isTopLevel }) => {
 
     const renderLiked = () => {
         if (liked) {
-            return <a href="#" onClick={handleLike} style={{fontWeight: "bold"}}>{"unlike.it"}</a>
+            return <a href="#" onClick={handleLike} style={{ fontWeight: "bold" }}>{"unlike.it"}</a>
         }
         return <a href="#" onClick={handleLike}>{"like.it"}</a>;
     };

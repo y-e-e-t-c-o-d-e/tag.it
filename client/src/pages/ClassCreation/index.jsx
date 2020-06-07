@@ -110,7 +110,7 @@ const ClassCreation = ({ currentUser, history }) => {
             <Navigation history={history} currentUser={currentUser} />
             <div className="container">
                 <div className="container-title">
-                    <h1>Create a Class</h1>
+                    <h1>Create a Course</h1>
                 </div>
                 <div className="input">
                     {/* Main class creation form */}
@@ -134,10 +134,10 @@ const ClassCreation = ({ currentUser, history }) => {
                         <div className="flex-row">
                             <p>Initial Tags (Optional):</p>
 
-                            <AutocompleteTags initialTags={[]} setAddedTags={(tags)=>{
-                                
-                            }} setDeletedTags={(tags)=>{
-                                
+                            <AutocompleteTags initialTags={[]} setAddedTags={(tags) => {
+
+                            }} setDeletedTags={(tags) => {
+
                             }} onChange={(tags) => {
                                 setSelectedTags(tags)
                             }} />

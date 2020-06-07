@@ -59,21 +59,21 @@ const CommentSection = ({ commentList, postId }) => {
                         <div className="comment-post-options">
                             <div className="select-anonymous">
                                 <p>Discuss as: </p>
-                                <DropdownButton id="dropdown-button-form" title={visibility} drop="up">
+                                <DropdownButton id="dropdown-button-form" variant="warning" title={visibility} drop="up">
                                     <Dropdown.Item onClick={() => { setVisiblity("public, visible") }} >public, visible</Dropdown.Item>
                                     <Dropdown.Item onClick={() => { setVisiblity("public, anonymous") }} >public, anonymous</Dropdown.Item>
                                     <Dropdown.Item onClick={() => { setVisiblity("private") }} >private</Dropdown.Item>
                                 </DropdownButton>
                             </div>
-                            <Button id="cancel-button" onClick={() => { setNewComment(false) }}>cancel</Button>
-                            <Button id="create-button" type="submit">create.it</Button>
+                            <Button id="cancel-button" variant="warning" onClick={() => { setNewComment(false) }}>cancel</Button>
+                            <Button id="create-button" variant="warning" type="submit">create.it</Button>
                         </div>
                     </form>
                 </div>
             );
         }
         return (
-            <Button id="new-comment-button" className="yellow-button" onClick={() => { setNewComment(true) }}>discuss.it</Button>
+            <Button variant="warning" onClick={() => { setNewComment(true) }}>discuss.it</Button>
         );
     };
 

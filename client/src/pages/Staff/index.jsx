@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "react-bootstrap";
 import { Navigation } from "../../components";
-import {API, createToast} from "../../utils";
+import { API, createToast } from "../../utils";
 import './style.css';
 
 const Staff = ({ history, match, currentUser }) => {
@@ -23,7 +23,7 @@ const Staff = ({ history, match, currentUser }) => {
             console.error(e)
             createToast(e);
         });
-    }, []);    
+    }, []);
 
     /* Function for handling inviting staff */
     const handleStaffInvite = async (event) => {
@@ -68,7 +68,7 @@ const Staff = ({ history, match, currentUser }) => {
 
     return (
         <>
-            <Navigation history={history}  currentUser={currentUser} />
+            <Navigation history={history} currentUser={currentUser} />
             <div className="flex-instructors">
                 <div className="invite-box">
                     <div className="invite-content">
@@ -76,12 +76,12 @@ const Staff = ({ history, match, currentUser }) => {
                         <p>Currently inviting instructors for</p>
                         <h2>Enter Instructor Email (e.g. username@ucsd.edu)</h2>
                         <form onSubmit={handleStaffInvite}>
-                            <input name="email" type="email" placeholder="Add new instructor email" required="required"  style={{ backgroundColor: "#e6e5e5" }} />
+                            <input name="email" type="email" placeholder="Add new instructor email" required="required" style={{ backgroundColor: "#e6e5e5" }} />
                             <div className="input">
                                 <Button id="invite-button" type="submit">Invite</Button>
                             </div>
                         </form>
-                        <p>*Instructors will have access to the class setting page, and will be able to manage tags, pin posts, make announcements, etc.</p>
+                        <p>*Instructors will have access to the course settings page, and will be able to manage tags, pin posts, make announcements, etc.</p>
                     </div>
                     <div className="input">
                         <Button id="return-button" href={`/courses/${courseId}`}>Return to Course</Button>
