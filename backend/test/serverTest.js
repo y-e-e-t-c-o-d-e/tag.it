@@ -17,9 +17,13 @@ describe('index routes', () => {
   let userObj;
   let userUUID2 = "uuid2"
   let userObj2;
+  let userUUID3 = "uuid3"
+  let userObj3;
 
   let courseKey;
   let courseObj;
+  let studentInviteKey;
+  let instrInviteKey;
 
   // Set up function before every test
   before(async () => {
@@ -43,6 +47,15 @@ describe('index routes', () => {
     await User.pushUserToFirebase(user2Params);
     userObj2 = await User.getUserById(userUUID2);
 
+     // User 3 set up 
+     const user3Params = {
+      name: "pending instr",
+      email: "i1@ucsd.edu",
+      uuid: userUUID3
+    };
+    await User.pushUserToFirebase(user3Params);
+    userObj3 = await User.getUserById(userUUID3);
+
     // Course set up 
     const course1 = {
         name: "Test Course 1",
@@ -52,6 +65,9 @@ describe('index routes', () => {
     courseKey = await Course.pushCourseToFirebase(course1, userObj);
     courseObj = await Course.getCourseById(courseKey);
     await courseObj.addStudent(userUUID2);
+    await courseObj.addPendingInstructor(userObj3.getEmail());
+    studentInviteKey = courseObj.getStudentInviteId();
+    instrInviteKey = courseObj.getInstructorInviteId();
   });
 
   // Tear down function that runs after every test
@@ -150,6 +166,64 @@ describe('index routes', () => {
         })
     });
 
+    it('get users of course', (done) => {
+      chai.request(server)
+        .get(`/api/course/${courseKey}/users`)
+        .set("Authorization", `Bearer ${userUUID}`)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).deep.equal({
+            students: [userObj2.props],
+            instructors: [userObj.props],
+            pendingInstructorList: [userObj3.getEmail()]
+          });
+          done();
+        })
+    });
+
+    it('verify invite link: student', (done) => {
+      chai.request(server)
+        .get(`/api/course/${courseKey}/invite/${studentInviteKey}`)
+        .set("Authorization", `Bearer ${userUUID}`)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).deep.equal({
+            status: 200,
+            type: "student"
+          });
+          done();
+        })
+    });
+
+    it('verify invite link: instructor', (done) => {
+      chai.request(server)
+        .get(`/api/course/${courseKey}/invite/${instrInviteKey}`)
+        .set("Authorization", `Bearer ${userUUID3}`)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).deep.equal({
+            status: 200,
+            type: "instructor",
+            error: ""
+          });
+          done();
+        })
+    });
+
+    it('fail to verify invite link: instructor', (done) => {
+      chai.request(server)
+        .get(`/api/course/${courseKey}/invite/${instrInviteKey}`)
+        .set("Authorization", `Bearer ${userUUID2}`)
+        .end((err, res) => {
+          expect(res).to.have.status(410);
+          expect(res.body).deep.equal({
+            status: 410,
+            type: null,
+            error: "User has not been invited to join staff by the instructors"
+          });
+          done();
+        })
+    });
   });
 
 });
