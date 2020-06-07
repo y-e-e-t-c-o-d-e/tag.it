@@ -18,58 +18,23 @@ const Login = ({ history }) => {
         history.push("/signup")
     }
 
-    /* Checks whether the input form is valid */
-    const [emailValid, setEmailValid] = useState(false);
-
     const handleLogin = async (event) => {
-        if (emailValid) {
-            event.preventDefault();
-            const { email, password } = event.target.elements;
+        event.preventDefault();
+        const { email, password } = event.target.elements;
 
-            try {
-                // This action will cause the onChangeEventListener to occur (in Auth.jsx)
-                const {user} = await db
-                    .auth()
-                    .signInWithEmailAndPassword(email.value,
-                        password.value);
+        try {
+            // This action will cause the onChangeEventListener to occur (in Auth.jsx)
+            const { user } = await db
+                .auth()
+                .signInWithEmailAndPassword(email.value,
+                    password.value);
 
-                // Only reroutes to new page if user's email is verified
-                if (user.emailVerified) {
-                    history.push("/");
-                }
-            } catch (error) {
-                createToast(error);
+            // Only reroutes to new page if user's email is verified
+            if (user.emailVerified) {
+                history.push("/");
             }
-        }
-        else { createToast("Invalid email address"); }
-    }
-
-    /* Makes possible email input background color change  */
-    const [emailBgColor, setEmailBgColor] = useState(
-        bgColors.default
-    );
-
-    /* When input for email address changes, try to validate the email address */
-    const handleEmailChange = (event) => {
-        const emailInput = event.target.value;
-        let lastAtPos = emailInput.lastIndexOf('@');
-        let lastDotPos = emailInput.lastIndexOf('.');
-
-        // Logics used to check validity of email input
-        let validFormat = lastAtPos > 0 && lastDotPos > 2 && lastAtPos < lastDotPos;
-        let containsDoubleAt = emailInput.lastIndexOf('@@') !== -1;
-        let validOrgNameLength = emailInput.length - lastDotPos > 2;
-
-        // If any of the logics are not satisfied, change the background color to red
-        if (emailInput === "" || !validFormat || !validOrgNameLength || containsDoubleAt) {
-            setEmailBgColor(bgColors.error);
-            setEmailValid(false);
-        }
-
-        // Otherwise, set the background color as light blue (to indicate correctness)
-        else {
-            setEmailBgColor(bgColors.default);
-            setEmailValid(true);
+        } catch (error) {
+            createToast(error);
         }
     }
 
@@ -80,7 +45,7 @@ const Login = ({ history }) => {
 
     return (
         <div>
-            <Navigation history={history}  />
+            <Navigation history={history} />
             <div className="container">
                 <div id="center-logo">
                     <img src={logo} alt="Tag.it" height="125" />
@@ -93,8 +58,7 @@ const Login = ({ history }) => {
                             <div className="inputField">
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control name="email" type="email" placeholder="Email"
-                                    onBlur={handleEmailChange}
-                                    style={{ backgroundColor: emailBgColor }}
+                                    style={{ backgroundColor: "white" }}
                                 />
                             </div>
 
