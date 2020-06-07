@@ -34,7 +34,7 @@ exports.addCourse = async (req, res) => {
 exports.getAllCourses = async (req, res) => {
     const ref = db.ref('Courses');
     ref.once("value", function (snapshot) {
-        res.status(200).json(snapshot.val());
+        res.status(200).json(snapshot.val() || []);
     });
 };
 
@@ -263,9 +263,12 @@ exports.getCourseUsers = async (req, res) => {
     try {
         const courseObj = await course.getCourseById(courseUUID);
         
-        const filledInInstructors = await Promise.all(courseObj.getInstructorList().map(
+        const studentList = await courseObj.getStudentList();
+        const instructorList = await courseObj.getInstructorList();
+
+        const filledInInstructors = await Promise.all(instructorList.map(
             async (instructorId) => (await user.getUserById(instructorId)).props));
-        const filledInStudents = await Promise.all(courseObj.getStudentList().map(
+        const filledInStudents = await Promise.all(studentList.map(
             async (studentId) => (await user.getUserById(studentId)).props));
 
         res.status(200).json({

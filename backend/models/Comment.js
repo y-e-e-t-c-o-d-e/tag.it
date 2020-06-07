@@ -1,5 +1,6 @@
 const { db } = require("../shared/firebase")
 const User = require("./User")
+const Post = require("./Post")
 
 class Comment {
     constructor(props) {
@@ -216,11 +217,11 @@ class Comment {
 module.exports.pushCommentToFirebase = (updateParams) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const commentRef = db.ref("Comments").push();
+            const commentRef = await db.ref("Comments").push();
             await commentRef.set({
                 content: updateParams["content"],
                 author: updateParams["author"],
-                uuid: (await commentRef).key,
+                uuid: commentRef.key,
                 time: Date.now(),
                 postId: updateParams["postId"],
                 parentComment: "parentComment" in updateParams ? updateParams["parentComment"] : "dummy_parent",
@@ -231,7 +232,16 @@ module.exports.pushCommentToFirebase = (updateParams) => {
                 isResolved: false,
 
             });
-            resolve((await commentRef).key);
+            const currentUser = await User.getUserById(updateParams["author"]);
+            const currentPost = await Post.getPostById(updateParams["postId"]);
+            await currentUser.addComment(commentRef.key);
+            if (!updateParams["parentComment"]) {
+                await currentPost.addComment(commentRef.key);
+            } else {
+                const parentComment = await getCommentById(updateParams["parentComment"]);
+                await parentComment.addChild(commentRef.key);
+            }
+            resolve(commentRef.key);
         } catch (e) {
             console.log("There was an error: " + e);
             reject("Something went wrong");
@@ -243,13 +253,11 @@ module.exports.pushCommentToFirebase = (updateParams) => {
 
 
 getCommentById = async (uuid) => {
-    const ref = db.ref('Comments/' + uuid);
+    const ref = db.ref(`Comments/${uuid}`);
     return new Promise((resolve, reject) => {
         ref.once("value", function (snapshot) {
-            //console.log(snapshot.val());
             const r = new Comment(snapshot.val());
-            // now get the user's name
-            //console.log(r);
+
             User.getUserById(r.getAuthor()).then(async user => {
                 r.props.authorName = user.getName();
                 r.props.likedStatus = await user.getLikedCommentStatus(uuid);
@@ -262,15 +270,34 @@ getCommentById = async (uuid) => {
     })
 }
 
-deleteCommentById = async (uuid) => {
-    const ref = db.ref('Comments/' + uuid);
-    try {
+deleteCommentById = async (uuid, deletingPost = false) => {
+    
+    const ref = db.ref(`Comments/${uuid}`);
+    // if comment has children
+    const currentComment = await this.getCommentById(uuid);
+
+    await currentComment.getChildList().forEach(async subUUID => {
+        await this.deleteCommentById(subUUID);
+    })
+
+    // find the user who created me
+    const currentUser = await User.getUserById(currentComment.getAuthor());
+    await currentUser.removeComment(uuid);
+    // find the post on which I am placed
+    if (!deletingPost && currentComment.getParentComment() == "dummy_parent") {
+        const currentPost = await Post.getPostById(currentComment.getPostId());
+        await currentPost.removeComment(uuid);
+    }
+    
+
+    try{
         const result = await ref.remove();
         return true;
     } catch (e) {
         console.log(e);
         return false;
     }
+    
 }
 
 

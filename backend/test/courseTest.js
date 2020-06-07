@@ -4,7 +4,7 @@ const should = chai.should();
 const post = require("../models/Post");
 const user = require("../models/User");
 const course = require("../models/Course");
-
+/** 
 // Tag test suite 
 describe('course', () => {
 
@@ -130,5 +130,4 @@ describe('course', () => {
         const pendingInstructorList = await testCourse.getPendingInstructorList();
         expect(pendingInstructorList.length).to.equal(0);
     })
-    */
-});
+});*/

@@ -1,5 +1,5 @@
 // Install these dependencies before you run
-const post = require("../models/Post");
+const Post = require("../models/Post");
 const { db } = require("../shared/firebase")
 const { InternalServerError } = require("../shared/error");
 const User = require("./User");
@@ -55,7 +55,8 @@ class Course {
         return this.props.term;
     }
 
-    getInstructorList() {
+    getInstructorList = async () => {
+        await this.updateCourse();
         return this.props.instructorList.slice(1, this.props.instructorList.length);
     }
 
@@ -67,7 +68,8 @@ class Course {
         return this.props.tagList.slice(1, this.props.tagList.length);
     }
 
-    getStudentList() {
+    getStudentList = async () => {
+        await this.updateCourse();
         return this.props.studentList.slice(1, this.props.studentList.length);
     }
 
@@ -87,7 +89,8 @@ class Course {
         return this.props.instructorInviteId;
     }
 
-    getPendingInstructorList() {
+    getPendingInstructorList = async () => {
+        await this.updateCourse();
         return this.props.pendingInstructorList.slice(1, this.props.pendingInstructorList.length);
     }
 
@@ -121,7 +124,7 @@ class Course {
     }
 
     addStudent = async (userId) => {
-        this.updateCourse();
+        await this.updateCourse();
         if (this.props.studentList.indexOf(userId) < 0) {
             this.props.studentList.push(userId);
             await this.push();
@@ -131,12 +134,14 @@ class Course {
     }
 
     addInstructor = async (userId, userEmail = null) => {
-        this.updateCourse();
-        this.props.instructorList.push(userId);
+        await this.updateCourse();
+        if (this.props.instructorList.indexOf(userId) < 0) {
+            this.props.instructorList.push(userId);
 
-        // Checks if instructor is in pendingInstructorList and removes if so
-        while (this.props.pendingInstructorList.indexOf(userEmail) >= 0) {
-            this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
+            // Checks if instructor is in pendingInstructorList and removes if so
+            while (this.props.pendingInstructorList.indexOf(userEmail) >= 0) {
+                this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
+            }
         }
 
         await this.push();
@@ -156,8 +161,17 @@ class Course {
         }
     }
 
+    removePost = async (postId) => {
+        await this.updateCourse();
+        const index = this.props.postList.indexOf(postId);
+        if (index != -1) {
+            this.props.postList.splice(index, 1);
+        }
+        await this.push();
+    }
+
     removePendingInstructor = async (userEmail) => {
-        this.updateCourse();
+        await this.updateCourse();
         if (this.props.pendingInstructorList.indexOf(userEmail) >= 0) {
             this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
             await this.push();
@@ -165,29 +179,24 @@ class Course {
     }
     
     removeInstructor = async (userId) => {
-        this.updateCourse();
-        if (this.props.instructorList.indexOf(userId) >= 0) {
+        await this.updateCourse();
+
+        if (this.props.instructorList.indexOf(userId) >= 0) {      
             this.props.instructorList.splice(this.props.instructorList.indexOf(userId), 1);
-
-            const userObj = await User.getUserById(userId);
-            await userObj.removeInstructorCourse(userId);
-
-            while (this.props.pendingInstructorList.indexOf(userObj.getEmail()) >= 0) {
-                this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
-            }
-
             await this.push();
+            const userObj = await User.getUserById(userId);
+            await userObj.removeInstructorCourse(this.props.uuid);
         }
     }
 
     removeStudent = async (userId) => {
-        this.updateCourse();
+        await this.updateCourse();
         if (this.props.studentList.indexOf(userId) >= 0) {
             this.props.studentList.splice(this.props.studentList.indexOf(userId), 1);
             await this.push();
 
             const userObj = await User.getUserById(userId);
-            await userObj.removeStudentCourse(userId);
+            await userObj.removeStudentCourse(this.props.uuid);
         }
     }
 
@@ -197,7 +206,7 @@ class Course {
         for (let i = 0; i < list.length; i ++) {
             // get each post object from firebase
             //console.log(list[i]);
-            const currentPost = await post.getPostById(list[i]);
+            const currentPost = await Post.getPostById(list[i]);
             const tagList = await currentPost.getTagList();
             for (let j = 0; j < tagList.length; j ++) {
                 if (tagList[j] === tagId) {
@@ -228,7 +237,7 @@ class Course {
             let list = this.getPostList();
             const posts = [];
             for (let i = 0; i < list.length; i ++) {
-                const currentPost = await post.getPostById(list[i]);
+                const currentPost = await Post.getPostById(list[i]);
                 if (currentPost.isPrivate()) {
                     posts.push(currentPost.getUUID());
                 }
@@ -242,7 +251,7 @@ class Course {
             let list = this.getPostList();
             const posts = [];
             for (let i = 0; i < list.length; i ++) {
-                const currentPost = await post.getPostById(list[i]);
+                const currentPost = await Post.getPostById(list[i]);
                 if (!currentPost.isPrivate()) {
                     posts.push(currentPost.getUUID());
                 }
@@ -256,7 +265,7 @@ class Course {
             let list = this.getPostList();
             const posts = [];
             for (let i = 0; i < list.length; i ++) {
-                const currentPost = await post.getPostById(list[i]);
+                const currentPost = await Post.getPostById(list[i]);
                 if (currentPost.isPinned()) {
                     posts.push(currentPost.getUUID());
                 }
@@ -270,7 +279,7 @@ class Course {
             let list = this.getPostList();
             const posts = [];
             for (let i = 0; i < list.length; i ++) {
-                const currentPost = await post.getPostById(list[i]);
+                const currentPost = await Post.getPostById(list[i]);
                 if (currentPost.isAnnouncement()) {
                     posts.push(currentPost.getUUID());
                 }
@@ -299,6 +308,7 @@ class Course {
         await db.ref("Courses").child(this.props.uuid).set({
             name: this.props.name, 
             term: this.props.term,
+            description: this.props.description,
             uuid: this.props.uuid,
             instructorList: this.props.instructorList, 
             studentList: this.props.studentList,
@@ -318,11 +328,11 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                 await db.ref("Courses").child(courseUUID).set(updateParams);
                 resolve(courseUUID);
             } else {
-                const courseRef = db.ref("Courses").push();
+                const courseRef = await db.ref("Courses").push();
                 await courseRef.set({
                     name: updateParams['name'],
                     term: updateParams['term'], 
-                    uuid: (await courseRef).key,
+                    uuid: courseRef.key,
                     studentInviteId: makeId(10),
                     instructorInviteId: makeId(10),
                     studentList: ["dummy_val"],         // Firebase doesn't initialize a list if its empty
@@ -332,8 +342,8 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                     postList: ["dummy_val"],
                     description: updateParams['description']
                 });
-                await user.addInstructorCourse((await courseRef).key);
-                resolve((await courseRef).key);
+                await user.addInstructorCourse(courseRef.key);
+                resolve(courseRef.key);
             }
         } catch(e) {
             console.log("There was an error: " + e);
@@ -343,7 +353,7 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
 };
 
 getCourseById = async (uuid) => {
-    const ref = db.ref('Courses/' + uuid);
+    const ref = db.ref(`Courses/${uuid}`);
 
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
@@ -356,25 +366,10 @@ getCourseById = async (uuid) => {
             reject(errorObject);
         })
     }) 
-
-
-    /**
-     * This is for reference to the callback but, we're using promises now.
-     */
-
-    // // Attach an asynchronous callback to read the data at our posts reference
-    // await ref.once("value", function(snapshot) {
-    //     const r = new User(snapshot.val());
-    //     console.log(r.props.name);
-    //     callback(r);
-    // }, function (errorObject) {
-    //     console.log("The read failed: " + errorObject.code);
-    // })
 }
 
 deleteCourseById = async (uuid) => {
-    //console.log("yeet")
-    const ref = db.ref('Courses/' + uuid);
+    const ref = db.ref(`Courses/${uuid}`);
     try{
         const result = await ref.remove();
         return true;

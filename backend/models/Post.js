@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
-const user = require("./User");
-const tag = require("./Tag");
-const comment = require("./Comment")
+const User = require("./User");
+const Tag = require("./Tag");
+const Comment = require("./Comment")
 const { db } = require("../shared/firebase")
 const Course = require("./Course")
 
@@ -135,8 +135,6 @@ class Post {
         await this.updatePost();
         const index = this.props.commentList.indexOf(commentId);
         if (index != -1) {
-            // may or may not be necessary depending on how front end implements deleteComment
-            await comment.deleteCommentById(commentId);
             this.props.commentList.splice(index, 1);
         }
         await this.push();
@@ -146,7 +144,7 @@ class Post {
     addTag = async (tagId) => {
         await this.updatePost();
         this.props.tagList.push(tagId);
-        const addedTag = await tag.getTagById(tagId);
+        const addedTag = await Tag.getTagById(tagId);
         await addedTag.addPost(this.props.uuid);
         await this.push();
     }
@@ -157,6 +155,8 @@ class Post {
         const index = this.props.tagList.indexOf(tagId);
         if (index != -1) {
             this.props.tagList.splice(index, 1);
+            const removedTag = await Tag.getTagById(tagId);
+            await removedTag.removePost(this.props.uuid);
         }
         await this.push();
     }
@@ -166,7 +166,7 @@ class Post {
         const index = this.props.tagList.indexOf(tagId);
         if (index != -1) {
             this.props.tagList.splice(index, 1);
-            const removedTag = await tag.getTagById(tagId);
+            const removedTag = await Tag.getTagById(tagId);
             await removedTag.removePost(this.props.uuid);
         }
         await this.push();
@@ -297,12 +297,12 @@ class Post {
 module.exports.pushPostToFirebase = (updateParams) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const postRef = db.ref("Posts").push();
-            await (await postRef).set({
+            const postRef = await db.ref("Posts").push();
+            await postRef.set({
                 title: updateParams["title"], 
                 content: updateParams["content"],
                 author: updateParams["author"], 
-                uuid: (await postRef).key,
+                uuid: postRef.key,
                 time: Date.now(),
                 tagList: updateParams["tagList"] ? updateParams["tagList"] : ["dummy_tag"],
                 commentList: ['dummy_comment'],
@@ -316,11 +316,18 @@ module.exports.pushPostToFirebase = (updateParams) => {
                 score: 0,
                 course: updateParams["course"]
             });
-            const currentPost = await getPostById((await postRef).key);
-            const course = await (Course.getCourseById(updateParams["course"]));
-            await (course.addPost(currentPost.props.uuid));
-
-            resolve((await postRef).key);
+            const currentPost = await getPostById(postRef.key);
+            const currentCourse = await Course.getCourseById(updateParams["course"]);
+            const currentUser = await User.getUserById(updateParams["author"]);
+            await currentCourse.addPost(postRef.key);
+            await currentUser.addPost(postRef.key);
+            
+            // Iterates through all tags in tagList and add this post to those tags
+            tagList = updateParams["tagList"] ? updateParams["tagList"] : [];
+            for (const tagId of tagList) {
+                await currentPost.addTag(tagId);
+            }
+            resolve(postRef.key);
         } catch(e) {
             console.log("There was an error: " + e);
             reject(e);
@@ -332,7 +339,7 @@ module.exports.pushPostToFirebase = (updateParams) => {
 
 
 getPostById = async (uuid, userObj) => {
-    const ref = db.ref('Posts/' + uuid);
+    const ref = db.ref(`Posts/${uuid}`);
 
     return new Promise((resolve, reject) => {
         ref.once("value", function(snapshot) {
@@ -357,7 +364,22 @@ getPostById = async (uuid, userObj) => {
 }
 
 deletePostById = async (uuid) => {
-    const ref = db.ref('Posts/'+uuid);
+    const ref = db.ref(`Posts/${uuid}`);
+    const currentPost = await this.getPostById(uuid);
+    const currentUser = await User.getUserById(currentPost.getAuthor());
+    const currentCourse = await Course.getCourseById(currentPost.getCourse());
+    await currentPost.getCommentList().forEach(async commentUUID => {
+        await Comment.deleteCommentById(commentUUID, true);
+    });
+
+    await currentPost.getTagList().forEach(async tagUUID => {
+        const currentTag = await Tag.getTagById(tagUUID);
+        await currentTag.removePost(uuid);
+    })
+
+    await currentUser.removePost(uuid);
+    await currentCourse.removePost(uuid);
+
     try{
         const result = await ref.remove();
         return true;

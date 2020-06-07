@@ -4,7 +4,7 @@ const should = chai.should();
 const post = require("../models/Post");
 const user = require("../models/User");
 const tag = require("../models/Tag");
- 
+/** 
 // Tag test suite
 describe('tag', () => {
    let key;
@@ -115,3 +115,10 @@ describe('tag', () => {
        tag.deleteTagById(key2)
    })
 });
+
+// updates to Tag Test: gotta make sure all the courses actually exist when we create a tag. For this case
+// its simple we only really need one course 
+// We don't have to create post objects to test post because the addPost method is linked post first
+// however, the post we use to create the tag must be a real post
+
+*/
