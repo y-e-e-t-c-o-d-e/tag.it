@@ -120,10 +120,10 @@ exports.verifyCourse = async (req, res) => {
             let status = 200; 
             let type = "instructor";
 
-            console.log(courseObj.getPendingInstructorList())
-
             // Return if user is not in instructor list
-            if (courseObj.getPendingInstructorList().indexOf(userObj.getEmail()) < 0) {
+            const pendingList = await (courseObj.getPendingInstructorList());
+            
+            if (pendingList.indexOf(userObj.getEmail()) < 0) {
                 errorMsg = "User has not been invited to join staff by the instructors";
                 status = 410;
                 type = null;
@@ -146,7 +146,7 @@ exports.verifyCourse = async (req, res) => {
     } catch (e) {
         res.status(410).json({
             status: 410,
-            error: "Course obj not being able to got from Firebase"
+            error: "Course obj not retrieved from Firebase"
         });
     }
 }
