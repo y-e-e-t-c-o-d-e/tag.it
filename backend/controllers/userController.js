@@ -1,5 +1,5 @@
-const user = require("../models/User");
-const course = require("../models/Course");
+const User = require("../models/User");
+const Course = require("../models/Course");
 
 exports.addUser = async (req, res) => {
     // Check that required data is given
@@ -13,7 +13,7 @@ exports.addUser = async (req, res) => {
     };
 
     try {
-        await user.pushUserToFirebase(bodyParams);
+        await User.pushUserToFirebase(bodyParams);
         res.status(200).send(`Added user ${bodyParams.uuid}`)
     } catch (e) {
         res.status(410).json({
@@ -30,25 +30,28 @@ exports.getUser = async (req, res) => {
     // Grabs the user based on the userUUID. If fails, responds with an error.
     try {
         if (userUUID) {
-            userObj = await user.getUserById(userUUID);
+            userObj = await User.getUserById(userUUID);
         }
 
         // get all the courses
-        userObj.props.filledInStudentCourseList = await Promise.all(userObj.getStudentCourseList().map(async uuid => {
-            const toReturn = (await course.getCourseById(uuid)).props;
+        const studentCourseList = await userObj.getStudentCourseList();
+        userObj.props.filledInStudentCourseList = await Promise.all(studentCourseList.map(async uuid => {
+            const toReturn = (await Course.getCourseById(uuid)).props;
             return toReturn;
         }));
-
-        userObj.props.filledInInstructorCourseList = await Promise.all(userObj.getInstructorCourseList().map(async uuid => {
-            const toReturn = (await course.getCourseById(uuid)).props;
+        
+        const instructorCourseList = await userObj.getInstructorCourseList();
+        userObj.props.filledInInstructorCourseList = await Promise.all(instructorCourseList.map(async uuid => {
+            const toReturn = (await Course.getCourseById(uuid)).props;
             return toReturn;
         }));
 
         res.status(200).json(userObj.props);
     } catch (e) {
+        console.log(e)
         res.status(410).json({
             status: 410,
-            error: e
+            error: JSON.stringify(e)
         });
     };
 };
@@ -123,11 +126,11 @@ exports.addUserToCourse = async (req, res) => {
     };
 
     if (userToAdd) {
-        userObj = await user.getUserById(userToAdd);
+        userObj = await User.getUserById(userToAdd);
     }
 
     try {
-        let courseObj = await course.getCourseById(courseUUID);
+        let courseObj = await Course.getCourseById(courseUUID);
 
         if ("type" in bodyParams && bodyParams["type"] == "instructor") {
             await userObj.addInstructorCourse(courseObj.getUUID());
@@ -159,7 +162,7 @@ exports.getUserType = async (req, res) => {
 
     // Grabs the user's type based on the courseUUID. If fails, responds with an error.
     try {
-        const courseObj = await course.getCourseById(courseUUID);
+        const courseObj = await Course.getCourseById(courseUUID);
 
         if (courseObj.getInstructorList().indexOf(userObj.getUUID()) != -1) {
             res.status(200).json({
@@ -190,7 +193,7 @@ exports.deleteUser = async (req, res) => {
 
     // Grabs the user based on the userUUID. If fails, responds with an error.
     try {
-        user.deleteUserByID(userUUID);
+        User.deleteUserByID(userUUID);
         res.status(200).send("removed user with the following userUUID:" + userUUID)
     } catch (e) {
         res.status(410).json({
