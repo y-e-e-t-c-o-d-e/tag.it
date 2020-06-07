@@ -170,10 +170,11 @@ exports.getCourseInfo = async (req, res, next) => {
     try {
         const courseObj = await Course.getCourseById(courseUUID);
         let type = courseObj.classifyUser(req.user.getUUID());
-
-        // Checks whether user should have access to course material or not
-        if (type !== "student" && type !== "instructor") {
-            throw new Unauthorized("User not allowed to access the course");
+        if (!req.query.invited) {
+            // Checks whether user should have access to course material or not
+            if (type !== "student" && type !== "instructor") {
+                throw new Unauthorized("User not allowed to access the course");
+            }
         }
 
         // Gets all the Post Objects
