@@ -33,7 +33,7 @@ const ClassCreation = ({ currentUser, history }) => {
     const handleClassCreation = async (event) => {
         event.preventDefault();
         if (titleValid && descValid) {
-            const { title, description} = event.target.elements;
+            const { title, description } = event.target.elements;
             /* try to create a course in database */
             try {
                 const tags = selectedTags.map(tag => tag.name)
@@ -122,14 +122,14 @@ const ClassCreation = ({ currentUser, history }) => {
                         </div>
                         <div className="inputField">
                             <Form.Label>Description:</Form.Label>
-                            <Form.Control as="textarea" name="description" placeholder="Description" onChange={handleDescChange} onBlur={handleDescChange} style={{ backgroundColor: descBgColor }}/>
+                            <Form.Control as="textarea" name="description" placeholder="Description" onChange={handleDescChange} onBlur={handleDescChange} style={{ backgroundColor: descBgColor }} />
                         </div>
                         <div className="inputField" id="term-selection">
                             <Form.Label>Course Term:{'\u00A0'}{'\u00A0'}</Form.Label>
-                            <DropdownButton name="term" title={courseTerm}>
-                                <Dropdown.Item onClick={()=>{setCourseTerm("SS1")}}>Summer Session I</Dropdown.Item>
-                                <Dropdown.Item onClick={()=>{setCourseTerm("SS2")}}>Summer Session II</Dropdown.Item>
-                                <Dropdown.Item onClick={()=>{setCourseTerm("FA20")}}>Fall 2020</Dropdown.Item>
+                            <DropdownButton name="term" variant="warning" title={courseTerm}>
+                                <Dropdown.Item onClick={() => { setCourseTerm("SS1") }}>Summer Session I</Dropdown.Item>
+                                <Dropdown.Item onClick={() => { setCourseTerm("SS2") }}>Summer Session II</Dropdown.Item>
+                                <Dropdown.Item onClick={() => { setCourseTerm("FA20") }}>Fall 2020</Dropdown.Item>
                             </DropdownButton>
                         </div>
                         <div className="inputField">
@@ -143,12 +143,12 @@ const ClassCreation = ({ currentUser, history }) => {
                                 setSelectedTags(tags)
                             }} />
                         </div>
-                        <Button id="next-button" type="submit">Next Step: Adding Instructors</Button>
+                        <Button id="next-button" variant="warning" type="submit">Next Step: Adding Instructors</Button>
                     </Form>
                 </div>
                 {/* Cancel creating a class */}
                 <div className="input">
-                    <Button id="cancel-button" onClick={redirectHome}>Cancel</Button>
+                    <Button id="cancel-button" variant="warning" onClick={redirectHome}>Cancel</Button>
                 </div>
             </div>
 

@@ -114,7 +114,7 @@ const PostView = ({ currentUser, history }) => {
     // Attempt to edit the post
     const attemptEdit = () => {
         if (post.author !== currentUser.uuid) {
-            alert("Only the post maker can edit the post");
+            createToast("Only the post maker can edit the post");
             return -1;
         }
         setEditing(true);

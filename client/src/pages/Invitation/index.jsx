@@ -16,7 +16,7 @@ function Invitation(props) {
     const inviteId = props.match.params.inviteId;
 
     useEffect(() => {
-        API.getCourse(courseId).then((course) => {
+        API.getCourse(courseId, true).then((course) => {
             // Check if user is in course, if so immediately redirect
             if (!!course.data.type) {
                 let link = `/courses/${course.data.courseId}`;

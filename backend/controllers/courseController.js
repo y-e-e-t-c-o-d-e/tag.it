@@ -170,10 +170,11 @@ exports.getCourseInfo = async (req, res, next) => {
     try {
         const courseObj = await Course.getCourseById(courseUUID);
         let type = courseObj.classifyUser(req.user.getUUID());
-
-        // Checks whether user should have access to course material or not
-        if (type !== "student" && type !== "instructor") {
-            throw new Unauthorized("User not allowed to access the course");
+        if (!req.query.invited) {
+            // Checks whether user should have access to course material or not
+            if (type !== "student" && type !== "instructor") {
+                throw new Unauthorized("User not allowed to access the course");
+            }
         }
 
         // Gets all the Post Objects
@@ -183,7 +184,7 @@ exports.getCourseInfo = async (req, res, next) => {
                 const postObj = await Post.getPostById(postId);
 
                 // Does not add private posts if user is a student (except if the private post is yours)
-                if (type === "instructor" || !postObj.isPrivate || postObj.getAuthor() === req.user.getUUID()) {
+                if (type === "instructor" || !postObj.isPrivate() || postObj.getAuthor() === req.user.getUUID()) {
                     (await acc).push(postObj.props);
                 }
                 
@@ -272,6 +273,7 @@ exports.getCourseUsers = async (req, res) => {
         
         const studentList = await courseObj.getStudentList();
         const instructorList = await courseObj.getInstructorList();
+        const pendingInstructorList = await courseObj.getPendingInstructorList();
 
         const filledInInstructors = await Promise.all(instructorList.map(
             async (instructorId) => (await User.getUserById(instructorId)).props));
@@ -280,7 +282,8 @@ exports.getCourseUsers = async (req, res) => {
 
         res.status(200).json({
             students: filledInStudents,
-            instructors: filledInInstructors
+            instructors: filledInInstructors,
+            pendingInstructorList: pendingInstructorList
         });
     } catch (e) {
         res.status(410).json({
