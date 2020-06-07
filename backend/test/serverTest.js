@@ -40,6 +40,9 @@ describe('index routes', () => {
   let commentKey;
   let commentObj;
 
+  let tagKey;
+  let tagObj;
+
   // Set up function before every test
   before(async () => {
     server = require('../app');
@@ -130,13 +133,29 @@ describe('index routes', () => {
     }
     commentKey = await Comment.pushCommentToFirebase(comment1);
     commentObj = await Comment.getCommentById(commentKey);
+
+    // Tag set up
+    const tag1 = {
+      name: "github",
+      course: courseKey2
+    }
+    tagKey = await Tag.pushTagToFirebase(tag1);
+    tagObj = await Tag.getTagById(tagKey);
   });
 
   // Tear down function that runs after every test
   after(async () => {
     server.close();
     await User.deleteUserById(userUUID);
+    await User.deleteUserById(userUUID2);
+    await User.deleteUserById(userUUID3);
+    await User.deleteUserById(userUUID4);
     await Course.deleteCourseById(courseKey);
+    await Course.deleteCourseById(courseKey2);
+    await Post.deletePostById(postKey);
+    await Post.deletePostById(postKey2);
+    await Comment.deleteCommentById(commentKey);
+    await Tag.deleteTagById(tagKey);
   })
     
   it('should protect authenticated routes', (done) => {
@@ -315,6 +334,20 @@ describe('index routes', () => {
         .end((err, res) => {
           expect(res).to.have.status(200);
           expect(res.body).deep.equal([commentObj.props]);
+          done();
+        });
+    });
+  });
+
+  describe('tag routes', () => {
+    it('get tag', (done) => {
+      chai.request(server)
+        .get('/api/tag')
+        .query({courseUUID: courseKey2})
+        .set("Authorization", `Bearer ${userUUID4}`)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).deep.equal([tagObj.getUUID()]);
           done();
         });
     });
