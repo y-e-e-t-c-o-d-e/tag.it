@@ -39,6 +39,8 @@ const Login = ({ history }) => {
     }
 
     const { currentUser } = useContext(AuthContext);
+    const [emailValue, setEmailValue] = useState("");
+
     if (currentUser) {
         return <Redirect to="/" />;
     }
@@ -58,14 +60,26 @@ const Login = ({ history }) => {
                             <div className="inputField">
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control name="email" type="email" placeholder="Email"
-                                    style={{ backgroundColor: "white" }}
+                                    style={{ backgroundColor: "white" }} onChange={(e) => {setEmailValue(e.target.value)}}
                                 />
                             </div>
 
                             <div className="inputField">
                                 <Form.Label>Password</Form.Label>
                                 <Form.Control name="password" type="password" placeholder="Password" />
-                                <a href="/" id="pwdRecover">Forgot your password?</a>
+                                <a href="/" id="pwdRecover" onClick={(e) => {
+                                    e.preventDefault();
+                                    // check if they inputted their email
+                                    if (emailValue !== "" && emailValue.includes("@") && emailValue.includes(".")) {
+                                        db.auth().sendPasswordResetEmail(emailValue).then(finished => {
+                                            createToast("Password reset sent!");
+                                        }).catch(error => {
+                                            createToast("Something went wrong — " + error);
+                                        })
+                                    } else {
+                                        createToast("Please input a valid email!");
+                                    }
+                                }}>Forgot your password?</a>
                             </div>
 
                             <Button type="submit">Log In</Button>
