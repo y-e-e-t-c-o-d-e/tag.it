@@ -5,6 +5,7 @@ const chaiHttp = require('chai-http');
 
 const User = require("../models/User");
 const Course = require("../models/Course");
+const Post = require("../models/Post");
 
 chai.use(chaiHttp)
 
@@ -15,15 +16,22 @@ describe('index routes', () => {
 
   let userUUID = "uuid";
   let userObj;
-  let userUUID2 = "uuid2"
+  let userUUID2 = "uuid2";
   let userObj2;
-  let userUUID3 = "uuid3"
+  let userUUID3 = "uuid3";
   let userObj3;
+  let userUUID4 = "uuid4";
+  let userObj4;
 
   let courseKey;
   let courseObj;
   let studentInviteKey;
   let instrInviteKey;
+  let courseKey2;
+  let courseObj2;
+
+  let postKey;
+  let postObj;
 
   // Set up function before every test
   before(async () => {
@@ -47,8 +55,8 @@ describe('index routes', () => {
     await User.pushUserToFirebase(user2Params);
     userObj2 = await User.getUserById(userUUID2);
 
-     // User 3 set up 
-     const user3Params = {
+    // User 3 set up 
+    const user3Params = {
       name: "pending instr",
       email: "i1@ucsd.edu",
       uuid: userUUID3
@@ -56,7 +64,16 @@ describe('index routes', () => {
     await User.pushUserToFirebase(user3Params);
     userObj3 = await User.getUserById(userUUID3);
 
-    // Course set up 
+    // User 4 set up 
+    const user4Params = {
+      name: "post author",
+      email: "u4@ucsd.edu",
+      uuid: userUUID4
+    };
+    await User.pushUserToFirebase(user4Params);
+    userObj4 = await User.getUserById(userUUID4);
+
+    // Course 1 set up 
     const course1 = {
         name: "Test Course 1",
         term: "Fall 2020",
@@ -68,6 +85,25 @@ describe('index routes', () => {
     await courseObj.addPendingInstructor(userObj3.getEmail());
     studentInviteKey = courseObj.getStudentInviteId();
     instrInviteKey = courseObj.getInstructorInviteId();
+
+    // Course 2 set up 
+    const course2 = {
+      name: "Course with post",
+      term: "Spring 2020",
+      description: "TESTING MORE"
+    };
+    courseKey2 = await Course.pushCourseToFirebase(course2, userObj4);
+    courseObj2 = await Course.getCourseById(courseKey2);    
+
+    // Post set up
+    const post1 = {
+      title: "Test Post 1",
+      content: "Help me pls",
+      author: userUUID4,
+      course: courseKey2
+    }
+    postKey = await Post.pushPostToFirebase(post1);
+    postObj = await Post.getPostById(postKey);
   });
 
   // Tear down function that runs after every test
@@ -226,4 +262,21 @@ describe('index routes', () => {
     });
   });
 
+  describe('post routes', () => {
+    it('get post', (done) => {
+      chai.request(server)
+        .get('/api/post')
+        .query({postUUID: postKey})
+        .set("Authorization", `Bearer ${userUUID4}`)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).deep.equal({
+            ...postObj.props, 
+            filledInTags: [], 
+            authorName: userObj4.getName()
+          });
+          done();
+        });
+    });
+  });
 });
