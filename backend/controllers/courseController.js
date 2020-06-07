@@ -184,7 +184,7 @@ exports.getCourseInfo = async (req, res, next) => {
                 const postObj = await Post.getPostById(postId);
 
                 // Does not add private posts if user is a student (except if the private post is yours)
-                if (type === "instructor" || !postObj.isPrivate || postObj.getAuthor() === req.user.getUUID()) {
+                if (type === "instructor" || !postObj.isPrivate() || postObj.getAuthor() === req.user.getUUID()) {
                     (await acc).push(postObj.props);
                 }
                 
