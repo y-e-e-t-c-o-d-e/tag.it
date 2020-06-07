@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import logo from '../../assets/logo.png';
 import { Navigation } from "../../components";
 import db from "../../base";
@@ -113,12 +113,12 @@ const SignUp = ({ history }) => {
     return (
         <div>
             <Navigation history={history} />
-            <div className="centered">
+            <div className="container">
                 <div className="contents">
                     {/* The tag.it logo*/}
                     <div id="center-logo">
                         <img src={logo} alt="Tag.it" height="125" />
-                        <h2>Connecting Students to Professors</h2>
+                        <p>Connecting Students to Professors</p>
                     </div>
 
                     {/* The main body of the page */}
@@ -127,30 +127,30 @@ const SignUp = ({ history }) => {
                         {/* Signup section */}
                         <div className="input">
                             <h2>Sign Up</h2>
-                            <form onSubmit={handleSignUp}>
-                                <label>
-                                    <p>Please enter your name:</p>
-                                    <input name="name" type="name" placeholder="First & Last Name" style={{ backgroundColor: "white" }}
+                            <Form onSubmit={handleSignUp}>
+                                <div className="inputField">
+                                    <Form.Label>Name</Form.Label>
+                                    <Form.Control name="name" type="name" placeholder="First & Last Name" style={{ backgroundColor: "white" }}
                                     />
-                                </label>
-                                <label>
-                                    <p>Please enter your email:</p>
-                                    <input name="email" type="email" placeholder="Email" style={{ backgroundColor: "white" }}
+                                </div>
+                                <div className="inputField">
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control name="email" type="email" placeholder="Email" style={{ backgroundColor: "white" }}
                                     />
-                                </label>
-                                <label>
-                                    <p>Please enter your password:</p>
-                                    <input name="password" type="password" placeholder="Password" style={{ backgroundColor: "white" }}
+                                </div>
+                                <div className="inputField">
+                                    <Form.Label>Password</Form.Label>
+                                    <Form.Control name="password" type="password" placeholder="Password" style={{ backgroundColor: "white" }}
                                     />
-                                </label>
-                                <label>
-                                    <p>Please enter your password again:</p>
-                                    <input name="password" type="password" placeholder="Confirm Password" style={{ backgroundColor: "white" }}
+                                </div>
+                                <div className="inputField">
+                                    <Form.Label>Confirm Password</Form.Label>
+                                    <Form.Control name="password" type="password" placeholder="Confirm Password" style={{ backgroundColor: "white" }}
                                     />
-                                </label>
+                                </div>
                                 <br />
                                 <Button variant="primary" type="submit">Sign Up</Button>
-                            </form>
+                            </Form>
                         </div>
 
                         {/* Redirect to Log in */}
