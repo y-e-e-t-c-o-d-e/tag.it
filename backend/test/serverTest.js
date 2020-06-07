@@ -6,6 +6,8 @@ const chaiHttp = require('chai-http');
 const User = require("../models/User");
 const Course = require("../models/Course");
 const Post = require("../models/Post");
+const Comment = require("../models/Comment");
+const Tag = require("../models/Tag");
 
 chai.use(chaiHttp)
 
@@ -32,6 +34,11 @@ describe('index routes', () => {
 
   let postKey;
   let postObj;
+  let postKey2;
+  let postObj2;
+
+  let commentKey;
+  let commentObj;
 
   // Set up function before every test
   before(async () => {
@@ -88,14 +95,14 @@ describe('index routes', () => {
 
     // Course 2 set up 
     const course2 = {
-      name: "Course with post",
+      name: "Course with posts",
       term: "Spring 2020",
       description: "TESTING MORE"
     };
     courseKey2 = await Course.pushCourseToFirebase(course2, userObj4);
     courseObj2 = await Course.getCourseById(courseKey2);    
 
-    // Post set up
+    // Post 1 set up
     const post1 = {
       title: "Test Post 1",
       content: "Help me pls",
@@ -104,6 +111,25 @@ describe('index routes', () => {
     }
     postKey = await Post.pushPostToFirebase(post1);
     postObj = await Post.getPostById(postKey);
+
+    // Post 2 set up
+    const post2 = {
+      title: "Post with comment",
+      content: "Help me pls",
+      author: userUUID4,
+      course: courseKey2
+    }
+    postKey2 = await Post.pushPostToFirebase(post2);
+    postObj2 = await Post.getPostById(postKey2);
+
+    // Comment set up
+    const comment1 = {
+      content: "I agree",
+      postId: postKey2,
+      author: userUUID4
+    }
+    commentKey = await Comment.pushCommentToFirebase(comment1);
+    commentObj = await Comment.getCommentById(commentKey);
   });
 
   // Tear down function that runs after every test
@@ -275,6 +301,20 @@ describe('index routes', () => {
             filledInTags: [], 
             authorName: userObj4.getName()
           });
+          done();
+        });
+    });
+  });
+
+  describe('comment routes', () => {
+    it('get comment', (done) => {
+      chai.request(server)
+        .get('/api/comment')
+        .query({postUUID: postKey2})
+        .set("Authorization", `Bearer ${userUUID4}`)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).deep.equal([commentObj.props]);
           done();
         });
     });
