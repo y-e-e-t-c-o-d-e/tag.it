@@ -146,16 +146,15 @@ describe('index routes', () => {
   // Tear down function that runs after every test
   after(async () => {
     server.close();
+    await Post.deletePostById(postKey);
+    await Post.deletePostById(postKey2);
     await User.deleteUserById(userUUID);
     await User.deleteUserById(userUUID2);
     await User.deleteUserById(userUUID3);
     await User.deleteUserById(userUUID4);
+    await Tag.deleteTagById(tagKey);
     await Course.deleteCourseById(courseKey);
     await Course.deleteCourseById(courseKey2);
-    await Post.deletePostById(postKey);
-    await Post.deletePostById(postKey2);
-    await Comment.deleteCommentById(commentKey);
-    await Tag.deleteTagById(tagKey);
   })
     
   it('should protect authenticated routes', (done) => {
