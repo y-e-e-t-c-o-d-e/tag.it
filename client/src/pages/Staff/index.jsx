@@ -92,14 +92,14 @@ const Staff = ({ history, match, currentUser }) => {
                         <form onSubmit={handleStaffInvite}>
                             <input name="email" type="email" placeholder="Add new instructor email" required="required" style={{ backgroundColor: "#e6e5e5" }} />
                             <div className="input">
-                                <Button id="invite-button" type="submit">Invite</Button>
+                                <Button id="invite-button" variant="warning" type="submit">Invite</Button>
                             </div>
                         </form>
                         <p>*Instructors will have access to the course settings page, and will be able to manage tags, pin posts, make announcements, etc.</p>
                     </div>
                     <div className="input">
-                        <Button id="return-button" href={`/courses/${courseId}`}>Return to Course</Button>
-                        <Button id="return-button" href={`/courses/${courseId}/settings`}>Return to Course Settings</Button>
+                        <Button id="return-button" variant="warning" href={`/courses/${courseId}`}>Return to Course</Button>
+                        <Button id="return-button" variant="warning" href={`/courses/${courseId}/settings`}>Return to Course Settings</Button>
                     </div>
                 </div>
                 <div className="curr-instructors">
