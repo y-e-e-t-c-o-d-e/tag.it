@@ -57,6 +57,14 @@ const PostView = ({ currentUser, history }) => {
         return (<Button block key={tag.uuid} className="tagListItem"><b>{tag.name}</b></Button>);
     });
 
+    // To be rendered if the post does not have tags yet
+    const emptyTag = (
+        <p id="no-tags">This post does not have tags yet. Add tags to help others find this post quicker!</p>
+    )
+
+    // Tag section depending on whether or not there are tags
+    let tagSection = post.filledInTags.length? tagButtons:emptyTag;
+
     // Toggles the following status of the post
     const toggleFollow = () => {
         API.toggleFollow(currentUser, postId);
@@ -151,7 +159,7 @@ const PostView = ({ currentUser, history }) => {
             {/* Like / discuss/ tags */}
             <span>Tags:</span>
             <div className="tagButtons">
-                {tagButtons}
+                {tagSection}
             </div>
             <div className="post-view-buttons">
                 <div className="like-discuss">
