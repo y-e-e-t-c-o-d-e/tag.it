@@ -9,7 +9,6 @@ exports.addComment = async (req, res) => {
     // parentComment is optional
     const content = bodyParams["content"];
     const postId = bodyParams["postId"];
-    const parentComment = bodyParams["parentComment"];
     bodyParams["author"] = req.user.getUUID();
 
     if (!postId || !content) {
@@ -22,17 +21,7 @@ exports.addComment = async (req, res) => {
 
     try {
         const commentObjKey = await comment.pushCommentToFirebase(bodyParams);
-        const commentObj = await comment.getCommentById(commentObjKey);
-        // Provided parentComment id
-        if (parentComment) {
-            const parentCommentObj = await comment.getCommentById(parentComment);
-            parentCommentObj.addChild(commentObjKey);
-        } else {
-            const postObj = await post.getPostById(postId);
-            postObj.addComment(commentObjKey);
-        }
-
-        res.status(200).json("Comment added");
+        res.status(200).json(`Comment added: ${commentObjKey}`);
     } catch (e) {
         res.status(410).json({
             error: e,
