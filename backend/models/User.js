@@ -229,16 +229,6 @@ class User {
         await this.updateUser();
         return this.getLikedPostList().indexOf(postId) >= 0;
     }
-
-    // getLikedCommentStatus = async (commentId) => {
-    //     await this.updateUser();
-    //     return this.getLikedCommentList().indexOf(commentId) >= 0;
-    // }
-
-    // getLikedPostStatus = async (postId) => {
-    //     await this.updateUser();
-    //     return this.getLikedPostList().indexOf(postId) >= 0;
-    // }
     
     setIcon = async (icon) => {
         this.props.icon = icon;
@@ -290,8 +280,6 @@ class User {
         return this.props.icon;
     }
  
-    //getters for everything, add post, add comment, add followedPost
-
     /**
      * Update a given user's data fields.
      * 
