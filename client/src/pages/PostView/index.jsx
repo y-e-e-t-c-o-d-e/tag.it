@@ -53,8 +53,8 @@ const PostView = ({ currentUser, history }) => {
     }, [currentUser])
 
     // A list of all the tags to be rendered
-    const tagButtons = post.filledInTags.map((tag)=>{
-        return(<Button block key={tag.uuid} className="tagListItem"><b>{tag.name}</b></Button>);
+    const tagButtons = post.filledInTags.map((tag) => {
+        return (<Button block key={tag.uuid} className="tagListItem"><b>{tag.name}</b></Button>);
     });
 
     // Toggles the following status of the post
@@ -75,10 +75,10 @@ const PostView = ({ currentUser, history }) => {
         followUnfollowButton = (<Dropdown.Item key="follow" as="button">Loading </Dropdown.Item>);
     }
 
-    
+
     // Copy link on click of the copy button
     const copyLink = () => {
-        let link = `tagdotit.netlify.com/course/${courseId}/post/${postId}`;
+        let link = `tagdotit.netlify.com/courses/${courseId}/post/${postId}`;
         navigator.clipboard.writeText(link);
         createToast("Link successfully copied!");
     }
@@ -104,16 +104,16 @@ const PostView = ({ currentUser, history }) => {
     // Render like button depending on the current liked state
     const renderPostLiked = () => {
         if (postLiked) {
-            return <Button className="blue-button" onClick={handlePostLike}>unlike.it</Button>
+            return <Button variant="primary" onClick={handlePostLike}>unlike.it</Button>
 
         }
-        return <Button className="yellow-button" onClick={handlePostLike}>like.it</Button>
+        return <Button variant="warning" onClick={handlePostLike}>like.it</Button>
     };
 
 
     // Attempt to edit the post
-    const attemptEdit = () =>{
-        if(post.author !== currentUser.uuid){
+    const attemptEdit = () => {
+        if (post.author !== currentUser.uuid) {
             alert("Only the post maker can edit the post");
             return -1;
         }
@@ -133,8 +133,8 @@ const PostView = ({ currentUser, history }) => {
                     </Col>
                 </Row>
                 <div className="title-button-section">
-                    <Button className="yellow-button" onClick={attemptEdit}>change.it</Button>
-                    <DropdownButton className="yellow-button" title="actions">
+                    <Button variant="warning" onClick={attemptEdit}>change.it</Button>
+                    <DropdownButton variant="warning" title="actions">
                         {followUnfollowButton}
                         <Dropdown.Item key="copy-link" as="button" onClick={copyLink}>Copy Link</Dropdown.Item>
                         {resolveUnresolveButton}
@@ -154,32 +154,32 @@ const PostView = ({ currentUser, history }) => {
                 {tagButtons}
             </div>
             <div className="post-view-buttons">
-                    <div className="like-discuss">
-                        
-                        <div className="likes"> {post.score} </div>
-                        {renderPostLiked()}
-                        <br/>
-                    </div>
+                <div className="like-discuss">
+
+                    <div className="likes"> {post.score} </div>
+                    {renderPostLiked()}
+                    <br />
+                </div>
             </div>
-            <CommentSection commentList={post.commentList} postId={postId}/>
+            <CommentSection commentList={post.commentList} postId={postId} />
 
         </div>
     );
 
     // The edit view that will show up if we are currently editing
     const postContent = post.content;
-    const editor = <EditPost postUUID={postId} postText={postContent} 
-                    isResolved={post.isResolved} isPinned={post.isPinned}
-                    setEditing={setEditing} />
+    const editor = <EditPost postUUID={postId} postText={postContent}
+        isResolved={post.isResolved} isPinned={post.isPinned}
+        setEditing={setEditing} />
 
     // The content to be shown depending on if we are editing
-    let content = editing? editor:postViewer;
+    let content = editing ? editor : postViewer;
 
     // Returns the content of the page
     return (
 
         <div className="home">
-            <Navigation  history={history} currentUser={currentUser} />
+            <Navigation history={history} currentUser={currentUser} />
             <div className="cont">
                 <Button onClick={() => { history.push(`/courses/${courseId}`) }}>Course Home</Button>
                 <Row>
