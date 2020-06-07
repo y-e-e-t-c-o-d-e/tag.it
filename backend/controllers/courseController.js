@@ -272,6 +272,7 @@ exports.getCourseUsers = async (req, res) => {
         
         const studentList = await courseObj.getStudentList();
         const instructorList = await courseObj.getInstructorList();
+        const pendingInstructorList = await courseObj.getPendingInstructorList();
 
         const filledInInstructors = await Promise.all(instructorList.map(
             async (instructorId) => (await User.getUserById(instructorId)).props));
@@ -280,7 +281,8 @@ exports.getCourseUsers = async (req, res) => {
 
         res.status(200).json({
             students: filledInStudents,
-            instructors: filledInInstructors
+            instructors: filledInInstructors,
+            pendingInstructorList: pendingInstructorList
         });
     } catch (e) {
         res.status(410).json({

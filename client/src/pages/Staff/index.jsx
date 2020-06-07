@@ -14,10 +14,11 @@ const Staff = ({ history, match, currentUser }) => {
     let pendingRequest = false;
 
     useEffect(() => {
-        API.getCourseUsers(courseId).then((data) => {
-            setCurrCourses(data.data.instructors.map((instructorObj) => instructorObj.email));
-            setPendingCourses(data.data.pendingInstructorList);
-            setEmailToIdMap(data.data.instructors.reduce((acc, instructorObj) => {
+        API.getCourseUsers(courseId).then((response) => {
+            console.log(response.data)
+            setCurrCourses(response.data.instructors.map((instructorObj) => instructorObj.email));
+            setPendingCourses(response.data.pendingInstructorList);
+            setEmailToIdMap(response.data.instructors.reduce((acc, instructorObj) => {
                 acc[instructorObj.email] = instructorObj.uuid;
                 return acc;
             }, {}))
