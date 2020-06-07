@@ -90,11 +90,11 @@ export default {
 
     },
 
-    getCourse: function (uuid) {
+    getCourse: function (uuid, invited) {
         const config = {
-            headers: authHeaders()
+            headers: authHeaders(),
         };
-        return axios.get(`${baseURL}/api/course/${uuid}`, config);
+        return axios.get(`${baseURL}/api/course/${uuid}?invited=${invited ? "true" : "false"}`, config);
     },
 
     updateCourse: function (courseUUID, courseName, description) {

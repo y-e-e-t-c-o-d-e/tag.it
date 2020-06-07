@@ -91,6 +91,10 @@
     align-items: center;
 }
 
+#no-tags {
+    color: #1D7B99;
+}
+
 .tagButtons {
     max-height: 100px;
     display: block;

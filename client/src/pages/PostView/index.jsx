@@ -57,6 +57,14 @@ const PostView = ({ currentUser, history }) => {
         return (<Button block key={tag.uuid} className="tagListItem"><b>{tag.name}</b></Button>);
     });
 
+    // To be rendered if the post does not have tags yet
+    const emptyTag = (
+        <p id="no-tags">This post does not have tags yet. Add tags to help others find this post quicker!</p>
+    )
+
+    // Tag section depending on whether or not there are tags
+    let tagSection = post.filledInTags.length? tagButtons:emptyTag;
+
     // Toggles the following status of the post
     const toggleFollow = () => {
         API.toggleFollow(currentUser, postId);
@@ -78,7 +86,7 @@ const PostView = ({ currentUser, history }) => {
 
     // Copy link on click of the copy button
     const copyLink = () => {
-        let link = `tagdotit.netlify.com/courses/${courseId}/post/${postId}`;
+        let link = `tagdotit.netlify.com/courses/${courseId}/posts/${postId}`;
         navigator.clipboard.writeText(link);
         createToast("Link successfully copied!");
     }
@@ -114,7 +122,7 @@ const PostView = ({ currentUser, history }) => {
     // Attempt to edit the post
     const attemptEdit = () => {
         if (post.author !== currentUser.uuid) {
-            alert("Only the post maker can edit the post");
+            createToast("Only the post maker can edit the post");
             return -1;
         }
         setEditing(true);
@@ -151,7 +159,7 @@ const PostView = ({ currentUser, history }) => {
             {/* Like / discuss/ tags */}
             <span>Tags:</span>
             <div className="tagButtons">
-                {tagButtons}
+                {tagSection}
             </div>
             <div className="post-view-buttons">
                 <div className="like-discuss">
