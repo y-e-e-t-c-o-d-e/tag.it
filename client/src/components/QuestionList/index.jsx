@@ -19,11 +19,11 @@ const QuestionList = ({ questions, courseId, history, filters }) =>{
 
 
     // Displays all posts that are not private
-    const listBody = orderedPosts.map((post) =>{
+    const listBody = orderedPosts.map((post, key) =>{
         let link = "/courses/"+ courseId+ "/posts/"+post.uuid;
 
         return (    
-            <PostGrid title={post.title} history={history} link={link} isPrivate={post.isPrivate}/>
+            <PostGrid key={key} title={post.title} history={history} link={link} isPrivate={post.isPrivate}/>
         )
     })
 

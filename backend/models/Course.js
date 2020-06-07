@@ -124,7 +124,7 @@ class Course {
     }
 
     addStudent = async (userId) => {
-        this.updateCourse();
+        await this.updateCourse();
         if (this.props.studentList.indexOf(userId) < 0) {
             this.props.studentList.push(userId);
             await this.push();
@@ -134,7 +134,7 @@ class Course {
     }
 
     addInstructor = async (userId, userEmail = null) => {
-        this.updateCourse();
+        await this.updateCourse();
         if (this.props.instructorList.indexOf(userId) < 0) {
             this.props.instructorList.push(userId);
 
@@ -171,7 +171,7 @@ class Course {
     }
 
     removePendingInstructor = async (userEmail) => {
-        this.updateCourse();
+        await this.updateCourse();
         if (this.props.pendingInstructorList.indexOf(userEmail) >= 0) {
             this.props.pendingInstructorList.splice(this.props.pendingInstructorList.indexOf(userEmail), 1);
             await this.push();
@@ -179,7 +179,7 @@ class Course {
     }
     
     removeInstructor = async (userId) => {
-        this.updateCourse();
+        await this.updateCourse();
 
         if (this.props.instructorList.indexOf(userId) >= 0) {      
             this.props.instructorList.splice(this.props.instructorList.indexOf(userId), 1);
@@ -190,7 +190,7 @@ class Course {
     }
 
     removeStudent = async (userId) => {
-        this.updateCourse();
+        await this.updateCourse();
         if (this.props.studentList.indexOf(userId) >= 0) {
             this.props.studentList.splice(this.props.studentList.indexOf(userId), 1);
             await this.push();

@@ -28,16 +28,11 @@ const ClassCreation = ({ currentUser, history }) => {
     /* Update state of selected tags */
     const [selectedTags, setSelectedTags] = useState([]);
 
-    const onChangeSetTags = (tagState) => {
-        // setSelectedTags(tagState);
-    };
-
     /* Main function for handling class creation */
     const handleClassCreation = async (event) => {
         event.preventDefault();
         if (titleValid && descValid) {
             const { title, description, term } = event.target.elements;
-            const tags = selectedTags.tags;
             /* try to create a course in database */
             try {
                 const courseId = (await API.createCourse(title.value, term.value, description.value)).data;

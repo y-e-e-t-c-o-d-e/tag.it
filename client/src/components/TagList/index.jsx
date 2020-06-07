@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, ListGroup, Row, Col } from "react-bootstrap";
+import { Button, Row, Col } from "react-bootstrap";
 import './style.css';
 
 const TagList = ({ tags, filters, setFilters }) => {
@@ -10,7 +10,7 @@ const TagList = ({ tags, filters, setFilters }) => {
         <div className="tag-section">
             <Row>
                 <Col>
-                    <input className="search" type="text" placeholder="Search..." onChange={e => {
+                    <input className="search" type="text" defaultValue={search} placeholder="Search..." onChange={e => {
                         const val = e.target.value
                         setSearch()
                         setFilters({...filters, search: val})

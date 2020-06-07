@@ -8,8 +8,6 @@ import './style.css';
 const defaultPostOption = {...PostOptions[Object.keys(PostOptions)[0]], text: Object.keys(PostOptions)[0]}
 
 const PostCreator = ({tags, courseId, setView, views}) => {
-    // const [tags, setTags] = useState([{name: "sample tag", uuid: "jlkd8f2348"}]); // all possible tags
-    const [addedTags, setAddedTags] = useState(new Set()); // tags that have been added to this post
     const [options, setOptions] = useState(defaultPostOption);
 
     // form content
@@ -68,8 +66,8 @@ const PostCreator = ({tags, courseId, setView, views}) => {
                     </Col>
                     <Col>
                         <DropdownButton variant="warning" id="dropdown-button-form" title={options.text} drop="up">
-                            {Object.keys(PostOptions).map((optionText) => 
-                                <Dropdown.Item as="button" onClick={() => setOptions({...PostOptions[optionText], text: optionText})}>{optionText}</Dropdown.Item> 
+                            {Object.keys(PostOptions).map((optionText, key) => 
+                                <Dropdown.Item key={key} as="button" onClick={() => setOptions({...PostOptions[optionText], text: optionText})}>{optionText}</Dropdown.Item> 
                             )}
                         </DropdownButton>
                     </Col>

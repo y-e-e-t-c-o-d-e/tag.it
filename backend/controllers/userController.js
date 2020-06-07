@@ -136,7 +136,6 @@ exports.addUserToCourse = async (req, res) => {
             await userObj.addInstructorCourse(courseObj.getUUID());
             res.status(200).send("Added user as instructor to course " + courseObj.getUUID());
         } else {
-            await courseObj.addStudent(userObj.getUUID());
             await userObj.addStudentCourse(courseObj.getUUID());
             res.status(200).send("Added user as student to course " + courseObj.getUUID());
         }
