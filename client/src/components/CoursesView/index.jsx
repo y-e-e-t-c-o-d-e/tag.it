@@ -3,14 +3,14 @@ import { Button, Jumbotron } from "react-bootstrap";
 import { courseToLink } from "../../utils"
 import './style.css';
 
-const CoursesView = ({currentUser, username, history }) => {
+const CoursesView = ({ currentUser, username, history }) => {
     const [studentCourses, setStudentCourses] = useState([])
     const [instructorCourses, setInstructorCourses] = useState([])
 
     if (currentUser && studentCourses.length !== currentUser.filledInStudentCourseList.length) {
         setStudentCourses(currentUser.filledInStudentCourseList)
     }
-    
+
     if (currentUser && instructorCourses.length !== currentUser.filledInInstructorCourseList.length) {
         setInstructorCourses(currentUser.filledInInstructorCourseList)
     }
@@ -20,26 +20,26 @@ const CoursesView = ({currentUser, username, history }) => {
             <Jumbotron>
                 <h1>Welcome, {username}</h1>
                 <p>
-                    This is tag.it! Choose or add a course below to engage in your classes.
+                    This is tag.it! Choose or add a course below to engage in your courses.
                 </p>
                 <div className="courses-container">
-                    { studentCourses.length > 0 && <h3>Student Courses</h3> }
-                    { studentCourses.length > 0 &&
+                    {studentCourses.length > 0 && <h3>Student Courses</h3>}
+                    {studentCourses.length > 0 &&
                         studentCourses.map((course, key) => {
                             return (<div key={key}>
                                 <Button className="course-btn" key={key} variant="primary" onClick={() => { history.push(courseToLink(course.uuid)) }}>{course.name}</Button>
-                                <br/>
-                                </div>
+                                <br />
+                            </div>
                             )
                         })
                     }
-                    { instructorCourses.length > 0 && <h3>Instructor Courses</h3> }
-                    { instructorCourses.length > 0 &&
+                    {instructorCourses.length > 0 && <h3>Instructor Courses</h3>}
+                    {instructorCourses.length > 0 &&
                         instructorCourses.map((course, key) => {
                             return (<div key={key}>
                                 <Button className="course-btn" key={key} variant="success" onClick={() => { history.push(courseToLink(course.uuid)) }}>{course.name}</Button>
-                                <br/>
-                                </div>
+                                <br />
+                            </div>
                             )
                         })
                     }
