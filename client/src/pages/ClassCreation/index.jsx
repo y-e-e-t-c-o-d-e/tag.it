@@ -35,7 +35,8 @@ const ClassCreation = ({ currentUser, history }) => {
             const { title, description, term } = event.target.elements;
             /* try to create a course in database */
             try {
-                const courseId = (await API.createCourse(title.value, term.value, description.value)).data;
+                const tags = selectedTags.map(tag => tag.name)
+                const courseId = (await API.createCourse(title.value, term.value, description.value, tags)).data;
                 redirectAddStaff(courseId); // might need to change depending on how backend implements the return value
             } catch (error) {
                 createToast(error);
