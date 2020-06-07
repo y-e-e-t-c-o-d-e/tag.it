@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from "react-bootstrap";
+import { Form, Button, Dropdown, DropdownButton } from "react-bootstrap";
 import { AutocompleteTags, Navigation } from "../../components"
 import { API, createToast } from "../../utils"
 import './style.css';
@@ -24,6 +24,7 @@ const ClassCreation = ({ currentUser, history }) => {
     /* Check if input form is valid */
     const [titleValid, setTitleValid] = useState(false);
     const [descValid, setDescValid] = useState(false);
+    const [courseTerm, setCourseTerm] = useState("SS1");
 
     /* Update state of selected tags */
     const [selectedTags, setSelectedTags] = useState([]);
@@ -32,18 +33,18 @@ const ClassCreation = ({ currentUser, history }) => {
     const handleClassCreation = async (event) => {
         event.preventDefault();
         if (titleValid && descValid) {
-            const { title, description, term } = event.target.elements;
+            const { title, description} = event.target.elements;
             /* try to create a course in database */
             try {
                 const tags = selectedTags.map(tag => tag.name)
-                const courseId = (await API.createCourse(title.value, term.value, description.value, tags)).data;
+                const courseId = (await API.createCourse(title.value, courseTerm, description.value, tags)).data;
                 redirectAddStaff(courseId); // might need to change depending on how backend implements the return value
             } catch (error) {
                 createToast(error);
                 console.error(error);
             }
         } else {
-            if (!titleValid) { createToast("Please enter a course title"); }
+            if (!titleValid) { createToast("Course Title should have format: [Course Code] - [Course Name]"); }
             else if (!descValid) { createToast("Please enter a course description"); }
         }
     }
@@ -114,25 +115,25 @@ const ClassCreation = ({ currentUser, history }) => {
                 </div>
                 <div className="input">
                     {/* Main class creation form */}
-                    <form onSubmit={handleClassCreation}>
-                        <div className="flex-row">
-                            <p>Course Title:</p>
-                            <input name="title" placeholder="Ex: CSE 111 - History of LeetCode" onBlur={handleTitleChange} style={{ backgroundColor: titleBgColor }} />
+                    <Form onSubmit={handleClassCreation}>
+                        <div className="inputField">
+                            <Form.Label>Course Title:</Form.Label>
+                            <Form.Control name="title" placeholder="Ex: CSE 111 - History of LeetCode" onChange={handleTitleChange} onBlur={handleTitleChange} style={{ backgroundColor: titleBgColor }} />
                         </div>
-                        <div className="flex-row">
-                            <p>Description:</p>
-                            <textarea name="description" placeholder="Description" onBlur={handleDescChange} style={{ backgroundColor: descBgColor }}></textarea>
+                        <div className="inputField">
+                            <Form.Label>Description:</Form.Label>
+                            <Form.Control as="textarea" name="description" placeholder="Description" onChange={handleDescChange} onBlur={handleDescChange} style={{ backgroundColor: descBgColor }}/>
                         </div>
-                        <div className="flex-row">
-                            <p>Course Term:</p>
-                            <select name="term">
-                                <option value="SS1">Summer Session I</option>
-                                <option value="SS2">Summer Session II</option>
-                                <option value="FA20">Fall 2020</option>
-                            </select>
+                        <div className="inputField" id="term-selection">
+                            <Form.Label>Course Term:{'\u00A0'}{'\u00A0'}</Form.Label>
+                            <DropdownButton name="term" title={courseTerm}>
+                                <Dropdown.Item onClick={()=>{setCourseTerm("SS1")}}>Summer Session I</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>{setCourseTerm("SS2")}}>Summer Session II</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>{setCourseTerm("FA20")}}>Fall 2020</Dropdown.Item>
+                            </DropdownButton>
                         </div>
-                        <div className="flex-row">
-                            <p>Initial Tags (Optional):</p>
+                        <div className="inputField">
+                            <Form.Label>Initial Tags (Optional):</Form.Label>
 
                             <AutocompleteTags initialTags={[]} setAddedTags={(tags) => {
 
@@ -143,7 +144,7 @@ const ClassCreation = ({ currentUser, history }) => {
                             }} />
                         </div>
                         <Button id="next-button" type="submit">Next Step: Adding Instructors</Button>
-                    </form>
+                    </Form>
                 </div>
                 {/* Cancel creating a class */}
                 <div className="input">
