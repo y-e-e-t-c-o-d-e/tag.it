@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {Button} from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { Label, SuggestionTextField, Navigation } from "../../components"
-import {API, createToast} from '../../utils/';
+import { API, createToast } from '../../utils/';
 import './style.css';
 
-const AddClass = ({history, currentUser}) => {
+const AddClass = ({ history, currentUser }) => {
     const [selectedClasses, setSelectedClasses] = useState(["", "", "", "", ""]);
     const [courseOptions, setCourseOptions] = useState([]);
 
@@ -23,9 +23,9 @@ const AddClass = ({history, currentUser}) => {
 
     // Renders each of the suggestion text fields
     const renderFields = () => {
-        return [1, 2, 3, 4, 5].map((value, index) => 
-            <SuggestionTextField name={`Class ${value}`} options={courseOptions} type={"class"}
-                                 onBlur={(id) => onBlurSetClasses(index, id)} key={index}/>
+        return [1, 2, 3, 4, 5].map((value, index) =>
+            <SuggestionTextField name={`Course ${value}`} options={courseOptions} type={"class"}
+                onBlur={(id) => onBlurSetClasses(index, id)} key={index} />
         );
     };
 
@@ -34,13 +34,13 @@ const AddClass = ({history, currentUser}) => {
             return <></>
         };
 
-        const studentLabels = currentUser.filledInStudentCourseList.map((val, key) => 
+        const studentLabels = currentUser.filledInStudentCourseList.map((val, key) =>
             <Label key={key} type="student">{val.name}</Label>
         );
-        const instructorLabels = currentUser.filledInInstructorCourseList.map((val, key) => 
+        const instructorLabels = currentUser.filledInInstructorCourseList.map((val, key) =>
             <Label key={key} type="instructor">{val.name}</Label>
         );
-        
+
         return studentLabels.concat(instructorLabels);
     };
 
@@ -50,11 +50,11 @@ const AddClass = ({history, currentUser}) => {
 
         // Accounts for case when no field has been filled
         if (filteredArr.length === 0) {
-            createToast("No classes to add are found. Please select a course to add by typing into the text field.");
+            createToast("No courses to add are found. Please select a course to add by typing into the text field.");
             return;
         }
 
-        // Resolves all the backend calls synchronously. 
+        // Resolves all the backend calls synchronously.
         const addedClassesResult = filteredArr.reduce(async (previousPromise, nextID) => {
             await previousPromise;
             return API.addToCourse(nextID);
@@ -66,24 +66,24 @@ const AddClass = ({history, currentUser}) => {
         addedClassesResult.then(e => {
             history.push("/");
         }).catch(e => {
-            createToast(`${e}. Check whether you are already added to these classes.`);
+            createToast(`${e}. Check whether you are already added to these courses.`);
         });
     };
 
     return (
         <>
-            <Navigation history={history} currentUser={currentUser}/>
+            <Navigation history={history} currentUser={currentUser} />
             <div className="addClassPage">
-                <div className="left-section"> 
-                    <h1>Add a Class</h1>
+                <div className="left-section">
+                    <h1>Add a Course</h1>
                     {renderFields()}
                     <div className="buttons">
                         <Button variant="primary" onClick={() => history.push("/")}>Cancel</Button>
-                        <Button variant="primary" onClick={onSubmit}>Add Classes</Button>
+                        <Button variant="primary" onClick={onSubmit}>Add Courses</Button>
                     </div>
                 </div>
                 <div className="right-section">
-                    <p>Current Classes</p>
+                    <p>Current Courses</p>
                     <div className="scrollable-classes">
                         {renderClassLabels()}
                     </div>

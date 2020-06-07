@@ -3,6 +3,7 @@ const Post = require("../models/Post");
 const { db } = require("../shared/firebase")
 const { InternalServerError } = require("../shared/error");
 const User = require("./User");
+const Tag = require("./Tag");
 const { makeId } = require("../shared/util");
 
 class Course {
@@ -329,6 +330,7 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                 resolve(courseUUID);
             } else {
                 const courseRef = await db.ref("Courses").push();
+
                 await courseRef.set({
                     name: updateParams['name'],
                     term: updateParams['term'], 
@@ -343,11 +345,21 @@ module.exports.pushCourseToFirebase = (updateParams, user, courseUUID) => {
                     description: updateParams['description']
                 });
                 await user.addInstructorCourse(courseRef.key);
+
+                // add all the tags
+                updateParams.tagList = updateParams.tagList || [];
+                for await (const tagName of updateParams.tagList) {
+                    await Tag.pushTagToFirebase({
+                        name: tagName,
+                        course: courseRef.key
+                    })
+                }
+
                 resolve(courseRef.key);
             }
         } catch(e) {
             console.log("There was an error: " + e);
-            reject("Something went wrong");
+            reject(e);
         }
     })
 };

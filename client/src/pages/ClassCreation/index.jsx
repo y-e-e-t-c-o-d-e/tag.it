@@ -36,7 +36,8 @@ const ClassCreation = ({ currentUser, history }) => {
             const { title, description} = event.target.elements;
             /* try to create a course in database */
             try {
-                const courseId = (await API.createCourse(title.value, courseTerm, description.value)).data;
+                const tags = selectedTags.map(tag => tag.name)
+                const courseId = (await API.createCourse(title.value, courseTerm, description.value, tags)).data;
                 redirectAddStaff(courseId); // might need to change depending on how backend implements the return value
             } catch (error) {
                 createToast(error);
@@ -58,7 +59,6 @@ const ClassCreation = ({ currentUser, history }) => {
 
         // Checking for format of the name
         const titleInput = event.target.value;
-        console.log(titleInput);
         let inputArr = titleInput.split(' - ');
         let courseCodeValid;
         let courseNameValid;
@@ -111,7 +111,7 @@ const ClassCreation = ({ currentUser, history }) => {
             <Navigation history={history} currentUser={currentUser} />
             <div className="container">
                 <div className="container-title">
-                    <h1>Create a Class</h1>
+                    <h1>Create a Course</h1>
                 </div>
                 <div className="input">
                     {/* Main class creation form */}
@@ -135,10 +135,10 @@ const ClassCreation = ({ currentUser, history }) => {
                         <div className="inputField">
                             <Form.Label>Initial Tags (Optional):</Form.Label>
 
-                            <AutocompleteTags initialTags={[]} setAddedTags={(tags)=>{
-                                
-                            }} setDeletedTags={(tags)=>{
-                                
+                            <AutocompleteTags initialTags={[]} setAddedTags={(tags) => {
+
+                            }} setDeletedTags={(tags) => {
+
                             }} onChange={(tags) => {
                                 setSelectedTags(tags)
                             }} />
