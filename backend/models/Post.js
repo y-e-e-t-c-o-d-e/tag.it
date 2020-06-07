@@ -143,9 +143,12 @@ class Post {
 
     addTag = async (tagId) => {
         await this.updatePost();
-        this.props.tagList.push(tagId);
-        const addedTag = await Tag.getTagById(tagId);
-        await addedTag.addPost(this.props.uuid);
+        const index = this.props.tagList.indexOf(tagId);
+        if (index == -1) {
+            this.props.tagList.push(tagId);
+            const addedTag = await Tag.getTagById(tagId);
+            await addedTag.addPost(this.props.uuid);
+        }
         await this.push();
     }
 
