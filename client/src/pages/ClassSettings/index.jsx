@@ -39,7 +39,6 @@ const ClassSettings = ({ currentUser, history }) => {
     const [deletedTags, setDeletedTags] = useState([]);
 
 
-    let link = "https://tagdotit.netlify.app/course/" + courseId;
 
     useEffect(() => {
         API.getCourse(courseId).then((response) => {
@@ -47,7 +46,7 @@ const ClassSettings = ({ currentUser, history }) => {
             setCourseDescription(response.data.description);
             setCourseName(response.data.name)
             setTags(response.data.tagList)
-            setCourseInviteLink(`https://tagdotit.netlify.app/course/${courseId}/invite/${course.studentInviteId}`)
+            setCourseInviteLink(`https://tagdotit.netlify.app/courses/${courseId}/invite/${response.data.studentInviteId}`)
         }).catch(() => {
             setCourseName('Default Class Name')
         })
