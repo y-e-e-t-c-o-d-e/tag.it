@@ -34,7 +34,7 @@
 .filter-dropdown {
     position: relative;
     display: inline-block;
-    float: right;
+    /* float: right; */
 }
 
 .filter-dropdown-content {
@@ -64,10 +64,4 @@
 
 .filter-dropdown:hover .filter-dropdown-content {
     display: block;
-}
-
-.btn-primary {
-    border-radius: 0;
-    background-color: #1D7B99;
-    padding-top: 0.5em;
 }
