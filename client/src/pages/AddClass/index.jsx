@@ -25,7 +25,8 @@ const AddClass = ({ history, currentUser }) => {
     const renderFields = () => {
         return [1, 2, 3, 4, 5].map((value, index) =>
             <SuggestionTextField name={`Course ${value}`} options={courseOptions} type={"class"}
-                onBlur={(id) => onBlurSetClasses(index, id)} key={index} />
+                onBlur={(id) => onBlurSetClasses(index, id)} key={index}
+                onChange={(id) => onBlurSetClasses(index, id)} key={index} />
         );
     };
 
