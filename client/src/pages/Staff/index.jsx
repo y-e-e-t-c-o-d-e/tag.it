@@ -60,8 +60,8 @@ const Staff = ({ history, match, currentUser }) => {
     }
 
     const renderClassInstructors = () => {
-        const instructorEmails = currCourses.map((val) =>
-            <button className="email-button" onClick={() => removeInstructor(val)}>{val}</button>
+        const instructorEmails = currCourses.map((val, key) =>
+            <button key={key} className="email-button" onClick={() => removeInstructor(val)}>{val}</button>
         );
         return instructorEmails;
     }
