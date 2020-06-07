@@ -19,7 +19,7 @@ function Invitation(props) {
         API.getCourse(courseId).then((course) => {
             // Check if user is in course, if so immediately redirect
             if (!!course.data.type) {
-                let link = `/course/${course.data.courseId}`;
+                let link = `/courses/${course.data.courseId}`;
                 history.push(link)
             }
 
