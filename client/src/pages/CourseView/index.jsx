@@ -30,7 +30,7 @@ const CourseView = ({currentUser, history }) => {
                 return tag
             }))
         }).catch(err => {
-            setCourse({name: "Error", postList: [], uuid: err})
+            setCourse({name: "Error occured. Please contact an instructor.", postList: [], uuid: err})
         })
     }, [view, window.location.href])
 

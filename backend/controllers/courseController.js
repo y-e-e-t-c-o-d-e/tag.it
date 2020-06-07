@@ -5,6 +5,7 @@ const Post = require("../models/Post");
 const Tag = require("../models/Tag");
 const User = require("../models/User");
 const { db } = require("../shared/firebase")
+const {  Unauthorized } = require("../shared/error");
 
 // Adds a course to the database based on req body
 exports.addCourse = async (req, res) => {
@@ -85,7 +86,7 @@ exports.updateCourse = async (req, res) => {
     };
 };
 
-exports.verifyCourse = async (req, res) => {
+exports.verifyInvite = async (req, res) => {
 
     const bodyParams = req.params;
     const userObj = req.user;
@@ -155,7 +156,7 @@ exports.verifyCourse = async (req, res) => {
 }
 
 // Gets info on the given course based on the user type
-exports.getCourseInfo = async (req, res) => {
+exports.getCourseInfo = async (req, res, next) => {
     const courseUUID = req.params.courseId;
     const userObj = req.user;
     
@@ -169,6 +170,11 @@ exports.getCourseInfo = async (req, res) => {
     try {
         const courseObj = await Course.getCourseById(courseUUID);
         let type = courseObj.classifyUser(req.user.getUUID());
+
+        // Checks whether user should have access to course material or not
+        if (type !== "student" && type !== "instructor") {
+            throw new Unauthorized("User not allowed to access the course");
+        }
 
         // Gets all the Post Objects
         let postContentList = await courseObj.getPostList().reduce(async (acc, postId, index) => {
@@ -222,8 +228,6 @@ exports.getCourseInfo = async (req, res) => {
             type: type
         });
     } catch (e) {
-        console.log("no course fuond")
-        console.log(e)
         res.status(410).json({
             status: 410,
             error: e.message

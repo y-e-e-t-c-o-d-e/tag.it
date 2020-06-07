@@ -28,6 +28,6 @@ router.route("/:courseId/invite")
 
 // Matches with "/api/course/:courseid/:inviteid"
 router.route("/:courseid/invite/:inviteid")
-    .get(courseController.verifyCourse)
+    .get(courseController.verifyInvite)
 
 module.exports = router;
