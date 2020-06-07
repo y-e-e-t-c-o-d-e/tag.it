@@ -27,9 +27,19 @@ const QuestionList = ({ questions, courseId, history, filters }) =>{
         )
     })
 
+    // Indicates that there are no posts for this class yet
+    const emptyPost = (
+        <div>
+            Click make.it to create the first post of the class!
+        </div>
+    );
+
+    // Renders the components depending on whether the class has posts yet
+    let content = questions.length? listBody:emptyPost;
+
     return(
         <div className="qList">
-            {listBody}            
+            {content}            
         </div>
     );
 };
