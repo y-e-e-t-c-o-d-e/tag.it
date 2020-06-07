@@ -20,6 +20,7 @@ const Staff = ({ history, match, currentUser }) => {
                 return acc;
             }, {}))
         }).catch((e) => {
+            console.error(e)
             createToast(e);
         });
     }, []);    

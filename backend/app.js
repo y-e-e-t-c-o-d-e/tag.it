@@ -10,6 +10,15 @@ const indexRouter = require('./routes/index');
 app.use(bodyParser.json());
 
 app.use(cors());
+
+// don't cache requests
+app.use((req, res, next) => {
+  res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  res.header('Expires', '-1');
+  res.header('Pragma', 'no-cache');
+  next();
+})
+
 app.use('/', indexRouter);
 
 // Error Handling
