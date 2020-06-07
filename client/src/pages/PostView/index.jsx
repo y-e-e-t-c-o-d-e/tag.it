@@ -78,7 +78,7 @@ const PostView = ({ currentUser, history }) => {
 
     // Copy link on click of the copy button
     const copyLink = () => {
-        let link = `tagdotit.netlify.com/courses/${courseId}/post/${postId}`;
+        let link = `tagdotit.netlify.com/courses/${courseId}/posts/${postId}`;
         navigator.clipboard.writeText(link);
         createToast("Link successfully copied!");
     }
