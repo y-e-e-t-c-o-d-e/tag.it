@@ -34,18 +34,21 @@ exports.getUser = async (req, res) => {
         }
 
         // get all the courses
-        userObj.props.filledInStudentCourseList = await Promise.all(userObj.getStudentCourseList().map(async uuid => {
+        const studentCourseList = await (userObj.getStudentCourseList());
+        userObj.props.filledInStudentCourseList = await Promise.all(studentCourseList.map(async uuid => {
             const toReturn = (await course.getCourseById(uuid)).props;
             return toReturn;
         }));
 
-        userObj.props.filledInInstructorCourseList = await Promise.all(userObj.getInstructorCourseList().map(async uuid => {
+        const instructorCourseList = await (userObj.getInstructorCourseList());
+        userObj.props.filledInInstructorCourseList = await Promise.all(instructorCourseList.map(async uuid => {
             const toReturn = (await course.getCourseById(uuid)).props;
             return toReturn;
         }));
 
         res.status(200).json(userObj.props);
     } catch (e) {
+        console.log(e)
         res.status(410).json({
             status: 410,
             error: e

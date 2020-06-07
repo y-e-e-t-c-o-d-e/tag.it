@@ -20,28 +20,22 @@ describe('index routes', () => {
     server.close();
   })
 
-  
-    
-    it('should protect authenticated routes', (done) => {
-      chai.request(server)
+  it('should protect authenticated routes', (done) => {
+    chai.request(server)
       .get('/api/protected')
       .end((err, res) => {
         res.should.have.status(401);
         done();
       })
-    })
-    
-    it('should accept authenticated users', (done) => {
-      chai.request(server)
+  })
+
+  it('should accept authenticated users', (done) => {
+    chai.request(server)
       .get('/api/protected')
       .set("Authorization", "Bearer someuseruuid")
       .end((err, res) => {
         res.should.have.status(200);
         done();
       })
-    })
-
-  it('should return a string', () => {
-    expect('ci with travis').to.equal('ci with travis');
-  });
+  })
 });
