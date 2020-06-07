@@ -15,7 +15,6 @@ const Staff = ({ history, match, currentUser }) => {
 
     useEffect(() => {
         API.getCourseUsers(courseId).then((response) => {
-            console.log(response.data)
             setCurrCourses(response.data.instructors.map((instructorObj) => instructorObj.email));
             setPendingCourses(response.data.pendingInstructorList);
             setEmailToIdMap(response.data.instructors.reduce((acc, instructorObj) => {
