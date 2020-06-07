@@ -197,13 +197,14 @@ export default {
         return axios.delete(`${baseURL}/api/course/${courseUUID}/${userUUID}`, config);
     },
 
-    inviteUserToCourse: function (courseUUID, userEmail) {
+    inviteUserToCourse: function (courseUUID, userEmail, type="instructor") {
         const config = {
             method: 'post',
             url: `${baseURL}/api/course/${courseUUID}/invite`,
             headers: authHeaders(),
             data: {
-                email: userEmail
+                email: userEmail,
+                type: type
             }
         };
         return axios(config);

@@ -310,7 +310,8 @@ exports.sendEmail = async (req, res) => {
         await courseObj.addPendingInstructor(bodyParams["email"]);
 
         let inviteURL;
-        if ("type" in bodyParams && bodyParams["type"] == "instructor") {
+
+        if (bodyParams["type"] === "instructor") {
             inviteURL = "https://tagdotit.netlify.app/courses/"+courseUUID+"/invite/"+courseObj.getInstructorInviteId();
         } else {
             inviteURL = "https://tagdotit.netlify.app/courses/"+courseUUID+"/invite/"+courseObj.getStudentInviteId();
