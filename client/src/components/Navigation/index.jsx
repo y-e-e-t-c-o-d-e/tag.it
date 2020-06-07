@@ -7,7 +7,7 @@ import logo from '../../assets/logo.png'
 import './style.css';
 
 const loginRender = (history) => (
-    <Navbar expand="lg" inverse fluid>
+    <Navbar expand="lg" inverse="true" fluid={1}>
         <Navbar.Brand onClick={() => {history.push('/')}}><img
             alt=""
             src={logo}
@@ -56,7 +56,7 @@ const regularRender = (studentCourses, instructorCourses, courseId, postId, hist
 
     return (
         <div>
-            <Navbar expand="lg" inverse fluid>
+            <Navbar expand="lg" inverse="true" fluid="true">
                 <Navbar.Brand onClick={() => {history.push("/")}}><img
                     alt=""
                     src={logo}

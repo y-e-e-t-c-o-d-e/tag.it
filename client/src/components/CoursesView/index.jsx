@@ -26,7 +26,7 @@ const CoursesView = ({currentUser, username, history }) => {
                     { studentCourses.length > 0 && <h3>Student Courses</h3> }
                     { studentCourses.length > 0 &&
                         studentCourses.map((course, key) => {
-                            return (<div>
+                            return (<div key={key}>
                                 <Button className="course-btn" key={key} variant="primary" onClick={() => { history.push(courseToLink(course.uuid)) }}>{course.name}</Button>
                                 <br/>
                                 </div>
@@ -36,7 +36,7 @@ const CoursesView = ({currentUser, username, history }) => {
                     { instructorCourses.length > 0 && <h3>Instructor Courses</h3> }
                     { instructorCourses.length > 0 &&
                         instructorCourses.map((course, key) => {
-                            return (<div>
+                            return (<div key={key}>
                                 <Button className="course-btn" key={key} variant="success" onClick={() => { history.push(courseToLink(course.uuid)) }}>{course.name}</Button>
                                 <br/>
                                 </div>
